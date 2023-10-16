@@ -25,8 +25,8 @@ public class BoardCommentDAOImpleTest {
 	
 	@Test
 	public void testCommentImple() {
-		insert();
-//		selectAll();
+//		insert();
+		selectAll();
 //		update();
 //		delete();
 	}

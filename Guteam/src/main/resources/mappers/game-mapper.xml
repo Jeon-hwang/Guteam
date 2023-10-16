@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.spring.guteam.gameMapper">
+
+    <insert id="insert">
+    	insert into ${game} (${gameName}, ${price}, ${genre}, ${releaseDate}) values (#{gameName}, #{price}, #{genre}, #{releaseDate})
+    </insert>
+    <select id="select_all" resultType="GameVO">
+    	select * from ${game} order by ${gameId} desc
+    </select>
+    <select id="select_by_game_id" resultType="GameVO">
+    	select * from ${game} where ${gameId}=#{gameId}
+    </select>
+    <update id="update">
+    	update ${game} set ${gameName}=#{gameName}, ${price}=#{price}, ${genre}=#{genre}, ${gameImageName}=#{gameImageName} where ${gameId}=#{gameId}
+    </update>
+    <delete id="delete">
+    	delete ${game} where ${gameId}=#{gameId}
+    </delete>
+    
+    <select id="paging" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${gameImageName}
+    	from (select rownum rn, a.* from(
+    	select * from ${game} order by ${gameId} desc)a
+    	) where rn between #{start} and #{end}
+    </select>
+    
+    <!-- 
+    #{start} : criteria.getStart()
+    #{end} : criteria.getEnd()
+     -->
+     
+    <select id="total_count" resultType="Integer">
+    	select count(*) total_cnt from ${game}
+    </select>
+    
+    <select id="select_by_price" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${gameImageName}
+    	from(select rownum rn, a.* from (select * from ${game}
+    	where ${price} >= #{price}
+    	order by ${gameId} desc)a )
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_by_keyword" resultType="GameVO">
+    select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${gameImageName}
+    	from(select rownum rn, a.* from (
+    	select * from ${game}
+    	where ${gameName} like '%'||#{keyword}||'%' or
+    		${genre} like '%'||#{keyword}||'%'
+    		order by ${gameId} desc)a )
+    	where rn between #{start} and #{end}
+    </select>
+    
+</mapper>
