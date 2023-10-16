@@ -1,6 +1,8 @@
 package project.spring.guteam.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -45,12 +47,6 @@ public class GameDAOImple implements GameDAO {
 	}
 
 	@Override
-	public int delete(int gameId) {
-		logger.info("Game delete() 호출 : gameId = " + gameId);
-		return sqlSession.delete(NAMESPACE + ".delete", gameId);
-	}
-
-	@Override
 	public List<GameVO> select(PageCriteria criteria) {
 		logger.info("Game select(criteria) 호출 : criteria = " + criteria);
 		return sqlSession.selectList(NAMESPACE + ".paging", criteria);
@@ -63,13 +59,17 @@ public class GameDAOImple implements GameDAO {
 	}
 
 	@Override
-	public List<GameVO> selectByPrice(int price) {
+	public List<GameVO> selectByPrice(int price, PageCriteria criteria) {
 		logger.info("Game select(price) 호출 : price = " + price);
-		return sqlSession.selectList(NAMESPACE+ ".select_by_price", price);
+		Map<String , Object> args = new HashMap<>();
+		args.put("price", price);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE+ ".select_by_price", args);
 	}
 
 	@Override
-	public List<GameVO> selectByNameOrGenre(String keyword) {
+	public List<GameVO> selectByNameOrGenre(String keyword, PageCriteria criteria) {
 		logger.info("Game select by name or genre() 호출 : keyword = " + keyword);
 		return sqlSession.selectList(NAMESPACE + ".select_by_keyword", keyword);
 	}

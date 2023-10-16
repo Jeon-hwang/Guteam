@@ -37,16 +37,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_by_price" resultType="GameVO">
-    	select * from ${game}
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${gameImageName}
+    	from(select rownum rn, a.* from (select * from ${game}
     	where ${price} >= #{price}
-    	order by ${gameId} desc
+    	order by ${gameId} desc)a )
+    	where rn between #{start} and #{end}
     </select>
     
     <select id="select_by_keyword" resultType="GameVO">
+    select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${gameImageName}
+    	from(select rownum rn, a.* from (
     	select * from ${game}
     	where ${gameName} like '%'||#{keyword}||'%' or
     		${genre} like '%'||#{keyword}||'%'
-    		order by ${gameId} desc
+    		order by ${gameId} desc)a )
+    	where rn between #{start} and #{end}
     </select>
     
 </mapper>

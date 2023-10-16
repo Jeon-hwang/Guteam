@@ -30,7 +30,6 @@ public class GameDAOTest {
 //		insertTest();
 //		selectTest();
 //		updateTest();
-//		deleteTest();
 //		selectCriTest();
 //		getTotalTest();
 //		selectByPriceTest();
@@ -39,7 +38,7 @@ public class GameDAOTest {
 
 	private void selectByNameOrGenretest() {
 		String keyword = "즐";
-		List<GameVO> list = dao.selectByNameOrGenre(keyword);
+		List<GameVO> list = dao.selectByNameOrGenre(keyword, new PageCriteria());
 		for(int i = 0 ; i < list.size(); i++) {
 			logger.info(list.get(i).toString());
 		}
@@ -48,7 +47,7 @@ public class GameDAOTest {
 
 	private void selectByPriceTest() {
 		int price = 1500;
-		List<GameVO> list = dao.selectByPrice(price);
+		List<GameVO> list = dao.selectByPrice(price, new PageCriteria());
 		for(int i = 0 ; i < list.size(); i++) {
 			logger.info(list.get(i).toString());
 		}
@@ -69,10 +68,6 @@ public class GameDAOTest {
 		
 	}
 
-	private void deleteTest() {
-		dao.delete(7);
-		
-	}
 
 	private void updateTest() {
 		GameVO vo = new GameVO(5, "changeGame", 2000, "changeGenre", null, "");
