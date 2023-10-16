@@ -25,10 +25,10 @@ public class BoardCommentDAOImpleTest {
 	
 	@Test
 	public void testCommentImple() {
-//		insert();
+		insert();
 //		selectAll();
 //		update();
-		delete();
+//		delete();
 	}
 
 	private void delete() {
