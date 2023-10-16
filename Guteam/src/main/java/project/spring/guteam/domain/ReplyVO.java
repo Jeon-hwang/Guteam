@@ -27,12 +27,12 @@ public class ReplyVO {
 
 	public void setReplyId(int replyId) {
 		this.replyId = replyId;
-  }
-  
+
+	}
 	public int getCommentId() {
 		return commentId;
 	}
-  
+
 	public void setCommentId(int commentId) {
 		this.commentId = commentId;
 	}
