@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="project.spring.guteam.gameMapper">
 
     <insert id="insert">
-    	insert into ${game} (${gameName}, ${price}, ${genre}) values (#{gameName}, #{price}, #{genre})
+    	insert into ${game} (${gameName}, ${price}, ${genre}, ${releaseDate}) values (#{gameName}, #{price}, #{genre}, #{releaseDate})
     </insert>
     <select id="select_all" resultType="GameVO">
     	select * from ${game} order by ${gameId} desc
@@ -27,31 +27,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	) where rn between #{start} and #{end}
     </select>
     
+    <!-- 
+    #{start} : criteria.getStart()
+    #{end} : criteria.getEnd()
+     -->
+     
     <select id="total_count" resultType="Integer">
     	select count(*) total_cnt from ${game}
     </select>
     
-    <select id="select_by_genre" resultType="GameVO">
+    <select id="select_by_price" resultType="GameVO">
     	select * from ${game}
-    	where ${genre} like '%'||#{keyword}||'%'
+    	where ${price} >= #{price}
+    	order by ${gameId} desc
     </select>
     
     <select id="select_by_keyword" resultType="GameVO">
     	select * from ${game}
     	where ${gameName} like '%'||#{keyword}||'%' or
-    		#{genre} like '%'||#{keyword}||'%'
+    		${genre} like '%'||#{keyword}||'%'
     		order by ${gameId} desc
     </select>
     
-    <!-- 
-    <update id="update_reply_cnt">
-    	update ${test_board}
-    	set ${replyCnt} = ${replyCnt} + #{amount}
-    	where ${boardId} = #{boardId}
-    </update>
-     -->
-    <!-- 
-    #{start} : criteria.getStart()
-    #{end} : criteria.getEnd()
-     -->
 </mapper>

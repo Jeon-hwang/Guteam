@@ -5,47 +5,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="project.spring.guteam.gameBoardMapper">
 
     <insert id="insert">
-    	insert into ${gameBoard} (${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}) values (#{gameId}, #{memberId}, #{gameBoardTitle}, #{gameBoardContent})
+    	insert into ${game_board} (${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}) values (#{gameId}, #{memberId}, #{gameBoardTitle}, #{gameBoardContent}, #{gameBoardDateCreated})
     </insert>
     <select id="select_all_by_game_id" resultType="GameBoardVO">
-    	select * from ${gameBoard} where ${gameId}=#{gameId} order by ${gameBoardId} desc
+    	select * from ${game_board} where ${gameId}=#{gameId} order by ${gameBoardId} desc
     </select>
     <select id="select_by_game_board_id" resultType="GameBoardVO">
-    	select * from ${gameBoard} where ${gameBoardId}=#{gameBoardId}
+    	select * from ${game_board} where ${gameBoardId}=#{gameBoardId}
     </select>
     <update id="update">
-    	update ${gameBoard} set ${memberId}=#{memberId}, ${gameBoardTitle}=#{gameBoardTitle}, ${gameBoardContent}=#{gameBoardContent} where ${gameBoardId}=#{gameBoardId}
+    	update ${game_board} set ${memberId}=#{memberId}, ${gameBoardTitle}=#{gameBoardTitle}, ${gameBoardContent}=#{gameBoardContent} where ${gameBoardId}=#{gameBoardId}
     </update>
     <delete id="delete">
-    	delete ${gameBoard} where ${gameBoardId}=#{gameBoardId}
+    	delete ${game_board} where ${gameBoardId}=#{gameBoardId}
     </delete>
     
     <select id="paging" resultType="GameBoardVO">
     	select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
     	from (select rownum rn, a.* from(
-    	select * from ${gameBaord} order by ${gameBoardId} desc)a
+    	select * from ${game_board} where ${gameId}=#{gameId} order by ${gameBoardId} desc)a
     	) where rn between #{start} and #{end}
     </select>
     
     <select id="total_count" resultType="Integer">
-    	select count(*) total_cnt from ${gameBoard}
+    	select count(*) total_cnt from ${game_board}
     </select>
     
     <select id="select_by_member_id" resultType="GameBoardVO">
-    	select * from ${gameBoard}
+    	select * from ${game_board}
     	where ${memberId} like '%'||#{keyword}||'%'
     </select>
     
     <select id="select_by_keyword" resultType="GameBoardVO">
-    	select * from ${gameBoard}
+    	select * from ${game_board}
     	where ${gameBoardTitle} like '%'||#{keyword}||'%' or
-    		#{gameBoardContent} like '%'||#{keyword}||'%'
+    		${gameBoardContent} like '%'||#{keyword}||'%'
     		order by ${gameBoardId} desc
     </select>
     
    
     <update id="update_comment_cnt">
-    	update ${gameBoard}
+    	update ${game_board}
     	set ${commentCnt} = ${commentCnt} + #{amount}
     	where ${gameBoardId} = #{gameBoardId}
     </update>

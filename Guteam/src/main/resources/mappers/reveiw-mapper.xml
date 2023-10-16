@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="paging" resultType="ReviewVO">
     	select ${reviewId}, ${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}, ${reviewDateCreated}, ${rating}, ${thumbUpCount}
     	from (select rownum rn, a.* from(
-    	select * from ${review} order by ${reviewId} desc)a
+    	select * from ${review} where ${gameId}=#{gameId} order by ${reviewId} desc)a
     	) where rn between #{start} and #{end}
     </select>
     
@@ -32,16 +32,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_by_member_id" resultType="ReviewVO">
-    	select * from ${review}
-    	where ${memberId} like '%'||#{keyword}||'%'
-    	order by ${reviewId} desc
+    	select ${reviewId}, ${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}, ${reviewDateCreated}, ${rating}, ${thumbUpCount}
+    	from (select rownum rn, a.*
+    	from (select * from ${review}
+    	where ${gameId}=#{gameId} and ${memberId} like '%'||#{keyword}||'%'
+    	order by ${reviewId} desc)a
+    	) where rn between #{start} and #{end}
+    	
     </select>
     
     <select id="select_by_keyword" resultType="ReviewVO">
-    	select * from ${review}
+    	select ${reviewId}, ${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}, ${reviewDateCreated}, ${rating}, ${thumbUpCount}
+    	from (select rownum rn, a.*
+    	from (select * from ${review}
     	where ${reviewTitle} like '%'||#{keyword}||'%' or
-    		#{reviewContent} like '%'||#{keyword}||'%'
-    		order by ${reviewId} desc
+    		${reviewContent} like '%'||#{keyword}||'%'
+    		order by ${reviewId} desc)a
+    	) where rn between #{start} and #{end}
     </select>
     
 
