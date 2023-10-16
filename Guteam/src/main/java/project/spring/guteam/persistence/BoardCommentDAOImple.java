@@ -23,19 +23,19 @@ public class BoardCommentDAOImple implements BoardCommentDAO {
 	
 	@Override
 	public int insert(BoardCommentVO vo) {
-		logger.info("insert() 수행");
+		logger.info("B.Comment insert() 수행");
 		return sqlSession.insert(NAMESPACE+".insert",vo);
 	}
 
 	@Override
 	public List<BoardCommentVO> select(int gameBoardId) {
-		logger.info("select() 수행");
+		logger.info("B.Comment select() 수행");
 		return sqlSession.selectList(NAMESPACE+".select_all_by_board_id",gameBoardId);
 	}
 
 	@Override
 	public int update(String commentContent, int commentId) {
-		logger.info("update() 수행");
+		logger.info("B.Comment update() 수행");
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("commentId", commentId);
 		args.put("commentContent", commentContent);
@@ -44,7 +44,7 @@ public class BoardCommentDAOImple implements BoardCommentDAO {
 
 	@Override
 	public int delete(int commentId) {
-		logger.info("delete 수행");
+		logger.info("B.Comment delete 수행");
 		return sqlSession.update(NAMESPACE+".delete",commentId);
 	}
 
