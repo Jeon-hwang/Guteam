@@ -13,12 +13,15 @@ public interface MemberDAO {
 	List<MemberVO> select();
 	
 	// 회원 정보 조회 (ID)
-	MemberVO select(int memberId);
+	MemberVO select(String memberId);
 	
 	// 회원 정보 수정
-	int update(MemberVO vo);
+	int updateMem(MemberVO vo);
+	
+	// 캐쉬 충전
+	int updateCash(MemberVO vo);
 	
 	// 회원 정보 삭제
-	int delete(int memberId);
+	int delete(String memberId);
 	
 }

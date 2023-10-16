@@ -11,7 +11,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	- value : DB 테이블 및 컬럼 이름
 	 -->
 	 
-	 
 	 <properties>
 		<property name="board_comment" value="board_comment" />
 		<property name="commentId" value="comment_id" />
@@ -21,6 +20,17 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<property name="commentDateCreated" value="comment_date_created" />
 		<property name="replyCnt" value = "reply_cnt" />
 		
+		<!-- 회원 -->
+	 	<property name="member" value="member"/>
+	 	<property name="memberId" value="member_id"/>
+	 	<property name="password" value="password"/>
+	 	<property name="nickname" value="nickname"/>
+	 	<property name="email" value="email"/>
+	 	<property name="phone" value="phone"/>
+	 	<property name="cash" value="cash"/>
+	 	<property name="memberImageName" value="member_image_name"/>
+	 	<property name="isAdmin" value="is_admin"/>
+	 	
 	 	
 	 <!-- name은 vo변수와 이름 같게 -->
 	 <!--  select()호출시 name에 대소문자 구분을 안함 이거 따로 mybatis에 태그 넣어줘야하는데 이거 반드시 기억 -->
