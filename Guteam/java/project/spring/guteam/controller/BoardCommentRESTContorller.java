@@ -7,11 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.spring.guteam.domain.BoardCommentVO;
@@ -43,13 +46,20 @@ public class BoardCommentRESTContorller {
 		return new ResponseEntity<List<BoardCommentVO>>(list,HttpStatus.OK);
 	}
 	
-	@PostMapping("/{commentId}")
+	@PutMapping("/{commentId}")
 	public ResponseEntity<Integer> updateComment(@PathVariable("commentId") int commentId,@RequestBody String commentContent){
 		logger.info("comment update 호출");
 		
 		int result;
 		result = service.update(commentId, commentContent);
 		
+		return new ResponseEntity<Integer>(result, HttpStatus.OK);
+	}
+	 
+	@DeleteMapping("/{commentId}")
+	public ResponseEntity<Integer> deleteComment(@PathVariable("commentId") int commentId,@RequestBody int gameBoardId){
+		logger.info("comment delete 호출");
+		int result = service.delete(commentId, gameBoardId);
 		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 	}
 }

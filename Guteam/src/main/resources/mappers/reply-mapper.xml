@@ -6,11 +6,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="project.spring.guteam.ReplyMapper">
 	<insert id="insert">
 		insert into ${reply}
-		(${commentId},${replyId},${replyContent})
-		values (#{commentId},#{replyId},#{replyContent})
+		(${commentId},${memberId},${replyContent})
+		values (#{commentId},#{memberId},#{replyContent})
 	</insert>
 	
-	<select id="select_all_by_comment_id">
+	<select id="select_all_by_comment_id" resultType="ReplyVO">
 		select * from ${reply}
 		where ${commentId} = #{commentId}
 		order by ${replyId}
