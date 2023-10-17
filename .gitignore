@@ -1,7 +1,3 @@
-/Guteam/.settings/
-/Guteam/.classpath
-/Guteam/.springBeans
-/Guteam/bin/
-/Guteam/target/
-/Guteam/.project
-*.class
+/target/
+/.classpath
+/bin/
