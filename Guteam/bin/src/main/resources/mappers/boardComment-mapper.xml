@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="project.spring.guteam.BoardCommentMapper">
+	 <!-- <insert id="insert">
+	 	insert into ${test_board}
+	 	(${boardTitle},${boardContent},${memberId})
+	 	values (#{boardTitle}, #{boardContent},#{memberId})
+	 	 $ : Colum명 
+	 	 # : ? (쿼리문) vo 변수와 정확히 일치해야 한다(방식은 get메서드) 
+	 </insert> -->
+	 <insert id="insert">
+	 	insert into ${board_comment}
+	 	(${gameBoardId},${memberId},${commentContent})
+	 	values (#{gameBoardId},#{memberId},#{commentContent})
+	 </insert>
+	 <select id="select_all_by_board_id" resultType="BoardCommentVO">
+	 	select * from ${board_comment}
+	 	where ${gameBoardId} = #{gameBoardId}
+	 	order by ${commentId}
+	 </select>
+	 <update id="update">
+	 	update ${board_comment}
+	 	set ${commentContent} = #{commentContent}
+	 	where ${commentId} = #{commentId}
+	 </update>
+	 <update id="delete">
+	 	update ${board_comment}
+	 	set ${commentContent} = 'deleted'
+	 	where ${commentId} = #{commentId}
+	 </update>
+</mapper>
