@@ -11,7 +11,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	- value : DB 테이블 및 컬럼 이름
 	 -->
 	 
-	 
 	 <properties>
 		<property name="board_comment" value="board_comment" />
 		<property name="commentId" value="comment_id" />
@@ -27,6 +26,38 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	<property name="memberId" value="member_id"/>
 	 	<property name="replyContent" value="reply_content"/>
 	 	<property name="replyDateCreated" value="reply_date_created"/>
+	 	
+	 	<property name="game" value="game"/>
+   		<property name="gameId" value="game_id"/>
+   		<property name="gameName" value="game_name"/>
+   		<property name="price" value="price"/>
+   		<property name="genre" value="genre"/>
+   		<property name="releaseDate" value="release_date"/>
+   		<property name="gameImageName" value="game_image_name"/>
+   		
+   		<property name="game_board" value="game_board"/>
+   		<property name="gameBoardId" value="game_board_id"/>
+   		<property name="gameId" value="game_id"/>
+   		<property name="memberId" value="member_id"/>
+   		<property name="gameBoardTitle" value="game_board_title"/>
+   		<property name="gameBoardContent" value="game_board_content"/>
+   		<property name="gameBoardDateCreated" value="game_board_date_created"/>
+   		<property name="commentCnt" value="comment_cnt"/>
+   		
+   		<property name="review" value="review"/>
+   		<property name="reviewId" value="review_id"/>
+   		<property name="gameId" value="game_id"/>
+   		<property name="memberId" value="member_id"/>
+   		<property name="reviewTitle" value="review_title"/>
+   		<property name="reviewContent" value="review_content"/>
+   		<property name="reviewDateCreated" value="review_date_created"/>
+   		<property name="rating" value="rating"/>
+   		<property name="thumbUpCount" value="thumb_up_count"/>
+   		
+   		<property name="thumb" value="thumb"/>
+   		<property name="reviewId" value="review_id"/>
+   		<property name="memberId" value="member_id"/>
+   		<property name="upDown" value="up_down"/>
 	 	
 	 <!-- name은 vo변수와 이름 같게 -->
 	 <!--  select()호출시 name에 대소문자 구분을 안함 이거 따로 mybatis에 태그 넣어줘야하는데 이거 반드시 기억 -->
