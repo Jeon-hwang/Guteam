@@ -12,6 +12,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 -->
 	 
 	 <properties>
+	 	
+	 
 		<property name="board_comment" value="board_comment" />
 		<property name="commentId" value="comment_id" />
 		<property name="gameBoardId" value="game_board_id" />

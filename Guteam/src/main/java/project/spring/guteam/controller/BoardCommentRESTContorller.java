@@ -19,7 +19,7 @@ import project.spring.guteam.service.BoardCommentService;
 
 
 @RestController
-@RequestMapping(value="board_comment/comments")
+@RequestMapping(value="boardComment/comments")
 public class BoardCommentRESTContorller {
 	private static final Logger logger = LoggerFactory.getLogger(BoardCommentRESTContorller.class);
 	

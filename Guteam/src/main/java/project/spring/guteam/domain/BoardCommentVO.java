@@ -9,7 +9,7 @@ public class BoardCommentVO {
 	private String commentContent;
 	private Date commentDateCreated;
 	private int replyCnt;
-	
+
 	public BoardCommentVO() {}
 
 	public BoardCommentVO(int commentId, int gameBoardId, String memberId, String commentContent,

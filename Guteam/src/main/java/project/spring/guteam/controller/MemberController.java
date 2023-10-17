@@ -20,7 +20,7 @@ public class MemberController {
 	private MemberService memberService;
 	
 	// 로그인 메인
-	@GetMapping("/loginmain")
+	@GetMapping("/loginMain")
 	public void loginMainGET() {
 		logger.info("loginMainGET() 호출");
 	}
