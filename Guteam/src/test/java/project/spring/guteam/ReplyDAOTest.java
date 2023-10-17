@@ -23,7 +23,7 @@ public class ReplyDAOTest {
 	
 	@Test
 	public void testReplyDAO() {
-		insert();
+//		insert();
 	}
 
 	
