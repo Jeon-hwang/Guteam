@@ -8,10 +8,8 @@
 </head>
 <body>
 <form action="game/list" method="get">
-<input type="text" name="keyword" id="keyword" maxlength="20">
+<input type="text" maxlength="20">
 <input type="submit" value="검색">
-<a href="member/login"><input type="button" value="로그인"></a>
-
 </form>
 
 
