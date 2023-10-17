@@ -61,9 +61,6 @@
 				}
 			}); // file-drop.drop
 			
-			
-			
-			
 		});// document.ready
 		
 	</script>

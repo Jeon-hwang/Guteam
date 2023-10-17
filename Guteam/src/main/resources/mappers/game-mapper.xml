@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="project.spring.guteam.gameMapper">
 
     <insert id="insert">
-    	insert into ${game} (${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}) values (#{gameName}, #{price}, #{genre}, sysdate, sysdate, 'basic.png')
+    	insert into ${game} (${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}) values (#{gameName}, #{price}, #{genre}, sysdate, sysdate, #{gameImageName})
     </insert>
     <select id="select_all" resultType="GameVO">
     	select * from ${game} order by ${gameId} desc

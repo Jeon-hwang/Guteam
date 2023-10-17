@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>게임 등록</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
 </head>
 <body>
 <h1>게임 등록</h1>
@@ -15,8 +16,45 @@
 game_name : <input type="text" autofocus="autofocus" name="gameName" required="required"><br> 
 price : <input type="number" name="price" required="required"><br>
 genre : <input type="text" name="genre" required><br>
-game_image : 비동기로 구현할 예정<br>
+game_image : <img class="file-drop" width="200px" height="200px" src="display?fileName=basic.png"><br>
+<input type="hidden" class="gameImageName" name="gameImageName" value="basic.png">
+<br>
 <input type="submit" value="등록"><br>
+<script type="text/javascript">
+$(document).ready(function(){
+			$('.file-drop').on('dragenter dragover', function(event){
+				event.preventDefault();
+				console.log('drag 테스트');
+			}); 
+			$('.file-drop').on('drop', function(event){
+				event.preventDefault();
+				
+				var formData = new FormData();
+				
+				var files = event.originalEvent.dataTransfer.files;
+				
+				var i = 0 ;
+				for(i = 0 ; i < files.length; i++){
+					console.log(files[i]);
+					formData.append("files",files[i]);
+				$.ajax({
+					type : 'post',
+					url : '/guteam/game/upload-ajax',
+					data : formData,
+					processData : false,
+					contentType : false,
+					success : function(data){
+						console.log(data);
+						$('.file-drop').attr('src', 'display?fileName='+data);
+						$('.gameImageName').attr('value', data);
+					}
+				
+				});// ajax
+				}
+			}); // file-drop.drop
+		});// document.ready
+	</script>
+
 </form>
 </body>
 </html>
