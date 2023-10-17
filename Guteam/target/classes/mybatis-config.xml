@@ -26,12 +26,14 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	<property name="memberId" value="member_id"/>
 	 	<property name="replyContent" value="reply_content"/>
 	 	<property name="replyDateCreated" value="reply_date_created"/>
+	 	
 	 	<property name="game" value="game"/>
    		<property name="gameId" value="game_id"/>
    		<property name="gameName" value="game_name"/>
    		<property name="price" value="price"/>
    		<property name="genre" value="genre"/>
    		<property name="releaseDate" value="release_date"/>
+   		<property name="updateDate" value="update_date"/>
    		<property name="gameImageName" value="game_image_name"/>
    		
    		<property name="game_board" value="game_board"/>

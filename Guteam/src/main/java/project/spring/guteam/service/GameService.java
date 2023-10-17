@@ -12,5 +12,6 @@ public interface GameService {
 	GameVO read(int gameId);
 	int update(GameVO vo);
 	int getTotalCount();
-	
+	List<GameVO> read(int price, PageCriteria criteria);
+	List<GameVO> read(String keyword, PageCriteria criteria);
 }

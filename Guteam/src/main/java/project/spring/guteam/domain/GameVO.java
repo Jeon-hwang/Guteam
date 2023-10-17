@@ -8,15 +8,18 @@ public class GameVO {
 	private int price;
 	private String genre;
 	private Date releaseDate;
+	private Date updateDate; 
 	private String gameImageName;
 	
 	public GameVO() {}
-	public GameVO(int gameId, String gameName, int price, String genre, Date releaseDate, String gameImageName) {
+	public GameVO(int gameId, String gameName, int price, String genre, Date releaseDate, Date updateDate,
+			String gameImageName) {
 		this.gameId = gameId;
 		this.gameName = gameName;
 		this.price = price;
 		this.genre = genre;
 		this.releaseDate = releaseDate;
+		this.updateDate = updateDate;
 		this.gameImageName = gameImageName;
 	}
 	public int getGameId() {
@@ -49,6 +52,12 @@ public class GameVO {
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
 	}
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
 	public String getGameImageName() {
 		return gameImageName;
 	}
@@ -58,10 +67,9 @@ public class GameVO {
 	@Override
 	public String toString() {
 		return "GameVO [gameId=" + gameId + ", gameName=" + gameName + ", price=" + price + ", genre=" + genre
-				+ ", releaseDate=" + releaseDate + ", gameImageName=" + gameImageName + "]";
+				+ ", releaseDate=" + releaseDate + ", updateDate=" + updateDate + ", gameImageName=" + gameImageName
+				+ "]";
 	}
 	
 	
-	
-
 }

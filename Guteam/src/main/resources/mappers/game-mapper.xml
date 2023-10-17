@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="project.spring.guteam.gameMapper">
 
     <insert id="insert">
-    	insert into ${game} (${gameName}, ${price}, ${genre}, ${releaseDate}) values (#{gameName}, #{price}, #{genre}, #{releaseDate})
+    	insert into ${game} (${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}) values (#{gameName}, #{price}, #{genre}, sysdate, sysdate, 'basic.png')
     </insert>
     <select id="select_all" resultType="GameVO">
     	select * from ${game} order by ${gameId} desc
@@ -14,14 +14,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select * from ${game} where ${gameId}=#{gameId}
     </select>
     <update id="update">
-    	update ${game} set ${gameName}=#{gameName}, ${price}=#{price}, ${genre}=#{genre}, ${gameImageName}=#{gameImageName} where ${gameId}=#{gameId}
+    	update ${game} set ${gameName}=#{gameName}, ${price}=#{price}, ${genre}=#{genre}, ${gameImageName}=#{gameImageName}, ${updateDate}=sysdate where ${gameId}=#{gameId}
     </update>
     <delete id="delete">
     	delete ${game} where ${gameId}=#{gameId}
     </delete>
     
     <select id="paging" resultType="GameVO">
-    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${gameImageName}
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from (select rownum rn, a.* from(
     	select * from ${game} order by ${gameId} desc)a
     	) where rn between #{start} and #{end}
@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_by_price" resultType="GameVO">
-    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${gameImageName}
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from(select rownum rn, a.* from (select * from ${game}
     	where ${price} >= #{price}
     	order by ${gameId} desc)a )
@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_by_keyword" resultType="GameVO">
-    select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${gameImageName}
+    select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from(select rownum rn, a.* from (
     	select * from ${game}
     	where ${gameName} like '%'||#{keyword}||'%' or

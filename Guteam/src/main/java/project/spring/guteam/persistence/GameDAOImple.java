@@ -71,7 +71,11 @@ public class GameDAOImple implements GameDAO {
 	@Override
 	public List<GameVO> selectByNameOrGenre(String keyword, PageCriteria criteria) {
 		logger.info("Game select by name or genre() 호출 : keyword = " + keyword);
-		return sqlSession.selectList(NAMESPACE + ".select_by_keyword", keyword);
+		Map<String , Object> args = new HashMap<>();
+		args.put("keyword", keyword);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE + ".select_by_keyword", args);
 	}
 
 }

@@ -39,14 +39,26 @@ public class GameServiceImple implements GameService {
 
 	@Override
 	public int update(GameVO vo) {
-		logger.info("update() 호출 : vo = " + vo);
+		logger.info("game update() 호출 : vo = " + vo);
 		return gameDAO.update(vo);
 	}
 
 	@Override
 	public int getTotalCount() {
-		logger.info("getTotalCount() 호출");
+		logger.info("game getTotalCount() 호출");
 		return gameDAO.getTotalCounts();
+	}
+
+	@Override
+	public List<GameVO> read(int price, PageCriteria criteria) {
+		logger.info("game read(price) 호출");
+		return gameDAO.selectByPrice(price, criteria);
+	}
+
+	@Override
+	public List<GameVO> read(String keyword, PageCriteria criteria) {
+		logger.info("game read(keyword) 호출");
+		return gameDAO.selectByNameOrGenre(keyword, criteria);
 	}
 
 }

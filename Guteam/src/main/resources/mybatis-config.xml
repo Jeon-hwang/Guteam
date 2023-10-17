@@ -33,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
    		<property name="price" value="price"/>
    		<property name="genre" value="genre"/>
    		<property name="releaseDate" value="release_date"/>
+   		<property name="updateDate" value="update_date"/>
    		<property name="gameImageName" value="game_image_name"/>
    		
    		<property name="game_board" value="game_board"/>

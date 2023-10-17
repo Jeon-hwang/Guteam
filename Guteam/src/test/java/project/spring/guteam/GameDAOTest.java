@@ -70,7 +70,7 @@ public class GameDAOTest {
 
 
 	private void updateTest() {
-		GameVO vo = new GameVO(5, "changeGame", 2000, "changeGenre", null, "");
+		GameVO vo = new GameVO(8, "changeGame", 2000, "changeGenre", null, null, "");
 		dao.update(vo);
 		
 	}
@@ -85,7 +85,7 @@ public class GameDAOTest {
 	private void insertTest() {
 		Date date = new Date();
 		logger.info(date.toString());
-		GameVO vo = new GameVO(0, "testGame2", 1000, "rpg", new Date(), null);
+		GameVO vo = new GameVO(0, "testGame2", 1000, "rpg", new Date(), null, null);
 		logger.info(vo.toString());
 		int result = dao.insert(vo);
 		if(result == 1 ) {
