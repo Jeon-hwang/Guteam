@@ -1,6 +1,7 @@
-/.DS_Store
-
-
-/.classpath
-
-/.settings
+/Guteam/.settings/
+/Guteam/.classpath
+/Guteam/.springBeans
+/Guteam/bin/
+/Guteam/target/
+/Guteam/.project
+*.class

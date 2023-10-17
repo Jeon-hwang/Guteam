@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 -->
 	 
 	 <properties>
+	 	
 		<property name="board_comment" value="board_comment" />
 		<property name="commentId" value="comment_id" />
 		<property name="gameBoardId" value="game_board_id" />
@@ -59,7 +60,41 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
    		<property name="reviewId" value="review_id"/>
    		<property name="memberId" value="member_id"/>
    		<property name="upDown" value="up_down"/>
+   		
+   		<property name="member" value="member"/>
+   		<property name="password" value="password"/>
+   		<property name="nickname" value="nickname"/>
+   		<property name="email" value="email"/>
+   		<property name="phone" value="phone"/>
+   		<property name="cash" value="cash"/>
+   		<property name="memberImageName" value="member_image_name"/>
+   		<property name="isAdmin" value="is_admin"/>
 	 	
+	 	<property name="friend" value="friend"/>
+	 	<property name="memberId" value="member_id"/>
+	 	<property name="friendId" value="friend_id"/>
+	 	
+	 	<property name="friend_request" value="friend_request"/>
+	 	<property name="sendMemberId" value="send_member_id"/>
+	 	<property name="receiveMemberId" value="receiveMemberId"/>
+	 	
+	 	<property name="message" value="message"/>
+	 	<property name="messageId" value="message_id"/>
+	 	<property name="receiveMemberId" value="receive_member_id"/>
+	 	<property name="sendMemberId" value="send_member_id"/>
+	 	<property name="sendMemberNicname" value="send_member_nicname"/>
+	 	<property name="messageTitle" value="message_title"/>
+	 	<property name="messageContent" value="message_cotent"/>
+	 	<property name="messageDateCreated" value="message_date_created"/>
+	 	
+	 	<property name="wish_list" value="wish_list"/>
+	 	<property name="memberId" value="member_id"/>
+	 	<property name="gameId" value="game_id"/>
+	 	
+	 	<property name="purchased" value="purchased"/>
+	 	<property name="memberId" value="member_id"/>
+	 	<property name="gameId" value="game_id"/>
+	 	<property name="purchaseDate" value="purchase_date"/>
 	 <!-- name은 vo변수와 이름 같게 -->
 	 <!--  select()호출시 name에 대소문자 구분을 안함 이거 따로 mybatis에 태그 넣어줘야하는데 이거 반드시 기억 -->
 	 </properties>
