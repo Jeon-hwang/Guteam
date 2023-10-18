@@ -18,13 +18,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="update">
 		update ${reply}
-		set ${replyComment} = #{replyComment}
+		set ${replyContent} = #{replyContent}
 		where ${replyId} = #{replyId}
 	</update>
 	
 	<update id="delete">
 		update ${reply}
-		set ${replyComment} = 'deleted'
+		set ${replyContent} = 'deleted'
 		where ${replyId} = #{replyId}
 	</update>
 </mapper>

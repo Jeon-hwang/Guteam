@@ -26,7 +26,6 @@
 	</div>
 	</section>
 	
-	
 	<script type="text/javascript">
 		$(document).ready(function(){
 			
@@ -126,7 +125,7 @@
 				
 				var commentId = $(this).prevAll('#commentId').val();
 				var gameBoardId =  $('#gameBoardId').val();
-				console.log('댓글Id 및 게시판 id: '+commentId+','+gameBoardId);
+				console.log('댓글Id 및 게시판판 id: '+commentId+','+gameBoardId);
 				$.ajax({
 					type : 'DELETE',
 					url : 'comments/'+commentId,
@@ -175,8 +174,9 @@
 						});//end each
 							list += '아이디 : <input type="text" name="replyMemberId" id="replyMemberId">'
 									+ '내용 : <input type="text" name="replyContent" id="replyContent">'
-									+ '<button class="reply_add_btn" >작성</button>';
-							console.log(list);				
+									+ '<button class="reply_add_btn" >작성</button>'
+									+ '<button class="fold_replies_area">접기</button>';
+											
 							$(repliesArea).html(list);
 						}//end funtion(data)
 						
@@ -218,6 +218,56 @@
 			});//end reply_add_btn
 			
 			
+			
+			$('#comments').on('click','.comment_item .reply_item .update_reply',function(){
+				//var repliesAreaNum = $(this).parent().parent().attr('class');
+				//console.log(repliesAreaNum);
+				
+				var replyId = $(this).prevAll('#replyId').val();
+				var replyContent = $(this).prevAll('#replyContent').val();
+				
+				console.log('대댓글Id 및 내용 : '+replyId+','+replyContent);
+				
+				$.ajax({
+					type : 'PUT',
+					url : 'replies/'+replyId,
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					data : replyContent,
+					success : function(result){
+						if(result ==1){
+							alert('수정 되었습니다!');
+							getAllComments();
+						}
+					}
+				})//end ajax
+			});// end reply_update.on
+			
+			$('#comments').on('click','.comment_item .reply_item .delete_reply',function(){
+				
+				var replyId = $(this).prevAll('#replyId').val();
+				
+				console.log('대댓글Id 및 게시판판 id: '+replyId);
+				$.ajax({
+					type : 'DELETE',
+					url : 'replies/'+replyId,
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					success : function(result){
+						if(result==1){
+							alert('삭제 되었습니다!');
+							getAllComments();
+						}
+					}	
+				});//end ajax
+			});
+			
+			$('#comments').on('click','.comment_item .fold_replies_area',function(){
+				console.log('접어버리기');
+				$(this).parent().html('');
+			});//end fold_replies_area
 		});//end document
 	</script>
 	
