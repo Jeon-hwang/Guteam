@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.spring.guteam.PurchasedMapper">
+	<insert id="insert">
+		insert into ${purchased}
+		(${memberId},${gameId})
+		values (#{memberId},#{gameId})
+	</insert>
+	<select id="select" resultType="PurchasedVO">
+		select * from ${purchased}
+		where ${memberId} = #{memberId}
+	</select>
+	
+</mapper>

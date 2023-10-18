@@ -34,10 +34,10 @@ public class ReplyDAOImple implements ReplyDAO {
 	}
 
 	@Override
-	public int update(String replyComment, int replyId) {
+	public int update(String replyContent, int replyId) {
 		logger.info("Reply update 실행!");
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("replyCommnet", replyComment);
+		args.put("replyContent", replyContent);
 		args.put("replyId",replyId);
 		return sqlSession.update(NAMESPACE+".update",args);
 	}

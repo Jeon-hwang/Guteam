@@ -111,4 +111,5 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 <typeAliases>
 	 	<package name="project.spring.guteam.domain" />
 	 </typeAliases>
+
 </configuration>

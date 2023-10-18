@@ -28,4 +28,5 @@
 <a href="list?page=${page }&keyword=${keyword}"><button>리스트로 돌아가기</button></a>
 <a href="update?gameId=${vo.gameId }&page=${page}"><button>수정하기</button></a>
 </body>
+
 </html>

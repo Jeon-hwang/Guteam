@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="project.spring.guteam.WishList">
+	<insert id="insert">
+		insert into ${wish_list}
+		values(#{memberId},#{gameId})
+	</insert>
+	
+	<select id="select_by_memberId" resultType="WishListVO">
+		select * from ${wish_list}
+		where ${memberId}=#{memberId}
+	</select>
+	
+	<delete id="delete">
+		delete from ${wish_list}
+		where ${memberId}=#{memberId} and ${gameId}=#{gameId}
+	</delete>
+</mapper>
