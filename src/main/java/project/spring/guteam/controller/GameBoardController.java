@@ -92,6 +92,25 @@ public class GameBoardController {
 		model.addAttribute("gameId", gameId);
 	}
 	
+	@GetMapping("/update")
+	public void update(Model model, int gameBoardId, int page, int gameId) {
+		GameBoardVO vo = gameBoardService.read(gameBoardId);
+		model.addAttribute("vo", vo);
+		model.addAttribute("page",page);
+		model.addAttribute("gameId", gameId);
+	}
+	
+	@PostMapping("/update")
+	public String update(GameBoardVO vo, RedirectAttributes reAttr, int page, int gameId) {
+		int result = gameBoardService.update(vo);
+		if(result == 1) {
+			reAttr.addFlashAttribute("update_result","success");
+			return "redirect:/gameBoard/detail?gameBoardId="+vo.getGameBoardId()+"&page="+page+"&gameId="+gameId;   
+		}else {
+			return "redirect:/gameBoard/update?gameBoardId="+vo.getGameBoardId()+"&page="+page+"&gameId="+gameId;
+		}
+	}
+	
 	@PostMapping("/updateDeleted")
 	public String updateDeleted(int gameBoardId, RedirectAttributes reAttr) {
 		logger.info("gameBoard updateDeleted() 호출 : gameBoardId = " + gameBoardId);

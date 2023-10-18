@@ -19,6 +19,7 @@ li {
 </head>
 <body>
 <a href="register?gameId=${gameId }"><button>글쓰기</button></a>
+<a href="../game/detail?gameId=${gameId }&page=1"><button>게임 정보로 돌아가기</button></a>
 <table>
 	<thead>
 		<tr>

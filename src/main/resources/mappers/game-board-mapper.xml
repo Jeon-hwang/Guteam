@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select * from ${game_board} where ${gameBoardId}=#{gameBoardId}
     </select>
     <update id="update">
-    	update ${game_board} set ${memberId}=#{memberId}, ${gameBoardTitle}=#{gameBoardTitle}, ${gameBoardContent}=#{gameBoardContent} where ${gameBoardId}=#{gameBoardId}
+    	update ${game_board} set ${gameBoardTitle}=#{gameBoardTitle}, ${gameBoardContent}=#{gameBoardContent} where ${gameBoardId}=#{gameBoardId}
     </update>
     <delete id="delete">
     	delete ${game_board} where ${gameBoardId}=#{gameBoardId}
