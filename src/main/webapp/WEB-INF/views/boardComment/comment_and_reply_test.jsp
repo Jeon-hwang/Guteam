@@ -15,7 +15,7 @@
 	<section id="CommentGroup">
 	
 	<div style="text-align : center;">
-		<input type="hidden" id="gameBoardId" name="gameBoardId" value=1>
+		<input type="hidden" id="gameBoardId" name="gameBoardId" value=2>
 		닉네임 : <input type="text" id="memberId">
 		내용 : <input type="text" id="commentContent">
 		<button id="commentAddBtn">작성</button>
@@ -71,7 +71,7 @@
 					
 					var memberId = $('#memberId').val();
 					var list = '';
-					
+					var commentRow = 1;
 					$(data).each(function(){
 						console.log(this);
 						
@@ -79,6 +79,7 @@
 						
 						list += '<li class="comment_item">'
 						+ '<pre>'
+						+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 						+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
 						+ this.memberId + '&nbsp&nbsp'
 						+ '<input type="text" id="commentContent" value="'+this.commentContent+'">'
@@ -86,14 +87,16 @@
 						+ '<button class="update_comment" >수정</button>'
 						+ '<button class="delete_comment" >삭제</button>'
 						+ '<br><button class="reply_view_btn">답글보기</button>'
-						+ '<div class="replies_area"></div>'
-						+ '</pre></li>'
-						
+						+ '<div class="replies_area'+commentRow+'"></div>'
+						+ '</pre></li>';
+						console.log('해당 행 번호 : '+commentRow);	
+						commentRow++;
 					});//end each
 					
 					$('#comments').html(list);
 					}//end funtion(data)
 				);//end .getJSON
+				
 				}// end getAllComments()
 		
 			$('#comments').on('click','.comment_item .update_comment',function(){
@@ -143,49 +146,51 @@
 			
 			$('#comments').on('click','.comment_item .reply_view_btn',function(){
 				var commentId = $(this).prevAll('#commentId').val();
-				
+				var commentRow = $(this).prevAll('#commentRow').val();
 				var url = 'replies/all/'+commentId;
 				console.log('댓글 ID?'+commentId);
-				var list = ''
+				console.log('몇번째 댓글?'+commentRow);
 				$.getJSON(
 						url,
 						function(data){
 						console.log(data);
 						
-						list = '';
-			
+						var list = '';
+						var repliesArea = '.replies_area'+commentRow;
+						
 						$(data).each(function(){
 							console.log(this);
 							
 							var replyDateCreated = new Date(this.replyDateCreated);
 							
 							list += '<li class="reply_item">'
-							+ '<pre>'
 							+ '<input type="hidden" id="replyId" value="'+this.replyId+'">'
 							+ this.memberId + '&nbsp&nbsp'
 							+ '<input type="text" id="replyContent" value="'+this.replyContent+'">'
 							+ replyDateCreated + '&nbsp&nbsp'
 							+ '<button class="update_reply" >수정</button>'
 							+ '<button class="delete_reply" >삭제</button>'
-							+ '</pre></li>';
+							+ '</li>';
 							
 						});//end each
 							list += '아이디 : <input type="text" name="replyMemberId" id="replyMemberId">'
 									+ '내용 : <input type="text" name="replyContent" id="replyContent">'
 									+ '<button class="reply_add_btn" >작성</button>';
 							console.log(list);				
-							
+							$(repliesArea).html(list);
 						}//end funtion(data)
-					
+						
 					);//end .getJSON
-				console.log(list);
-				$(this).nextAll('.replies_area').html(list);
+				
+				
 								
 			});// replyView.on
 			
 			
-			$('#comments').on('click','.comment_item .replies_area .reply_add_btn',function(){
-				var commentId = $(this).prevAll('#commentId').val();	
+			$('#comments').on('click','.comment_item .reply_add_btn',function(){
+				//var tagName = $(this).parent().prevAll('#commentId').prop('tagName');
+				//console.log(tagName);
+				var commentId = $(this).parent().prevAll('#commentId').val();	
 				var memberId = $(this).prevAll('#replyMemberId').val();
 				var replyContent = $(this).prevAll('#replyContent').val();
 				console.log("댓글id, 회원id, 대댓내용 :"+ commentId+", "+memberId+", "+replyContent);
@@ -209,9 +214,7 @@
 							getAllComments();
 						}
 					}
-					
 				});// end ajax
-				
 			});//end reply_add_btn
 			
 			
