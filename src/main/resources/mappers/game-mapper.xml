@@ -36,6 +36,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select count(*) total_cnt from ${game}
     </select>
     
+    <select id="total_count_by_keyword" resultType="Integer">
+    	select count(*) total_cnt from ${game} 
+    	where ${gameName} like '%'||#{keyword}||'%' or
+    		${genre} like '%'||#{keyword}||'%'
+    </select>
+    
+    <select id="total_count_by_price" resultType="Integer">
+    	select count(*) total_cnt from ${game}
+    	where ${price} >= #{price}
+    </select>
+    
     <select id="select_by_price" resultType="GameVO">
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from(select rownum rn, a.* from (select * from ${game}

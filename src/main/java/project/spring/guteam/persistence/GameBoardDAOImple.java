@@ -57,9 +57,9 @@ public class GameBoardDAOImple implements GameBoardDAO {
 	}
 	
 	@Override
-	public int getTotalCounts() {
+	public int getTotalCounts(int gameId) {
 		logger.info("GameBoard getTotal() 호출 " );
-		return sqlSession.selectOne(NAMESPACE + ".total_count");
+		return sqlSession.selectOne(NAMESPACE + ".total_count", gameId);
 	}
 
 	@Override
@@ -88,5 +88,27 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("amount", amount);
 		return sqlSession.update(NAMESPACE + ".update_comment_cnt", args);
 	}
+
+	@Override
+	public int updateDeleted(int gameBoardId) {
+		logger.info("GameBoard updateDeleted() 호출 : gameBoardId = " + gameBoardId);
+		return sqlSession.update(NAMESPACE + ".update_deleted", gameBoardId);
+	}
+
+	@Override
+	public int getTotalCounts(int gameId, String keywordCriteria, String keyword) {
+		logger.info(keywordCriteria);
+		int result = 0;
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("keyword", keyword);
+		args.put("gameId", gameId);
+		if(keywordCriteria.equals("memberId")) {
+			result = sqlSession.selectOne(NAMESPACE+".total_count_by_member_id",args);
+		}else {
+			result = sqlSession.selectOne(NAMESPACE+".total_count_by_keyword",args);
+		}
+		return result;
+	}
+
 
 }

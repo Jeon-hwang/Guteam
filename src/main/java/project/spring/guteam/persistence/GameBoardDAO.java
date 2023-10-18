@@ -11,8 +11,10 @@ public interface GameBoardDAO {
 	GameBoardVO selectByBoardId(int gameBoardId);
 	int update(GameBoardVO vo);
 	int delete(int gameBoardId);
-	int getTotalCounts();
+	int getTotalCounts(int gameId);
+	int getTotalCounts(int gameId, String keywordCriteria, String keyword);
 	List<GameBoardVO> selectByMemberId(int gameId, String memberId);
 	List<GameBoardVO> selectByKeyword(int gameId, String keyword);
 	int updateCommentCnt(int gameBoardId, int amount);
+	int updateDeleted(int gameBoardId);
 }

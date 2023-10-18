@@ -12,6 +12,8 @@ public interface GameDAO {
 	int update(GameVO vo);
 	List<GameVO> select(PageCriteria criteria);
 	int getTotalCounts();
+	int getTotalCounts(String keyword);
+	int getTotalCounts(int price);
 	List<GameVO> selectByPrice(int price, PageCriteria criteria);
 	List<GameVO> selectByNameOrGenre(String keyword, PageCriteria criteria);
 }

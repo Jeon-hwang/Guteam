@@ -1,11 +1,8 @@
 package project.spring.guteam.controller;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +45,8 @@ public class GameController {
 		logger.info("list 호출");
 		logger.info("page = " + page + ", numsPerPage = "+ numsPerPage);
 		PageCriteria criteria = new PageCriteria();
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(criteria);
 		if(page != null) {
 			criteria.setPage(page);
 		}
@@ -58,15 +56,17 @@ public class GameController {
 		List<GameVO> list;
 		if(keyword==null) {
 			list = gameService.read(criteria);
+			pageMaker.setTotalCount(gameService.getTotalCount());
 		}else {
 			list = gameService.read(keyword, criteria);
+			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
 		}
 		model.addAttribute("list",list);
-		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(gameService.getTotalCount());
+		
+		
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);
+		model.addAttribute("keyword", keyword);
 	}
 	
 	@GetMapping("/register")
@@ -86,10 +86,11 @@ public class GameController {
 	}
 	
 	@GetMapping("/detail")
-	public void detail(Model model, int gameId, int page) {
+	public void detail(Model model, int gameId, int page, String keyword) {
 		GameVO vo = gameService.read(gameId);
 		model.addAttribute("vo",vo);
 		model.addAttribute("page", page);
+		model.addAttribute("keyword",keyword);
 	}
 	
 	@GetMapping("/update")
@@ -162,18 +163,4 @@ public class GameController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
-	private String saveUploadFile(MultipartFile file) {
-		SimpleDateFormat sdf = new SimpleDateFormat("MMddhhmmss");
-		String date = sdf.format(new Date());
-		String savedName =  date+ "_" + file.getOriginalFilename();
-		File target = new File(uploadPath, savedName);
-		
-		try {
-			FileCopyUtils.copy(file.getBytes(), target);
-			return savedName;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		} 
-	}
 }

@@ -50,6 +50,12 @@ public class GameServiceImple implements GameService {
 	}
 
 	@Override
+	public int getTotalCount(String keyword) {
+		logger.info("getTotalCount(keyword) 호출 : keyword = " + keyword);
+		return gameDAO.getTotalCounts(keyword);
+	}
+	
+	@Override
 	public List<GameVO> read(int price, PageCriteria criteria) {
 		logger.info("game read(price) 호출");
 		return gameDAO.selectByPrice(price, criteria);
@@ -59,6 +65,12 @@ public class GameServiceImple implements GameService {
 	public List<GameVO> read(String keyword, PageCriteria criteria) {
 		logger.info("game read(keyword) 호출");
 		return gameDAO.selectByNameOrGenre(keyword, criteria);
+	}
+
+	@Override
+	public int getTotalCount(int price) {
+		logger.info("getTotalCount(price) 호출 : price = " + price);
+		return gameDAO.getTotalCounts(price);
 	}
 
 }

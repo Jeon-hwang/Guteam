@@ -59,7 +59,7 @@ public class GameBoardDAOTest {
 	}
 
 	private void getTotalTest() {
-		logger.info(dao.getTotalCounts()+"");
+		logger.info(dao.getTotalCounts(5)+"");
 		
 	}
 

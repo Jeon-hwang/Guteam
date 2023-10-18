@@ -58,6 +58,7 @@ public class GameDAOImple implements GameDAO {
 		return sqlSession.selectOne(NAMESPACE + ".total_count");
 	}
 
+	
 	@Override
 	public List<GameVO> selectByPrice(int price, PageCriteria criteria) {
 		logger.info("Game select(price) 호출 : price = " + price);
@@ -76,6 +77,18 @@ public class GameDAOImple implements GameDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_by_keyword", args);
+	}
+
+	@Override
+	public int getTotalCounts(String keyword) {
+		logger.info("Game getTotalCounts(keyword) 호출 : keyword = " + keyword);
+		return sqlSession.selectOne(NAMESPACE + ".total_count_by_keyword", keyword);
+	}
+
+	@Override
+	public int getTotalCounts(int price) {
+		logger.info("Game getTotalCounts(price)호출 : price = " + price);
+		return sqlSession.selectOne(NAMESPACE+ ".total_count_by_price", price);
 	}
 
 }
