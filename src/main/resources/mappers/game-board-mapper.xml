@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="project.spring.guteam.gameBoardMapper">
 
     <insert id="insert">
-    	insert into ${game_board} (${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}) values (#{gameId}, #{memberId}, #{gameBoardTitle}, #{gameBoardContent}, #{gameBoardDateCreated})
+    	insert into ${game_board} (${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}) values (#{gameId}, #{memberId}, #{gameBoardTitle}, #{gameBoardContent}, sysdate)
     </insert>
     <select id="select_all_by_game_id" resultType="GameBoardVO">
     	select * from ${game_board} where ${gameId}=#{gameId} order by ${gameBoardId} desc
@@ -28,12 +28,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="total_count" resultType="Integer">
+    	select count(*) total_cnt from ${game_board} where ${gameId}=#{gameId}
+    </select>
+    
+    <select id="total_count_by_member_id" resultType="Integer">
     	select count(*) total_cnt from ${game_board}
+    	where ${memberId} like '%'||#{keyword}||'%' and ${gameId}=#{gameId}
+    </select>
+    
+    <select id="total_count_by_keyword" resultType="Integer">
+    	selete count(*) total_cnt from ${game_board}
+    	where ${gameId}=#{gameId} and (${gameBoardTitle} like '%'||#{keyword}||'%' or
+    		${gameBoardContent} like '%'||#{keyword}||'%')
     </select>
     
     <select id="select_by_member_id" resultType="GameBoardVO">
     	select * from ${game_board}
-    	where ${memberId} like '%'||#{keyword}||'%'
+    	where ${memberId} like '%'||#{keyword}||'%' and ${gameId}=#{gameId}
     </select>
     
     <select id="select_by_keyword" resultType="GameBoardVO">
@@ -47,6 +58,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="update_comment_cnt">
     	update ${game_board}
     	set ${commentCnt} = ${commentCnt} + #{amount}
+    	where ${gameBoardId} = #{gameBoardId}
+    </update>
+    
+    <update id = "update_deleted">
+    	update ${game_board}
+    	set ${gameBoardTitle} = '삭제된 게시글 입니다', ${gameBoardContent} = '삭제된 게시글 입니다'
     	where ${gameBoardId} = #{gameBoardId}
     </update>
  

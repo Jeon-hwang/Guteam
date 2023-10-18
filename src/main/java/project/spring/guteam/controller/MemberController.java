@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.service.MemberService;
 
+
 @Controller // @Component
 @RequestMapping(value="/member")
 public class MemberController {

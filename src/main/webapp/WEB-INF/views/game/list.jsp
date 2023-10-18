@@ -20,6 +20,7 @@ li {
 <body>
 	<a href="register"><button>게임등록</button></a>
 	<br>
+	<input type="hidden" id="keyword" value="${keyword }">
 	<input type="hidden" id="page" value="${pageMaker.criteria.page }">
 	<c:forEach var="vo" items="${list }">
 	<div class="gameInfo" style="display:inline-block;">
@@ -41,10 +42,20 @@ li {
 		<c:forEach var="pageLink" begin="${pageMaker.startPageNo }"
 			end="${pageMaker.endPageNo }">
 			<c:if test="${pageMaker.criteria.page==pageLink }">
-				<li><a href="list?page=${pageLink }" style="color: green;">${pageLink }</a></li>
+				<c:if test="${empty keyword }">
+					<li><a href="list?page=${pageLink }" style="color: green;">${pageLink }</a></li>
+				</c:if>
+				<c:if test="${not empty keyword }">
+					<li><a href="list?page=${pageLink }&keyword=${keyword}" style="color: green;">${pageLink }</a></li>
+				</c:if>
 			</c:if>
 			<c:if test="${pageMaker.criteria.page!=pageLink }">
-				<li><a href="list?page=${pageLink }">${pageLink }</a></li>
+				<c:if test="${empty keyword }">
+					<li><a href="list?page=${pageLink }">${pageLink }</a></li>
+				</c:if>
+				<c:if test="${not empty keyword }">
+					<li><a href="list?page=${pageLink }&keyword=${keyword}">${pageLink }</a></li>
+				</c:if>
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
@@ -56,7 +67,8 @@ li {
 			$('.gameInfo').on('click',  function(){
 				var gameId = $(this).find("input").val();
 				var page = $('#page').val();
-				var url = "detail?gameId="+gameId+"&page="+page;
+				var keyword = $('#keyword').val();
+				var url = "detail?gameId="+gameId+"&page="+page+"&keyword="+keyword;
 				location.href=url;
 			});
 		}); // document
