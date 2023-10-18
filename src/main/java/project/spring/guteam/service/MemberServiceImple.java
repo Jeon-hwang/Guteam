@@ -31,20 +31,26 @@ public class MemberServiceImple implements MemberService {
 
 	@Override
 	public MemberVO read(String memberId) {
-		logger.info("read() 호출 = memberId = " + memberId);
+		logger.info("read() 호출 memberId = " + memberId);
 		return dao.select(memberId);
-	}
-
-	@Override
-	public int updateMem(MemberVO vo) {
-		logger.info("updateMem() 호출 vo = " + vo.toString());
-		return dao.updateMem(vo);
 	}
 	
 	@Override
-	public int updateCash(MemberVO vo) {
-		logger.info("updateCash() 호출 vo = " + vo.toString());
-		return dao.updateCash(vo);
+	public int read(String memberId, String checking) {
+		logger.info("checkId() 호출 memberId = " + memberId);
+		return dao.checkId(memberId);
+	}
+	
+	
+	@Override
+	public int update(MemberVO vo, String isCash) {
+		if(isCash.equals("Y")) {
+			logger.info("updateCash() 호출 vo = " + vo.toString());
+			return dao.updateCash(vo);
+		}else {
+		logger.info("updateMem() 호출 vo = " + vo.toString());
+		return dao.updateMem(vo);
+		}
 	}
 
 	@Override
@@ -52,5 +58,7 @@ public class MemberServiceImple implements MemberService {
 		logger.info("delete() 호출 memberId = " + memberId);
 		return dao.delete(memberId);
 	}
+
+	
 
 }

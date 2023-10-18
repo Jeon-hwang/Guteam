@@ -10,8 +10,8 @@ public interface MemberService {
 	int create(MemberVO vo);
 	List<MemberVO> read();
 	MemberVO read(String memberId);
-	int updateMem(MemberVO vo);
-	int updateCash(MemberVO vo);
+	int read(String memberId, String checking);
+	int update(MemberVO vo, String isCash);
 	int delete(String memberId);
 	
 }
