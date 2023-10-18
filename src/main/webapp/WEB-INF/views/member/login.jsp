@@ -9,15 +9,16 @@
 <body>
 	<h1>GUTEAM</h1>
 	<a href="register">회원 가입</a>
-	
-	<form action="">
-	
+	<form action="login" method="post">
+		ID &nbsp;&nbsp;&nbsp; 
+		<input type="text" name="memberId" required />
+		<br>
+		PW &nbsp;
+		<input type="password" name="password" required />
+		<input type="hidden" name="targetURL" value=${param.targetURL }>
+		<input type="submit" value="로그인">
+
 	</form>
-	ID &nbsp;&nbsp;&nbsp;
-	<input type="text" name="memberId" required />
-	PW &nbsp;&nbsp;&nbsp;
-	<input type="password" name="password" required />
-	<input type="submit" value="로그인">
 	
 	
 </body>

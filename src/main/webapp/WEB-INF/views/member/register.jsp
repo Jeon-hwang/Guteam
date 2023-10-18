@@ -13,8 +13,8 @@
 		<div>
 			아이디 :
 			<input type="text" id="memberId" name="memberId" placeholder="ID 입력" check_result="fail" required />
-			<button type="button" id="btnCheck" >중복확인</button>
-			<img id="id_check_success" style="display: none;"><br>
+			<span id="checkOk" style="display:none; color:green;">사용 가능한 아이디입니다.</span>
+			<span id="checkNo" style="display:none; color:red;" >아이디가 이미 존재합니다.</span><br>
 			비번 :&nbsp;&nbsp;&nbsp;
 			<input type="password" name="password" placeholder="PW 입력" required /><br>
 			닉네임 :
@@ -30,39 +30,44 @@
 	</form>
 	
 	<script type="text/javascript">
-	
-		// ID 중복 검사
-	
-		// 검사 후 id 변경시, 재검사
-		$('#btnCheck').click(function(){
-			// id 미입력
-			if($('#memberId').val() == '') {
-				alert('아이디를 입력해 주세요.')
-				return;
-			}
+		$('document').ready(function(){
+			// ID 중복 검사
+			// 검사 후 id 변경시, 재검사
+			$('#memberId').blur(function(){
+				console.log("id중복 검사 체크")
+				// id 미입력
+				if($('#memberId').val() == '') {
+					alert('아이디를 입력해 주세요.')
+					$('#checkNo').hide();
+					$('#checkOk').hide();
+					return;
+				}
+				
+				var memberId = $('#memberId').val();
+				console.log(memberId);
+				
+				$.ajax({
+					type : 'POST',
+					url : "../member/checkId",
+					data : {memberId : memberId},
+					success : function(result) {
+						$('#btnCheck').hide();
+						console.log("성공? " + result);
+						if(result != 'fail'){
+							$('#checkOk').hide();
+							$('#checkNo').show();
+						} else {
+							$('#checkNo').hide();
+							$('#checkOk').show();
+						}
+					}
+				}); //end ajax
+				
+			}); //end click()
 			
-			$('#id_check_success').hide();
-			$('#btnCheck').show();
-			$('#memberId').attr("check_result", "fail");
-		})
-		
-		
-		
-		var inputId = $('memberId').val();
-		
-		$.ajax({
-			url : "id_check.jsp",
-			data : {
-				'memberId' : inputId
-			},
-			
-			
-		}); //end ajax
-		
-		
-		
+		}); //end document
 
-	
 	</script>
 </body>
+
 </html>
