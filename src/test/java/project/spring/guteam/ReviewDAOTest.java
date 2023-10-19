@@ -59,7 +59,7 @@ public class ReviewDAOTest {
 	}
 
 	private void getTotalTest() {
-		logger.info(dao.getTotalCount()+"");
+		logger.info(dao.getTotalCount(5)+"");
 		
 	}
 

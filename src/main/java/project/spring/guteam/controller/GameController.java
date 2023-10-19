@@ -3,6 +3,8 @@ package project.spring.guteam.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -62,8 +64,6 @@ public class GameController {
 			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
 		}
 		model.addAttribute("list",list);
-		
-		
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);
 		model.addAttribute("keyword", keyword);
@@ -71,14 +71,14 @@ public class GameController {
 	
 	@GetMapping("/register")
 	public void registerGET() {
-		
+		// 관리자로 로그인해야만 볼 수 있도록 해야함(Interceptor)
 	}
 	
 	@PostMapping("/register")
 	public String registerPOST(GameVO vo, RedirectAttributes reAttr) {
 		int result = gameService.create(vo);
 		if(result==1) {
-			reAttr.addFlashAttribute("insert_result","success");
+			reAttr.addFlashAttribute("insert_result","success"); // 추후에 alert 창 띄우게 설정
 			return "redirect:/game/list";   
 		}else {
 			return "redirect:/game/register";   
@@ -86,30 +86,38 @@ public class GameController {
 	}
 	
 	@GetMapping("/detail")
-	public void detail(Model model, int gameId, int page, String keyword) {
+	public void detail(Model model, int gameId, String prevListUrl) {
 		GameVO vo = gameService.read(gameId);
 		model.addAttribute("vo",vo);
-		model.addAttribute("page", page);
-		model.addAttribute("keyword",keyword);
+		if(prevListUrl==null) {
+			prevListUrl="list";
+		}
+		model.addAttribute("prevListUrl", prevListUrl);
 	}
 	
 	@GetMapping("/update")
-	public void updateGET(Model model, int gameId, int page) {
+	public void updateGET(Model model, int gameId, String prevListUrl) {
 		GameVO vo = gameService.read(gameId);
 		model.addAttribute("vo", vo);
-		model.addAttribute("page", page);
+		try {
+			prevListUrl = URLEncoder.encode(prevListUrl, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally {
+		model.addAttribute("prevListUrl", prevListUrl);
+		}
 	}
 	
 	@PostMapping("/update")
-	public String updatePOST(GameVO vo, RedirectAttributes reAttr, int page) {
+	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl) {
 		logger.info("updatePOST() 호출");
 		logger.info(vo+"");
 		int result = gameService.update(vo);
 		if(result==1) {
 			reAttr.addFlashAttribute("update_result", "success");
-			return "redirect:/game/detail?gameId="+vo.getGameId()+"&page="+page;
+			return "redirect:/game/detail?gameId="+vo.getGameId()+"&prevListUrl="+prevListUrl;
 		}else {
-			return "redirect:/game/update?gameId="+vo.getGameId();
+			return "redirect:/game/update?gameId="+vo.getGameId()+"&prevListUrl="+prevListUrl;
 		}
 	}
 	

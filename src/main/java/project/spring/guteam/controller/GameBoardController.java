@@ -19,6 +19,7 @@ import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.GameBoardService;
+import project.spring.guteam.service.GameService;
 import project.spring.guteam.service.MemberService;
 
 @Controller
@@ -28,6 +29,9 @@ public class GameBoardController {
 	
 	@Autowired
 	private GameBoardService gameBoardService;
+	
+	@Autowired
+	private GameService gameService;
 	
 	@Autowired
 	private MemberService memberService;
@@ -56,15 +60,16 @@ public class GameBoardController {
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);
 		List<String> nicknameList = new ArrayList<>();
-		for(GameBoardVO vo : list) {
-			String memberId = vo.getMemberId();
+		for(int i = 0 ; i < list.size(); i++) {
+			String memberId = list.get(i).getMemberId();
 			MemberVO memberVO = memberService.read(memberId);
 			logger.info(memberVO.toString());
 			String nickname = memberVO.getNickname();
 			nicknameList.add(nickname);
 		}
 		model.addAttribute("nicknameList", nicknameList);
-		model.addAttribute("gameId", gameId);
+		GameVO gameVO = gameService.read(gameId);
+		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("list",list);
 	}
 	

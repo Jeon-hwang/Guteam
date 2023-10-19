@@ -15,11 +15,18 @@ li {
 </style>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
 <meta charset="UTF-8">
-<title>${gameId } 커뮤니티</title>
+<title>${gameVO.gameName } 커뮤니티</title>
 </head>
 <body>
-<a href="register?gameId=${gameId }"><button>글쓰기</button></a>
-<a href="../game/detail?gameId=${gameId }&page=1"><button>게임 정보로 돌아가기</button></a>
+<a href="register?gameId=${gameVO.gameId }"><button>글쓰기</button></a>
+<a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button>게임 정보로 돌아가기</button></a>
+<br>
+<br>
+<form action="list" id="search" method="get">
+	<input type="hidden" name="gameId" value="${gameVO.gameId }">
+	<input type="text" name="keyword" value="${keyword }" maxlength="30">
+	<input type="submit" value="검색">
+</form>
 <table>
 	<thead>
 		<tr>
@@ -30,37 +37,36 @@ li {
 			<th width="58px">댓글 수</th>
 		</tr>
 	</thead>
-	<c:forEach varStatus="status" var="vo" items="${list }">
+	<c:forEach varStatus="status" var="gameBoardVO" items="${list }">
 		<tr>
-			<td>${vo.gameBoardId }</td>
-			<td><a href="detail?gameBoardId=${vo.gameBoardId }&page=${pageMaker.criteria.page}&gameId=${gameId}">${vo.gameBoardTitle }</a></td>
+			<td>${gameBoardVO.gameBoardId }</td>
+			<td><a href="detail?gameBoardId=${gameBoardVO.gameBoardId }&page=${pageMaker.criteria.page}&gameId=${gameVO.gameId}">${gameBoardVO.gameBoardTitle }</a></td>
 			<td>${nicknameList[status.index] }</td>		
-			<td>${vo.gameBoardDateCreated }</td>
-			<td>${vo.commentCnt }</td>
+			<td>${gameBoardVO.gameBoardDateCreated }</td>
+			<td>${gameBoardVO.commentCnt }</td>
 		</tr>
 	</c:forEach>
 
 </table>
 	<ul>
 		<c:if test="${pageMaker.hasPrev }">
-			<li><a href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameId}"><button>이전</button></a></li>
+			<li><a href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}"><button>이전</button></a></li>
 		</c:if>
 		<c:forEach var="pageLink" begin="${pageMaker.startPageNo }"
 			end="${pageMaker.endPageNo }">
 			<c:if test="${pageMaker.criteria.page==pageLink }">
-				<li><a href="list?page=${pageLink }&gameId=${gameId}" style="color: green;">${pageLink }</a></li>
+				<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}" style="color: green;">${pageLink }</a></li>
 			</c:if>
 			<c:if test="${pageMaker.criteria.page!=pageLink }">
-				<li><a href="list?page=${pageLink }&gameId=${gameId}">${pageLink }</a></li>
+				<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}">${pageLink }</a></li>
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
-			<li><a href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameId}"><button>다음</button></a></li>
+			<li><a href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}"><button>다음</button></a></li>
 		</c:if>
 	</ul>
 <br>
 <br>
-
 
 </body>
 </html>

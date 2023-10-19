@@ -23,10 +23,13 @@
 마지막 업데이트일 : ${vo.updateDate }
 <hr>
 <br>
+<a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button>수정하기</button></a>
 <br>
 <a href="../gameBoard/list?gameId=${vo.gameId }"><button>${vo.gameName } 커뮤니티</button></a>
-<a href="list?page=${page }&keyword=${keyword}"><button>리스트로 돌아가기</button></a>
-<a href="update?gameId=${vo.gameId }&page=${page}"><button>수정하기</button></a>
+<br>
+<a href="../review/list?gameId=${vo.gameId }"><button>리뷰보기</button></a>
+<br>
+<a href="${prevListUrl}"><button>리스트로 돌아가기</button></a>
 </body>
 
 </html>

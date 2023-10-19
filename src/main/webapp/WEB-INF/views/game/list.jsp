@@ -20,8 +20,6 @@ li {
 <body>
 	<a href="register"><button>게임등록</button></a>
 	<br>
-	<input type="hidden" id="keyword" value="${keyword }">
-	<input type="hidden" id="page" value="${pageMaker.criteria.page }">
 	<c:forEach var="vo" items="${list }">
 	<div class="gameInfo" style="display:inline-block;">
 		<img alt="${vo.gameName }" width="300px" height="300px" src="display?fileName=${vo.gameImageName }">
@@ -66,9 +64,9 @@ li {
 		$(document).ready(function(){
 			$('.gameInfo').on('click',  function(){
 				var gameId = $(this).find("input").val();
-				var page = $('#page').val();
+				var prevListUrl = window.location.href;
 				var keyword = $('#keyword').val();
-				var url = "detail?gameId="+gameId+"&page="+page+"&keyword="+keyword;
+				var url = "detail?gameId="+gameId+"&prevListUrl="+prevListUrl;
 				location.href=url;
 			});
 		}); // document

@@ -51,7 +51,7 @@ public class GameBoardServiceImple implements GameBoardService {
 	@Override
 	public List<GameBoardVO> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword) {
 		logger.info("gameBoard read(keyword) 호출 : keywordCriteria = " + keywordCriteria + ",keyword = " + keyword);
-		if(keywordCriteria.equals("memberId")) {
+		if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
 			return gameBoardDAO.selectByMemberId(gameId, keyword);
 		}else {
 			return gameBoardDAO.selectByKeyword(gameId, keyword);

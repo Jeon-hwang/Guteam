@@ -57,9 +57,9 @@ public class ReviewDAOImple implements ReviewDAO {
 	}
 
 	@Override
-	public int getTotalCount() {
+	public int getTotalCount(int gameId) {
 		logger.info("Reveiw getTotal() 호출 ");
-		return sqlSession.selectOne(NAMESPACE + ".total_count");
+		return sqlSession.selectOne(NAMESPACE + ".total_count", gameId);
 	}
 
 	@Override

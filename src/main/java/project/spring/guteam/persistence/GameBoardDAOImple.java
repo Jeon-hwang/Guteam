@@ -102,7 +102,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("keyword", keyword);
 		args.put("gameId", gameId);
-		if(keywordCriteria.equals("memberId")) {
+		if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
 			result = sqlSession.selectOne(NAMESPACE+".total_count_by_member_id",args);
 		}else {
 			result = sqlSession.selectOne(NAMESPACE+".total_count_by_keyword",args);

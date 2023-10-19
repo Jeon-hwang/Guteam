@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="project.spring.guteam.reviewMapper">
 
     <insert id="insert">
-    	insert into ${review} (${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}) values (#{gameId}, #{memberId}, #{reviewTitle}, #{reviewContent})
+    	insert into ${review} (${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}, ${reviewDateCreated}, ${rating}) values (#{gameId}, #{memberId}, #{reviewTitle}, #{reviewContent}, sysdate, #{rating})
     </insert>
     <select id="select_all_by_game_id" resultType="ReviewVO">
     	select * from ${review} where ${gameId}=#{gameId} order by ${reviewId} desc
@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="total_count" resultType="Integer">
     	select count(*) total_cnt from ${review}
+    	where ${gameId}=#{gameId}
     </select>
     
     <select id="select_by_member_id" resultType="ReviewVO">

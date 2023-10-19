@@ -37,21 +37,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="total_count_by_keyword" resultType="Integer">
-    	selete count(*) total_cnt from ${game_board}
+    	select count(*) total_cnt from ${game_board}
     	where ${gameId}=#{gameId} and (${gameBoardTitle} like '%'||#{keyword}||'%' or
     		${gameBoardContent} like '%'||#{keyword}||'%')
     </select>
     
     <select id="select_by_member_id" resultType="GameBoardVO">
     	select * from ${game_board}
-    	where ${memberId} like '%'||#{keyword}||'%' and ${gameId}=#{gameId}
+    	where ${gameId}=#{gameId} and (${memberId} like '%'||#{keyword}||'%' and ${gameId}=#{gameId})
+    	order by ${gameBoardId} desc
     </select>
     
     <select id="select_by_keyword" resultType="GameBoardVO">
     	select * from ${game_board}
-    	where ${gameBoardTitle} like '%'||#{keyword}||'%' or
-    		${gameBoardContent} like '%'||#{keyword}||'%'
-    		order by ${gameBoardId} desc
+    	where ${gameId}=#{gameId} and (${gameBoardTitle} like '%'||#{keyword}||'%' or
+    		${gameBoardContent} like '%'||#{keyword}||'%')
+    	order by ${gameBoardId} desc
     </select>
     
    

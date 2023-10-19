@@ -18,7 +18,7 @@
 <form action="update" method="post">
 
 <img class="file-drop" width="100px" height="100px" alt="${vo.gameName }" src="display?fileName=${vo.gameImageName }"><br>
-<input type="hidden" name="page" value="${page }">
+<input type="hidden" name="prevListUrl" value="${prevListUrl }">
 <input type="hidden" name="gameId" value="${vo.gameId }">
 게임이름=<input type="text" name="gameName" value="${vo.gameName }" required><br>
 가격=<input type="number" name="price" value="${vo.price }" required><br>
