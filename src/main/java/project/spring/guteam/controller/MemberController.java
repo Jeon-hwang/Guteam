@@ -1,5 +1,10 @@
 package project.spring.guteam.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,10 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.spring.guteam.domain.MemberVO;
@@ -21,11 +29,14 @@ import project.spring.guteam.service.MemberService;
 @RequestMapping(value = "/member")
 public class MemberController {
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-
+	
 	@Autowired
 	private MemberService memberService;
-
-	// 로그인 메인
+	
+	@Resource(name="uploadPath")
+	private String uploadPath;
+	
+	// 로그인 화면
 	@GetMapping("/login")
 	public void loginGET() {
 		logger.info("loginGET() 호출");
@@ -52,7 +63,7 @@ public class MemberController {
 			logger.info("로그인 실패 targetURL = " + targetURL);
 			return "redirect:/member/login";
 		}
-	}
+	} //end loginPOST()
 	
 	//로그아웃
 	@GetMapping("/logout")
@@ -68,8 +79,6 @@ public class MemberController {
 		}
 	}
 	
-	
-
 	// id 중복체크
 	@PostMapping("/checkId")
 	@ResponseBody
@@ -101,11 +110,76 @@ public class MemberController {
 		int result = memberService.create(vo);
 		logger.info(result + " 행 삽입");
 		if (result == 1) {
-			reAttr.addFlashAttribute("알림", "success");
+			reAttr.addFlashAttribute("on_alert", "success");
 			return "redirect:/member/login";
 		} else {
-			return "redirect:/member/login";
+			return "redirect:/member/register";
+		}
+	} //end registerPOST()
+	
+	// 회원정보 수정
+	@GetMapping("/update")
+	public void updateGET(Model model, HttpSession session) {
+		logger.info("updateGET() 호출");
+		MemberVO vo = new MemberVO();
+		String memberId = (String) session.getAttribute("memberId");
+		vo = memberService.read(memberId);
+		model.addAttribute("vo", vo);
+		logger.info(vo.toString());
+		
+	}
+	
+	@PostMapping("/update")
+	public String updatePOST(MemberVO vo, MultipartFile file) {	
+		logger.info("updatePOST() 호출 : " + vo.toString());
+		logger.info("파일 이름 : " + file.getOriginalFilename());
+		
+		String savedFile = saveUploadFile(file);
+		logger.info(savedFile);
+		vo.setMemberImageName(savedFile);
+		int result = memberService.update(vo, "N");
+		
+		if(result == 1) {
+			logger.info("수정 완료");
+			return "redirect:/";
+		} else {
+			logger.info("수정 실패");
+			return "redirect:/member/update";
+		}
+		
+	}
+	
+	// 업로드 파일 이름 중복 방지
+	private String saveUploadFile(MultipartFile file) {
+		UUID uuid = UUID.randomUUID();
+		String saveName = uuid + "_" + file.getOriginalFilename();
+		File target = new File(uploadPath, saveName);
+		
+		try {
+			FileCopyUtils.copy(file.getBytes(), target);
+			return saveName;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
 	}
+	
+	// 회원 탈퇴
+	@PostMapping("/delete")
+	public String delete(String memberId, HttpSession session) {
+		logger.info("delete() 호출 memberId = " + memberId);
+		session.removeAttribute("memberId");
+		int result = memberService.delete(memberId);
+		if(result == 1) {
+			logger.info("탈퇴 성공");
+			return "redirect:/";
+		} else {
+			logger.info("탈퇴 실패");
+			return "redirect:/";
+		}
+		
+	} //end delete()
+	
 
 } // end MemberController

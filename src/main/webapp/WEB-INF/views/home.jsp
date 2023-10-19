@@ -14,24 +14,30 @@
 	</form>
 	
 	<c:if test="${empty sessionScope.memberId }">
-		<button type="button" id="btn_login">로그인</button>
+		<a href="member/login"><button type="button">로그인</button></a>
 	</c:if>
 	
 	<c:if test="${not empty sessionScope.memberId }">
-		<button type="button" id="btn_logout">로그아웃</button>
+		<a href="member/update"><button type="button">회원수정</button></a>
+		<a href="member/logout"><button type="button">로그아웃</button></a><br><br>
+		<form action="member/delete" method="post">
+			<input type="hidden" name="memberId" id="memberId" value="${sessionScope.memberId }">
+			<input type="submit" value="회원탈퇴">	
+		</form>
 	</c:if>
 	
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		$(document).ready(function(){
-			$('#btn_login').click(function(){
-				var target = encodeURI('/guteam/member/login');
-				location = target;
-			});
-			$('#btn_logout').click(function(){
-				location = '/guteam/member/logout';
-			})
+			$('#memberId').click(function(){
+				var msg = confirm(${memberId} + '님, 정말로 탈퇴 하시겠습니까?');
+				if(msg == true){
+					console.log("성공");
+				}
+				
+			}); //end .click()
+			
 		}); //end document
-	</script>
+	</script> -->
 </body>
 
 </html>

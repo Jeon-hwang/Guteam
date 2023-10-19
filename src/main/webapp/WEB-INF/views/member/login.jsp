@@ -4,7 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Guteam : 로그인</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<title>GUTEAM : 로그인</title>
 </head>
 <body>
 	<h1>GUTEAM</h1>
@@ -17,9 +18,16 @@
 		<input type="password" name="password" required />
 		<input type="hidden" name="targetURL" value=${param.targetURL }>
 		<input type="submit" value="로그인">
-
 	</form>
+	<input type="hidden" id="onAlert" value="${on_alert }">
 	
-	
+<script type="text/javascript">
+	$(document).ready(function(){
+		var result = $('#onAlert').val();
+			if(result == 'success'){
+			alert('가입 성공!');
+		}
+	});
+</script>
 </body>
 </html>
