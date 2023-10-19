@@ -21,7 +21,7 @@
 			연락처 :
 			<input type="text" name="phone" value="${vo.phone }" required /><br><br>
 			프로필 사진 <br>
-			<input type="file" name="memberImageName"><br>
+			<input type="text" name="memberImageName"><br>
 			<input type="hidden" name="isAdmin" value="N" />
 			<input type="submit" value="수정">
 		</div>
