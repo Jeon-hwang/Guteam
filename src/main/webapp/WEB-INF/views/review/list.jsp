@@ -30,17 +30,15 @@
 			<td>${nicknameList[status.index] }</td>		
 			<td>${reviewVO.reviewDateCreated }</td>
 			<td>
-				<c:if test="${reviewVO.rating!=0 }">
-					<c:forEach begin="1" end="${reviewVO.rating/2 }" step="1">
-					★
-					</c:forEach>
-					<c:if test="${reviewVO.rating%2!=0 }">
-					<img width="12" height="12" alt="" src="https://cdn0.iconfinder.com/data/icons/rating/100/13-512.png">
-					</c:if>
-					<c:forEach begin="1" end="${5-(reviewVO.rating/2) }" step="1">
-					☆
-					</c:forEach>
+				<c:forEach begin="1" end="${reviewVO.rating/2 }" step="1">
+				★
+				</c:forEach>
+				<c:if test="${reviewVO.rating%2!=0 }">
+				<img width="12" height="12" alt="" src="https://cdn0.iconfinder.com/data/icons/rating/100/13-512.png">
 				</c:if>
+				<c:forEach begin="1" end="${5-(reviewVO.rating/2) }" step="1">
+				☆
+				</c:forEach>
 			</td>
 		</tr>
 	</c:forEach>

@@ -52,6 +52,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	) where rn between #{start} and #{end}
     </select>
     
+    <select id="get_rating" resultType="Integer">
+    	select avg(${rating}) avg_rating from ${review} where ${gameId}=#{gameId}
+    </select>
+    
 
     <update id="update_thumb_up_count">
     	update ${review}

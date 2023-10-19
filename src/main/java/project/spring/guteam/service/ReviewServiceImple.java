@@ -60,4 +60,10 @@ public class ReviewServiceImple implements ReviewService {
 		return reviewDAO.getTotalCount(gameId);
 	}
 
+	@Override
+	public int getRating(int gameId) {
+		logger.info("review getRating() 호출");
+		return reviewDAO.getRating(gameId);
+	}
+
 }

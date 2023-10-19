@@ -20,7 +20,7 @@ li {
 <body>
 	<a href="register"><button>게임등록</button></a>
 	<br>
-	<c:forEach var="vo" items="${list }">
+	<c:forEach varStatus="status" var="vo" items="${list }">
 	<div class="gameInfo" style="display:inline-block;">
 		<img alt="${vo.gameName }" width="300px" height="300px" src="display?fileName=${vo.gameImageName }">
 		<input type="hidden" class="gameId" value="${vo.gameId }">
@@ -29,6 +29,18 @@ li {
 		price : ${vo.price }<br>
 		genre : ${vo.genre }<br>
 		releaseDate : ${vo.releaseDate }<br>
+		rating : 
+		<c:if test="${ratingList[status.index]!=0 }">
+		<c:forEach begin="1" end="${ratingList[status.index]/2 }" step="1">
+			★
+		</c:forEach>
+		<c:if test="${ratingList[status.index]%2!=0 }">
+			<img width="12" height="12" alt="" src="https://cdn0.iconfinder.com/data/icons/rating/100/13-512.png">
+		</c:if>
+		<c:forEach begin="1" end="${5-(ratingList[status.index]/2) }" step="1">
+			☆
+		</c:forEach>
+		</c:if>
 		<br>
 		<!-- <img alt="${vo.gameName }" src=""><br> -->
 	</div>

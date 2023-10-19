@@ -11,7 +11,7 @@
 <input type="hidden" name="gameId" value="${gameId }">
 memberId = <input type="text" name="memberId" value="${sessionScope.memberId }test" readonly><br>
 reviewTitle = <input type="text" name="reviewTitle" autofocus required><br>
-rating = <input type="number" min="1" max="10" name="rating"><br>
+rating = <input type="number" min="0" max="10" name="rating" value="5" required><br>
 reviewContent = <textarea name="reviewContent" rows="50" cols="100" required></textarea><br>
 <input type="submit" value="글 작성 완료하기"><br>
 </form>

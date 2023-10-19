@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -30,6 +31,7 @@ import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.GameService;
+import project.spring.guteam.service.ReviewService;
 
 @Controller
 @RequestMapping(value="/game")
@@ -38,6 +40,9 @@ public class GameController {
 	
 	@Autowired
 	private GameService gameService;
+	
+	@Autowired
+	private ReviewService reviewService;
 	
 	@Resource(name="uploadPath")
 	private String uploadPath;
@@ -63,7 +68,13 @@ public class GameController {
 			list = gameService.read(keyword, criteria);
 			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
 		}
+		List<Integer> ratingList = new ArrayList<>();
+		for(int i = 0 ; i < list.size(); i++) {
+			int gameId = list.get(i).getGameId();
+			ratingList.add(reviewService.getRating(gameId));
+		}
 		model.addAttribute("list",list);
+		model.addAttribute("ratingList", ratingList);
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);
 		model.addAttribute("keyword", keyword);

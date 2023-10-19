@@ -12,5 +12,6 @@ public interface ReviewService {
 	int update(ReviewVO vo);
 	int delete(int reviewId);
 	int update(int riviewId, int amount);
-	int getTotalCount(int gameId);	
+	int getTotalCount(int gameId);
+	int getRating(int gameId);
 }

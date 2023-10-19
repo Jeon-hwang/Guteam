@@ -79,5 +79,37 @@ public class ReviewController {
 			return "redirect:register?gameId="+vo.getGameId();
 		}
 	}
+	
+	@GetMapping("/detail")
+	public void detail(Model model, int reviewId, int page) {
+		ReviewVO reviewVO = reviewService.read(reviewId);
+		GameVO gameVO = gameService.read(reviewVO.getGameId());
+		model.addAttribute("reviewVO", reviewVO);
+		model.addAttribute("gameVO", gameVO);
+		model.addAttribute("page", page);
+		
+	}
+	
+	@GetMapping("/update")
+	public void updateGET() {
+		
+	}
+	
+	@PostMapping("/update")
+	public String updatePOST() {
+		return null;
+		
+	}
+	
+	@PostMapping("/delete")
+	public String delete(int reviewId, int gameId) {
+		int result = reviewService.delete(reviewId);
+		
+		if(result==1) {
+			return "redirect:/review/list?gameId="+gameId;
+		}else {
+			return "redirect:/review/detail?reviewId="+reviewId+"&gameId="+gameId;
+		}
+	}
 
 }

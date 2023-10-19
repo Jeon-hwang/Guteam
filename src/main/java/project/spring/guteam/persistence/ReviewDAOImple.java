@@ -94,4 +94,15 @@ public class ReviewDAOImple implements ReviewDAO {
 		
 	}
 
+	@Override
+	public int getRating(int gameId) {
+		logger.info("Review getRating() 호출 : gameId = " + gameId);
+		Integer rating = sqlSession.selectOne(NAMESPACE+".get_rating", gameId);
+		if(rating==null) {
+			rating = 0;
+		}
+		logger.info("rating = " + rating);
+		return rating;
+	}
+
 }
