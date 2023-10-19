@@ -23,7 +23,7 @@
 			<input type="text" name="email" required /><br>
 			연락처 :
 			<input type="text" name="phone" required /><br>
-			<input type="hidden" name="memberImageName" value="img">
+			<input type="hidden" name="memberImageName" value="default.jpeg">
 			<input type="hidden" name="isAdmin" value="N" />
 			<input type="submit" value="가입">
 		</div>
@@ -55,10 +55,10 @@
 						console.log("성공? " + result);
 						if(result != 'fail'){
 							$('#checkOk').hide();
-							$('#checkNo').show();
+							$('#checkNo').show(); //id 중복
 						} else {
 							$('#checkNo').hide();
-							$('#checkOk').show();
+							$('#checkOk').show(); //id 사용가능
 						}
 					}
 				}); //end ajax
@@ -66,7 +66,7 @@
 			}); //end click()
 			
 		}); //end document
-
+		
 	</script>
 </body>
 
