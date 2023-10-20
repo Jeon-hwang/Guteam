@@ -1,9 +1,5 @@
 package project.spring.guteam.persistence;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +25,9 @@ public class ThumbDAOImple implements ThumbDAO{
 	}
 
 	@Override
-	public List<Integer> select(String memberId, int upDown) {
-		logger.info("Thumb select() 호출  : memberId = " + memberId);
-		Map<String, Object> args = new HashMap<>();
-		args.put("memberId", memberId);
-		args.put("upDown", upDown);
-		return sqlSession.selectList(NAMESPACE + ".select_by_member_id", args);
+	public ThumbVO select(ThumbVO vo) {
+		logger.info("Thumb select() 호출  : vo = " + vo);
+		return sqlSession.selectOne(NAMESPACE + ".select", vo);
 	}
 
 	@Override

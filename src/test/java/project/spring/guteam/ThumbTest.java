@@ -26,7 +26,7 @@ public class ThumbTest {
 	@Test
 	public void test() {
 //		insertTest();
-//		selectTest();
+		selectTest();
 //		updateTest();
 //		deleteTest();
 		
@@ -42,10 +42,11 @@ public class ThumbTest {
 	}
 
 	private void selectTest() {
-		List<Integer> list = dao.select("test", 1);
-		for(int i = 0 ; i < list.size(); i ++) {
-		logger.info(list.get(i)+"");
-		}
+		ThumbVO vo = new ThumbVO(3, "test", 1);
+		vo = dao.select(vo);
+		
+		logger.info(vo.toString());
+		
 		
 	}
 

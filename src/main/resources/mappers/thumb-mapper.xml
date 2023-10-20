@@ -8,8 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	insert into ${thumb} (${reviewId}, ${memberId}, ${upDown}) values (#{reviewId}, #{memberId}, #{upDown})
     </insert>
     
-    <select id="select_by_member_id" resultType="Integer">
-    	select ${reviewId} from ${thumb} where ${memberId}=#{memberId} and ${upDown}=#{upDown}
+    <select id="select" resultType="ThumbVO">
+    	select * from ${thumb} where ${reviewId}=#{reviewId} and ${memberId}=#{memberId}
     </select>
     <update id="update">
     	update ${thumb} set ${upDown}=#{upDown} where ${memberId}=#{memberId} and ${reviewId}=#{reviewId}

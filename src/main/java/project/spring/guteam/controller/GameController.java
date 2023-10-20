@@ -100,6 +100,8 @@ public class GameController {
 	public void detail(Model model, int gameId, String prevListUrl) {
 		GameVO vo = gameService.read(gameId);
 		model.addAttribute("vo",vo);
+		int rating = reviewService.getRating(gameId);
+		model.addAttribute("rating", rating);
 		if(prevListUrl==null) {
 			prevListUrl="list";
 		}

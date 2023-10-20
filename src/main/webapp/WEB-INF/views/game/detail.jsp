@@ -21,6 +21,8 @@
 출시일 : ${vo.releaseDate }
 <br>
 마지막 업데이트일 : ${vo.updateDate }
+<br>
+평점 : ${rating } 점
 <hr>
 <br>
 <a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button>수정하기</button></a>
