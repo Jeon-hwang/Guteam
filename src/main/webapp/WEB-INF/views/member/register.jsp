@@ -12,7 +12,7 @@
 	<form action="register" method="post">
 		<div>
 			아이디 :
-			<input type="text" id="memberId" name="memberId" placeholder="ID 입력" check_result="fail" required />
+			<input type="text" id="memberId" name="memberId" placeholder="ID 입력" required />
 			<span id="checkOk" style="display:none; color:green;">사용 가능한 아이디입니다.</span>
 			<span id="checkNo" style="display:none; color:red;" >아이디가 이미 존재합니다.</span><br>
 			비번 :&nbsp;&nbsp;&nbsp;
@@ -23,7 +23,7 @@
 			<input type="text" name="email" required /><br>
 			연락처 :
 			<input type="text" name="phone" required /><br>
-			<input type="hidden" name="memberImageName" value="default.jpeg">
+			<input type="hidden" name="memberImageName" value="/default.jpeg">
 			<input type="hidden" name="isAdmin" value="N" />
 			<input type="submit" value="가입">
 		</div>

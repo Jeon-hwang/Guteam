@@ -12,6 +12,7 @@ public class MediaUtil {
 	static {
 		mediaMap = new HashMap<>();
 		mediaMap.put("JPG", MediaType.IMAGE_JPEG);
+		mediaMap.put("JPEG", MediaType.IMAGE_JPEG);
 		mediaMap.put("GIF", MediaType.IMAGE_GIF);
 		mediaMap.put("PNG", MediaType.IMAGE_PNG);
 		mediaMap.put("JFIF", MediaType.IMAGE_JPEG);
