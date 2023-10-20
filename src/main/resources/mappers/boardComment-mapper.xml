@@ -32,4 +32,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	set ${commentContent} = 'deleted'
 	 	where ${commentId} = #{commentId}
 	 </update>
+	 
+	 <select id="select_and_paging" resultType="BoardCommentVo">
+	 	select b.${commentId}, b.${gameBoardId}, b.${memberId}, b.${commentContent}, b.${replyCnt}, b.${commentDateCreated}
+	 	from (
+	 		select rownum rn, a.* from(
+	 			select * from ${board_comment} where ${gameBoardId}=#{gameBoardId} order by ${commentId} desc
+	 		)a
+	 	)b where rn between #{start} and #{end} 
+	 </select>
+	 
+	 <select id="total_count" resultType="Integer">
+	 	select count(*) total_cnt from ${board_comment} where ${gameBoardId}=#{gameBoardId}
+	 </select>
 </mapper>

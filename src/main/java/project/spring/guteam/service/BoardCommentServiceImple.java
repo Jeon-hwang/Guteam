@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import project.spring.guteam.domain.BoardCommentVO;
+import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.BoardCommentDAO;
 
 @Service //@Component
@@ -24,9 +25,9 @@ public class BoardCommentServiceImple implements BoardCommentService {
 	}
 
 	@Override
-	public List<BoardCommentVO> read(int gameBoardId) {
+	public List<BoardCommentVO> read(int gameBoardId,PageCriteria criteria) {
 		logger.info("Comment read() 실행");
-		return boardCommentDAO.select(gameBoardId);
+		return boardCommentDAO.select(gameBoardId,criteria);
 	}
 
 	@Override
@@ -39,6 +40,12 @@ public class BoardCommentServiceImple implements BoardCommentService {
 	public int delete(int commentId, int gameBoardId) {
 		logger.info("comment delete 실행");
 		return boardCommentDAO.delete(commentId);
+	}
+
+	@Override
+	public int getTotalCount(int boardId) {
+		logger.info("service getTotalCount 실행");
+		return boardCommentDAO.getTotalCount(boardId);
 	}
 
 }

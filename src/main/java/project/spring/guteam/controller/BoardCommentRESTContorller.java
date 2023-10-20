@@ -1,6 +1,8 @@
 package project.spring.guteam.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.spring.guteam.domain.BoardCommentVO;
+import project.spring.guteam.pageutil.PageCriteria;
+import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.BoardCommentService;
 
 
@@ -39,11 +43,26 @@ public class BoardCommentRESTContorller {
 	}
 	
 	@GetMapping("/all/{gameBoardId}")
-	public ResponseEntity<List<BoardCommentVO>> readComment(@PathVariable("gameBoardId") int gameBoardId){
+	public ResponseEntity<Map<String, Object>> readComment(@PathVariable("gameBoardId") int gameBoardId,Integer page){
 		logger.info("readComment 실행");
+		PageCriteria criteria = new PageCriteria(1, 3);
+		if(page != null) {
+			criteria.setPage(page);
+		}
 		
-		List<BoardCommentVO> list = service.read(gameBoardId);
-		return new ResponseEntity<List<BoardCommentVO>>(list,HttpStatus.OK);
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(criteria);
+		pageMaker.setTotalCount(service.getTotalCount(gameBoardId));
+		pageMaker.setPageData();
+		List<BoardCommentVO> list = service.read(gameBoardId,criteria);
+		
+		Map<String, Object> data = new HashMap<String, Object>();
+		
+		data.put("list", list);
+		data.put("pageMaker", pageMaker);
+		
+		
+		return new ResponseEntity<Map<String,Object>>(data,HttpStatus.OK);
 	}
 	
 	@PutMapping("/{commentId}")

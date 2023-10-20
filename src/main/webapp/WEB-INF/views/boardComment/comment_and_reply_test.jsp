@@ -50,18 +50,23 @@
 						console.log(result);
 						if(result==1){
 							alert('댓글 입력 성공');
-							getAllComments();
+							getAllComments(1);
 						}
 					}
 					
 				});// end ajax
 			})// commentAddBtn
-			
-			getAllComments();
-			function getAllComments(){
+			$('#comments').on('click','.comment_paging .paging',function(){
+				var clickPage = $(this).val();
+				console.log("선택한 페이지 :"+clickPage);
+				getAllComments(clickPage);
+			})
+			getAllComments(1);
+			function getAllComments(nowPage){
 				var gameBoardId= $('#gameBoardId').val();
+				var page = nowPage;
 				
-				var url = 'comments/all/'+gameBoardId;
+				var url = 'comments/all/'+gameBoardId+'?page='+page;
 				
 				$.getJSON(
 					url,
@@ -71,7 +76,7 @@
 					var memberId = $('#memberId').val();
 					var list = '';
 					var commentRow = 1;
-					$(data).each(function(){
+					$(data.list).each(function(){
 						console.log(this);
 						
 						var commentDateCreated = new Date(this.commentDateCreated);
@@ -91,14 +96,29 @@
 						console.log('해당 행 번호 : '+commentRow);	
 						commentRow++;
 					});//end each
+					var hasPrev = data.pageMaker.hasPrev;
+					var hasNext = data.pageMaker.hasNext;
+					var startPageNo = data.pageMaker.startPageNo;
+					var endPageNo = data.pageMaker.endPageNo;
 					
+						list += '<div class="comment_paging">'
+							 if(hasPrev){
+						list += '<button class="paging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp' 
+							 }
+							for(var i = startPageNo ; i<=endPageNo ; i++ ){
+						list += '<button class="paging" value="'+i+'">'+i+'</button>'		
+							}
+							if(hasNext){
+								list += '&nbsp&nbsp<button class="paging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp'		
+							}
+						list +=	'</div>'
 					$('#comments').html(list);
 					}//end funtion(data)
 				);//end .getJSON
 				
 				}// end getAllComments()
 		
-			$('#comments').on('click','.comment_item .update_comment',function(){
+			$('#comments').on('click','.comment_item .update_comment',function(){ //댓글 업데이트
 			
 				var commentId = $(this).prevAll('#commentId').val();
 				var commentContent = $(this).prevAll('#commentContent').val();
@@ -121,7 +141,7 @@
 				})//end ajax
 			}); // end btn_update.on 
 			
-			$('#comments').on('click','.comment_item .delete_comment',function(){
+			$('#comments').on('click','.comment_item .delete_comment',function(){ // 댓글 삭제
 				
 				var commentId = $(this).prevAll('#commentId').val();
 				var gameBoardId =  $('#gameBoardId').val();

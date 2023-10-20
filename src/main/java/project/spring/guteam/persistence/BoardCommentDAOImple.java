@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import project.spring.guteam.domain.BoardCommentVO;
+import project.spring.guteam.pageutil.PageCriteria;
 
 @Repository //component
 public class BoardCommentDAOImple implements BoardCommentDAO {
@@ -47,5 +48,23 @@ public class BoardCommentDAOImple implements BoardCommentDAO {
 		logger.info("B.Comment delete 수행");
 		return sqlSession.update(NAMESPACE+".delete",commentId);
 	}
+
+	@Override
+	public List<BoardCommentVO> select(int gameBoardId, PageCriteria criteria) {
+		logger.info("paging select 수행");
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("gameBoardId", gameBoardId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE+".select_and_paging",args);
+	}
+
+	@Override
+	public int getTotalCount(int gameBoardId) {
+		logger.info("getTotalNum 실행");
+		return sqlSession.selectOne(NAMESPACE+".total_count",gameBoardId);
+	}
+	
+	
 
 }
