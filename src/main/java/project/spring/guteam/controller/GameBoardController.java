@@ -42,7 +42,7 @@ public class GameBoardController {
 		logger.info("page = " + page + ", numsPerPage = "+ numsPerPage);
 		PageCriteria criteria = new PageCriteria();
 		if(page != null) {
-			criteria.setPage(page);
+			criteria.setPage(page);	
 		}
 		if(numsPerPage != null) {
 			criteria.setNumsPerPage(numsPerPage);

@@ -29,6 +29,22 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			
+			function dateFormat(date) {
+		        var month = date.getMonth() + 1;
+		        var day = date.getDate();
+		        var hour = date.getHours();
+		        var minute = date.getMinutes();
+		        var second = date.getSeconds();
+
+		        month = month >= 10 ? month : '0' + month;
+		        day = day >= 10 ? day : '0' + day;
+		        hour = hour >= 10 ? hour : '0' + hour;
+		        minute = minute >= 10 ? minute : '0' + minute;
+		        second = second >= 10 ? second : '0' + second;
+
+		        return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+		}
+			
 			$('#commentAddBtn').click(function(){
 				var gameBoardId = $('#gameBoardId').val();
 				var memberId = $('#memberId').val();
@@ -81,18 +97,35 @@
 						
 						var commentDateCreated = new Date(this.commentDateCreated);
 						
+						if(this.commentContent=="삭제된 댓글입니다."){
 						list += '<li class="comment_item">'
-						+ '<pre>'
-						+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
-						+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
-						+ this.memberId + '&nbsp&nbsp'
-						+ '<input type="text" id="commentContent" value="'+this.commentContent+'">'
-						+ commentDateCreated + '&nbsp&nbsp'
-						+ '<button class="update_comment" >수정</button>'
-						+ '<button class="delete_comment" >삭제</button>'
-						+ '<br><button class="reply_view_btn">답글보기</button>'
-						+ '<div class="replies_area'+commentRow+'"></div>'
-						+ '</pre></li>';
+								+ '<pre>'
+								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
+								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
+								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">'
+								+ '<p>삭제된 댓글입니다.</p>'
+								+ '<div class="reply_btn_area">'
+								+ '<button class="reply_view_btn" style="display:block">답글보기</button>'
+								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
+								+ '<div class="replies_area'+commentRow+'"></div>'
+								+ '</pre></li>';
+						}else{
+						list += '<li class="comment_item">'
+								+ '<pre>'
+								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
+								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
+								+ '<span>'+this.memberId+'</span> :&nbsp&nbsp'
+								+ '<span>'+this.commentContent+'</span>&nbsp&nbsp&nbsp&nbsp'
+								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">'
+								+ '<span>'+dateFormat(commentDateCreated)+'</span>&nbsp&nbsp'
+								+ '<button class="update_comment" >수정</button>'
+								+ '<button class="delete_comment" >삭제</button>'
+								+ '<div class="reply_btn_area">'
+								+ '<button class="reply_view_btn" style="display:block">답글보기</button>'
+								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
+								+ '<div class="replies_area'+commentRow+'"></div>'
+								+ '</pre></li>';
+						}
 						console.log('해당 행 번호 : '+commentRow);	
 						commentRow++;
 					});//end each
@@ -100,13 +133,17 @@
 					var hasNext = data.pageMaker.hasNext;
 					var startPageNo = data.pageMaker.startPageNo;
 					var endPageNo = data.pageMaker.endPageNo;
-					
+						
 						list += '<div class="comment_paging">'
 							 if(hasPrev){
 						list += '<button class="paging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp' 
 							 }
 							for(var i = startPageNo ; i<=endPageNo ; i++ ){
+								if(nowPage==i){
+						list += '<em>'+i+'</em>'									
+								}else{
 						list += '<button class="paging" value="'+i+'">'+i+'</button>'		
+							}
 							}
 							if(hasNext){
 								list += '&nbsp&nbsp<button class="paging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp'		
@@ -119,7 +156,7 @@
 				}// end getAllComments()
 		
 			$('#comments').on('click','.comment_item .update_comment',function(){ //댓글 업데이트
-			
+				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
 				var commentId = $(this).prevAll('#commentId').val();
 				var commentContent = $(this).prevAll('#commentContent').val();
 				
@@ -135,16 +172,17 @@
 					success : function(result){
 						if(result ==1){
 							alert('수정 되었습니다!');
-							getAllComments();
+							getAllComments(nowPage);
 						}
 					}
 				})//end ajax
 			}); // end btn_update.on 
 			
 			$('#comments').on('click','.comment_item .delete_comment',function(){ // 댓글 삭제
-				
 				var commentId = $(this).prevAll('#commentId').val();
 				var gameBoardId =  $('#gameBoardId').val();
+				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
+				
 				console.log('댓글Id 및 게시판판 id: '+commentId+','+gameBoardId);
 				$.ajax({
 					type : 'DELETE',
@@ -156,19 +194,24 @@
 					success : function(result){
 						if(result==1){
 							alert('삭제 되었습니다!');
-							getAllComments();
+							getAllComments(nowPage);
 						}
 					}	
 				});//end ajax
 				
 			});//end delete.comment.on
 			
-			$('#comments').on('click','.comment_item .reply_view_btn',function(){
-				var commentId = $(this).prevAll('#commentId').val();
-				var commentRow = $(this).prevAll('#commentRow').val();
+			
+			$('#comments').on('click','.comment_item .reply_btn_area .reply_view_btn',function(){
+				var commentId = $(this).parent().prevAll('#commentId').val();
+				var commentRow = $(this).parent().prevAll('#commentRow').val();
 				var url = 'replies/all/'+commentId;
 				console.log('댓글 ID?'+commentId);
 				console.log('몇번째 댓글?'+commentRow);
+				if($(this).is(":visible")){
+					$(this).next().css("display","block");
+					$(this).css("display","none");
+				}
 				$.getJSON(
 						url,
 						function(data){
@@ -184,7 +227,7 @@
 							
 							list += '<li class="reply_item">'
 							+ '<input type="hidden" id="replyId" value="'+this.replyId+'">'
-							+ this.memberId + '&nbsp&nbsp'
+							+ this.memberId + ':&nbsp&nbsp'
 							+ '<input type="text" id="replyContent" value="'+this.replyContent+'">'
 							+ replyDateCreated + '&nbsp&nbsp'
 							+ '<button class="update_reply" >수정</button>'
@@ -195,8 +238,6 @@
 							list += '아이디 : <input type="text" name="replyMemberId" id="replyMemberId">'
 									+ '내용 : <input type="text" name="replyContent" id="replyContent">'
 									+ '<button class="reply_add_btn" >작성</button>'
-									+ '<button class="fold_replies_area">접기</button>';
-											
 							$(repliesArea).html(list);
 						}//end funtion(data)
 						
@@ -210,9 +251,15 @@
 			$('#comments').on('click','.comment_item .reply_add_btn',function(){
 				//var tagName = $(this).parent().prevAll('#commentId').prop('tagName');
 				//console.log(tagName);
+				
 				var commentId = $(this).parent().prevAll('#commentId').val();	
 				var memberId = $(this).prevAll('#replyMemberId').val();
 				var replyContent = $(this).prevAll('#replyContent').val();
+				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
+				//var replyViewBtnClick = $(this).parent().parent().parent().nextAll(".reply_btn_area").children(".reply_view_btn").prop('tagName');
+				var replyViewBtnClick = $(this).parent().prevAll(".reply_btn_area").children(".reply_view_btn");
+				console.log('강제클릭태그 이름: '+replyViewBtnClick.prop('tagName'));
+				console.log('대댓글쪽 현재 페이지'+nowPage);
 				console.log("댓글id, 회원id, 대댓내용 :"+ commentId+", "+memberId+", "+replyContent);
 				var obj = {
 						'commentId' : commentId,
@@ -228,13 +275,18 @@
 					},
 					data : JSON.stringify(obj),
 					success : function(result){
-						console.log(result);
+						//console.log(result);
 						if(result==1){
+							
 							alert('대댓글 입력 성공');
-							getAllComments();
+						//	getAllComments(nowPage);
+							$(replyViewBtnClick).trigger("click");
 						}
+					
 					}
+					
 				});// end ajax
+				
 			});//end reply_add_btn
 			
 			
@@ -242,7 +294,7 @@
 			$('#comments').on('click','.comment_item .reply_item .update_reply',function(){
 				//var repliesAreaNum = $(this).parent().parent().attr('class');
 				//console.log(repliesAreaNum);
-				
+				var replyViewBtnClick = $(this).parent().parent().prevAll(".reply_btn_area").children(".reply_view_btn");
 				var replyId = $(this).prevAll('#replyId').val();
 				var replyContent = $(this).prevAll('#replyContent').val();
 				
@@ -258,7 +310,7 @@
 					success : function(result){
 						if(result ==1){
 							alert('수정 되었습니다!');
-							getAllComments();
+							$(replyViewBtnClick).trigger("click");
 						}
 					}
 				})//end ajax
@@ -267,7 +319,7 @@
 			$('#comments').on('click','.comment_item .reply_item .delete_reply',function(){
 				
 				var replyId = $(this).prevAll('#replyId').val();
-				
+				var replyViewBtnClick = $(this).parent().parent().prevAll(".reply_btn_area").children(".reply_view_btn");
 				console.log('대댓글Id 및 게시판판 id: '+replyId);
 				$.ajax({
 					type : 'DELETE',
@@ -278,7 +330,7 @@
 					success : function(result){
 						if(result==1){
 							alert('삭제 되었습니다!');
-							getAllComments();
+							$(replyViewBtnClick).trigger("click");
 						}
 					}	
 				});//end ajax
@@ -286,7 +338,12 @@
 			
 			$('#comments').on('click','.comment_item .fold_replies_area',function(){
 				console.log('접어버리기');
-				$(this).parent().html('');
+				$(this).parent().next().html('');
+				if($(this).is(":visible")){
+					$(this).prev().css("display","block");
+					$(this).css("display","none");
+				}
+				
 			});//end fold_replies_area
 		});//end document
 	</script>
