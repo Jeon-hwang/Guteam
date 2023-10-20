@@ -17,6 +17,7 @@ game_name : <input type="text" autofocus="autofocus" name="gameName" required="r
 price : <input type="number" name="price" required="required"><br>
 genre : <input type="text" name="genre" required><br>
 game_image : <img class="file-drop" width="200px" height="200px" src="display?fileName=basic.png"><br>
+<input type="file" id="file" accept="image/*" onchange="display(event)">
 <input type="hidden" class="gameImageName" name="gameImageName" value="basic.png">
 <br>
 <input type="submit" value="등록"><br>
@@ -52,7 +53,17 @@ $(document).ready(function(){
 				});// ajax
 				}
 			}); // file-drop.drop
+			
+			
 		});// document.ready
+		function display(event){
+			var reader = new FileReader();
+			reader.onload = function(event){
+				$('.file-drop').attr('src', event.target.result);
+			}
+			reader.readAsDataURL(event.target.files[0]);
+			console.log(event.target.result);
+		}; // display
 	</script>
 
 </form>
