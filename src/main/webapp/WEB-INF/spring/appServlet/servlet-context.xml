@@ -13,8 +13,13 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
+
 	<!-- Annotation 기반의 AOP 기능 사용 -->
 	<aop:aspectj-autoproxy />
+
+	<!-- OS별 절대경로 설정 파일 연결 -->
+	<context:property-placeholder location="classpath:uploadPath.properties" />
+
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
@@ -28,7 +33,9 @@
 	<context:component-scan base-package="project.spring.guteam" />
 	
 	<beans:bean id="uploadPath" class="java.lang.String">
-		<beans:constructor-arg value="C:\\Study\\FileUploadTest">		
+		<!-- <beans:constructor-arg value="C:\\Study\\FileUploadTest"> -->
+		<!-- <beans:constructor-arg value="/Users/DHKwak/Documents/Images">	 -->	
+		<beans:constructor-arg value="${uploadPath.img}">
 		</beans:constructor-arg>
 	</beans:bean>
 	

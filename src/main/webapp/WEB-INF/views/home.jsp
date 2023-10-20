@@ -18,26 +18,9 @@
 	</c:if>
 	
 	<c:if test="${not empty sessionScope.memberId }">
-		<a href="member/update"><button type="button">회원수정</button></a>
+		<a href="member/profiles"><button>나의 프로필</button></a>
 		<a href="member/logout"><button type="button">로그아웃</button></a><br><br>
-		<form action="member/delete" method="post">
-			<input type="hidden" name="memberId" id="memberId" value="${sessionScope.memberId }">
-			<input type="submit" value="회원탈퇴">	
-		</form>
 	</c:if>
-	
-	<!-- <script type="text/javascript">
-		$(document).ready(function(){
-			$('#memberId').click(function(){
-				var msg = confirm(${memberId} + '님, 정말로 탈퇴 하시겠습니까?');
-				if(msg == true){
-					console.log("성공");
-				}
-				
-			}); //end .click()
-			
-		}); //end document
-	</script> -->
 </body>
 
 </html>
