@@ -6,3 +6,5 @@
 .project
 src/.DS_Store
 .DS_Store
+/uploadPath.properties
+src/main/resources/uploadPath.properties
