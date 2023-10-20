@@ -1,8 +1,8 @@
 /target/
-/.classpath
+*.classpath
 /bin/
 *.class
 /.settings/
 .project
-src/.DS_Store
-.DS_Store
+*.DS_Store
+*/uploadPath.properties
