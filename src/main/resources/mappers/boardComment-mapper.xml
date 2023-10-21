@@ -5,13 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="project.spring.guteam.BoardCommentMapper">
-	 <!-- <insert id="insert">
-	 	insert into ${test_board}
-	 	(${boardTitle},${boardContent},${memberId})
-	 	values (#{boardTitle}, #{boardContent},#{memberId})
-	 	 $ : Colum명 
-	 	 # : ? (쿼리문) vo 변수와 정확히 일치해야 한다(방식은 get메서드) 
-	 </insert> -->
+
 	 <insert id="insert">
 	 	insert into ${board_comment}
 	 	(${gameBoardId},${memberId},${commentContent})
@@ -33,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	where ${commentId} = #{commentId}
 	 </update>
 	 
-	 <select id="select_and_paging" resultType="BoardCommentVo">
+	 <select id="select_and_paging" resultType="BoardCommentVO">
 	 	select b.${commentId}, b.${gameBoardId}, b.${memberId}, b.${commentContent}, b.${replyCnt}, b.${commentDateCreated}
 	 	from (
 	 		select rownum rn, a.* from(
