@@ -1,8 +1,9 @@
 /target/
-*.classpath
+/.classpath
 /bin/
 *.class
 /.settings/
 .project
-*.DS_Store
+src/.DS_Store
+.DS_Store
 *.properties
