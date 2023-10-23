@@ -18,6 +18,7 @@
 		<input type="password" name="password" required />
 		<input type="hidden" name="targetURL" value=${param.targetURL }>
 		<input type="submit" value="로그인">
+		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"> 
 	</form>
 	<input type="hidden" id="onAlert" value="${on_alert }">
 	

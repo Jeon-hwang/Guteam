@@ -23,7 +23,6 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 	</bean>
 	
 	
-	
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="ds"></property>
 	</bean>
@@ -37,7 +36,6 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 		<property name="mapperLocations"
 			value="classpath:mappers/*.xml" />
 	</bean>
-
 	<bean id="sqlSession"
 		class="org.mybatis.spring.SqlSessionTemplate"
 		destroy-method="clearCache">
@@ -45,3 +43,4 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 			ref="sqlSessionFactory" />
 	</bean>
 </beans>
+
