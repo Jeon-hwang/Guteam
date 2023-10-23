@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
 <title>${vo.gameName }</title>
 </head>
 <body>
@@ -32,6 +33,19 @@
 <a href="../review/list?gameId=${vo.gameId }"><button>리뷰보기</button></a>
 <br>
 <a href="${prevListUrl}"><button>리스트로 돌아가기</button></a>
+
+<input type="hidden" id="updateResult" value="${update_result }">
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		var updateResult = $('#updateResult').val();
+		console.log(updateResult);
+		if(updateResult=='success'){
+			alert('게임 정보 수정 성공');
+		}
+	});// document
+
+</script>
 </body>
 
 </html>

@@ -43,5 +43,21 @@
 		</tr>
 	</c:forEach>
 </table>
+<input type="hidden" id="insertResult" value="${insert_result }">  
+<input type="hidden" id="deleteResult" value="${delete_result }">
+<script type="text/javascript">
+	$(document).ready(function(){
+		var insertResult = $('#insertResult').val();
+		if(insertResult=='success'){
+			alert('리뷰 등록 성공');
+		}
+		var deleteResult = $('#deleteResult').val();
+		if(deleteResult=='success'){
+			alert('리뷰 삭제 성공');
+		}
+		
+	});
+</script>
+
 </body>
 </html>

@@ -5,4 +5,4 @@
 /.settings/
 .project
 *.DS_Store
-*/uploadPath.properties
+*.properties

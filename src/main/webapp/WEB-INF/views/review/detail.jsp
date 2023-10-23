@@ -30,9 +30,15 @@
 <button type="button" id="thumbUp" class="" value="${thumbVO.upDown }">추천</button>
 <button type="button" id="thumbDown" class="" value="${thumbVO.upDown }">비추</button>
 <a href="list?gameId=${reviewVO.gameId }&page=${page}"><button>${gameVO.gameName } 리뷰 목록으로 돌아가기</button></a>
-
+<input type="hidden" id="updateResult" value="${update_result }">
 <script type="text/javascript">
 	$(document).ready(function(){
+		var updateResult = $('#updateResult').val();
+		if(updateResult=='success'){
+			alert('리뷰 수정 성공');
+		}
+		
+		
 		var thumbUp = $('#thumbUp');
 		var thumbDown = $('#thumbDown');
 		var memberId = $('#memberId').attr('value');

@@ -82,7 +82,7 @@ public class ReviewController {
 	public String registerPOST(ReviewVO vo, RedirectAttributes reAttr) {
 		int result = reviewService.create(vo);
 		if(result == 1 ) {
-			reAttr.addFlashAttribute("register_result","success");
+			reAttr.addFlashAttribute("insert_result","success");
 			return "redirect:list?gameId="+vo.getGameId();
 		}else {
 			return "redirect:register?gameId="+vo.getGameId();
@@ -116,7 +116,7 @@ public class ReviewController {
 		int result = reviewService.update(vo);
 		if(result==1) {
 			reAttr.addFlashAttribute("update_result","success");
-			return "redirect:list?gameId="+vo.getGameId()+"&page="+page;
+			return "redirect:detail?reviewId="+vo.getReviewId()+"&page="+page;
 		}else {
 			return "redirect:update?reviewId="+vo.getReviewId()+"&page="+page;
 		}

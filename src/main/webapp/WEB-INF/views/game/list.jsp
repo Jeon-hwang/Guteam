@@ -72,8 +72,14 @@ li {
 			<li><a href="list?page=${pageMaker.endPageNo+1 }"><button>다음</button></a></li>
 		</c:if>
 	</ul>
+	<input type="hidden" id="insertResult" value="${insert_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var insertResult = $('#insertResult').val();
+			if(insertResult=='success'){
+				alert('게임 등록 성공!');
+			}
+			
 			$('.gameInfo').on('click',  function(){
 				var gameId = $(this).find("input").val();
 				var prevListUrl = window.location.href;

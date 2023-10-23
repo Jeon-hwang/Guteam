@@ -12,12 +12,12 @@
 <br>
 관리자로 로그인 해야만 볼 수 있는 창<br>
 <hr>
-<form action="register" method="post"><br>
+<form action="register" method="post" enctype="multipart/form-data"><br>
 game_name : <input type="text" autofocus="autofocus" name="gameName" required="required"><br> 
 price : <input type="number" name="price" required="required"><br>
 genre : <input type="text" name="genre" required><br>
 game_image : <img class="file-drop" width="200px" height="200px" src="display?fileName=basic.png"><br>
-<input type="file" id="file" accept="image/*" onchange="display(event)">
+<input type="file" id="file" name="file" accept="image/*" onchange="display(event)">
 <input type="hidden" class="gameImageName" name="gameImageName" value="basic.png">
 <br>
 <input type="submit" value="등록"><br>

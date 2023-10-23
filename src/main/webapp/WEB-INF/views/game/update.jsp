@@ -15,14 +15,14 @@
 </style>
 </head>
 <body>
-<form action="update" method="post">
-
-<img class="file-drop" width="100px" height="100px" alt="${vo.gameName }" src="display?fileName=${vo.gameImageName }"><br>
+<form action="update" method="post" enctype="multipart/form-data">
 <input type="hidden" name="prevListUrl" value="${prevListUrl }">
 <input type="hidden" name="gameId" value="${vo.gameId }">
 게임이름=<input type="text" name="gameName" value="${vo.gameName }" required><br>
 가격=<input type="number" name="price" value="${vo.price }" required><br>
 장르=<input type="text" name="genre" value="${vo.genre }" required><br>
+게임 이미지 = <img class="file-drop" width="100px" height="100px" alt="${vo.gameName }" src="display?fileName=${vo.gameImageName }"><br>
+<input type="file" name="file" id="file" accept="image/*" onchange="display(event)">
 <input type="hidden" class="gameImageName" name="gameImageName" value="${vo.gameImageName }">
 <!-- <img alt="${vo.gameImageName }" src=""> -->
 <br>
@@ -62,6 +62,14 @@
 			}); // file-drop.drop
 			
 		});// document.ready
+		function display(event){
+			var reader = new FileReader();
+			reader.onload = function(event){
+				$('.file-drop').attr('src', event.target.result);
+			}
+			reader.readAsDataURL(event.target.files[0]);
+			console.log(event.target.result);
+		}; // display
 		
 	</script>
 

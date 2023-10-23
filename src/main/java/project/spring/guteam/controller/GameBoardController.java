@@ -121,7 +121,7 @@ public class GameBoardController {
 		logger.info("gameBoard updateDeleted() 호출 : gameBoardId = " + gameBoardId);
 		int result = gameBoardService.update(gameBoardId);
 		if(result==1) {
-			reAttr.addFlashAttribute("update_result", "success");
+			reAttr.addFlashAttribute("delete_result", "success");
 			return "redirect:/gameBoard/list?gameId="+gameBoardService.read(gameBoardId).getGameId();
 		}else {
 			return "redirect:/gameBoard/detail?gameId="+gameBoardService.read(gameBoardId).getGameId()+"&gameBoardId="+gameBoardId;

@@ -3,6 +3,7 @@ package project.spring.guteam.fileutil;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,7 +24,7 @@ public class FileUploadUtil {
 	
 	public static String saveUploadedFile(String uploadPath, 
 			String fileName, byte[] data) throws IOException {
-		
+				
 		SimpleDateFormat sdf = new SimpleDateFormat("hhmmss");
 		
 		String date = sdf.format(new Date());

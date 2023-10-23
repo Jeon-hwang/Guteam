@@ -65,8 +65,24 @@ li {
 			<li><a href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}"><button>다음</button></a></li>
 		</c:if>
 	</ul>
+	<input type="hidden" id="insertResult" value="${insert_result }">
+	<input type="hidden" id="deleteResult" value="${delete_result }">
 <br>
 <br>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var insertResult = $('#insertResult').val();
+			console.log(insertResult);
+			if(insertResult=='success'){
+				alert('게시글 등록 성공');
+			}
+			var deleteResult = $('#deleteResult').val();
+			if(deleteResult=='success'){
+				alert('게시글 삭제 성공');
+			}
+		}); // document
+	</script>
 
 </body>
 </html>
