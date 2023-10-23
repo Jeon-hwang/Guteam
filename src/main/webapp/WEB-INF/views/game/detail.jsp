@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <title>${vo.gameName }</title>
 </head>
 <body>
@@ -25,6 +25,7 @@
 <br>
 평점 : ${rating } 점
 <hr>
+<input type="hidden" id="gameId" value=${vo.gameId }>
 <br>
 <a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button>수정하기</button></a>
 <br>
@@ -36,6 +37,13 @@
 
 <input type="hidden" id="updateResult" value="${update_result }">
 
+<br>
+
+<div class="wish_list_btn_area">
+	<button id="addWishList">위시리스트에 추가</button>
+	<button id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
+</div>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
@@ -43,6 +51,69 @@
 		if(updateResult=='success'){
 			alert('게임 정보 수정 성공');
 		}
+		$('#addWishList').click(function(){
+			var gameId = $('#gameId').val();
+			var memberId = '${sessionScope.memberId }';
+			var obj = {
+					'gameId' : gameId,
+					'memberId' : memberId
+			}
+			
+			$.ajax({
+				type : 'POST',
+				url : '../wishList',
+				headers : {
+					'Content-Type' : 'application/json'
+				},
+				data : JSON.stringify(obj),
+				success : function(result){
+					console.log(result);
+					if(result==1){
+						alert('위시리스트 추가 성공');
+						removeWishListOn();
+					}
+				}
+			});// end ajax
+		}); // end add_wish_list.click
+		removeWishListOn();
+		function removeWishListOn(){
+			var gameId = $('#gameId').val();
+			var memberId = '${sessionScope.memberId }';
+			
+			var url = '../wishList/find/'+memberId+'?gameId='+gameId;
+			$.getJSON(
+					url,
+					function(data){
+						console.log(data);
+						if(data != null){
+							$('#addWishList').css("display","none");
+							$('#removeWishList').css("display","inline");
+						}
+					});//end JSON
+					
+		}//end removeWishListOn()
+		
+		$('#removeWishList').click(function(){
+			var gameId = $('#gameId').val();
+			var memberId = '${sessionScope.memberId }';
+			
+			$.ajax({
+				type : 'DELETE',
+				url : '../wishList/'+memberId,
+				headers : {
+					'Content-Type' : 'application/json'
+				},
+				data : gameId,
+				success : function(result){
+					console.log(result);
+					if(result==1){
+						alert('위시리스트 제거 성공');
+						$('#addWishList').css("display","inline");
+						$('#removeWishList').css("display","none");
+					}
+				}
+			});// end ajax
+		});//end removeWishList.click
 	});// document
 
 </script>
