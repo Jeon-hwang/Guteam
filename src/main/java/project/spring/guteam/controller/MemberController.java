@@ -51,7 +51,8 @@ public class MemberController {
 	@PostMapping("/login")
 	public String loginPOST(String memberId, String password, String targetURL, HttpServletRequest request) {
 		logger.info("loginPOST() 호출");
-		if(memberId.equals("test") && password.equals("1234")) {
+		if(memberId.equals("test") && password.equals("1234")
+				|| memberId.equals("test12") && password.equals("1234")) {
 			logger.info("로그인 성공");
 			HttpSession session = request.getSession();
 			session.setAttribute("memberId", memberId);
@@ -149,10 +150,6 @@ public class MemberController {
 	@PostMapping("/update")
 	public String updatePOST(MemberVO vo, MultipartFile file) {	
 		logger.info("updatePOST() 호출 : " + vo.toString());
-		
-		
-		
-		
 		if(file.getOriginalFilename().equals("")) {
 			
 		}else {
@@ -178,8 +175,6 @@ public class MemberController {
 		}
 		
 	}
-	
-	
 	
 	// 회원 탈퇴
 	@PostMapping("/delete")
@@ -234,5 +229,24 @@ public class MemberController {
         return entity;
     } //end display()
 	
+    // 친구 목록
+    @GetMapping("/friends")
+    public void friendsGET(Model model, HttpSession session) {
+    	logger.info("friendsGET() 호출");
+    	MemberVO vo = new MemberVO();
+		String memberId = (String) session.getAttribute("memberId");
+		vo = memberService.read(memberId);
+		model.addAttribute("vo", vo);
+		logger.info(vo.toString());
+    }
+    
+    // 친구 추가
+    @PostMapping("/addFriend")
+    public void addFriend(String friendId, HttpSession session) {
+    	logger.info("addFrined() 호출 friendId = " + friendId);
+    	String memberId = (String) session.getAttribute("memberId");
+    	
+    	
+    }
 
 } // end MemberController
