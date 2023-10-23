@@ -19,8 +19,12 @@
 	
 	<c:if test="${not empty sessionScope.memberId }">
 		<a href="member/profiles"><button>나의 프로필</button></a>
-		<a href="member/logout"><button type="button">로그아웃</button></a><br><br>
+		<a href="member/logout"><button type="button">로그아웃</button></a>
+		<a href="wishList/myWishList"><button>나의 위시리스트</button></a>
+		<a href="wishList/myWishList"><button>나의 보유 게임</button></a><br><br>
 	</c:if>
+	
+
 </body>
 
 </html>
