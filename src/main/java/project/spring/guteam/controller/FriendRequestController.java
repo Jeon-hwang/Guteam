@@ -20,6 +20,7 @@ public class FriendRequestController {
 	@Autowired
 	FriendRequestService friendRequestService;
 	
+	// 친구 요청
 	@PostMapping("/addFriend")
 	public String addFriend (FriendRequestVO vo, HttpSession session) {
 		logger.info("addFriend() vo = " + vo.toString());
@@ -32,6 +33,8 @@ public class FriendRequestController {
 			return "redirect:/member/friends";
 		}
 	}
+	
+	// 받은 요청 조회
 	
 	
 }

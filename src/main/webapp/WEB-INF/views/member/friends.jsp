@@ -31,6 +31,17 @@
 <h3>보낸 요청</h3>
 <hr>
 <h3>받은 요청</h3>
+	<table>
+	<tbody>
+		<c:forEach var="vo" items="${list }">
+			<tr>
+				<td><input type="image" class="profileImg" alt="${vo.memberId }" 
+					src="display?fileName=${vo.memberImageName }" readonly /></td>
+				<td></td>
+			</tr>
+		</c:forEach>
+	</tbody>
+</table>
 <hr>
 <h2>친구 목록</h2>
 <table>
