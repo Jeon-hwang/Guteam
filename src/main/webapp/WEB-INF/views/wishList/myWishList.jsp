@@ -6,39 +6,34 @@
 
 <html>
 <head>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <meta charset="UTF-8">
 <style type="text/css">
-	.wishList li{
+	body{
+		width : 1000px;
+		margin : auto;
+	}
+	.wish_list li{
 		display : flex;
-		justify-content: space;
+		justify-content: space-between;
 	}
 </style>
 <title>위시리스트</title>
 </head>
 <body>
 <sec:authentication property="principal" var="principal"/>
-	<h1>${principal.username}님의 위시리스트</h1>
-	<input type="hidden" id="memberId" value="${principal.username}">
-	<div class="wishListArea">
-		<ul class="wishList">
-		<!-- 	<c:forEach varStatus="status" var="vo" items="${list }">
-			
-				<li><img alt="${vo.gameName }" width="100px" height="100px"
-					src="display?fileName=${vo.gameImageName }"></li>
-				
-				<li>게임 이름 : ${vo.gameName }</li>
-				
-				<li>가격 : ${vo.price }</li>
-				
-				<li>장르 : ${vo.genre }</li>
-				
-				<li>마지막 업데이트일 : ${vo.updateDate }</li>
-				
-				<button id="delete">삭제</button>
-			</c:forEach>
-			 -->
+	<h1><a href="../">Guteam</a></h1>
+	<h2>${principal.username}님의 위시리스트</h2>
+	<input type="hidden" id="memberId" value=${principal.username }>
+	<div class="wish_list_area">
+		<ul class="wish_list">
 		</ul>
+	</div>
+	<div class="price_area">
+		<p>선택한 게임 총 가격 : ￦<span id="totalPrice">0</span></p>
+		<button id="allBuy">선택한 게임 구매</button>
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -55,18 +50,66 @@
 							console.log(data);
 							$(data).each(function(){
 								console.log(this);
-								list +=	'<li><img alt="'+this.gameName
-									 + '" width="100px" height="100px"'
-									 + 'src="../game/display?fileName='+this.gameImageName+'"></li>'
-									 + '<li><span class="game_name">'+this.gameName+'</span></li>'
-									 + '<li><span class="genre">'+this.genre+'</span><br>'
-									 + '<span class="price">'+this.price+'</span></li>'
+								list +=	'<li class="wish_list_item">'
+									 + '<input type="hidden" id="gameId" value='+this.gameId+'>'
+									 + '<input type="checkbox" id="listCheck">'
+									 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
+									 + 'src="../game/display?fileName='+this.gameImageName+'">'
+									 + '<a href=../game/detail?gameId='+this.gameId+'><span id="gameName">'+this.gameName+'</span></a>'
+									 + '<span id="genre">'+this.genre+'</span>'
+									 + '<span id="showPrice">￦'+this.price+'</span>'
+									 + '<input type="hidden" id="price" value='+this.price+'>'
+									 + '<div class="buy_or_remove">'
+									 + '<button id="buyBtn">구매</button>'
+									 + '<button id="removeWishList">X</button></div>'
+									 + '</li>'
+									 + '<hr>';
 							});//end data.each
 							
-							$('.wishList').html(list);
+							$('.wish_list').html(list);
 							
 						});// end getJSON
-			}
+			}//end showWishList()
+			$('.wish_list').on('click','.wish_list_item .buy_or_remove #removeWishList',function(){
+				var gameId = $(this).parent().prevAll('#gameId').val();
+				var memberId = $('#memberId').val();
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				var name = $("#userName").val();
+				$.ajax({
+					type : 'DELETE',
+					url : memberId,
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					data : gameId,
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(result){
+						console.log(result);
+						if(result==1){
+							alert('위시리스트 제거 성공');
+							showWishList();
+						}
+					}
+				});// end ajax
+			});//end removeWishList.click
+			
+			$('.wish_list').on('click','.wish_list_item #listCheck',function(){
+				var price = parseInt($(this).nextAll('#price').val());
+				var totalPrice = parseInt($('#totalPrice').text());
+				
+				if($(this).is(':checked')){
+					//console.log("체크 수행 확인!");
+					//console.log("가격? "+price);
+					totalPrice += price;
+				}else{
+					totalPrice  -= price;
+				}
+				
+				$('#totalPrice').html(totalPrice);
+			});// end wish_list_item.on
 		}); // end document
 	</script>
 </body>

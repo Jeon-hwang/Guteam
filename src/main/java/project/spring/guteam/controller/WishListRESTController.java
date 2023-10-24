@@ -51,6 +51,7 @@ public class WishListRESTController {
 	@DeleteMapping("/{memberId}")
 	public ResponseEntity<Integer> deleteWishList(@PathVariable("memberId")String memberId,@RequestBody int gameId){
 		WishListVO vo = new WishListVO(memberId, gameId);
+		logger.info("컨트롤러 값"+vo.toString());
 		int result = service.delete(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}

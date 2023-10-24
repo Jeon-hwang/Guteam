@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +27,7 @@
 	<a href="list?gameId=${gameId }&page=${page}"><button>커뮤니티로
 			돌아가기</button></a>
 	<input type="hidden" id="updateResult" value="${update_result }">
-	
+	<jsp:include page="../boardComment/comment_and_reply_test.jsp"></jsp:include>
 
 	<script type="text/javascript">
 		$(document).ready(function() {

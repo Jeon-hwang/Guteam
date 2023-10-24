@@ -50,6 +50,10 @@
 	<button id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
 </div>
 </sec:authorize>
+<sec:authorize access="hasRole('ROLE_USER','ROLE_ADMIN)">
+	<sec:authentication property=""/>
+</sec:authorize>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
@@ -115,6 +119,9 @@
 					'Content-Type' : 'application/json'
 				},
 				data : gameId,
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
 				success : function(result){
 					console.log(result);
 					if(result==1){

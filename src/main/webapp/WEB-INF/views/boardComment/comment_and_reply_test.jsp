@@ -1,14 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>댓글창</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
+<sec:authentication property="principal" var="principal"/>
 	<h1>댓글 테스트</h1>
 	
 	<!-- 대충 아래에 댓글 생성 -->
@@ -28,7 +32,9 @@
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
-			
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var name = $("#userName").val();
 			function dateFormat(date) {
 		        var month = date.getMonth() + 1;
 		        var day = date.getDate();
@@ -62,6 +68,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : JSON.stringify(obj),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						console.log(result);
 						if(result==1){
@@ -182,6 +191,9 @@
 					headers : {
 						'Content-Type' : 'application/json'
 					},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					data : commentContent,
 					success : function(result){
 						if(result ==1){
@@ -205,6 +217,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : gameBoardId,
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result==1){
 							alert('삭제 되었습니다!');
@@ -299,6 +314,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : JSON.stringify(obj),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						//console.log(result);
 						if(result==1){
@@ -340,6 +358,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : replyContent,
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result ==1){
 							alert('수정 되었습니다!');
@@ -347,7 +368,7 @@
 						}
 					}
 				})//end ajax
-			});// end reply_update.on
+			});// end update_reply
 			
 			$('#comments').on('click','.comment_item .reply_item .delete_reply',function(){
 				
@@ -360,6 +381,9 @@
 					headers : {
 						'Content-Type' : 'application/json'
 					},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result==1){
 							alert('삭제 되었습니다!');
@@ -367,7 +391,7 @@
 						}
 					}	
 				});//end ajax
-			});
+			});//end delete_reply
 			
 			$('#comments').on('click','.comment_item .fold_replies_area',function(){
 				console.log('접어버리기');
