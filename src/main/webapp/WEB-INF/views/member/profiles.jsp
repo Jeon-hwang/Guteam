@@ -16,13 +16,17 @@
 </head>
 <body>
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
-	<h2>${sessionScope.memberId }님의 프로필</h2>
+<h2>${sessionScope.memberId }님의 프로필</h2>
+	<div>
+		<a href="addCash"><button>캐쉬 충전</button></a>
+		<a href="friends"><button>친구 목록</button></a>
+	</div>
 	<br>
 	<div>
 		<form action="delete" method="post">
-			<a href="update"><button type="button">회원수정</button></a>
+			<a href="update"><button type="button">회원 수정</button></a>
 			<input type="hidden" name="memberId" id="memberId" value="${sessionScope.memberId }">
-			<input type="submit" value="회원탈퇴">	
+			<input type="submit" value="회원 탈퇴">	
 		</form>
 	</div>
 </body>

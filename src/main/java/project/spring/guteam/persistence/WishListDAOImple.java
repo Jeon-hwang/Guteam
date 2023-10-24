@@ -1,6 +1,8 @@
 package project.spring.guteam.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import project.spring.guteam.domain.WishListVO;
+import project.spring.guteam.pageutil.PageCriteria;
 
 @Repository
 public class WishListDAOImple implements WishListDAO {
@@ -25,9 +28,13 @@ public class WishListDAOImple implements WishListDAO {
 	}
 
 	@Override
-	public List<WishListVO> select(String memberId) {
-		logger.info("select 수행");
-		return sqlSession.selectList(NAMESPACE+".select_by_memberId",memberId);
+	public List<WishListVO> select(String memberId,PageCriteria criteria) {
+		logger.info("select 수행(memberId)");
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("memberId", memberId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE+".select_by_memberId_paging",args);
 	}
 
 	@Override
@@ -35,6 +42,20 @@ public class WishListDAOImple implements WishListDAO {
 		logger.info("delete 수행");
 		
 		return sqlSession.delete(NAMESPACE+".delete",vo);
+	}
+
+	@Override
+	public List<String> select(int gameId) {
+		logger.info("select 수행(gameId)");
+		return sqlSession.selectList(NAMESPACE+".select_by_gameId",gameId);
+	}
+
+	@Override
+	public WishListVO select(String memberId, int gameId) {
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("memberId", memberId);
+		args.put("gameId", gameId);		
+		return sqlSession.selectOne(NAMESPACE+".find",args);
 	}
 
 }

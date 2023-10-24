@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.spring.guteam.FirendMapper">
+	 <!-- <insert id="insert">
+	 	insert into ${test_board}
+	 	(${boardTitle},${boardContent},${memberId})
+	 	values (#{boardTitle}, #{boardContent},#{memberId})
+	 	 $ : Colum명 
+	 	 # : ? (쿼리문) vo 변수와 정확히 일치해야 한다(방식은 get메서드) 
+	 </insert> -->
+	 
+	 <!-- 상대수락 후 친구 등록 -->
+	 <insert id="insert">
+	 insert into ${friend} (${memberId}, ${friendId})
+	 values (#{memberId}, #{friendId})
+	 </insert>
+	 
+	 <!-- 친구 목록 -->
+	 <select id="select_by_member_id" resultType="friendVO">
+	 select * from ${friend} where ${memberId} = #{memberId}
+	 </select>
+	 
+	 <!-- 친구 삭제 -->
+	 <delete id="delete">
+	 delete from ${friend} where ${memberId} = #{memberId}
+	 </delete>
+	 
+</mapper>

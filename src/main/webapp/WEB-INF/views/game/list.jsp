@@ -21,7 +21,7 @@ li {
 	<a href="register"><button>게임등록</button></a>
 	<br>
 	<c:forEach varStatus="status" var="vo" items="${list }">
-	<div class="gameInfo" style="display:inline-block;">
+	<div style="width:350px; height:500px; display:inline-block;" class="gameInfo">
 		<img alt="${vo.gameName }" width="300px" height="300px" src="display?fileName=${vo.gameImageName }">
 		<input type="hidden" class="gameId" value="${vo.gameId }">
 		<br>

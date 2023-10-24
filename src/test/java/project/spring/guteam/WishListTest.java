@@ -1,7 +1,5 @@
 package project.spring.guteam;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -39,12 +37,12 @@ public class WishListTest {
 		}
 	}
 
-	private void select() {
-		List<WishListVO> list = dao.select("test");
-		for(WishListVO vo : list) {
-			logger.info(vo.toString());
-		}
-	}
+//	private void select() {
+//		List<WishListVO> list = dao.select("test");
+//		for(WishListVO vo : list) {
+//			logger.info(vo.toString());
+//		}
+//	}
 
 	private void insert() { // 따로 게임 페이지에서 추가하도록하자
 		logger.info("insert 수행");
