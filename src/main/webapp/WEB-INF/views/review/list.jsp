@@ -3,7 +3,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
+<style type="text/css">
+.bi {
+	color:#ffc100;
+}
+</style>
 <head>
+<!-- Bootstrap css -->
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+   rel="stylesheet"
+   integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+   crossorigin="anonymous" />
+<!-- Bootstrap icons -->
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+   rel="stylesheet" />
+<!-- Bootstrap core JS-->
+<script
+   src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <meta charset="UTF-8">
 <title>${gameVO.gameName } 리뷰</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
@@ -31,13 +49,13 @@
 			<td>${reviewVO.reviewDateCreated }</td>
 			<td>
 				<c:forEach begin="1" end="${reviewVO.rating/2 }" step="1">
-				★
+				<i class="bi bi-star-fill"></i>
 				</c:forEach>
 				<c:if test="${reviewVO.rating%2!=0 }">
-				<img width="12" height="12" alt="" src="https://cdn0.iconfinder.com/data/icons/rating/100/13-512.png">
+				<i class="bi bi-star-half"></i>
 				</c:if>
 				<c:forEach begin="1" end="${5-(reviewVO.rating/2) }" step="1">
-				☆
+				<i class="bi bi-star"></i>
 				</c:forEach>
 			</td>
 		</tr>

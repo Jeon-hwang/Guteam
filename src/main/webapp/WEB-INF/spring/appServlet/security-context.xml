@@ -23,7 +23,7 @@
 		<s:intercept-url pattern="/game/register" access="hasRole('ROLE_ADMIN')" />
 		<s:intercept-url pattern="/game/update" access="hasRole('ROLE_ADMIN')" />
 		<s:form-login username-parameter="memberId" password-parameter="password" login-page="/member/login" login-processing-url="/member/login"
-		authentication-failure-forward-url="/member/login?error" default-target-url="/game/list"
+		default-target-url="/game/list" authentication-failure-url="/member/login?error" 
 		 />
 		<s:logout logout-url="/member/logout" invalidate-session="true" delete-cookies="true" logout-success-url="/game/list" />
 		<s:session-management invalid-session-url="/game/list">

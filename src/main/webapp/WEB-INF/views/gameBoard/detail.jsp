@@ -31,7 +31,6 @@
 	<a href="list?gameId=${gameId }&page=${page}"><button>커뮤니티로
 			돌아가기</button></a>
 	<input type="hidden" id="updateResult" value="${update_result }">
-	
 
 	<script type="text/javascript">
 		$(document).ready(function() {
