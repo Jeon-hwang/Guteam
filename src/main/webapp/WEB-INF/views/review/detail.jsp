@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,20 +16,29 @@
 }
 </style>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>${reviewVO.reviewTitle }</title>
 </head>
 <body>
+<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
+<sec:authentication property="principal" var="principal"/>
 <input type="hidden" id="reviewId" value="${reviewVO.reviewId }">
-<input type="hidden" id="memberId" value="${sessionScope.memberId }test">
+<input type="hidden" id="memberId" value="${principal.username }">
+</sec:authorize>
 제목 : ${reviewVO.reviewTitle }<br>
 작성자 : ${reviewVO.memberId }<br>
 작성일 : ${reviewVO.reviewDateCreated}<br>
 평점 : ${reviewVO.rating}<br>
 내용 : ${reviewVO.reviewContent }<br>
 추천 수 : <div id="thumbUpCount">${reviewVO.thumbUpCount }</div><br>
-<a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button>수정</button></a><form style="display:inline-block;" action="delete" method="post"><input type="hidden" name="reviewId" value="${reviewVO.reviewId }"><input type="hidden" name="gameId" value="${gameVO.gameId }"><input type="submit" value="삭제"></form><br>
+<c:if test="${principal.username==reviewVO.memberId }">
+<a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button>수정</button></a><form style="display:inline-block;" action="delete" method="post"><sec:csrfInput/><input type="hidden" name="reviewId" value="${reviewVO.reviewId }"><input type="hidden" name="gameId" value="${gameVO.gameId }"><input type="submit" value="삭제"></form><br>
+</c:if>
+<sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
 <button type="button" id="thumbUp" class="" value="${thumbVO.upDown }">추천</button>
 <button type="button" id="thumbDown" class="" value="${thumbVO.upDown }">비추</button>
+</sec:authorize>
 <a href="list?gameId=${reviewVO.gameId }&page=${page}"><button>${gameVO.gameName } 리뷰 목록으로 돌아가기</button></a>
 <input type="hidden" id="updateResult" value="${update_result }">
 <script type="text/javascript">
@@ -38,6 +48,8 @@
 			alert('리뷰 수정 성공');
 		}
 		
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 		
 		var thumbUp = $('#thumbUp');
 		var thumbDown = $('#thumbDown');
@@ -67,6 +79,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : JSON.stringify(ThumbVO),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result==1){
 							$(thumbUp).attr('value','');
@@ -85,6 +100,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : JSON.stringify(ThumbVO),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result==1){
 							$(thumbUp).attr('value',1);
@@ -103,6 +121,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : JSON.stringify(ThumbVO),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result==1){
 							$(thumbUp).attr('value',1);
@@ -132,6 +153,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : JSON.stringify(ThumbVO),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result==1){
 							$(thumbUp).attr('value','');
@@ -150,6 +174,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : JSON.stringify(ThumbVO),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result==1){
 							$(thumbDown).attr('value',-1);
@@ -168,6 +195,9 @@
 						'Content-Type' : 'application/json'
 					},
 					data : JSON.stringify(ThumbVO),	
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result){
 						if(result==1){
 							$(thumbDown).attr('value',-1);

@@ -1,5 +1,6 @@
 package project.spring.guteam.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import project.spring.guteam.service.ThumbService;
 @RequestMapping(value="/review")
 public class ReviewController {
 	private static Logger logger = LoggerFactory.getLogger(ReviewController.class);
+	
 	
 	@Autowired
 	private ReviewService reviewService;
@@ -90,18 +92,20 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/detail")
-	public void detail(Model model, int reviewId, int page, HttpSession session) {
+	public void detail(Model model, int reviewId, int page, Principal principal) {
 		ReviewVO reviewVO = reviewService.read(reviewId);
 		GameVO gameVO = gameService.read(reviewVO.getGameId());
 		model.addAttribute("reviewVO", reviewVO);
 		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("page", page);
-		String memberId = "test";//(String)session.getAttribute("memberId")
+		if(principal!=null) {
+		String memberId = principal.getName();
 		ThumbVO thumbVO = thumbService.read(new ThumbVO(reviewId, memberId, 0));
 		if(thumbVO!=null) {
 			logger.info(thumbVO.toString());
 		}
 		model.addAttribute("thumbVO",thumbVO);
+		}
 	}
 	
 	@GetMapping("/update")
@@ -126,7 +130,6 @@ public class ReviewController {
 	@PostMapping("/delete")
 	public String delete(int reviewId, int gameId, RedirectAttributes reAttr) {
 		int result = reviewService.delete(reviewId);
-		
 		if(result==1) {
 			reAttr.addFlashAttribute("delete_result","success");
 			return "redirect:/review/list?gameId="+gameId;

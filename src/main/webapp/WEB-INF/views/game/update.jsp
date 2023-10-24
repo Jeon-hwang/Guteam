@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token }"/>
+<meta name="_csrf_header" content="${_csrf.headerName }"/>
 <title>${vo.gameName } 정보 수정</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
 <style type="text/css">
@@ -15,7 +18,8 @@
 </style>
 </head>
 <body>
-<form action="update" method="post" enctype="multipart/form-data">
+<form action="update" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+<sec:csrfInput/>
 <input type="hidden" name="prevListUrl" value="${prevListUrl }">
 <input type="hidden" name="gameId" value="${vo.gameId }">
 게임이름=<input type="text" name="gameName" value="${vo.gameName }" required><br>
@@ -30,6 +34,8 @@
 </form>
 <script type="text/javascript">
 		$(document).ready(function(){
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 			$('.file-drop').on('dragenter dragover', function(event){
 				event.preventDefault();
 				console.log('drag 테스트');
@@ -51,6 +57,9 @@
 					data : formData,
 					processData : false,
 					contentType : false,
+					beforeSend : function(xhr){
+						xhr.setRequestHeader(header, token);
+					},
 					success : function(data){
 						console.log(data);
 						$('.file-drop').attr('src', 'display?fileName='+data);
