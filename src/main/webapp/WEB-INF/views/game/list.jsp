@@ -75,6 +75,7 @@ li {
 			<li><a href="list?page=${pageMaker.endPageNo+1 }"><button>다음</button></a></li>
 		</c:if>
 	</ul>
+	<a href="/guteam/"><button>홈으로 돌아가기</button></a>
 	<input type="hidden" id="insertResult" value="${insert_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){
