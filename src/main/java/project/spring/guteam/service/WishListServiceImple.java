@@ -62,7 +62,9 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 	public WishListVO find(String memberId, int gameId) {
 		logger.info("find() 실행");
 		WishListVO vo = wishListDAO.select(memberId, gameId);
+		if(vo!=null) {
 		logger.info(vo.toString());
+		}
 		return vo;
 	}
 

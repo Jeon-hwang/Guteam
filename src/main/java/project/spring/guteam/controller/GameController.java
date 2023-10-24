@@ -83,7 +83,6 @@ public class GameController {
 
 	@GetMapping("/register")
 	public void registerGET() {
-		// 관리자로 로그인해야만 볼 수 있도록 해야함(Interceptor)
 	}
 
 	@PostMapping("/register")

@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import project.spring.guteam.domain.MemberVO;
@@ -16,9 +17,13 @@ public class MemberServiceImple implements MemberService {
 	
 	@Autowired
 	private MemberDAO dao;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Override
 	public int create(MemberVO vo) {
+		vo.setPassword(passwordEncoder.encode(vo.getPassword()));
 		logger.info("create() 호출 성공 : vo = " + vo.toString());
 		return dao.insert(vo);
 	}

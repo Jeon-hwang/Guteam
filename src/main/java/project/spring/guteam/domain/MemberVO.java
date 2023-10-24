@@ -1,6 +1,28 @@
 package project.spring.guteam.domain;
 
+import java.util.Objects;
+
 public class MemberVO {
+	@Override
+	public int hashCode() {
+		return Objects.hash(cash, email, isAdmin, memberId, memberImageName, nickname, password, phone);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MemberVO other = (MemberVO) obj;
+		return cash == other.cash && Objects.equals(email, other.email) && Objects.equals(isAdmin, other.isAdmin)
+				&& Objects.equals(memberId, other.memberId) && Objects.equals(memberImageName, other.memberImageName)
+				&& Objects.equals(nickname, other.nickname) && Objects.equals(password, other.password)
+				&& Objects.equals(phone, other.phone);
+	}
+
 	String memberId;
 	String password;
 	String nickname;

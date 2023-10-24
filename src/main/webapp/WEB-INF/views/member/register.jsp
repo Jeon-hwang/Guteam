@@ -9,7 +9,9 @@
 </head>
 <body>
 	<h2>회원 가입</h2>
+
 	<form action="register" method="post">
+	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"> 
 		<div>
 			아이디 :
 			<input type="text" id="memberId" name="memberId" placeholder="ID 입력" required />

@@ -3,6 +3,7 @@ package project.spring.guteam.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +40,9 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	@Resource(name="uploadPath")
 	private String uploadPath;
 	
@@ -51,39 +56,43 @@ public class MemberController {
 	@PostMapping("/login")
 	public String loginPOST(String memberId, String password, String targetURL, HttpServletRequest request) {
 		logger.info("loginPOST() 호출");
-		if(memberId.equals("test") && password.equals("1234")
-				|| memberId.equals("test12") && password.equals("1234")) {
-			logger.info("로그인 성공");
-			HttpSession session = request.getSession();
-			session.setAttribute("memberId", memberId);
-			session.setMaxInactiveInterval(600);
-			logger.info("세션 = " + session);
-			logger.info("targetURL = " + targetURL);
-			if(!targetURL.equals("")) {
-				logger.info(targetURL);
-				return "redirect:/" + targetURL;
+		if(memberService.read(memberId, "checking")==1) {
+			if(passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {
+				logger.info("로그인 성공");
+//				HttpSession session = request.getSession();
+//				session.setAttribute("memberId", memberId);
+//				session.setMaxInactiveInterval(600);
+//				logger.info("세션 = " + session);
+				logger.info("targetURL = " + targetURL);
+				if(!targetURL.equals("")) {
+					logger.info(targetURL);
+					return "redirect:/" + targetURL;
+				} else {
+					return "redirect:/";
+				}
 			} else {
-				return "redirect:/";
+				logger.info("로그인 실패 targetURL = " + targetURL);
+				return "redirect:/member/login";
 			}
-		} else {
-			logger.info("로그인 실패 targetURL = " + targetURL);
-			return "redirect:/member/login";
-		}
+			}else {
+				logger.info("로그인 실패 targetURL = " + targetURL);
+				return "redirect:/member/login";
+			}
 	} //end loginPOST()
 	
 	//로그아웃
-	@GetMapping("/logout")
-	public String logout(HttpServletRequest request) {
-		logger.info("logout() 호출");
-		HttpSession session = request.getSession();
-		if(session.getAttribute("memberId") != null) {
-			session.removeAttribute("memberId");
-			logger.info("로그아웃 성공");
-			return "redirect:/";
-		} else {
-			return "redirect:/";
-		}
-	}
+//	@PostMapping("/logout")
+//	public String logout(HttpServletRequest request) {
+//		logger.info("logout() 호출");
+//		HttpSession session = request.getSession();
+//		if(session.getAttribute("memberId") != null) {
+//			session.removeAttribute("memberId");
+//			logger.info("로그아웃 성공");
+//			return "redirect:/";
+//		} else {
+//			return "redirect:/";
+//		}
+//	}
 	
 	// id 중복체크
 	@PostMapping("/checkId")
@@ -126,10 +135,10 @@ public class MemberController {
 	
 	// 마이페이지
 	@GetMapping("/profiles")
-	public void profilesGET(Model model, HttpSession session) {
+	public void profilesGET(Model model, Principal principal) {
 		logger.info("profilesGET() 호출");
 		MemberVO vo = new MemberVO();
-		String memberId = (String) session.getAttribute("memberId");
+		String memberId = principal.getName();
 		vo = memberService.read(memberId);
 		model.addAttribute("vo", vo);
 		logger.info(vo.toString());

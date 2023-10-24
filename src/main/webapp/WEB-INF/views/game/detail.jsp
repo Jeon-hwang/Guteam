@@ -1,13 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <title>${vo.gameName }</title>
 </head>
 <body>
+<sec:authentication property="principal" var="principal"/>
 <div class="category">
 <a href="list">All Games</a> > <a href="list?keyword=${vo.genre }">${vo.genre }</a>
 </div>
@@ -27,8 +31,10 @@
 <hr>
 <input type="hidden" id="gameId" value=${vo.gameId }>
 <br>
+<sec:authorize access="hasRole('ROLE_ADMIN')">
 <a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button>수정하기</button></a>
 <br>
+</sec:authorize>
 <a href="../gameBoard/list?gameId=${vo.gameId }"><button>${vo.gameName } 커뮤니티</button></a>
 <br>
 <a href="../review/list?gameId=${vo.gameId }"><button>리뷰보기</button></a>
@@ -38,22 +44,24 @@
 <input type="hidden" id="updateResult" value="${update_result }">
 
 <br>
-
+<sec:authorize access="hasRole('ROLE_USER')">
 <div class="wish_list_btn_area">
 	<button id="addWishList">위시리스트에 추가</button>
 	<button id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
 </div>
-
+</sec:authorize>
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
-		console.log(updateResult);
 		if(updateResult=='success'){
 			alert('게임 정보 수정 성공');
 		}
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var name = $("#userName").val();
 		$('#addWishList').click(function(){
 			var gameId = $('#gameId').val();
-			var memberId = '${sessionScope.memberId }';
+			var memberId = '${principal.username }';
 			var obj = {
 					'gameId' : gameId,
 					'memberId' : memberId
@@ -66,6 +74,9 @@
 					'Content-Type' : 'application/json'
 				},
 				data : JSON.stringify(obj),
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
 				success : function(result){
 					console.log(result);
 					if(result==1){
@@ -78,7 +89,7 @@
 		removeWishListOn();
 		function removeWishListOn(){
 			var gameId = $('#gameId').val();
-			var memberId = '${sessionScope.memberId }';
+			var memberId = '${principal.username }';
 			
 			var url = '../wishList/find/'+memberId+'?gameId='+gameId;
 			$.getJSON(
@@ -95,7 +106,7 @@
 		
 		$('#removeWishList').click(function(){
 			var gameId = $('#gameId').val();
-			var memberId = '${sessionScope.memberId }';
+			var memberId = '${principal.username }';
 			
 			$.ajax({
 				type : 'DELETE',

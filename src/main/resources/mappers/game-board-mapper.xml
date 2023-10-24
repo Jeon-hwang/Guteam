@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <update id = "update_deleted">
     	update ${game_board}
-    	set ${gameBoardTitle} = '삭제된 게시글 입니다', ${gameBoardContent} = '삭제된 게시글 입니다'
+    	set ${gameBoardTitle} = '삭제된 게시글 입니다', ${gameBoardContent} = '삭제된 게시글 입니다', ${memberId}='삭제된 게시글 입니다'
     	where ${gameBoardId} = #{gameBoardId}
     </update>
  

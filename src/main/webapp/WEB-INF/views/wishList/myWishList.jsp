@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 
 <html>
@@ -16,8 +17,9 @@
 <title>위시리스트</title>
 </head>
 <body>
-	<h1>${memberId }님의 위시리스트</h1>
-	<input type="hidden" id="memberId" value=${memberId }>
+<sec:authentication property="principal" var="principal"/>
+	<h1>${principal.username}님의 위시리스트</h1>
+	<input type="hidden" id="memberId" value="${principal.username}">
 	<div class="wishListArea">
 		<ul class="wishList">
 		<!-- 	<c:forEach varStatus="status" var="vo" items="${list }">

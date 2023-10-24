@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,8 +19,8 @@
 		PW &nbsp;
 		<input type="password" name="password" required />
 		<input type="hidden" name="targetURL" value=${param.targetURL }>
-		<input type="submit" value="로그인">
 		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"> 
+		<input type="submit" value="로그인">
 	</form>
 	<input type="hidden" id="onAlert" value="${on_alert }">
 	

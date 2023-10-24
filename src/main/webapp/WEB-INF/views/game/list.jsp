@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +19,9 @@ li {
 <title>Guteam Game List</title>
 </head>
 <body>
+	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<a href="register"><button>게임등록</button></a>
+	</sec:authorize>
 	<br>
 	<c:forEach varStatus="status" var="vo" items="${list }">
 	<div style="width:350px; height:500px; display:inline-block;" class="gameInfo">
