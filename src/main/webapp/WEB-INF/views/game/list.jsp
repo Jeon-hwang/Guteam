@@ -9,16 +9,19 @@
 <style type="text/css">
 ul {
 	list-style-type: none;
+	text-align: center;
 }
 
 li {
 	display: inline-block;
+	
 }
 </style>
 <meta charset="UTF-8">
 <title>Guteam Game List</title>
 </head>
 <body>
+<a href="/guteam/"><button>홈으로 돌아가기</button></a><jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<a href="register"><button>게임등록</button></a>
 	</sec:authorize>
@@ -75,7 +78,7 @@ li {
 			<li><a href="list?page=${pageMaker.endPageNo+1 }"><button>다음</button></a></li>
 		</c:if>
 	</ul>
-	<a href="/guteam/"><button>홈으로 돌아가기</button></a>
+	
 	<input type="hidden" id="insertResult" value="${insert_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){

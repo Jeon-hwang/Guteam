@@ -11,7 +11,7 @@
 <title>${vo.gameName }</title>
 </head>
 <body>
-<sec:authentication property="principal" var="principal"/>
+
 <div class="category">
 <a href="list">All Games</a> > <a href="list?keyword=${vo.genre }">${vo.genre }</a>
 </div>
@@ -50,18 +50,23 @@
 	<button id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
 </div>
 </sec:authorize>
+<sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
+<sec:authentication property="principal" var="principal"/>
+<input type="hidden" id="username" value="${principal.username }">
+</sec:authorize>
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
 		if(updateResult=='success'){
 			alert('게임 정보 수정 성공');
 		}
+		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		var name = $("#userName").val();
+		var gameId = $('#gameId').val();
+		var memberId = $('#username').val();
+		
 		$('#addWishList').click(function(){
-			var gameId = $('#gameId').val();
-			var memberId = '${principal.username }';
 			var obj = {
 					'gameId' : gameId,
 					'memberId' : memberId
@@ -88,8 +93,6 @@
 		}); // end add_wish_list.click
 		removeWishListOn();
 		function removeWishListOn(){
-			var gameId = $('#gameId').val();
-			var memberId = '${principal.username }';
 			
 			var url = '../wishList/find/'+memberId+'?gameId='+gameId;
 			$.getJSON(
@@ -105,8 +108,6 @@
 		}//end removeWishListOn()
 		
 		$('#removeWishList').click(function(){
-			var gameId = $('#gameId').val();
-			var memberId = '${principal.username }';
 			
 			$.ajax({
 				type : 'DELETE',
@@ -115,6 +116,9 @@
 					'Content-Type' : 'application/json'
 				},
 				data : gameId,
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
 				success : function(result){
 					console.log(result);
 					if(result==1){

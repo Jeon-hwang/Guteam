@@ -141,7 +141,7 @@ public class GameController {
 
 	@PostMapping("/update")
 	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file) {
-
+		
 		logger.info("updatePOST() 호출");
 		String beforeImageName = gameService.read(vo.getGameId()).getGameImageName();
 		logger.info(vo + "");

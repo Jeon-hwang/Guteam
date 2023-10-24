@@ -10,6 +10,7 @@
 <title>GUTEAM : 로그인</title>
 </head>
 <body>
+	<c:if test="${not empty param }">아이디와 비밀번호를 확인해주세요 </c:if>
 	<h1>GUTEAM</h1>
 	<a href="register">회원 가입</a>
 	<form action="login" method="post">
@@ -19,7 +20,7 @@
 		PW &nbsp;
 		<input type="password" name="password" required />
 		<input type="hidden" name="targetURL" value=${param.targetURL }>
-		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"> 
+		<sec:csrfInput/>
 		<input type="submit" value="로그인">
 	</form>
 	<input type="hidden" id="onAlert" value="${on_alert }">

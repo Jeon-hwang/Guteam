@@ -68,7 +68,7 @@ public class MemberController {
 					logger.info(targetURL);
 					return "redirect:/" + targetURL;
 				} else {
-					return "redirect:/";
+					return "redirect:/game/list";
 				}
 			} else {
 				logger.info("로그인 실패 targetURL = " + targetURL);

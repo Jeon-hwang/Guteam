@@ -23,10 +23,11 @@
 		<s:intercept-url pattern="/game/register" access="hasRole('ROLE_ADMIN')" />
 		<s:intercept-url pattern="/game/update" access="hasRole('ROLE_ADMIN')" />
 		<s:form-login username-parameter="memberId" password-parameter="password" login-page="/member/login" login-processing-url="/member/login"
+		authentication-failure-forward-url="/member/login?error" default-target-url="/game/list"
 		 />
-		<s:logout logout-url="/member/logout" invalidate-session="true" delete-cookies="true" logout-success-url="/" />
-		<s:session-management invalid-session-url="/">
-		 	<s:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" expired-url="/" />
+		<s:logout logout-url="/member/logout" invalidate-session="true" delete-cookies="true" logout-success-url="/game/list" />
+		<s:session-management invalid-session-url="/game/list">
+		 	<s:concurrency-control max-sessions="1" expired-url="/game/list" />
 		</s:session-management>
 	</s:http>
 	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
