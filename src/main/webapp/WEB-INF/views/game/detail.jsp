@@ -11,7 +11,6 @@
 <title>${vo.gameName }</title>
 </head>
 <body>
-
 <div class="category">
 <a href="list">All Games</a> > <a href="list?keyword=${vo.genre }">${vo.genre }</a>
 </div>
