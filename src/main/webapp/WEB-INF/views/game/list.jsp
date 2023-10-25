@@ -25,9 +25,10 @@ ul {
 <title>Guteam Game List</title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<a href="register"><button>게임등록</button></a>
-	</sec:authorize><jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
+	</sec:authorize>
 	<br><br><br>
 	<form action="/guteam/game/list" method="get" >
 		<div class="input-group mb-3" style=" display:inline-block; text-align:center;">
@@ -42,39 +43,40 @@ ul {
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','price');$('#keyword').attr('type','number');$('#keyword').attr('min','0');">가격</a></li>
 		</ul>
 		<input type="hidden" class="keywordCriteria" name="keywordCriteria" value="keyword">
-		<input class="form-control" style=" display:inline-block;width:300px; background-color: var(--bs-primary-border-subtle);" type="text" name="keyword" id="keyword" maxlength="20">
+		<input class="form-control" style=" display:inline-block;width:300px; background-color: light-gray;" type="text" name="keyword" id="keyword" maxlength="20">
 		<input class="btn btn-light form-control" style=" display:inline-block; text-align:center;width:80px;" type="submit" value="검색">
 		</div>
 	</form>
 	
 	<br>
 	<c:forEach varStatus="status" var="vo" items="${list }">
-	<div class="btn btn-outline-primary" style="margin:5px; width:330px; height:500px; display:inline-block; ">
-		<div class="gameInfo">
-		<img class="rounded mx-auto d-block" alt="${vo.gameName }" width="300px" height="300px" src="display?fileName=${vo.gameImageName }">
-		<input type="hidden" class="gameId" value="${vo.gameId }">
-		<br>
-		<div style="font-size: 1em;">
-		name : ${vo.gameName } <br>
-		price : ${vo.price }<br>
-		genre : ${vo.genre }<br>
-		releaseDate : <fmt:formatDate value="${vo.releaseDate }" pattern="yyyy년 MM월 dd일"/>  <br>
-		rating : 
-		<c:if test="${ratingList[status.index]!=0 }">
-		<c:forEach begin="1" end="${ratingList[status.index]/2 }" step="1">
-			<i class="bi bi-star-fill"></i>
-		</c:forEach>
-		<c:if test="${ratingList[status.index]%2!=0 }">
-			<i class="bi bi-star-half"></i>
-		</c:if>
-		<c:forEach begin="1" end="${5-(ratingList[status.index]/2) }" step="1">
-			<i class="bi bi-star"></i>
-		</c:forEach>
-		</c:if>
+	<div class="btn btn-secondary" style="margin:5px; width:330px; height:500px; display:inline-block; ">
+			<div class="gameInfo">
+				<img class="rounded mx-auto d-block" alt="${vo.gameName }"
+					width="300px" height="300px"
+					src="display?fileName=${vo.gameImageName }"> <input
+					type="hidden" class="gameId" value="${vo.gameId }"> <br>
+				<div style="font-size: 1em;">
+					name : ${vo.gameName } <br> price : ${vo.price }<br>
+					genre : ${vo.genre }<br> releaseDate :
+					<fmt:formatDate value="${vo.releaseDate }" pattern="yyyy년 MM월 dd일" />
+					<br> rating :
+					<c:if test="${ratingList[status.index]!=0 }">
+						<c:forEach begin="1" end="${ratingList[status.index]/2 }" step="1">
+							<i class="bi bi-star-fill"></i>
+						</c:forEach>
+						<c:if test="${ratingList[status.index]%2!=0 }">
+							<i class="bi bi-star-half"></i>
+						</c:if>
+						<c:forEach begin="1" end="${5-(ratingList[status.index]/2) }"
+							step="1">
+							<i class="bi bi-star"></i>
+						</c:forEach>
+					</c:if>
+				</div>
+				<br>
+			</div>
 		</div>
-		<br>
-		</div>
-	</div>
 	</c:forEach>
 	<ul class="paging">
 		<c:if test="${pageMaker.hasPrev }">

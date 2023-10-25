@@ -9,6 +9,8 @@
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <title>${vo.gameName }</title>
+<style type="text/css">
+</style>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
@@ -37,22 +39,22 @@
 <input type="hidden" id="gameId" value=${vo.gameId }>
 <br>
 <sec:authorize access="hasRole('ROLE_ADMIN')">
-<a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button>수정하기</button></a>
+<a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button class="btn btn-light">수정하기</button></a>
 <br>
 </sec:authorize>
-<a href="../gameBoard/list?gameId=${vo.gameId }"><button>${vo.gameName } 커뮤니티</button></a>
+<a href="../gameBoard/list?gameId=${vo.gameId }"><button class="btn btn-light">${vo.gameName } 커뮤니티</button></a>
 <br>
-<a href="../review/list?gameId=${vo.gameId }"><button>리뷰보기</button></a>
+<a href="../review/list?gameId=${vo.gameId }"><button class="btn btn-light">리뷰보기</button></a>
 <br>
-<a href="${prevListUrl}"><button>리스트로 돌아가기</button></a>
+<a href="${prevListUrl}"><button class="btn btn-light">리스트로 돌아가기</button></a>
 
 <input type="hidden" id="updateResult" value="${update_result }">
 
 <br>
 <sec:authorize access="isAuthenticated()">
 <div class="wish_list_btn_area">
-	<button id="addWishList">위시리스트에 추가</button>
-	<button id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
+	<button  class="btn btn-light" id="addWishList">위시리스트에 추가</button>
+	<button  class="btn btn-light" id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
 	<a href="../purchased/purchaseWindow?gameId=${vo.gameId }&memberId=${principal.username }">구매</a>
 </div>
 </sec:authorize>
