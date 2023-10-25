@@ -96,6 +96,8 @@ public class GameBoardController {
 	@GetMapping("/detail")
 	public void detail(Model model, int gameBoardId, int page, int gameId) {
 		GameBoardVO vo = gameBoardService.read(gameBoardId);
+		String nickname = memberService.read(vo.getMemberId()).getNickname();
+		model.addAttribute("nickname", nickname);
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
 		model.addAttribute("gameId", gameId);

@@ -32,8 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="total_count_by_member_id" resultType="Integer">
-    	select count(*) total_cnt from ${game_board}
-    	where ${memberId} like '%'||#{keyword}||'%' and ${gameId}=#{gameId}
+    	select count(*) total_cnt from (select * from ${game_board} where ${gameId}=#{gameId})a, (select ${memberId} from ${member} where ${nickname} like '%'||#{keyword}||'%')b
+	where a.${memberId}=b.${memberId}
     </select>
     
     <select id="total_count_by_keyword" resultType="Integer">
@@ -43,12 +43,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_by_member_id" resultType="GameBoardVO">
-    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
-    	from (select rownum rn, a.* from(
-    	select * from ${game_board}
-    	where ${gameId}=#{gameId} and (${memberId} like '%'||#{keyword}||'%' and ${gameId}=#{gameId})
-    	order by ${gameBoardId} desc)a
-    	) where rn between #{start} and #{end}
+	    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+	from (select rownum rn, a.* from (select * from ${game_board} where ${gameId}=#{gameId})a, (select ${memberId} from ${member} where ${nickname} like '%'||#{keyword}||'%')b
+	where a.${memberId}=b.${memberId}
+	order by ${gameBoardId} desc)
+	where rn between #{start} and #{end}
     </select>
     
     <select id="select_by_keyword" resultType="GameBoardVO">
@@ -70,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <update id = "update_deleted">
     	update ${game_board}
-    	set ${gameBoardTitle} = '삭제된 게시글 입니다', ${gameBoardContent} = '삭제된 게시글 입니다', ${memberId}='삭제된 게시글 입니다'
+    	set ${gameBoardTitle} = '삭제된 게시글 입니다', ${gameBoardContent} = '삭제된 게시글 입니다', ${memberId}='deleted'
     	where ${gameBoardId} = #{gameBoardId}
     </update>
  

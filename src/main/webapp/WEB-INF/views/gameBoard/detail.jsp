@@ -12,13 +12,15 @@
 <body>
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 	제목 : ${vo.gameBoardTitle }
-	<br> 작성자 : ${vo.memberId}
+	<br> 작성자 : ${nickname}
 	<br> 내용 : ${vo.gameBoardContent }
 	<br> 작성일 : ${vo.gameBoardDateCreated }
 	<br> 댓글 수 : ${vo.commentCnt }
 	<br>
 	<hr>
 	<sec:authentication property="principal" var="principal"/>
+	<sec:authorize access="isAuthenticated()">
+	<c:if test="${vo.gameBoardTitle!='삭제된 게시글 입니다' }">
 	<c:if test="${principal.username==vo.memberId }">
 	<a href="update?gameBoardId=${vo.gameBoardId }&page=${page}&gameId=${gameId}">
 	<button>게시글 수정하기</button></a>
@@ -28,6 +30,8 @@
 		<input type="submit" value="게시글 삭제하기">
 	</form>
 	</c:if>
+	</c:if>
+	</sec:authorize>
 	<br>
 	<a href="list?gameId=${gameId }&page=${page}"><button>커뮤니티로
 			돌아가기</button></a>
