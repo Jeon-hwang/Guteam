@@ -7,7 +7,8 @@ import project.spring.guteam.domain.FriendRequestVO;
 public interface FriendRequestService {
 	
 	int create(FriendRequestVO vo);
-	List<FriendRequestVO> readTo(String sendMemberId);
+	int read(String sendMemberId);
+	List<String> readTo(String sendMemberId);
 	List<FriendRequestVO> readFrom(String receiveMemberId);
 	int delete(String sendMemberId);
 	

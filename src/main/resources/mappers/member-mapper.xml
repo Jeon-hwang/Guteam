@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 select * from ${member} where ${memberId} = #{memberId}
 	 </select>
 	 
-	 <select id="check_member_id" resultType="int">
+	 <select id="check_member_id" resultType="Integer">
 	 select count(*) from ${member} where ${memberId} = #{memberId}
 	 </select>
 	 

@@ -24,16 +24,22 @@ public class FriendRequestDAOImple implements FriendRequestDAO {
 		logger.info("insert() 호출");
 		return sqlSession.insert(NAMESPACE + ".insert", vo);
 	}
+	
+	@Override
+	public int select(String sendMemberId) {
+		logger.info("select_all() 호출 sendMemberId" + sendMemberId);
+		return sqlSession.selectOne(NAMESPACE + ".select_all", sendMemberId);
+	}
 
 	@Override
-	public List<FriendRequestVO> selectTo(String sendMemberId) {
-		logger.info("selectTo() 호출 = sendMemberId" + sendMemberId);
+	public List<String> selectTo(String sendMemberId) {
+		logger.info("selectTo() 호출 sendMemberId = " + sendMemberId);
 		return sqlSession.selectList(NAMESPACE + ".select_to_request", sendMemberId);
 	}
 
 	@Override
 	public List<FriendRequestVO> selectFrom(String receiveMemberId) {
-		logger.info("selectFrom() 호출 = receiveMemberId" + receiveMemberId);
+		logger.info("selectFrom() 호출 receiveMemberId = " + receiveMemberId);
 		return sqlSession.selectList(NAMESPACE + ".select_from_request", receiveMemberId);
 	}
 
@@ -42,4 +48,5 @@ public class FriendRequestDAOImple implements FriendRequestDAO {
 		logger.info("delete() 호출");
 		return sqlSession.delete(sendMemberId);
 	}
+
 }

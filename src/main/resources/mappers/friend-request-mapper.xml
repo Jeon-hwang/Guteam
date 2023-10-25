@@ -12,6 +12,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 values (#{sendMemberId}, #{receiveMemberId}, sysdate)
 	 </insert>
 	 
+	 <!-- 친구 요청 내역 확인 -->
+	<select id="select_all" resultType="Integer">
+	 select count(*) from ${friend_request} where ${sendMemberId} = #{sendMemberId}
+	</select>
 	 <!-- 친구 요청 내역 -->
 	 <select id="select_to_request" resultType="FriendRequestVO">
 	 select * from ${friend_request} where ${sendMemberId} = #{sendMemberId} 

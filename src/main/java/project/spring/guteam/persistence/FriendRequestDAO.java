@@ -9,8 +9,11 @@ public interface FriendRequestDAO {
 	// 친구 요청
 	int insert(FriendRequestVO vo);
 	
+	// 친구 요청 확인
+	int select(String sendMemberId);
+	
 	// 친구 요청 내역
-	List<FriendRequestVO> selectTo(String sendMemberId);
+	List<String> selectTo(String sendMemberId);
 	
 	// 받은 친구 요청 내역
 	List<FriendRequestVO> selectFrom(String receiveMemberId);
