@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	
 	 	<property name="friend_request" value="friend_request"/>
 	 	<property name="sendMemberId" value="send_member_id"/>
-	 	<property name="receiveMemberId" value="receive_memberId"/>
+	 	<property name="receiveMemberId" value="receive_member_id"/>
 	 	<property name="sendDate" value="send_date"/>
 	 	
 	 	<property name="message" value="message"/>

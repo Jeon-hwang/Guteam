@@ -30,8 +30,8 @@ public class FriendRequestDAOTest {
 	}
 
 	private void testSelect() {
-		List<FriendRequestVO> list = dao.selectTo("test");
-		for(FriendRequestVO vo : list) {
+		List<String> list = dao.selectTo("test");
+		for(String vo : list) {
 			logger.info(vo.toString());
 		}
 		

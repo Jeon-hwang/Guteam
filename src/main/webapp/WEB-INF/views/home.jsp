@@ -9,6 +9,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
+	<input type="hidden" id="alert" value="${alert }">
 	<div class="auth" style="display:inline-block; margin-right: 50px; float:right;">
 	<sec:authorize access="isAnonymous()">
 			<a href="/guteam/member/login"><button type="button">로그인</button></a>
@@ -30,7 +31,17 @@
 	</form>
 	
 	
-
+<script type="text/javascript">
+	$(document).ready(function(){
+		var result = $('#alert').val();
+			if(result == 'success'){
+				alert('회원 탈퇴가 완료되었습니다!');
+			}
+			else if(result == 'fail'){
+				alert('요청에 실패하였습니다.');
+			}
+	});
+</script>
 </body>
 
 </html>

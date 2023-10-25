@@ -23,15 +23,16 @@
 		<sec:csrfInput/>
 		<input type="submit" value="로그인">
 	</form>
-	<input type="hidden" id="onAlert" value="${on_alert }">
+	<input type="hidden" id="alert" value="${alert }">
 	
 <script type="text/javascript">
 	$(document).ready(function(){
-		var result = $('#onAlert').val();
+		var result = $('#alert').val();
 			if(result == 'success'){
 			alert('가입 성공!');
 		}
 	});
 </script>
+
 </body>
 </html>

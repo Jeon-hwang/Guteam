@@ -7,7 +7,6 @@ import java.security.Principal;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -80,7 +80,7 @@ public class MemberController {
 			}
 	} //end loginPOST()
 	
-	//로그아웃
+//	//로그아웃
 //	@PostMapping("/logout")
 //	public String logout(HttpServletRequest request) {
 //		logger.info("logout() 호출");
@@ -125,7 +125,7 @@ public class MemberController {
 		int result = memberService.create(vo);
 		logger.info(result + " 행 삽입");
 		if (result == 1) {
-			reAttr.addFlashAttribute("on_alert", "success");
+			reAttr.addFlashAttribute("alert", "success");
 			return "redirect:/member/login";
 		} else {
 			return "redirect:/member/register";
@@ -146,10 +146,10 @@ public class MemberController {
 	
 	// 회원정보 수정
 	@GetMapping("/update")
-	public void updateGET(Model model, HttpSession session) {
+	public void updateGET(Model model, Principal principal) {
 		logger.info("updateGET() 호출");
 		MemberVO vo = new MemberVO();
-		String memberId = (String) session.getAttribute("memberId");
+		String memberId = principal.getName();
 		vo = memberService.read(memberId);
 		model.addAttribute("vo", vo);
 		logger.info(vo.toString());
@@ -157,7 +157,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/update")
-	public String updatePOST(MemberVO vo, MultipartFile file) {	
+	public String updatePOST(MemberVO vo, MultipartFile file, RedirectAttributes reAttr) {	
 		logger.info("updatePOST() 호출 : " + vo.toString());
 		if(file.getOriginalFilename().equals("")) {
 			
@@ -176,8 +176,9 @@ public class MemberController {
 		int result = memberService.update(vo, "N");
 		
 		if(result == 1) {
+			reAttr.addFlashAttribute("alert", "success");
 			logger.info("수정 완료");
-			return "redirect:/";
+			return "redirect:/member/profiles";
 		} else {
 			logger.info("수정 실패");
 			return "redirect:/member/update";
@@ -187,15 +188,18 @@ public class MemberController {
 	
 	// 회원 탈퇴
 	@PostMapping("/delete")
-	public String delete(String memberId, HttpSession session) {
-		logger.info("delete() 호출 memberId = " + memberId);
-		session.removeAttribute("memberId");
+	public String delete(String memberId, Principal principal, RedirectAttributes reAttr) {
+		logger.info("delete() 호출 memberId = " + principal);
+		
 		int result = memberService.delete(memberId);
 		if(result == 1) {
 			logger.info("탈퇴 성공");
+			reAttr.addFlashAttribute("alert", "success");
+			SecurityContextHolder.clearContext();
 			return "redirect:/";
 		} else {
 			logger.info("탈퇴 실패");
+			reAttr.addFlashAttribute("alert", "fail");
 			return "redirect:/";
 		}
 		
@@ -238,24 +242,5 @@ public class MemberController {
         return entity;
     } //end display()
 	
-    // 친구 목록
-    @GetMapping("/friends")
-    public void friendsGET(Model model, HttpSession session) {
-    	logger.info("friendsGET() 호출");
-    	MemberVO vo = new MemberVO();
-		String memberId = (String) session.getAttribute("memberId");
-		vo = memberService.read(memberId);
-		model.addAttribute("vo", vo);
-		logger.info(vo.toString());
-    }
-    
-    // 친구 추가
-    @PostMapping("/addFriend")
-    public void addFriend(String friendId, HttpSession session) {
-    	logger.info("addFrined() 호출 friendId = " + friendId);
-    	String memberId = (String) session.getAttribute("memberId");
-    	
-    	
-    }
 
 } // end MemberController
