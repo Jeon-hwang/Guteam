@@ -12,18 +12,24 @@
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
-<sec:authentication property="principal" var="principal"/>
+	<sec:authentication property="principal" var="principal"/>
 	<h1>댓글 테스트</h1>
 	
 	<!-- 대충 아래에 댓글 생성 -->
 	<section id="CommentGroup">
 	
 	<div style="text-align : center;">
-		<input type="hidden" id="gameBoardId" name="gameBoardId" value=2>
-		닉네임 : <input type="text" id="memberId">
+		<input type="hidden" name="gameId" id="gameId" value="${gameId }">
+		<input type="hidden" name="page" id="page" value="${page }">
+		<input type="hidden" name="gameBoardId" id="gameBoardId" value="${vo.gameBoardId }">
+		<sec:authorize access="isAuthenticated()">
+		닉네임 : <span id=memberId>${principal.username }</span> &nbsp;&nbsp;&nbsp;
 		내용 : <input type="text" id="commentContent">
 		<button id="commentAddBtn">작성</button>
-		
+		</sec:authorize>
+		<sec:authorize access="isAnonymous()">
+			<a href="../member/login">로그인을 하셔야 댓글이 작성 가능합니다.	</a>
+		</sec:authorize>
 	</div>
 	<div style="text-align : center;">
 		<ul id="comments"></ul>
@@ -34,7 +40,8 @@
 		$(document).ready(function(){
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			var name = $("#userName").val();
+			var principalMemberId = $('#memberId').text();
+			
 			function dateFormat(date) {
 		        var month = date.getMonth() + 1;
 		        var day = date.getDate();
@@ -53,17 +60,16 @@
 			
 			$('#commentAddBtn').click(function(){
 				var gameBoardId = $('#gameBoardId').val();
-				var memberId = $('#memberId').val();
 				var commentContent = $('#commentContent').val();
 				var obj = {
 						'gameBoardId' : gameBoardId,
-						'memberId' : memberId,
+						'memberId' : principalMemberId,
 						'commentContent' : commentContent
 				}
 				
 				$.ajax({
 					type : 'POST',
-					url : 'comments',
+					url : '../boardComment/comments',
 					headers : {
 						'Content-Type' : 'application/json'
 					},
@@ -91,7 +97,7 @@
 				var gameBoardId= $('#gameBoardId').val();
 				var page = nowPage;
 				
-				var url = 'comments/all/'+gameBoardId+'?page='+page;
+				var url = '../boardComment/comments/all/'+gameBoardId+'?page='+page;
 				
 				$.getJSON(
 					url,
@@ -127,10 +133,12 @@
 								+ '<span id="commentContentView">'+this.commentContent+'</span>&nbsp&nbsp&nbsp&nbsp'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">&nbsp&nbsp&nbsp&nbsp'
 								+ '<span>'+dateFormat(commentDateCreated)+'</span>&nbsp&nbsp'
-								+ '<button class="update_comment" >수정</button>'
+								if(principalMemberId==this.memberId){
+						list += '<button class="update_comment" >수정</button>'
 								+ '<button class="update_comment_check" style="display:none" >수정확인</button>'
 								+ '<button class="delete_comment" >삭제</button>'
-								+ '<div class="reply_btn_area">'
+								}
+						list += '<div class="reply_btn_area">'
 								+ '<button class="reply_view_btn" style="display:block">답글보기</button>'
 								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
 								+ '<div class="replies_area'+commentRow+'"></div>'
@@ -187,7 +195,7 @@
 				
 				$.ajax({
 					type : 'PUT',
-					url : 'comments/'+commentId,
+					url : '../boardComment/comments/'+commentId,
 					headers : {
 						'Content-Type' : 'application/json'
 					},
@@ -212,7 +220,7 @@
 				console.log('댓글Id 및 게시판판 id: '+commentId+','+gameBoardId);
 				$.ajax({
 					type : 'DELETE',
-					url : 'comments/'+commentId,
+					url : '../boardComment/comments/'+commentId,
 					headers : {
 						'Content-Type' : 'application/json'
 					},
@@ -234,7 +242,7 @@
 			$('#comments').on('click','.comment_item .reply_btn_area .reply_view_btn',function(){
 				var commentId = $(this).parent().prevAll('#commentId').val();
 				var commentRow = $(this).parent().prevAll('#commentRow').val();
-				var url = 'replies/all/'+commentId;
+				var url = '../boardComment/replies/all/'+commentId;
 				console.log('댓글 ID?'+commentId);
 				console.log('몇번째 댓글?'+commentRow);
 				if($(this).is(":visible")){
@@ -263,7 +271,7 @@
 							}else {
 							list += '<li class="reply_item">'
 							+ '<input type="hidden" id="replyId" value="'+this.replyId+'">'
-							+ this.memberId + ':&nbsp&nbsp'
+							+ this.memberId + ':&nbsp&nbsp'	
 							+ '<input type="hidden" id="replyContent" value="'+this.replyContent+'">&nbsp&nbsp'
 							+ '<span id="replyView">'+this.replyContent + '</span>&nbsp&nbsp'
 							+ dateFormat(replyDateCreated) + '&nbsp&nbsp'
@@ -273,11 +281,20 @@
 							+ '</li>';
 							}
 						});//end each
-							if(commentContent != '삭제된 댓글입니다.'){
-							list += '아이디 : <input type="text" name="replyMemberId" id="replyMemberId">'
-									+ '내용 : <input type="text" name="replyContent" id="replyContent">'
-									+ '<button class="reply_add_btn" >작성</button>';
+							if(commentContent == '삭제된 댓글입니다.'){
+								list += '<span>삭제된 댓글에는 답글을 달 수 없습니다.</span>';
+							}else if(principalMemberId == ''){
+								var uri ='/guteam/gameBoard/detail?gameBoardId='+gameBoardId+'&page=${page}&gameId=${gameId}'
+								const encoded = encodeURI(uri);
+								list += '<a href="../member/login?targetURL=">로그인을 하셔야 답글을 달 수 있습니다</a>';
+							}else{
+								list += '아이디 : <span id="replyMemberId">'+principalMemberId+'</span>&nbsp&nbsp&nbsp&nbsp'
+								+ '내용 : <input type="text" name="replyContent" id="replyContent">'
+								+ '<button class="reply_add_btn" >작성</button>';
 							}
+					
+						
+						
 							$(repliesArea).html(list);
 						}//end funtion(data)
 						
@@ -293,7 +310,7 @@
 				//console.log(tagName);
 				
 				var commentId = $(this).parent().prevAll('#commentId').val();	
-				var memberId = $(this).prevAll('#replyMemberId').val();
+			
 				var replyContent = $(this).prevAll('#replyContent').val();
 				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
 				//var replyViewBtnClick = $(this).parent().parent().parent().nextAll(".reply_btn_area").children(".reply_view_btn").prop('tagName');
@@ -303,13 +320,13 @@
 				console.log("댓글id, 회원id, 대댓내용 :"+ commentId+", "+memberId+", "+replyContent);
 				var obj = {
 						'commentId' : commentId,
-						'memberId' : memberId,
+						'memberId' : principalMemberId,
 						'replyContent' : replyContent
 				}
 				
 				$.ajax({
 					type : 'POST',
-					url : 'replies',
+					url : '../boardComment/replies',
 					headers : {
 						'Content-Type' : 'application/json'
 					},
@@ -353,7 +370,7 @@
 				
 				$.ajax({
 					type : 'PUT',
-					url : 'replies/'+replyId,
+					url : '../boardComment/replies/'+replyId,
 					headers : {
 						'Content-Type' : 'application/json'
 					},
@@ -377,7 +394,7 @@
 				console.log('대댓글Id 및 게시판판 id: '+replyId);
 				$.ajax({
 					type : 'DELETE',
-					url : 'replies/'+replyId,
+					url : '../boardComment/replies/'+replyId,
 					headers : {
 						'Content-Type' : 'application/json'
 					},

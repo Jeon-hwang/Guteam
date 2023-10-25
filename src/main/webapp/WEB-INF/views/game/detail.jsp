@@ -11,6 +11,10 @@
 <title>${vo.gameName }</title>
 </head>
 <body>
+<sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
+<sec:authentication property="principal" var="principal"/>
+<input type="hidden" id="username" value="${principal.username }">
+</sec:authorize>
 <div class="category">
 <a href="list">All Games</a> > <a href="list?keyword=${vo.genre }">${vo.genre }</a>
 </div>
@@ -47,12 +51,10 @@
 <div class="wish_list_btn_area">
 	<button id="addWishList">위시리스트에 추가</button>
 	<button id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
+	<a href="../purchased/purchaseWindow?gameId=${vo.gameId }&memberId=${principal.username }">구매</a>
 </div>
 </sec:authorize>
-<sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
-<sec:authentication property="principal" var="principal"/>
-<input type="hidden" id="username" value="${principal.username }">
-</sec:authorize>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
@@ -128,6 +130,9 @@
 				}
 			});// end ajax
 		});//end removeWishList.click
+		
+
+		}); //removeWishList.click 
 	});// document
 
 </script>

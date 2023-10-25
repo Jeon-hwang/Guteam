@@ -17,6 +17,7 @@
 	<br> 댓글 수 : ${vo.commentCnt }
 	<br>
 	<hr>
+	<sec:authorize access="hasRole('USER, ADMIN')">
 	<sec:authentication property="principal" var="principal"/>
 	<c:if test="${principal.username==vo.memberId }">
 	<a href="update?gameBoardId=${vo.gameBoardId }&page=${page}&gameId=${gameId}">
@@ -27,11 +28,12 @@
 		<input type="submit" value="게시글 삭제하기">
 	</form>
 	</c:if>
+	</sec:authorize>
 	<br>
 	<a href="list?gameId=${gameId }&page=${page}"><button>커뮤니티로
 			돌아가기</button></a>
 	<input type="hidden" id="updateResult" value="${update_result }">
-	
+	<jsp:include page="../boardComment/comment_and_reply_test.jsp" />
 
 	<script type="text/javascript">
 		$(document).ready(function() {

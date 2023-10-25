@@ -25,7 +25,7 @@ public class PurchasedDAOImple implements PurchasedDAO {
 	}
 
 	@Override
-	public List<PurchasedVO> select(String memberId) {
+	public List<PurchasedVO> select(String memberId) { // 구매 내역에 보여줄 리스트
 		logger.info("select 호출");
 		return sqlSession.selectList(NAMESPACE+".select",memberId);
 	}

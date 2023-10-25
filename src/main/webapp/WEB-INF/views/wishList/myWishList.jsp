@@ -33,11 +33,19 @@
 	</div>
 	<div class="price_area">
 		<p>선택한 게임 총 가격 : ￦<span id="totalPrice">0</span></p>
-		<button id="allBuy">선택한 게임 구매</button>
+		<form action="myWishList" method="post">
+		<sec:csrfInput/>
+		<input type="hidden" id="gameIdInput" name="gameIds" value="">
+		<input type="hidden" id="totalPriceInput" name="totalPriceInput" value="">
+		<input type="submit" id="submit" value="선택한 게임 구매">
+		</form>
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			showWishList();
+			var checkGameId = [];
+			var gameIdInput = $('#gameIdInput');
+			var totalPriceInput = $('#totalPriceInput');
 			
 			function showWishList(){
 				var memberId = $('#memberId').val();
@@ -99,17 +107,30 @@
 			$('.wish_list').on('click','.wish_list_item #listCheck',function(){
 				var price = parseInt($(this).nextAll('#price').val());
 				var totalPrice = parseInt($('#totalPrice').text());
-				
+				var gameId = $(this).prevAll('#gameId').val();
 				if($(this).is(':checked')){
 					//console.log("체크 수행 확인!");
 					//console.log("가격? "+price);
 					totalPrice += price;
+					checkGameId.push(gameId);
+					//console.log(checkGameId);
 				}else{
 					totalPrice  -= price;
+					checkGameId = checkGameId.filter((element) => element != gameId);
+					//console.log(checkGameId);
 				}
-				
+				$(totalPriceInput).attr('value',totalPrice);
+				$(gameIdInput).attr('value',checkGameId);
+				console.log($(totalPriceInput).attr('value'));
+				console.log($(gameIdInput).attr('value'));
 				$('#totalPrice').html(totalPrice);
 			});// end wish_list_item.on
+			
+			$('#allBuy').click(function(){
+				console.log("전체 구매버튼 클릭");
+				console.log(checkGameId);
+				
+			});
 		}); // end document
 	</script>
 </body>

@@ -16,7 +16,7 @@
 	<sec:authorize access="isAuthenticated()">
 			<a href="/guteam/member/profiles"><button>나의 프로필</button></a>
 			<a href="/guteam/wishList/myWishList"><button>나의 위시리스트</button></a>
-			<a href="/guteam/wishList/myWishList"><button>나의 보유 게임</button></a>
+			<a href="/guteam/purchased/myPurchased"><button>나의 보유 게임</button></a>
 			<form action="/guteam/member/logout" method="post" style="display:inline;">
 			<sec:csrfInput/>
 			<input type="submit" value="로그아웃"></form>

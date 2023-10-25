@@ -56,6 +56,7 @@ public class MemberController {
 	@PostMapping("/login")
 	public String loginPOST(String memberId, String password, String targetURL, HttpServletRequest request) {
 		logger.info("loginPOST() 호출");
+		logger.info("targetURL = " + targetURL);
 		if(memberService.read(memberId, "checking")==1) {
 			if(passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {
 				logger.info("로그인 성공");
@@ -65,7 +66,7 @@ public class MemberController {
 //				logger.info("세션 = " + session);
 				logger.info("targetURL = " + targetURL);
 				if(!targetURL.equals("")) {
-					logger.info(targetURL);
+					logger.info("targetURL : "+targetURL);
 					return "redirect:/" + targetURL;
 				} else {
 					return "redirect:/game/list";
