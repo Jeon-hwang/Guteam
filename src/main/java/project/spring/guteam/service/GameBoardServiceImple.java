@@ -52,9 +52,9 @@ public class GameBoardServiceImple implements GameBoardService {
 	public List<GameBoardVO> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword) {
 		logger.info("gameBoard read(keyword) 호출 : keywordCriteria = " + keywordCriteria + ",keyword = " + keyword);
 		if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
-			return gameBoardDAO.selectByMemberId(gameId, keyword);
+			return gameBoardDAO.selectByMemberId(gameId, keyword, criteria);
 		}else {
-			return gameBoardDAO.selectByKeyword(gameId, keyword);
+			return gameBoardDAO.selectByKeyword(gameId, keyword, criteria);
 		}
 	}
 
@@ -71,9 +71,9 @@ public class GameBoardServiceImple implements GameBoardService {
 	}
 
 	@Override
-	public int getTotalCount(int gameId, String keywordCriteria, String keyword) {
+	public int getTotalCount(int gameId, PageCriteria criteria, String keywordCriteria, String keyword) {
 		logger.info("getTotalCount(keyword) 호출 : keyword = " + keyword);
-		return gameBoardDAO.getTotalCounts(gameId, keywordCriteria, keyword);
+		return gameBoardDAO.getTotalCounts(gameId, criteria, keywordCriteria, keyword);
 	}
 
 }

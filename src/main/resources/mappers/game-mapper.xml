@@ -38,8 +38,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="total_count_by_keyword" resultType="Integer">
     	select count(*) total_cnt from ${game} 
-    	where ${gameName} like '%'||#{keyword}||'%' or
-    		${genre} like '%'||#{keyword}||'%'
+    	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
+    		lower(${genre}) like '%'||lower(#{keyword})||'%'
     </select>
     
     <select id="total_count_by_price" resultType="Integer">
@@ -59,8 +59,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from(select rownum rn, a.* from (
     	select * from ${game}
-    	where ${gameName} like '%'||#{keyword}||'%' or
-    		${genre} like '%'||#{keyword}||'%'
+    	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
+    		lower(${genre}) like '%'||lower(#{keyword})||'%'
     		order by ${gameId} desc)a )
     	where rn between #{start} and #{end}
     </select>

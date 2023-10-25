@@ -44,14 +44,14 @@ public class GameBoardDAOTest {
 	}
 
 	private void selectByKeywordTest() {
-		List<GameBoardVO>list = dao.selectByKeyword(5,"se");
+		List<GameBoardVO>list = dao.selectByKeyword(5,"se", null);
 		for(GameBoardVO vo : list) {
 			logger.info(vo.toString());
 		}
 	}
 
 	private void selectByMemberIdTest() {
-		List<GameBoardVO>list = dao.selectByMemberId(5,"test");
+		List<GameBoardVO>list = dao.selectByMemberId(5,"test", null);
 		for(GameBoardVO vo : list) {
 			logger.info(vo.toString());
 		}

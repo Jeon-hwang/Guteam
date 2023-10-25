@@ -63,20 +63,24 @@ public class GameBoardDAOImple implements GameBoardDAO {
 	}
 
 	@Override
-	public List<GameBoardVO> selectByMemberId(int gameId, String keyword) {
+	public List<GameBoardVO> selectByMemberId(int gameId, String keyword, PageCriteria criteria) {
 		logger.info("GameBoard selectByMemberId() 호출 gameId = " + gameId + ", keyword = " + keyword);
 		Map<String, Object> args = new HashMap<>();
 		args.put("gameId", gameId);
 		args.put("keyword", keyword);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_by_member_id", args);
 	}
 
 	@Override
-	public List<GameBoardVO> selectByKeyword(int gameId, String keyword) {
+	public List<GameBoardVO> selectByKeyword(int gameId, String keyword, PageCriteria criteria) {
 		logger.info("GameBoard selectByKeyword() 호출 : gameId = " + gameId + ", keyword = " + keyword);
 		Map<String, Object> args = new HashMap<>();
 		args.put("gameId", gameId);
 		args.put("keyword", keyword);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_by_keyword", args);
 	}
 
@@ -96,12 +100,14 @@ public class GameBoardDAOImple implements GameBoardDAO {
 	}
 
 	@Override
-	public int getTotalCounts(int gameId, String keywordCriteria, String keyword) {
+	public int getTotalCounts(int gameId, PageCriteria criteria,String keywordCriteria, String keyword) {
 		logger.info(keywordCriteria);
 		int result = 0;
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("keyword", keyword);
 		args.put("gameId", gameId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
 		if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
 			result = sqlSession.selectOne(NAMESPACE+".total_count_by_member_id",args);
 		}else {

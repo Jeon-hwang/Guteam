@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class GameController {
 	private String uploadPath;
 
 	@GetMapping("/list")
-	public void list(Model model, Integer page, Integer numsPerPage, String keyword) {
+	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria) {
 		logger.info("list 호출");
 		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
 		PageCriteria criteria = new PageCriteria();
@@ -62,10 +63,14 @@ public class GameController {
 			criteria.setNumsPerPage(numsPerPage);
 		}
 		List<GameVO> list;
-		if (keyword == null) {
+		if (keyword == null|| keyword.equals("")) {
 			list = gameService.read(criteria);
 			pageMaker.setTotalCount(gameService.getTotalCount());
-		} else {
+		} else if(keywordCriteria.equals("price")){
+			list = gameService.read(Integer.parseInt(keyword), criteria);
+			pageMaker.setTotalCount(gameService.getTotalCount(Integer.parseInt(keyword)));
+			model.addAttribute("keywordCriteria",keywordCriteria);
+		}else {
 			list = gameService.read(keyword, criteria);
 			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
 		}

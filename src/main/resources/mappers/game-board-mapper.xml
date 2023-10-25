@@ -38,21 +38,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="total_count_by_keyword" resultType="Integer">
     	select count(*) total_cnt from ${game_board}
-    	where ${gameId}=#{gameId} and (${gameBoardTitle} like '%'||#{keyword}||'%' or
-    		${gameBoardContent} like '%'||#{keyword}||'%')
+    	where ${gameId}=#{gameId} and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
+    		lower(${gameBoardContent}) like '%'||lower(#{keyword})||'%')
     </select>
     
     <select id="select_by_member_id" resultType="GameBoardVO">
+    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+    	from (select rownum rn, a.* from(
     	select * from ${game_board}
     	where ${gameId}=#{gameId} and (${memberId} like '%'||#{keyword}||'%' and ${gameId}=#{gameId})
-    	order by ${gameBoardId} desc
+    	order by ${gameBoardId} desc)a
+    	) where rn between #{start} and #{end}
     </select>
     
     <select id="select_by_keyword" resultType="GameBoardVO">
+    	select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+    	from (select rownum rn, a.* from(
     	select * from ${game_board}
-    	where ${gameId}=#{gameId} and (${gameBoardTitle} like '%'||#{keyword}||'%' or
-    		${gameBoardContent} like '%'||#{keyword}||'%')
-    	order by ${gameBoardId} desc
+    	where ${gameId}=#{gameId} and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
+    		lower(${gameBoardContent}) like '%'||lower(#{keyword})||'%')
+    	order by ${gameBoardId} desc)a
+    	) where rn between #{start} and #{end}
     </select>
     
    

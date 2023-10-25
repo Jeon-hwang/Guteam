@@ -50,12 +50,16 @@ public class GameBoardController {
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
 		List<GameBoardVO> list;
-		if(keyword==null) {
+		if(keyword==null||keyword.equals("")) {
 			list = gameBoardService.read(gameId, criteria);
 			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId));
 		}else{
 			list = gameBoardService.read(gameId, criteria, keywordCriteria, keyword);
-			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId, keywordCriteria, keyword));
+			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId, criteria, keywordCriteria, keyword));
+			model.addAttribute("keyword", keyword);
+			if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
+				model.addAttribute("keywordCriteria", keywordCriteria);
+			}
 		}
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);

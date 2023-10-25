@@ -21,6 +21,7 @@
 <title>${reviewVO.reviewTitle }</title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
 <sec:authentication property="principal" var="principal"/>
 <input type="hidden" id="reviewId" value="${reviewVO.reviewId }">

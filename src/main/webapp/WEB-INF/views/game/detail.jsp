@@ -11,9 +11,11 @@
 <title>${vo.gameName }</title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 <div class="category">
 <a href="list">All Games</a> > <a href="list?keyword=${vo.genre }">${vo.genre }</a>
 </div>
+
 <img alt="${vo.gameName }" width="300px" height="300px" src="display?fileName=${vo.gameImageName }">
 <br>
 게임 이름 : ${vo.gameName }

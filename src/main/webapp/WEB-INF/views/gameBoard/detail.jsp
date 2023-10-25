@@ -10,6 +10,7 @@
 <title>${vo.gameBoardTitle }</title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 	제목 : ${vo.gameBoardTitle }
 	<br> 작성자 : ${vo.memberId}
 	<br> 내용 : ${vo.gameBoardContent }

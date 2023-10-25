@@ -12,9 +12,9 @@ public interface GameBoardDAO {
 	int update(GameBoardVO vo);
 	int delete(int gameBoardId);
 	int getTotalCounts(int gameId);
-	int getTotalCounts(int gameId, String keywordCriteria, String keyword);
-	List<GameBoardVO> selectByMemberId(int gameId, String memberId);
-	List<GameBoardVO> selectByKeyword(int gameId, String keyword);
+	int getTotalCounts(int gameId, PageCriteria criteria, String keywordCriteria, String keyword);
+	List<GameBoardVO> selectByMemberId(int gameId, String memberId, PageCriteria criteria);
+	List<GameBoardVO> selectByKeyword(int gameId, String keyword, PageCriteria criteria);
 	int updateCommentCnt(int gameBoardId, int amount);
 	int updateDeleted(int gameBoardId);
 }
