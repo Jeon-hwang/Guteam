@@ -17,6 +17,7 @@
 		<s:intercept-url pattern="/member/friends" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/member/profiles" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/member/update" access="hasAnyRole('USER, ADMIN')" />
+		<s:intercept-url pattern="/purchased/purchaseWindow" access="hasAnyRole('ROLE_USER')" />
 		<s:intercept-url pattern="/review/register" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/review/update" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/wishList/myWishList" access="hasAnyRole('USER, ADMIN')" />
@@ -44,5 +45,4 @@
 	</s:authentication-manager>
 	
 	
-	
-</beans>
+	</beans>

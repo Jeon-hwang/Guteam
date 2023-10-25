@@ -36,7 +36,7 @@
 	<a href="list?gameId=${gameId }&page=${page}"><button>커뮤니티로
 			돌아가기</button></a>
 	<input type="hidden" id="updateResult" value="${update_result }">
-
+	<jsp:include page="../boardComment/comment_and_reply_test.jsp" />
 	<script type="text/javascript">
 		$(document).ready(function() {
 			var updateResult = $('#updateResult').val();

@@ -38,7 +38,7 @@ padding:20px 80px;
 	<sec:authorize access="isAuthenticated()">
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
 			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">나의 위시리스트</button></a>
-			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">나의 보유 게임</button></a>
+			<a href="/guteam/purchased/myPurchased"><button type="button" class="btn btn-light">나의 보유 게임</button></a>
 			<form action="/guteam/member/logout" method="post" style="display:inline;">
 			<sec:csrfInput/>
 			<input type="submit" class="btn btn-light" value="로그아웃"></form>

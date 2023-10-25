@@ -33,6 +33,9 @@ public class BoardCommentRESTContorller {
 	@Autowired
 	private BoardCommentService service;
 	
+	@GetMapping
+	public void comment() {}
+	
 	@PostMapping
 	public ResponseEntity<Integer> createComment(@RequestBody BoardCommentVO vo){
 		logger.info("createComment 실행");
