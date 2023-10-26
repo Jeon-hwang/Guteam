@@ -18,23 +18,24 @@
 	<br> 댓글 수 : ${vo.commentCnt }
 	<br>
 	<hr>
+	<div id="btn_group_detail">
 	<sec:authentication property="principal" var="principal"/>
 	<sec:authorize access="isAuthenticated()">
 	<c:if test="${vo.gameBoardTitle!='삭제된 게시글 입니다' }">
 	<c:if test="${principal.username==vo.memberId }">
 	<a href="update?gameBoardId=${vo.gameBoardId }&page=${page}&gameId=${gameId}">
-	<button>게시글 수정하기</button></a>
+	<button class="btn btn-light" >게시글 수정하기</button></a>
 	<form action="updateDeleted" method="post" style="display:inline;">
 		<input type="hidden" name="gameBoardId" value="${vo.gameBoardId }">
 		<sec:csrfInput/>
-		<input type="submit" value="게시글 삭제하기">
+		<input type="submit" class="btn btn-light"  value="게시글 삭제하기">
 	</form>
 	</c:if>
 	</c:if>
 	</sec:authorize>
 	<br>
-	<a href="list?gameId=${gameId }&page=${page}"><button>커뮤니티로
-			돌아가기</button></a>
+	<a href="list?gameId=${gameId }&page=${page}"><button class="btn btn-light" >커뮤니티로 돌아가기</button></a>
+	</div>
 	<input type="hidden" id="updateResult" value="${update_result }">
 	<jsp:include page="../boardComment/comment_and_reply_test.jsp" />
 	<script type="text/javascript">

@@ -6,15 +6,6 @@
 <html>
 <head>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
-<style type="text/css">
-.btn_clicked {
-	background-color:lightblue;
-	color:white;
-	border:0.8px;
-	border-radius:2px;
-	border-color:yellow;
-}
-</style>
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -33,16 +24,21 @@
 평점 : ${reviewVO.rating}<br>
 내용 : ${reviewVO.reviewContent }<br>
 추천 수 : <div id="thumbUpCount">${reviewVO.thumbUpCount }</div><br>
+
+<div id="btn_group_detail">
 <c:if test="${principal.username==reviewVO.memberId }">
-<a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button>수정</button></a><form style="display:inline-block;" action="delete" method="post"><sec:csrfInput/><input type="hidden" name="reviewId" value="${reviewVO.reviewId }"><input type="hidden" name="gameId" value="${gameVO.gameId }"><input type="submit" value="삭제"></form><br>
+<a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button class="btn btn-light" >수정</button></a><form style="display:inline-block;" action="delete" method="post"><sec:csrfInput/><input type="hidden" name="reviewId" value="${reviewVO.reviewId }"><input type="hidden" name="gameId" value="${gameVO.gameId }"><input class="btn btn-light" type="submit" value="삭제"></form><br>
 </c:if>
 <sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
 <c:if test="${principal.username!=reviewVO.memberId }">
-<button type="button" id="thumbUp" class="" value="${thumbVO.upDown }">추천</button>
-<button type="button" id="thumbDown" class="" value="${thumbVO.upDown }">비추</button>
+<button type="button" id="thumbUp" class="btn btn-light" value="${thumbVO.upDown }"><i class="bi bi-hand-thumbs-up" style="color:black;"></i></button>
+<button type="button" id="thumbDown" class="btn btn-light" value="${thumbVO.upDown }"><i class="bi bi-hand-thumbs-down" style="color:black;"></i></button>
 </c:if>
+<br>
 </sec:authorize>
-<a href="list?gameId=${reviewVO.gameId }&page=${page}"><button>${gameVO.gameName } 리뷰 목록으로 돌아가기</button></a>
+<a href="list?gameId=${reviewVO.gameId }&page=${page}"><button class="btn btn-light">${gameVO.gameName } 리뷰 목록으로 돌아가기</button></a>
+</div>
+
 <input type="hidden" id="updateResult" value="${update_result }">
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -61,9 +57,9 @@
 		
 		
 		if($(thumbUp).attr('value')==1){
-			$(thumbUp).attr('class','btn_clicked');
+			$(thumbUp).attr('class','btn btn-success');
 		}else if($(thumbDown).attr('value')==-1){
-			$(thumbDown).attr('class','btn_clicked');
+			$(thumbDown).attr('class','btn btn-danger');
 		}
 		
 		$(thumbUp).on('click', function(){
@@ -88,9 +84,9 @@
 					success : function(result){
 						if(result==1){
 							$(thumbUp).attr('value','');
-							$(thumbUp).attr('class','');
+							$(thumbUp).attr('class','btn btn-light');
 							$(thumbDown).attr('value','');
-							$(thumbDown).attr('class','');
+							$(thumbDown).attr('class','btn btn-light');
 							$('#thumbUpCount').html(parseInt($('#thumbUpCount').html())-1);
 						}
 					}
@@ -110,8 +106,8 @@
 						if(result==1){
 							$(thumbUp).attr('value',1);
 							$(thumbDown).attr('value',1);
-							$(thumbUp).attr('class','btn_clicked');
-							$(thumbDown).attr('class','');
+							$(thumbUp).attr('class','btn btn-success');
+							$(thumbDown).attr('class','btn btn-light');
 							$('#thumbUpCount').html(parseInt($('#thumbUpCount').html())+1);
 						}
 					}
@@ -131,8 +127,8 @@
 						if(result==1){
 							$(thumbUp).attr('value',1);
 							$(thumbDown).attr('value',1);
-							$(thumbUp).attr('class','btn_clicked');
-							$(thumbDown).attr('class','');
+							$(thumbUp).attr('class','btn btn-success');
+							$(thumbDown).attr('class','btn btn-light');
 							$('#thumbUpCount').html(parseInt($('#thumbUpCount').html())+1);
 						}
 					}
@@ -162,9 +158,9 @@
 					success : function(result){
 						if(result==1){
 							$(thumbUp).attr('value','');
-							$(thumbUp).attr('class','');
+							$(thumbUp).attr('class','btn btn-light');
 							$(thumbDown).attr('value','');
-							$(thumbDown).attr('class','');
+							$(thumbDown).attr('class','btn btn-light');
 							
 						}
 					}
@@ -183,9 +179,9 @@
 					success : function(result){
 						if(result==1){
 							$(thumbDown).attr('value',-1);
-							$(thumbDown).attr('class','btn_clicked');
+							$(thumbDown).attr('class','btn btn-danger');
 							$(thumbUp).attr('value',-1);
-							$(thumbUp).attr('class','');
+							$(thumbUp).attr('class','btn btn-light');
 							$('#thumbUpCount').html(parseInt($('#thumbUpCount').html())-1);
 						}
 					}
@@ -205,8 +201,8 @@
 						if(result==1){
 							$(thumbDown).attr('value',-1);
 							$(thumbUp).attr('value',-1);
-							$(thumbDown).attr('class','btn_clicked');
-							$(thumbUp).attr('class','');
+							$(thumbDown).attr('class','btn btn-danger');
+							$(thumbUp).attr('class','btn btn-light');
 							
 						}
 					}

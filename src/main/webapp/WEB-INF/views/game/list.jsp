@@ -6,43 +6,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<style type="text/css">
-.paging ul {
-	list-style-type: none;
-}
-
-.paging li {
-	display: inline-block;
-}
-.bi {
-	color:#ffc100;
-}
-</style>
 <meta charset="UTF-8">
 <title>Guteam Game List</title>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
+<div id="container">
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
-	<a href="register"><button>게임등록</button></a>
+	<a href="register"><button class="btn btn-light">게임등록</button></a>
 	</sec:authorize>
 	<br><br><br>
-	<form action="/guteam/game/list" method="get" >
-		<div class="input-group mb-3" style=" display:inline-block; text-align:center;">
+	<form class="d-flex justify-content-center formSearch" action="/guteam/game/list" method="get" style="width:60%; margin:auto;">
+		<div class="input-group mb-3 ">
 		<c:if test="${empty keywordCriteria}">
-		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">이름/장르</span></button>
+		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"style="margin-right:4px;"><span class="selectedItem">이름/장르</span></button>
 		</c:if>
 		<c:if test="${not empty keywordCriteria}">		
-		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">가격</span></button>
+		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"style="margin-right:4px;"><span class="selectedItem">가격</span></button>
 		</c:if>
 		<ul class="dropdown-menu">
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','keyword');$('#keyword').attr('type','text');">이름/장르</a></li>
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','price');$('#keyword').attr('type','number');$('#keyword').attr('min','0');">가격</a></li>
 		</ul>
 		<input type="hidden" class="keywordCriteria" name="keywordCriteria" value="keyword">
-		<input class="form-control" style=" display:inline-block;width:300px; background-color: light-gray;" type="text" name="keyword" id="keyword" maxlength="20">
-		<input class="btn btn-light form-control" style=" display:inline-block; text-align:center;width:80px;" type="submit" value="검색">
+		<input class="form-control w-50" type="text" name="keyword" id="keyword" maxlength="20" style="margin-right:4px;">
+		<input class="btn btn-light form-control"  type="submit" value="검색">
 		</div>
 	</form>
 	
@@ -76,17 +64,18 @@
 			</div>
 		</div>
 	</c:forEach>
-	<ul class="paging">
+	<div class="paging">
+	<ul class="pagination justify-content-center">
 		<c:if test="${pageMaker.hasPrev }">
 			<c:if test="${empty keyword }">
-			<li><a href="list?page=${pageMaker.startPageNo-1 }"><button>이전</button></a></li>
+			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }">&laquo;</a></li>
 			</c:if>
 			<c:if test="${not empty keyword }">
 			<c:if test="${not empty keywordCriteria }">
-			<li><a href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}"><button>이전</button></a></li>
+			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&laquo;</a></li>
 			</c:if>
 			<c:if test="${empty keywordCriteria }">
-			<li><a href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}"><button>이전</button></a></li>
+			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}">&laquo;</a></li>
 			</c:if>
 			</c:if>
 		</c:if>
@@ -94,48 +83,47 @@
 			end="${pageMaker.endPageNo }">
 			<c:if test="${pageMaker.criteria.page==pageLink }">
 				<c:if test="${empty keyword }">
-					<li><a href="list?page=${pageLink }" style="color: green;">${pageLink }</a></li>
+					<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${not empty keyword }">
 				<c:if test="${not empty keywordCriteria }">
-					<li><a href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}" style="color: green;">${pageLink }</a></li>
+					<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${empty keywordCriteria }">
-					<li><a href="list?page=${pageLink }&keyword=${keyword}" style="color: green;">${pageLink }</a></li>
+					<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
 				</c:if>
 				</c:if>
 			</c:if>
 			<c:if test="${pageMaker.criteria.page!=pageLink }">
 				<c:if test="${empty keyword }">
-					<li><a href="list?page=${pageLink }">${pageLink }</a></li>
+					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${not empty keyword }">
 				<c:if test="${not empty keywordCriteria }">
-					<li><a href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
+					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${empty keywordCriteria }">
-					<li><a href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
+					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
 				</c:if>
 				</c:if>
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
 			<c:if test="${empty keyword }">
-			<li><a href="list?page=${pageMaker.endPageNo+1 }"><button>다음</button></a></li>
+			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }">&raquo;</a></li>
 			</c:if>
 			<c:if test="${not empty keyword }">
 			<c:if test="${not empty keywordCriteria }">
-			<li><a href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}"><button>다음</button></a></li>
+			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&raquo;</a></li>
 			</c:if>
 			<c:if test="${empty keywordCriteria }">
-			<li><a href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}"><button>다음</button></a></li>
+			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}">&raquo;</a></li>
 			</c:if>
 			</c:if>
 		</c:if>
 	</ul>
-	
+	</div>
 	<input type="hidden" id="insertResult" value="${insert_result }">
-	
 	<script type="text/javascript">
 		$(document).ready(function(){
 			var selectedItem = $('.selectedItem').html();
@@ -161,5 +149,6 @@
 			
 		}); // end document.ready()
 	</script>
+	</div>
 </body>
 </html>

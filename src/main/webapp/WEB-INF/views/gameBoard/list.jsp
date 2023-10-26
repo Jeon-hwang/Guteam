@@ -5,37 +5,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style type="text/css">
-.paging ul {
-	list-style-type: none;
-}
-
-.paging li {
-	display: inline-block;
-}
-</style>
 <meta charset="UTF-8">
 <title>${gameVO.gameName }커뮤니티</title>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
-	<a href="register?gameId=${gameVO.gameId }"><button>글쓰기</button></a>
-	<a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button>게임
-			정보로 돌아가기</button></a>
+	<a href="register?gameId=${gameVO.gameId }"><button
+			class="btn btn-light">글쓰기</button></a>
+	<a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button
+			class="btn btn-light">게임 정보로 돌아가기</button></a>
 	<br>
 	<br>
 	<form action="list" id="search" method="get">
-		<div class="input-group mb-3"
-			style="display: inline-block; text-align: center;">
+		<div class="d-flex input-group mb-3" style="display: inline-block; text-align: center; width:60%; margin:auto;">
 			<c:if test="${empty keywordCriteria}">
 				<button class="btn btn-light dropdown-toggle" type="button"
-					data-bs-toggle="dropdown" aria-expanded="false">
+					data-bs-toggle="dropdown" aria-expanded="false" style="margin-right:4px;">
 					<span class="selectedItem">제목/내용</span>
 				</button>
 			</c:if>
 			<c:if test="${not empty keywordCriteria}">
 				<button class="btn btn-light dropdown-toggle" type="button"
-					data-bs-toggle="dropdown" aria-expanded="false">
+					data-bs-toggle="dropdown" aria-expanded="false" style="margin-right:4px;">
 					<span class="selectedItem">작성자</span>
 				</button>
 			</c:if>
@@ -45,11 +36,10 @@
 				<li><a class="dropdown-item"
 					onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','memberId');">작성자</a></li>
 			</ul>
-			<input type="hidden" class="keywordCriteria" name="keywordCriteria"
-				value="keyword"> <input type="hidden" name="gameId"
-				value="${gameVO.gameId }"> <input type="text" name="keyword"
-				value="${keyword }" maxlength="30"> <input type="submit"
-				value="검색">
+			<input type="hidden" class="keywordCriteria" name="keywordCriteria" value="keyword"> 
+			<input type="hidden" name="gameId" value="${gameVO.gameId }"> 
+			<input class="form-control w-25" type="text" name="keyword" value="${keyword }" maxlength="30" style="margin-right:4px;"> 
+			<input class="btn btn-light form-control" type="submit" value="검색">
 		</div>
 	</form>
 	<table class="table table-secondary table-hover">
@@ -78,20 +68,18 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	<ul class="paging">
+	<div class="paging">
+	<ul class="pagination justify-content-center">
 		<c:if test="${pageMaker.hasPrev }">
 			<c:if test="${empty keyword }">
-				<li><a
-					href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}"><button>이전</button></a></li>
+				<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}">&laquo;</a></li>
 			</c:if>
 			<c:if test="${not empty keyword }">
 				<c:if test="${not empty keywordCriteria }">
-					<li><a
-						href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}"><button>이전</button></a></li>
+					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&laquo;</a></li>
 				</c:if>
 				<c:if test="${empty keywordCriteria }">
-					<li><a
-						href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}&keyword=${keyword}"><button>이전</button></a></li>
+					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}&keyword=${keyword}">&laquo;</a></li>
 				</c:if>
 			</c:if>
 		</c:if>
@@ -99,56 +87,46 @@
 			end="${pageMaker.endPageNo }">
 			<c:if test="${pageMaker.criteria.page==pageLink }">
 				<c:if test="${empty keyword }">
-					<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}"
-						style="color: green;">${pageLink }</a></li>
+					<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }&gameId=${gameVO.gameId}">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${not empty keyword }">
 					<c:if test="${not empty keywordCriteria }">
-						<li><a
-							href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}"
-							style="color: green;">${pageLink }</a></li>
+						<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
 					</c:if>
 					<c:if test="${empty keywordCriteria }">
-						<li><a
-							href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}"
-							style="color: green;">${pageLink }</a></li>
+						<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}">${pageLink }</a></li>
 					</c:if>
 				</c:if>
 			</c:if>
 			<c:if test="${pageMaker.criteria.page!=pageLink }">
 				<c:if test="${empty keyword }">
-					<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}">${pageLink }</a></li>
+					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }&gameId=${gameVO.gameId}">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${not empty keyword }">
 					<c:if test="${not empty keywordCriteria }">
-						<li><a
-							href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
+						<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
 					</c:if>
 					<c:if test="${empty keywordCriteria }">
-						<li><a
-							href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}">${pageLink }</a></li>
+						<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}">${pageLink }</a></li>
 					</c:if>
 				</c:if>
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
 			<c:if test="${empty keyword }">
-				<li><a
-					href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}"><button>다음</button></a></li>
+				<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}">&raquo;</a></li>
 			</c:if>
 			<c:if test="${not empty keyword }">
 				<c:if test="${not empty keywordCriteria }">
-					<li><a
-						href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}"><button>다음</button></a></li>
+					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&raquo;</a></li>
 				</c:if>
 				<c:if test="${empty keywordCriteria }">
-					<li><a
-						href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}&keyword=${keyword}"><button>다음</button></a></li>
+					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}&keyword=${keyword}"><button>&raquo;</button></a></li>
 				</c:if>
 			</c:if>
 		</c:if>
 	</ul>
-
+	</div>
 	<input type="hidden" id="insertResult" value="${insert_result }">
 	<input type="hidden" id="deleteResult" value="${delete_result }">
 	<br>
@@ -174,7 +152,7 @@
 			$('.gameBoardInfo').on('click', function() {
 				var url = $(this).prev('.url').attr('value');
 				console.log(url);
-				location.href=url;
+				location.href = url;
 			}); // end gameBoardInfo.onclick()
 		}); // document
 	</script>

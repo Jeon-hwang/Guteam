@@ -38,6 +38,7 @@
 <hr>
 <input type="hidden" id="gameId" value=${vo.gameId }>
 <br>
+<div id="btn_group_detail">
 <sec:authorize access="hasRole('ROLE_ADMIN')">
 <a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button class="btn btn-light">수정하기</button></a>
 <br>
@@ -58,6 +59,7 @@
 	<a href="../purchased/purchaseWindow?gameId=${vo.gameId }&memberId=${principal.username }">구매</a>
 </div>
 </sec:authorize>
+</div>
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
