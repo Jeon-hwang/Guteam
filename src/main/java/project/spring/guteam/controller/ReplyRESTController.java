@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,20 +26,21 @@ public class ReplyRESTController {
 	private static final Logger logger= LoggerFactory.getLogger(ReplyRESTController.class);
 	
 	@Autowired
-	private ReplyService service;
+	private ReplyService replyService;
 	
 	@PostMapping
 	public ResponseEntity<Integer> createReply(@RequestBody ReplyVO vo){
 		logger.info("createReply 호출");
 		int result = 0;
-		result = service.create(vo);
+		
+		result = replyService.create(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 	
 	@GetMapping("/all/{commentId}")
 	public ResponseEntity<List<ReplyVO>> readReply(@PathVariable("commentId") int commentId){
 		logger.info("readReply 호출");
-		List<ReplyVO> list = service.read(commentId);
+		List<ReplyVO> list = replyService.read(commentId);
 		
 		return new ResponseEntity<List<ReplyVO>>(list,HttpStatus.OK);
 	}
@@ -48,7 +50,7 @@ public class ReplyRESTController {
 		logger.info("updateReply 호출");
 		int result = 0;
 		
-		result = service.update(replyId, replyContent);
+		result = replyService.update(replyId, replyContent);
 		
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
@@ -56,7 +58,7 @@ public class ReplyRESTController {
 	@DeleteMapping("/{replyId}")
 	public ResponseEntity<Integer> deleteReply(@PathVariable("replyId") int replyId){
 		int result;
-		result = service.delete(replyId);
+		result = replyService.delete(replyId);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 }

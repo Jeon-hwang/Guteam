@@ -13,5 +13,6 @@ public interface BoardCommentDAO {
 	
 	public List<BoardCommentVO> select(int gameBoardId, PageCriteria criteria);
 	public int getTotalCount(int gameBoardId);
-	
+	public int getBoardId(int commentId);
+	public int updateReplyCnt(int commentId,int amount);
 }

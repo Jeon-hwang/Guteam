@@ -52,6 +52,7 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 		return wishListDAO.select(gameId);
 	}
 
+	
 	@Override
 	public int delete(WishListVO vo) {
 		logger.info("delete() 실행");

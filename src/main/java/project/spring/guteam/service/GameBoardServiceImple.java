@@ -75,5 +75,6 @@ public class GameBoardServiceImple implements GameBoardService {
 		logger.info("getTotalCount(keyword) 호출 : keyword = " + keyword);
 		return gameBoardDAO.getTotalCounts(gameId, criteria, keywordCriteria, keyword);
 	}
-
+	
+	
 }

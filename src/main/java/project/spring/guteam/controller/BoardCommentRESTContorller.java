@@ -37,7 +37,7 @@ public class BoardCommentRESTContorller {
 	public void comment() {}
 	
 	@PostMapping
-	public ResponseEntity<Integer> createComment(@RequestBody BoardCommentVO vo){
+	public ResponseEntity<Integer> createComment(@RequestBody BoardCommentVO vo) throws Exception{
 		logger.info("createComment 실행");
 		int result = 0;
 		result = service.create(vo);

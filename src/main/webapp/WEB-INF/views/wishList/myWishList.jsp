@@ -33,10 +33,9 @@
 	</div>
 	<div class="price_area">
 		<p>선택한 게임 총 가격 : ￦<span id="totalPrice">0</span></p>
-		<form action="myWishList" method="post">
+		<form action="../purchased/purchaseWindow" method="get">
 		<sec:csrfInput/>
 		<input type="hidden" id="gameIdInput" name="gameIds" value="">
-		<input type="hidden" id="totalPriceInput" name="totalPriceInput" value="">
 		<input type="submit" id="submit" value="선택한 게임 구매">
 		</form>
 	</div>
@@ -83,7 +82,6 @@
 				var memberId = $('#memberId').val();
 				var token = $("meta[name='_csrf']").attr("content");
 				var header = $("meta[name='_csrf_header']").attr("content");
-				var name = $("#userName").val();
 				$.ajax({
 					type : 'DELETE',
 					url : memberId,
@@ -118,10 +116,8 @@
 					totalPrice  -= price;
 					checkGameId = checkGameId.filter((element) => element != gameId);
 					//console.log(checkGameId);
-				}
-				$(totalPriceInput).attr('value',totalPrice);
+				}			
 				$(gameIdInput).attr('value',checkGameId);
-				console.log($(totalPriceInput).attr('value'));
 				console.log($(gameIdInput).attr('value'));
 				$('#totalPrice').html(totalPrice);
 			});// end wish_list_item.on

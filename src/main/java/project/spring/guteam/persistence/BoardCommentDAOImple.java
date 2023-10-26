@@ -64,6 +64,21 @@ public class BoardCommentDAOImple implements BoardCommentDAO {
 		logger.info("getTotalNum 실행");
 		return sqlSession.selectOne(NAMESPACE+".total_count",gameBoardId);
 	}
+
+	@Override
+	public int getBoardId(int commentId) {
+		logger.info("getBoardId 실행");
+		return sqlSession.selectOne(NAMESPACE+".get_board_id",commentId);
+	}
+
+	@Override
+	public int updateReplyCnt(int commentId, int amount) {
+		logger.info("updateReplyCnt");
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("commentId", commentId);
+		args.put("amount", amount);
+		return sqlSession.update(NAMESPACE+".reply_cnt_update", args);
+	}
 	
 	
 

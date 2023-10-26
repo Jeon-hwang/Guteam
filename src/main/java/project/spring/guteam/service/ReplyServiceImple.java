@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.ReplyVO;
 import project.spring.guteam.persistence.ReplyDAO;
@@ -18,10 +19,22 @@ public class ReplyServiceImple implements ReplyService {
 	@Autowired
 	private ReplyDAO replyDAO;
 	
+	@Autowired
+	private BoardCommentService boardCommentService;
+	
+	@Autowired
+	private GameBoardService gameBoardService;
+	
+	@Transactional(value="transactionManager")
 	@Override
 	public int create(ReplyVO vo) {
 		logger.info("create 호출");
-		return replyDAO.insert(vo);
+		replyDAO.insert(vo);
+		int boardId = boardCommentService.getBoardId(vo.getCommentId());
+		boardCommentService.updateReplyCnt(vo.getCommentId(), 1);
+		gameBoardService.update(boardId, 1);
+		
+		return 1;
 	}
 
 	@Override

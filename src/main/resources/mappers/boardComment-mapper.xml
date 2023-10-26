@@ -3,7 +3,6 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
 <mapper namespace="project.spring.guteam.BoardCommentMapper">
 
 	 <insert id="insert">
@@ -39,4 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 <select id="total_count" resultType="Integer">
 	 	select count(*) total_cnt from ${board_comment} where ${gameBoardId}=#{gameBoardId}
 	 </select>
+	 
+	 <select id="get_board_id" resultType="Integer">
+	 	select ${gameBoardId} from ${board_comment} where ${commentId}=#{commentId} 
+	 </select>
+	 
+	 <update id="reply_cnt_update">
+	 	update ${board_comment}
+	 	set ${replyCnt} = ${replyCnt}+#{amount}
+	 	where ${commentId}= #{commentId}
+	 </update>
 </mapper>
