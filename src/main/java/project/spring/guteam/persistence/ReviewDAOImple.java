@@ -101,7 +101,11 @@ public class ReviewDAOImple implements ReviewDAO {
 		Map<String, Object> args = new HashMap<>();
 		args.put("gameId", gameId);
 		args.put("memberId", memberId);
-		return sqlSession.selectOne(NAMESPACE + ".reveiw_writed", args);
+		int result = 0 ;
+		if(sqlSession.selectOne(NAMESPACE + ".reveiw_writed", args)!=null) {
+			result = sqlSession.selectOne(NAMESPACE + ".reveiw_writed", args);
+		}
+		return result;
 	}
 
 	@Override

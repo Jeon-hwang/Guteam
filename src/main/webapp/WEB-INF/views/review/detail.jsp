@@ -37,8 +37,10 @@
 <a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button>수정</button></a><form style="display:inline-block;" action="delete" method="post"><sec:csrfInput/><input type="hidden" name="reviewId" value="${reviewVO.reviewId }"><input type="hidden" name="gameId" value="${gameVO.gameId }"><input type="submit" value="삭제"></form><br>
 </c:if>
 <sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
+<c:if test="${principal.username!=reviewVO.memberId }">
 <button type="button" id="thumbUp" class="" value="${thumbVO.upDown }">추천</button>
 <button type="button" id="thumbDown" class="" value="${thumbVO.upDown }">비추</button>
+</c:if>
 </sec:authorize>
 <a href="list?gameId=${reviewVO.gameId }&page=${page}"><button>${gameVO.gameName } 리뷰 목록으로 돌아가기</button></a>
 <input type="hidden" id="updateResult" value="${update_result }">

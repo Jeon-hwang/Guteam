@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,7 @@
 </head>
 <body>
 	<form action="update" method="post">
+	<sec:csrfInput/>
 		<input type="hidden" name="reviewId" value="${reviewVO.reviewId }">
 		<input type="hidden" name="gameId" value="${reviewVO.gameId }">
 		memberId = <input type="text" name="memberId" value="${sessionScope.memberId }test" readonly><br>
