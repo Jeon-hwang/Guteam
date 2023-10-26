@@ -53,36 +53,48 @@ public class GameController {
 		logger.info("list 호출");
 		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
 		PageCriteria criteria = new PageCriteria();
-		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCriteria(criteria);
 		if (page != null) {
 			criteria.setPage(page);
 		}
 		if (numsPerPage != null) {
 			criteria.setNumsPerPage(numsPerPage);
 		}
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(criteria);
 		List<GameVO> list;
-		if (keyword == null|| keyword.equals("")) {
-			list = gameService.read(criteria);
+		if (keyword == null || keyword.equals("")) {
 			pageMaker.setTotalCount(gameService.getTotalCount());
-		} else if(keywordCriteria.equals("price")){
-			list = gameService.read(Integer.parseInt(keyword), criteria);
+			paging(pageMaker, criteria);
+			list = gameService.read(criteria);
+		} else if (keywordCriteria != null && keywordCriteria.equals("price")) {
 			pageMaker.setTotalCount(gameService.getTotalCount(Integer.parseInt(keyword)));
-			model.addAttribute("keywordCriteria",keywordCriteria);
-		}else {
-			list = gameService.read(keyword, criteria);
+			paging(pageMaker, criteria);
+			list = gameService.read(Integer.parseInt(keyword), criteria);
+			model.addAttribute("keywordCriteria", keywordCriteria);
+		} else {
 			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
+			paging(pageMaker, criteria);
+			list = gameService.read(keyword, criteria);
 		}
 		List<Integer> ratingList = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			int gameId = list.get(i).getGameId();
 			ratingList.add(reviewService.getRating(gameId));
 		}
-		pageMaker.setPageData();
 		model.addAttribute("list", list);
 		model.addAttribute("ratingList", ratingList);
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("keyword", keyword);
+	}
+
+	private void paging(PageMaker pageMaker, PageCriteria criteria) {
+		pageMaker.setPageData();
+		if (criteria.getPage() > pageMaker.getEndPageNo()) {
+			criteria.setPage(pageMaker.getEndPageNo());
+		} else if (criteria.getPage() <= 0) {
+			criteria.setPage(1);
+		}
+		pageMaker.setPageData();
 	}
 
 	@GetMapping("/register")
@@ -92,8 +104,8 @@ public class GameController {
 	@PostMapping("/register")
 	public String registerPOST(GameVO vo, MultipartFile file, RedirectAttributes reAttr) {
 		logger.info("register 호출 file = " + file);
-		if (vo.getGameImageName() == null
-				|| vo.getGameImageName().equals("basic.png") && !vo.getGameImageName().equals("") && file != null) {
+		if (vo.getGameImageName().equals("basic.png") 
+				&& file != null && !file.getOriginalFilename().equals("")) {
 			try {
 				logger.info(file.getOriginalFilename());
 				vo.setGameImageName(
@@ -111,7 +123,7 @@ public class GameController {
 		vo.setGameImageName(gameImageName);
 		int result = gameService.create(vo);
 		if (result == 1) {
-			reAttr.addFlashAttribute("insert_result", "success"); 
+			reAttr.addFlashAttribute("insert_result", "success");
 			return "redirect:/game/list";
 		} else {
 			return "redirect:/game/register";
@@ -145,7 +157,7 @@ public class GameController {
 
 	@PostMapping("/update")
 	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file) {
-		
+
 		logger.info("updatePOST() 호출");
 		String beforeImageName = gameService.read(vo.getGameId()).getGameImageName();
 		logger.info(vo + "");

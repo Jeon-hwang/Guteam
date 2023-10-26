@@ -32,6 +32,7 @@
 <br>
 <input type="submit" value="수정">
 </form>
+<a href="detail?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button>취소</button></a>
 <script type="text/javascript">
 		$(document).ready(function(){
 			var token = $("meta[name='_csrf']").attr("content");

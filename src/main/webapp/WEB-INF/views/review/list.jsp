@@ -37,7 +37,7 @@
 <input type="text" value="${keyword }" name="keyword" >
 <input type="submit" value="검색">
 </form>
-<table>
+<table class="table table-secondary table-hover">
 	<thead>
 		<tr>
 			<th width="58px">글 번호</th>
@@ -47,10 +47,12 @@
 			<th width="120px">평점</th>
 		</tr>
 	</thead>
+	<tbody>
 	<c:forEach varStatus="status" var="reviewVO" items="${list }">
-		<tr>
+	<input type="hidden" class="url" value="detail?reviewId=${reviewVO.reviewId }&page=${pageMaker.criteria.page}&gameId=${gameVO.gameId}">
+		<tr class="reviewInfo">
 			<td>${reviewVO.reviewId }</td>
-			<td><a href="detail?reviewId=${reviewVO.reviewId }&page=${pageMaker.criteria.page}&gameId=${gameVO.gameId}">${reviewVO.reviewTitle }</a></td>
+			<td>${reviewVO.reviewTitle }</td>
 			<td>${nicknameList[status.index] }</td>		
 			<td>${reviewVO.reviewDateCreated }</td>
 			<td>
@@ -66,6 +68,7 @@
 			</td>
 		</tr>
 	</c:forEach>
+	</tbody>
 </table>
 <ul class="paging">
 		<c:if test="${pageMaker.hasPrev }">
@@ -138,6 +141,11 @@
 			alert('리뷰 삭제 성공');
 		}
 		
+		$('.reviewInfo').on('click',function(){
+			var url = $(this).prev('.url').attr('value');
+			console.log(url);
+			location.href=url;
+		}); // reviewInfo.onclick()
 	});
 </script>
 

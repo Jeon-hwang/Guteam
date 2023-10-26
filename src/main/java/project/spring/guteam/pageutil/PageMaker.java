@@ -78,6 +78,13 @@ public class PageMaker {
 		// Math.floor (버림)
 		
 	}
+
+	@Override
+	public String toString() {
+		return "PageMaker [criteria=" + criteria + ", totalCount=" + totalCount + ", numsOfPageLinks=" + numsOfPageLinks
+				+ ", startPageNo=" + startPageNo + ", endPageNo=" + endPageNo + ", hasPrev=" + hasPrev + ", hasNext="
+				+ hasNext + "]";
+	}
 	
 } // end PageMaker
 
