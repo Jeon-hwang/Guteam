@@ -13,6 +13,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="select_by_review_id" resultType="ReviewVO">
     	select * from ${review} where ${reviewId}=#{reviewId}
     </select>
+    <select id="reveiw_writed" resultType="Integer">
+    	select ${reviewId} from ${review} where ${gameId}=#{gameId} and ${memberId}=#{memberId}    
+    </select>
+    
     <update id="update">
     	update ${review} set ${memberId}=#{memberId}, ${reviewTitle}=#{reviewTitle}, ${reviewContent}=#{reviewContent}, ${rating}=#{rating} where ${reviewId}=#{reviewId}
     </update>
@@ -31,25 +35,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select count(*) total_cnt from ${review}
     	where ${gameId}=#{gameId}
     </select>
-    
-    <select id="select_by_member_id" resultType="ReviewVO">
-    	select ${reviewId}, ${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}, ${reviewDateCreated}, ${rating}, ${thumbUpCount}
-    	from (select rownum rn, a.*
-    	from (select * from ${review}
-    	where ${gameId}=#{gameId} and ${memberId} like '%'||#{keyword}||'%'
-    	order by ${reviewId} desc)a
-    	) where rn between #{start} and #{end}
-    	
-    </select>
-    
+        
     <select id="select_by_keyword" resultType="ReviewVO">
     	select ${reviewId}, ${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}, ${reviewDateCreated}, ${rating}, ${thumbUpCount}
     	from (select rownum rn, a.*
     	from (select * from ${review}
-    	where ${reviewTitle} like '%'||#{keyword}||'%' or
-    		${reviewContent} like '%'||#{keyword}||'%'
+    	where (lower(${reviewTitle}) like '%'||lower(#{keyword})||'%' or
+    		lower(${reviewContent}) like '%'||lower(#{keyword})||'%') and ${gameId}=#{gameId}
     		order by ${reviewId} desc)a
     	) where rn between #{start} and #{end}
+    </select>
+    
+    <select id="total_count_by_keyword" resultType="Integer">
+    	select count(*) total_cnt from ${review} where ${gameId}=#{gameId} and (lower(${reviewTitle}) like '%'||lower(#{keyword})||'%' or
+    		lower(${reviewContent}) like '%'||lower(#{keyword})||'%')
     </select>
     
     <select id="get_rating" resultType="Integer">
@@ -63,8 +62,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where ${reviewId} = #{reviewId}
     </update>
 
-    <!-- 
-    #{start} : criteria.getStart()
-    #{end} : criteria.getEnd()
-     -->
 </mapper>

@@ -12,8 +12,9 @@ public interface ReviewDAO {
 	int update(ReviewVO vo);
 	int delete(int reviewId);
 	int getTotalCount(int gameId);
-	List<ReviewVO> selectByMemberId(int gameId, PageCriteria criteria, String keyword);
 	List<ReviewVO> selectByKeyword(int gameId, PageCriteria criteria, String keyword);
+	int getTotalCount(int gameId, String keyword);
 	int update(int reviewId, int amount);
 	int getRating(int gameId);
+	int selectWrited(int gameId, String memberId);
 }

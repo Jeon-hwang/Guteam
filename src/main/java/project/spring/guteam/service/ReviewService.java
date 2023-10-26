@@ -14,4 +14,7 @@ public interface ReviewService {
 	int update(int riviewId, int amount);
 	int getTotalCount(int gameId);
 	int getRating(int gameId);
+	List<ReviewVO> read(int gameId, PageCriteria criteria, String keyword);
+	int getTotalCount(int gameId, String keyword);
+	int readWrited(int gameId, String memberId);
 }

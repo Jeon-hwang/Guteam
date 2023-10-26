@@ -46,7 +46,7 @@ public class ReviewController {
 	private GameService gameService;
 	
 	@GetMapping("/list")
-	public void list(int gameId, Model model, Integer page, Integer numsPerPage) {
+	public void list(int gameId, Model model, Integer page, Integer numsPerPage, Principal principal, String keyword) {
 		logger.info("review list() 호출");
 		PageCriteria criteria = new PageCriteria();
 		if(page != null) {
@@ -57,8 +57,15 @@ public class ReviewController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		List<ReviewVO> list = reviewService.read(gameId, criteria);
-		pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
+		List<ReviewVO> list;
+		if(keyword!=null&&!keyword.equals("")) {
+			list = reviewService.read(gameId, criteria, keyword);
+			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
+
+		}else {
+			list = reviewService.read(gameId, criteria);
+			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
+		}
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);
 		List<String> nicknameList = new ArrayList<>();
@@ -73,6 +80,11 @@ public class ReviewController {
 		GameVO gameVO = gameService.read(gameId);
 		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("list",list);
+		int writedReviewId = 0;
+		if(principal!=null) {
+			writedReviewId = reviewService.readWrited(gameId, principal.getName());
+		}
+		model.addAttribute("writedReviewId", writedReviewId);
 	}
 	
 	@GetMapping("/register")

@@ -62,17 +62,7 @@ public class ReviewDAOImple implements ReviewDAO {
 		return sqlSession.selectOne(NAMESPACE + ".total_count", gameId);
 	}
 
-	@Override
-	public List<ReviewVO> selectByMemberId(int gameId, PageCriteria criteria, String keyword) {
-		logger.info("Review selectByMemberId() 호출 : gameId = " + gameId + ", memberId like " + keyword);
-		Map<String, Object> args = new HashMap<>();
-		args.put("gameId", gameId);
-		args.put("start", criteria.getStart());
-		args.put("end", criteria.getEnd());
-		args.put("keyword", keyword);
-		return sqlSession.selectList(NAMESPACE + ".select_by_member_id", args);
-	}
-
+	
 	@Override
 	public List<ReviewVO> selectByKeyword(int gameId, PageCriteria criteria, String keyword) {
 		logger.info("Review selectByKeyword() 호출 : gameId = " + gameId + ", keyword = " + keyword);
@@ -103,6 +93,24 @@ public class ReviewDAOImple implements ReviewDAO {
 		}
 		logger.info("rating = " + rating);
 		return rating;
+	}
+
+	@Override
+	public int selectWrited(int gameId, String memberId) {
+		logger.info("Review selectWrited() 호출 : gameId = " + gameId + ", memberId = " + memberId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("gameId", gameId);
+		args.put("memberId", memberId);
+		return sqlSession.selectOne(NAMESPACE + ".reveiw_writed", args);
+	}
+
+	@Override
+	public int getTotalCount(int gameId, String keyword) {
+		logger.info("Reveiw getTotalCount(keyword) 호출 : keyword = " + keyword + ", gameId = " + gameId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("gameId", gameId);
+		args.put("keyword", keyword);
+		return sqlSession.selectOne(NAMESPACE+".total_count_by_keyword", args);
 	}
 
 }

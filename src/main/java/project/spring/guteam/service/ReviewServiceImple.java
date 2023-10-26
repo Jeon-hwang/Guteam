@@ -66,4 +66,22 @@ public class ReviewServiceImple implements ReviewService {
 		return reviewDAO.getRating(gameId);
 	}
 
+	@Override
+	public int readWrited(int gameId, String memberId) {
+		logger.info("review readWrited() 호출");
+		return reviewDAO.selectWrited(gameId, memberId);
+	}
+
+	@Override
+	public List<ReviewVO> read(int gameId, PageCriteria criteria, String keyword) {
+		logger.info("review read(keyword) 호출");
+		return reviewDAO.selectByKeyword(gameId, criteria, keyword);
+	}
+
+	@Override
+	public int getTotalCount(int gameId, String keyword) {
+		logger.info("review getTotalCount(keyword) 호출");
+		return reviewDAO.getTotalCount(gameId, keyword);
+	}
+
 }

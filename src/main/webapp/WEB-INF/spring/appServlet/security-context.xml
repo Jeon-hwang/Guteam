@@ -12,6 +12,7 @@
 		<s:intercept-url pattern="/*/list" access="permitAll" />
 		<s:intercept-url pattern="/member/login" access="permitAll" />
 		<s:intercept-url pattern="/member/register" access="permitAll" />
+		<s:intercept-url pattern="/friend/list" access="hasAnyRole('USER, ADMIN')"/>
 		<s:intercept-url pattern="/gameBoard/register" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/gameBoard/update" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/member/friends" access="hasAnyRole('USER, ADMIN')" />
@@ -23,7 +24,8 @@
 		<s:intercept-url pattern="/wishList/myWishList" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/game/register" access="hasRole('ROLE_ADMIN')" />
 		<s:intercept-url pattern="/game/update" access="hasRole('ROLE_ADMIN')" />
-		<s:form-login username-parameter="memberId" password-parameter="password" login-page="/member/login" login-processing-url="/member/login"
+		<s:form-login username-parameter="memberId" password-parameter="password" 
+		login-page="/member/login" login-processing-url="/member/login"
 		authentication-failure-url="/member/login?error" 
 		 />
 		<s:logout logout-url="/member/logout" invalidate-session="true" delete-cookies="true"/>
@@ -31,7 +33,8 @@
 		 	<s:concurrency-control max-sessions="1" expired-url="/game/list" />
 		</s:session-management>
 	</s:http>
-	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+	<bean id="bcryptPasswordEncoder" 
+	class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 	<s:authentication-manager>
 		<s:authentication-provider>
 			<s:jdbc-user-service data-source-ref="ds"

@@ -7,6 +7,13 @@
 .bi {
 	color:#ffc100;
 }
+.paging ul {
+	list-style-type: none;
+}
+
+.paging li {
+	display: inline-block;
+}
 </style>
 <head>
 <meta charset="UTF-8">
@@ -15,10 +22,21 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
-<a href="register?gameId=${gameVO.gameId }"><button>글쓰기</button></a>
+
+<c:if test="${writedReviewId==0 }">
+<a href="register?gameId=${gameVO.gameId }"><button>리뷰 쓰기</button></a>
+</c:if>
+<c:if test="${writedReviewId!=0 }">
+<a href="update?reviewId=${writedReviewId }&page=${pageMaker.criteria.page}"><button>리뷰 수정하기</button></a>
+</c:if>
 <a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button>게임 정보로 돌아가기</button></a>
 <br>
 <br>
+<form action="list" method="get">
+<input type="hidden" name="gameId" value="${gameVO.gameId }">
+<input type="text" value="${keyword }" name="keyword" >
+<input type="submit" value="검색">
+</form>
 <table>
 	<thead>
 		<tr>
@@ -49,6 +67,64 @@
 		</tr>
 	</c:forEach>
 </table>
+<ul class="paging">
+		<c:if test="${pageMaker.hasPrev }">
+			<c:if test="${empty keyword }">
+			<li><a href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}"><button>이전</button></a></li>
+			</c:if>
+			<c:if test="${not empty keyword }">
+			<c:if test="${not empty keywordCriteria }">
+			<li><a href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}"><button>이전</button></a></li>
+			</c:if>
+			<c:if test="${empty keywordCriteria }">
+			<li><a href="list?page=${pageMaker.startPageNo-1 }&gameId=${gameVO.gameId}&keyword=${keyword}"><button>이전</button></a></li>
+			</c:if>
+			</c:if>
+		</c:if>
+		<c:forEach var="pageLink" begin="${pageMaker.startPageNo }"
+			end="${pageMaker.endPageNo }">
+			<c:if test="${pageMaker.criteria.page==pageLink }">
+				<c:if test="${empty keyword }">
+					<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}" style="color: green;">${pageLink }</a></li>
+				</c:if>
+				<c:if test="${not empty keyword }">
+				<c:if test="${not empty keywordCriteria }">
+					<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}" style="color: green;">${pageLink }</a></li>
+				</c:if>
+				<c:if test="${empty keywordCriteria }">
+					<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}" style="color: green;">${pageLink }</a></li>
+				</c:if>
+				</c:if>
+			</c:if>
+			<c:if test="${pageMaker.criteria.page!=pageLink }">
+				<c:if test="${empty keyword }">
+					<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}">${pageLink }</a></li>
+				</c:if>
+				<c:if test="${not empty keyword }">
+				<c:if test="${not empty keywordCriteria }">
+					<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
+				</c:if>
+				<c:if test="${empty keywordCriteria }">
+					<li><a href="list?page=${pageLink }&gameId=${gameVO.gameId}&keyword=${keyword}" >${pageLink }</a></li>
+				</c:if>
+				</c:if>
+			</c:if>
+		</c:forEach>
+		<c:if test="${pageMaker.hasNext }">
+			<c:if test="${empty keyword }">
+			<li><a href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}"><button>다음</button></a></li>
+			</c:if>
+			<c:if test="${not empty keyword }">
+			<c:if test="${not empty keywordCriteria }">
+			<li><a href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}&keyword=${keyword}&keywordCriteria=${keywordCriteria}"><button>다음</button></a></li>
+			</c:if>
+			<c:if test="${empty keywordCriteria }">
+			<li><a href="list?page=${pageMaker.endPageNo+1 }&gameId=${gameVO.gameId}&keyword=${keyword}"><button>다음</button></a></li>
+			</c:if>
+			</c:if>
+		</c:if>
+	</ul>
+
 <input type="hidden" id="insertResult" value="${insert_result }">  
 <input type="hidden" id="deleteResult" value="${delete_result }">
 <script type="text/javascript">

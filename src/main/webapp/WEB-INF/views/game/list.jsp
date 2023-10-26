@@ -8,14 +8,12 @@
 <head>
 
 <style type="text/css">
-ul {
+.paging ul {
 	list-style-type: none;
-	text-align: center;
 }
 
 .paging li {
 	display: inline-block;
-	
 }
 .bi {
 	color:#ffc100;
@@ -80,7 +78,17 @@ ul {
 	</c:forEach>
 	<ul class="paging">
 		<c:if test="${pageMaker.hasPrev }">
+			<c:if test="${empty keyword }">
 			<li><a href="list?page=${pageMaker.startPageNo-1 }"><button>이전</button></a></li>
+			</c:if>
+			<c:if test="${not empty keyword }">
+			<c:if test="${not empty keywordCriteria }">
+			<li><a href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}"><button>이전</button></a></li>
+			</c:if>
+			<c:if test="${empty keywordCriteria }">
+			<li><a href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}"><button>이전</button></a></li>
+			</c:if>
+			</c:if>
 		</c:if>
 		<c:forEach var="pageLink" begin="${pageMaker.startPageNo }"
 			end="${pageMaker.endPageNo }">
@@ -90,7 +98,7 @@ ul {
 				</c:if>
 				<c:if test="${not empty keyword }">
 				<c:if test="${not empty keywordCriteria }">
-					<li><a href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=price" style="color: green;">${pageLink }</a></li>
+					<li><a href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}" style="color: green;">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${empty keywordCriteria }">
 					<li><a href="list?page=${pageLink }&keyword=${keyword}" style="color: green;">${pageLink }</a></li>
@@ -103,7 +111,7 @@ ul {
 				</c:if>
 				<c:if test="${not empty keyword }">
 				<c:if test="${not empty keywordCriteria }">
-					<li><a href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=price">${pageLink }</a></li>
+					<li><a href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${empty keywordCriteria }">
 					<li><a href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
@@ -112,7 +120,17 @@ ul {
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
+			<c:if test="${empty keyword }">
 			<li><a href="list?page=${pageMaker.endPageNo+1 }"><button>다음</button></a></li>
+			</c:if>
+			<c:if test="${not empty keyword }">
+			<c:if test="${not empty keywordCriteria }">
+			<li><a href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}"><button>다음</button></a></li>
+			</c:if>
+			<c:if test="${empty keywordCriteria }">
+			<li><a href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}"><button>다음</button></a></li>
+			</c:if>
+			</c:if>
 		</c:if>
 	</ul>
 	

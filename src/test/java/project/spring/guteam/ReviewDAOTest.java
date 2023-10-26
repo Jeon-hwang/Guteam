@@ -32,7 +32,6 @@ public class ReviewDAOTest {
 //		updateTest();
 //		deleteTest();
 //		getTotalTest();
-//		selectMemberTest();
 //		selectByKeywordTest();
 //		updateAmountTest();
 	}
@@ -50,13 +49,6 @@ public class ReviewDAOTest {
 		}
 	}
 
-	private void selectMemberTest() {
-		List<ReviewVO> list = dao.selectByMemberId(5, new PageCriteria(2, 3), "test");
-		for(ReviewVO vo : list) {
-			logger.info(vo.toString());
-		}
-		
-	}
 
 	private void getTotalTest() {
 		logger.info(dao.getTotalCount(5)+"");
