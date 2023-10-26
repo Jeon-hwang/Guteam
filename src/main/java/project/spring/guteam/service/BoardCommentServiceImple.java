@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.BoardCommentDAO;
+import project.spring.guteam.persistence.GameBoardDAO;
 
 @Service //@Component
 public class BoardCommentServiceImple implements BoardCommentService {
@@ -18,10 +20,17 @@ public class BoardCommentServiceImple implements BoardCommentService {
 	@Autowired
 	BoardCommentDAO boardCommentDAO;
 	
+	@Autowired
+	GameBoardDAO gameBoardDAO;
+	
+	@Transactional(value= "transactionManager")
 	@Override
-	public int create(BoardCommentVO vo) {
+	public int create(BoardCommentVO vo) throws Exception{
+		boardCommentDAO.insert(vo);
 		logger.info("comment create()실행");
-		return boardCommentDAO.insert(vo);
+		gameBoardDAO.updateCommentCnt(vo.getGameBoardId(), 1);
+		logger.info("boardComment update실행");
+		return 1;
 	}
 
 	@Override
@@ -46,6 +55,18 @@ public class BoardCommentServiceImple implements BoardCommentService {
 	public int getTotalCount(int boardId) {
 		logger.info("service getTotalCount 실행");
 		return boardCommentDAO.getTotalCount(boardId);
+	}
+
+	@Override
+	public int getBoardId(int commentId) {
+		logger.info("service getBoardId 실행");
+		return boardCommentDAO.getBoardId(commentId);
+	}
+
+	@Override
+	public int updateReplyCnt(int commentId, int amount) {
+		logger.info("updateReplyCnt 실행");
+		return boardCommentDAO.updateReplyCnt(commentId, amount);
 	}
 
 }
