@@ -24,9 +24,9 @@ public class FriendRequestServiceImple implements FriendRequestService {
 	}
 
 	@Override
-	public int read(String sendMemberId) {
-		logger.info("read() 호출 ? " + sendMemberId);
-		return dao.select(sendMemberId);
+	public int read(String receiveMemberId) {
+		logger.info("read() 호출 ? " + receiveMemberId);
+		return dao.select(receiveMemberId);
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class FriendRequestServiceImple implements FriendRequestService {
 	}
 
 	@Override
-	public List<FriendRequestVO> readFrom(String receiveMemberId) {
+	public List<String> readFrom(String receiveMemberId) {
 		logger.info("readFrom() 호출 받은 초대" + receiveMemberId);
 		return dao.selectFrom(receiveMemberId);
 	}

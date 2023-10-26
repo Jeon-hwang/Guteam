@@ -10,13 +10,13 @@ public interface FriendRequestDAO {
 	int insert(FriendRequestVO vo);
 	
 	// 친구 요청 확인
-	int select(String sendMemberId);
+	int select(String receiveMemberId);
 	
 	// 친구 요청 내역
 	List<String> selectTo(String sendMemberId);
 	
 	// 받은 친구 요청 내역
-	List<FriendRequestVO> selectFrom(String receiveMemberId);
+	List<String> selectFrom(String receiveMemberId);
 	
 	// 수락/거절 후 삭제
 	int delete(String sendMemberId);

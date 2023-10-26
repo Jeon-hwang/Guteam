@@ -6,6 +6,8 @@
 <meta charset="UTF-8">
 <title>GUTEAM : 회원 가입</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
 	<h2>회원 가입</h2>
@@ -32,7 +34,9 @@
 	</form>
 	
 	<script type="text/javascript">
-		$('document').ready(function(){
+		$(document).ready(function(){
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 			// ID 중복 검사
 			// 검사 후 id 변경시, 재검사
 			$('#memberId').blur(function(){
@@ -46,12 +50,15 @@
 				}
 				
 				var memberId = $('#memberId').val();
-				console.log(memberId);
+				console.log('memberId = ' + memberId);
 				
 				$.ajax({
 					type : 'POST',
 					url : "../member/checkId",
 					data : {memberId : memberId},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
 					success : function(result) {
 						$('#btnCheck').hide();
 						console.log("성공? " + result);
