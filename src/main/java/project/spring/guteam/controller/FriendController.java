@@ -3,6 +3,7 @@ package project.spring.guteam.controller;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -22,9 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.spring.guteam.domain.FriendRequestVO;
+import project.spring.guteam.domain.FriendVO;
 import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.service.FriendRequestService;
+import project.spring.guteam.service.FriendService;
+import project.spring.guteam.service.FriendServiceImple;
 import project.spring.guteam.service.MemberService;
 
 @Controller // @Component
@@ -37,6 +41,9 @@ public class FriendController {
 	
 	@Autowired
 	private FriendRequestService friendRequestService;
+	
+	@Autowired
+	private FriendService friendService;
 	
 	@Resource(name="uploadPath")
 	private String uploadPath;
@@ -53,45 +60,73 @@ public class FriendController {
 //		logger.info(vo.toString());
 //    }
     
-//	// 친구 목록
-//    @GetMapping("/list")
-//    public void listGET(Model model, Principal principal) {
-//    	logger.info("(friend) listGET() 호출");
-//    	List<String> sendMemberList;
-//    	List<MemberVO> sendList;
-//    	sendMemberList = friendRequestService.readTo(principal.getName());
-//    	for(int i=0; i<sendMemberList.size(); i++) {
-//    		MemberVO vo = memberService.read(sendMemberList.get(i));
-//    		sendList.add(vo);
-//    	}
-//    	model.addAttribute("sendList", sendList);
-//    }
+	// 친구 목록
+    @GetMapping("/list")
+    public void listGET(Model model, Principal principal) {
+    	logger.info("(friend) listGET() 호출");
+    	List<String> sendMemberList;
+    	List<String> receiveMemberList;
+    	List<MemberVO> sendList = new ArrayList<MemberVO>();
+    	List<MemberVO> receiveList = new ArrayList<MemberVO>();
+    	
+    	sendMemberList = friendRequestService.readTo(principal.getName());
+    	for(int i=0; i<sendMemberList.size(); i++) {
+    		MemberVO vo = memberService.read(sendMemberList.get(i));
+    		sendList.add(vo);
+    	}
+    	
+    	receiveMemberList = friendRequestService.readFrom(principal.getName());
+    	for(int i=0; i<receiveMemberList.size(); i++) {
+    		MemberVO vo = memberService.read(receiveMemberList.get(i));
+    		receiveList.add(vo);
+    	}
+    	model.addAttribute("vo", memberService.read(principal.getName()));
+    	model.addAttribute("sendList", sendList);
+    	model.addAttribute("receiveList", receiveList);
+    }
     
-    // 친구 추가
+    // 친구 추가 요청
     @PostMapping("/addFriend")
-    public String addFriend (FriendRequestVO vo, Principal principal, RedirectAttributes reAttr) {
- 		logger.info("addFriend() 호출 vo = " + vo.toString());
- 		int result = friendRequestService.read(principal.getName());
- 		if(result != 1) {
- 			result = friendRequestService.create(vo);
- 			if(result == 1) {
+    public String addFriend (FriendRequestVO vo, RedirectAttributes reAttr) {
+    	logger.info("addFriend() vo ? " + vo.toString());
+    	int result = memberService.read(vo.getReceiveMemberId(), "check");
+    	logger.info("멤버 중 요청 아이디 있나? 1이면 있음 = " + result);
+ 		if(result == 1) {
+ 			result = friendRequestService.read(vo.getReceiveMemberId());
+ 			logger.info("친추 중복인가? 1이면 중복 = " + result);
+ 			if(result != 1) {
+ 				result = friendRequestService.create(vo);
  	 			logger.info("친구 요청 성공");
  	 			reAttr.addFlashAttribute("alert", "success");
  	 			return "redirect:/friend/list";
  	 		} else {
- 	 			logger.info("친구 요청 실패");
- 	 			reAttr.addFlashAttribute("alert", "fail");
+ 	 			logger.info("친구 신청 중복? y");
+ 	 			reAttr.addFlashAttribute("alert", "dupl");
  	 			return "redirect:/friend/list";
  	 		}
  		} else {
- 			logger.info("친구 신청 중복? y");
- 			reAttr.addFlashAttribute("alert", "dupl");
- 			return "redirect:/friend/list";
+ 			logger.info("없는 아이디 입니다.");
+	 		reAttr.addFlashAttribute("alert", "fail");
+	 		return "redirect:/friend/list";
+ 			
  		}
  	} //end addFirend()
     
 	
-	// 받은 요청 조회
+	// 받은 요청 수락
+    @PostMapping
+    public void acceptPOST(FriendVO vo) {
+    	logger.info("acceptPOST() vo ? " + vo.toString());
+    	int result = friendService.create(vo);
+    	logger.info("");
+    	if(result == 1) {
+    		
+    	}
+    }
+    
+    
+    
+    
     
     // 미리보기
  	@GetMapping("/display")

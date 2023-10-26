@@ -14,16 +14,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 
 	 <!-- 친구 요청 내역 확인 -->
 	<select id="select_all" resultType="Integer">
-	 select count(*) from ${friend_request} where ${sendMemberId} = #{sendMemberId}
+	 select count(${sendMemberId}) from ${friend_request} where ${receiveMemberId} = #{receiveMemberId} 
 	</select>
 	 <!-- 친구 요청 내역 -->
-	 <select id="select_to_request" resultType="FriendRequestVO">
-	 select * from ${friend_request} where ${sendMemberId} = #{sendMemberId} 
+	 <select id="select_to_request" resultType="String">
+	 select ${receiveMemberId} from ${friend_request} where ${sendMemberId} = #{sendMemberId} 
 	 </select>
 	 
 	 <!-- 내게 온 친구 요청 내역 -->
-	 <select id="select_from_request" resultType="FriendRequestVO">
-	 select * from ${friend_request} where ${receiveMemberId} = #{receiveMemberId} 
+	 <select id="select_from_request" resultType="String">
+	 select ${sendMemberId} from ${friend_request} where ${receiveMemberId} = #{receiveMemberId} 
 	 </select>
 	 
 	 <!-- 응답시(수락/거절) 해당 row 삭제 -->

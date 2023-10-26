@@ -32,6 +32,7 @@
 			<input type="submit" value="회원 탈퇴">	
 		</form>
 	</div>
+<input type="hidden" id="alert" value="${alert }">
 	
 <script type="text/javascript">
 	$(document).ready(function(){

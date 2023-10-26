@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +18,7 @@
 <body>
 <h1>${vo.memberId }님의 회원 정보</h1>
 	<form action="update" method="post" enctype="multipart/form-data">
+	<sec:csrfInput/>
 		<div>
 			<input type="hidden" name="memberId" value="${vo.memberId }" />
 			<input type="hidden" name="password" value="${vo.password }" />

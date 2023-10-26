@@ -17,6 +17,7 @@
 </style>
 </head>
 <body>
+<h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 
 <div>
@@ -36,7 +37,7 @@
 		<c:forEach var="vo" items="${sendList }">
 		<div style="width:100px; hieght:140px; display:inline-block;" class="friendReq">
 			<img alt="${vo.memberImageName }" width="100px" height="100px" src="display?fileName=${vo.memberImageName }"> 
-			<input type="text" id="toNickname" value="${vo.nickname }">
+			<input type="text" id="toNickname" value="${vo.nickname }" style="width:92px;" readonly>
 		</div>
 			
 		</c:forEach>
@@ -44,17 +45,19 @@
 </table>
 <hr>
 <h3>받은 요청</h3>
-	<%-- <table>
+<table>
 	<tbody>
 		<c:forEach var="vo" items="${receiveList }">
-			<tr>
-				<td><input type="image" class="profileImg" alt="${vo.memberId }" 
-					src="display?fileName=${vo.memberImageName }" readonly /></td>
-				<td></td>
-			</tr>
+		<div style="width:100px; hieght:140px; display:inline-block;" class="friendReq">
+			<img alt="${vo.memberImageName }" width="100px" height="100px" src="display?fileName=${vo.memberImageName }"> 
+			<input type="text" id="toNickname" value="${vo.nickname }" style="width:92px;" readonly>
+			<button>수락</button>
+			<button>거절</button>
+		</div>
+			
 		</c:forEach>
 	</tbody>
-	</table> --%>
+</table>
 <hr>
 <h2>친구 목록</h2>
 <%-- <table>
@@ -78,7 +81,7 @@
 			} else if(result=='success'){
 				alert('친구요청이 완료되었습니다.');
 			}else if(result == 'fail'){
-				alert('요청에 실패하였습니다.');
+				alert('없는 아이디입니다.');
 			}
 	});
 </script>
