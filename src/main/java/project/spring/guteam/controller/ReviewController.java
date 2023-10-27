@@ -106,15 +106,15 @@ public class ReviewController {
 		Map<String, Object> args = reviewService.read(reviewId);
 		ReviewVO reviewVO = (ReviewVO) args.get("reviewVO");
 		GameVO gameVO = (GameVO) args.get("gameVO");
-		model.addAttribute("reviewVO", reviewVO);
-		model.addAttribute("gameVO", gameVO);
-		model.addAttribute("page", page);
 		if(principal!=null) {
 		String memberId = principal.getName();
 		ThumbVO thumbVO = thumbService.read(new ThumbVO(reviewId, memberId, 0));
 		if(thumbVO!=null) {
 			logger.info(thumbVO.toString());
 		}
+		model.addAttribute("reviewVO", reviewVO);
+		model.addAttribute("gameVO", gameVO);
+		model.addAttribute("page", page);
 		model.addAttribute("thumbVO",thumbVO);
 		}
 	}

@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.domain.ReviewVO;
+import project.spring.guteam.domain.ThumbVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.GameDAO;
 import project.spring.guteam.persistence.MemberDAO;
 import project.spring.guteam.persistence.ReviewDAO;
+import project.spring.guteam.persistence.ThumbDAO;
 
 @Service
 public class ReviewServiceImple implements ReviewService {
@@ -29,6 +31,9 @@ public class ReviewServiceImple implements ReviewService {
 	
 	@Autowired
 	private GameDAO gameDAO;
+	
+	@Autowired
+	private ThumbDAO thumbDAO;
 	
 	@Override
 	public int create(ReviewVO vo) {
@@ -53,11 +58,12 @@ public class ReviewServiceImple implements ReviewService {
 	}
 
 	@Override
-	public Map<String, Object> read(int reviewId) {
+	public Map<String, Object> read(int reviewId, String memberId) {
 		logger.info("review read(reviewId) 호출 : reviewId = " + reviewId );
 		Map<String, Object> args = new HashMap<>();
 		ReviewVO reviewVO = reviewDAO.select(reviewId);
-		
+		GameVO gameVO = gameDAO.select(reviewVO.getGameId());
+		ThumbVO thumbVO = thumbDAO.select(new ThumbVO(reviewId, memberId, 0));
 		return args;
 	}
 
