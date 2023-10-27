@@ -62,6 +62,7 @@ public class ReviewServiceImple implements ReviewService {
 		logger.info("review read(reviewId) 호출 : reviewId = " + reviewId );
 		Map<String, Object> args = new HashMap<>();
 		ReviewVO reviewVO = reviewDAO.select(reviewId);
+		logger.info(reviewVO.toString());
 		GameVO gameVO = gameDAO.select(reviewVO.getGameId());
 		ThumbVO thumbVO = thumbDAO.select(new ThumbVO(reviewId, memberId, 0));
 		args.put("reviewVO", reviewVO);

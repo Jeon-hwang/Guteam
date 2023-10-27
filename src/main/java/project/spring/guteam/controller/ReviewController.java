@@ -27,112 +27,118 @@ import project.spring.guteam.service.ReviewService;
 import project.spring.guteam.service.ThumbService;
 
 @Controller
-@RequestMapping(value="/review")
+@RequestMapping(value = "/review")
 public class ReviewController {
-	private static Logger logger = LoggerFactory.getLogger(ReviewController.class);	
-	
+	private static Logger logger = LoggerFactory.getLogger(ReviewController.class);
+
 	@Autowired
 	private ReviewService reviewService;
-		
+
 	@GetMapping("/list")
 	public void list(int gameId, Model model, Integer page, Integer numsPerPage, Principal principal, String keyword) {
 		logger.info("review list() 호출");
 		PageCriteria criteria = new PageCriteria();
-		if(page != null) {
+		if (page != null) {
 			criteria.setPage(page);
 		}
-		if(numsPerPage != null) {
+		if (numsPerPage != null) {
 			criteria.setNumsPerPage(numsPerPage);
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
 		readListsAndSetModel(model, gameId, criteria, pageMaker, principal, keyword);
 	}
-	
+
 	@GetMapping("/register")
 	public void registerGET(Model model, int gameId) {
 		model.addAttribute("gameId", gameId);
 	}
-	
+
 	@PostMapping("/register")
 	public String registerPOST(ReviewVO vo, RedirectAttributes reAttr) {
 		int result = reviewService.create(vo);
-		if(result == 1 ) {
-			reAttr.addFlashAttribute("insert_result","success");
-			return "redirect:list?gameId="+vo.getGameId();
-		}else {
-			return "redirect:register?gameId="+vo.getGameId();
+		if (result == 1) {
+			reAttr.addFlashAttribute("insert_result", "success");
+			return "redirect:list?gameId=" + vo.getGameId();
+		} else {
+			return "redirect:register?gameId=" + vo.getGameId();
 		}
 	}
-	
+
 	@GetMapping("/detail")
 	public void detail(Model model, int reviewId, int page, Principal principal) {
-		Map<String, Object> args = reviewService.read(reviewId, principal.getName());
+		Map<String, Object> args = null;
+		if (principal != null) {
+			args = reviewService.read(reviewId, principal.getName());
+		} else {
+			args = reviewService.read(reviewId, "");
+		}
 		ReviewVO reviewVO = (ReviewVO) args.get("reviewVO");
 		GameVO gameVO = (GameVO) args.get("gameVO");
-		if(principal!=null) {
-		String memberId = principal.getName();
-		ThumbVO thumbVO = (ThumbVO) args.get("thumbVO");
-		if(thumbVO!=null) {
-			logger.info(thumbVO.toString());
+		if (principal != null) {
+			ThumbVO thumbVO = (ThumbVO) args.get("thumbVO");
+			if (thumbVO != null) {
+				logger.info(thumbVO.toString());
+				model.addAttribute("thumbVO", thumbVO);
+			}
 		}
+		logger.info(reviewVO.toString());
 		model.addAttribute("reviewVO", reviewVO);
 		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("page", page);
-		model.addAttribute("thumbVO",thumbVO);
-		}
 	}
-	
+
 	@GetMapping("/update")
 	public void updateGET(Model model, int reviewId, int page) {
 		ReviewVO reviewVO = (ReviewVO) reviewService.read(reviewId, "").get("reviewVO");
-		model.addAttribute("reviewVO",reviewVO);
-		model.addAttribute("page",page);
+		model.addAttribute("reviewVO", reviewVO);
+		model.addAttribute("page", page);
 	}
-	
+
 	@PostMapping("/update")
 	public String updatePOST(ReviewVO vo, RedirectAttributes reAttr, int page) {
 		int result = reviewService.update(vo);
-		if(result==1) {
-			reAttr.addFlashAttribute("update_result","success");
-			return "redirect:detail?reviewId="+vo.getReviewId()+"&page="+page;
-		}else {
-			return "redirect:update?reviewId="+vo.getReviewId()+"&page="+page;
+		if (result == 1) {
+			reAttr.addFlashAttribute("update_result", "success");
+			return "redirect:detail?reviewId=" + vo.getReviewId() + "&page=" + page;
+		} else {
+			return "redirect:update?reviewId=" + vo.getReviewId() + "&page=" + page;
 		}
-		
+
 	}
-	
+
 	@PostMapping("/delete")
 	public String delete(int reviewId, int gameId, RedirectAttributes reAttr) {
 		int result = reviewService.delete(reviewId);
-		if(result==1) {
-			reAttr.addFlashAttribute("delete_result","success");
-			return "redirect:/review/list?gameId="+gameId;
-		}else {
-			return "redirect:/review/detail?reviewId="+reviewId+"&gameId="+gameId;
+		if (result == 1) {
+			reAttr.addFlashAttribute("delete_result", "success");
+			return "redirect:/review/list?gameId=" + gameId;
+		} else {
+			return "redirect:/review/detail?reviewId=" + reviewId + "&gameId=" + gameId;
 		}
 	}
-	
-	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker, Principal principal, String keyword) {
+
+	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker,
+			Principal principal, String keyword) {
 		Map<String, Object> args;
-		if(keyword!=null&&!keyword.equals("")) {
+		if (keyword != null && !keyword.equals("")) {
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
 			paging(pageMaker, criteria);
 			args = reviewService.read(gameId, criteria, keyword);
-		}else {
+		} else {
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
 			paging(pageMaker, criteria);
 			args = reviewService.read(gameId, criteria);
 		}
-		List<ReviewVO> reviewList = (List<ReviewVO>)args.get("reviewList");
-		List<String> nicknameList = (List<String>) args.get("nicknameList");	
-		GameVO gameVO = (GameVO)args.get("gameVO");
-		model.addAttribute("pageMaker",pageMaker);
+		List<ReviewVO> reviewList = (List<ReviewVO>) args.get("reviewList");
+		List<String> nicknameList = (List<String>) args.get("nicknameList");
+		GameVO gameVO = (GameVO) args.get("gameVO");
+		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("nicknameList", nicknameList);
 		model.addAttribute("gameVO", gameVO);
-		model.addAttribute("reviewList",reviewList);
+		model.addAttribute("reviewList", reviewList);
 		int writedReviewId = 0;
-		if(principal!=null) {
+		if (principal != null) {
 			writedReviewId = reviewService.readWrited(gameId, principal.getName());
 		}
 		model.addAttribute("writedReviewId", writedReviewId);

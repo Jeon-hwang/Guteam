@@ -44,7 +44,7 @@ public class PurchasedServiceImple implements PurchasedService {
 		List<PurchasedVO> list = dao.select(memberId);
 		List<GameVO> gameList = new ArrayList<GameVO>();
 		for(int i=0;i<list.size();i++) {
-			GameVO gameVO = gameService.read(list.get(i).getGameId());
+			GameVO gameVO = (GameVO) gameService.read(list.get(i).getGameId()).get("gameVO");
 			gameList.add(gameVO);
 		}
 		return gameList;

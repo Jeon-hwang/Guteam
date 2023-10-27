@@ -32,8 +32,7 @@
 		always-use-default-target="false"
 		authentication-success-handler-ref="loginSuccessHandler"
 		 />
-		<s:logout logout-url="/member/logout" invalidate-session="true" delete-cookies="true" 
-		
+		<s:logout logout-url="/member/logout" invalidate-session="true" delete-cookies="true" 		
 		success-handler-ref="logoutSuccessHandler"
 		/>
 		<s:session-management >
