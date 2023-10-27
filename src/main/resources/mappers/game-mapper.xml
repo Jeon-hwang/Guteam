@@ -65,4 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where rn between #{start} and #{end}
     </select>
     
+    <select id="get_seq_no" resultType="Integer">
+    	select last_number from user_sequences where sequence_name='GAME_SEQ'
+    </select>
+    
 </mapper>

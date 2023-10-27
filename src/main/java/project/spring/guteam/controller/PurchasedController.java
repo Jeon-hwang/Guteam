@@ -42,7 +42,7 @@ public class PurchasedController {
 			List<GameVO> list = new ArrayList<GameVO>();
 			for(String x : StrArr) {
 				logger.info(x);
-				GameVO vo = gameService.read(Integer.parseInt(x));
+				GameVO vo = (GameVO) gameService.read(Integer.parseInt(x)).get("vo");
 				list.add(vo);
 			}
 			model.addAttribute("list", list);

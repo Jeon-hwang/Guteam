@@ -1,7 +1,7 @@
 package project.spring.guteam.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +15,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.spring.guteam.domain.GameBoardVO;
 import project.spring.guteam.domain.GameVO;
-import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.GameBoardService;
-import project.spring.guteam.service.GameService;
-import project.spring.guteam.service.MemberService;
 
 @Controller
 @RequestMapping(value="/gameBoard")
@@ -29,13 +26,7 @@ public class GameBoardController {
 	
 	@Autowired
 	private GameBoardService gameBoardService;
-	
-	@Autowired
-	private GameService gameService;
-	
-	@Autowired
-	private MemberService memberService;
-	
+		
 	@GetMapping("/list")
 	public void list(Model model, int gameId,Integer page, Integer numsPerPage, String keywordCriteria, String keyword) {
 		logger.info("gameBoard list 호출");
@@ -49,32 +40,7 @@ public class GameBoardController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		List<GameBoardVO> list;
-		if(keyword==null||keyword.equals("")) {
-			list = gameBoardService.read(gameId, criteria);
-			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId));
-		}else{
-			list = gameBoardService.read(gameId, criteria, keywordCriteria, keyword);
-			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId, criteria, keywordCriteria, keyword));
-			model.addAttribute("keyword", keyword);
-			if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
-				model.addAttribute("keywordCriteria", keywordCriteria);
-			}
-		}
-		pageMaker.setPageData();
-		model.addAttribute("pageMaker",pageMaker);
-		List<String> nicknameList = new ArrayList<>();
-		for(int i = 0 ; i < list.size(); i++) {
-			String memberId = list.get(i).getMemberId();
-			MemberVO memberVO = memberService.read(memberId);
-			logger.info(memberVO.toString());
-			String nickname = memberVO.getNickname();
-			nicknameList.add(nickname);
-		}
-		model.addAttribute("nicknameList", nicknameList);
-		GameVO gameVO = gameService.read(gameId);
-		model.addAttribute("gameVO", gameVO);
-		model.addAttribute("list",list);
+		readListsAndSetModel(model, gameId, criteria, pageMaker, keyword, keywordCriteria);		
 	}
 	
 	@GetMapping("/register")
@@ -95,8 +61,8 @@ public class GameBoardController {
 	
 	@GetMapping("/detail")
 	public void detail(Model model, int gameBoardId, int page, int gameId) {
-		GameBoardVO vo = gameBoardService.read(gameBoardId);
-		String nickname = memberService.read(vo.getMemberId()).getNickname();
+		GameBoardVO vo = (GameBoardVO) gameBoardService.read(gameBoardId).get("gameBoardVO");
+		String nickname = (String) gameBoardService.read(gameBoardId).get("nickname");
 		model.addAttribute("nickname", nickname);
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
@@ -105,7 +71,7 @@ public class GameBoardController {
 	
 	@GetMapping("/update")
 	public void update(Model model, int gameBoardId, int page, int gameId) {
-		GameBoardVO vo = gameBoardService.read(gameBoardId);
+		GameBoardVO vo = (GameBoardVO) gameBoardService.read(gameBoardId).get("gameBoardVO");
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
 		model.addAttribute("gameId", gameId);
@@ -128,10 +94,50 @@ public class GameBoardController {
 		int result = gameBoardService.update(gameBoardId);
 		if(result==1) {
 			reAttr.addFlashAttribute("delete_result", "success");
-			return "redirect:/gameBoard/list?gameId="+gameBoardService.read(gameBoardId).getGameId();
+			return "redirect:/gameBoard/list?gameId="+((GameBoardVO)gameBoardService.read(gameBoardId).get("gameBoardVO")).getGameId();
 		}else {
-			return "redirect:/gameBoard/detail?gameId="+gameBoardService.read(gameBoardId).getGameId()+"&gameBoardId="+gameBoardId;
+			return "redirect:/gameBoard/detail?gameId="+((GameBoardVO)gameBoardService.read(gameBoardId).get("gameBoardVO")).getGameId()+"&gameBoardId="+gameBoardId;
 		}
+	}
+
+	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker,
+			String keyword, String keywordCriteria) {
+
+		List<GameBoardVO> gameBoardVOList;
+		List<String> nicknameList;
+		Map<String, Object> args;
+		if(keyword==null||keyword.equals("")) {
+			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId));
+			paging(pageMaker, criteria);
+			args = gameBoardService.read(gameId, criteria);
+			
+		}else{
+			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId, criteria, keywordCriteria, keyword));
+			paging(pageMaker, criteria);
+			args = gameBoardService.read(gameId, criteria, keywordCriteria, keyword);
+			model.addAttribute("keyword", keyword);
+			if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
+				model.addAttribute("keywordCriteria", keywordCriteria);
+			}
+		}
+		gameBoardVOList = (List<GameBoardVO>) args.get("gameBoardVOList");
+		nicknameList = (List<String>) args.get("nicknameList");
+		GameVO gameVO = (GameVO) args.get("gameVO");
+		model.addAttribute("pageMaker",pageMaker);
+		model.addAttribute("nicknameList", nicknameList);
+		model.addAttribute("gameVO", gameVO);
+		model.addAttribute("list",gameBoardVOList);
+		
+	}
+
+	private void paging(PageMaker pageMaker, PageCriteria criteria) {
+		pageMaker.setPageData();
+		if (criteria.getPage() > pageMaker.getEndPageNo()) {
+			criteria.setPage(pageMaker.getEndPageNo());
+		} else if (criteria.getPage() <= 0) {
+			criteria.setPage(1);
+		}
+		pageMaker.setPageData();
 	}
 
 }

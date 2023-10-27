@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="/WEB-INF/views/style.jsp"></jsp:include>
 <meta charset="UTF-8">
 <title>${vo.gameBoardTitle } 글 수정하기</title>
 </head>

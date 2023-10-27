@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="/WEB-INF/views/style.jsp"></jsp:include>
 <meta charset="UTF-8">
 <title>리뷰 수정 페이지</title>
 </head>

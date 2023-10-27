@@ -91,4 +91,10 @@ public class GameDAOImple implements GameDAO {
 		return sqlSession.selectOne(NAMESPACE+ ".total_count_by_price", price);
 	}
 
+	@Override
+	public int getSequenceNo() {
+		logger.info("Game getSeqNo()호출");
+		return sqlSession.selectOne(NAMESPACE+".get_seq_no");
+	}
+
 }

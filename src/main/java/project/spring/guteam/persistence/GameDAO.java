@@ -16,4 +16,5 @@ public interface GameDAO {
 	int getTotalCounts(int price);
 	List<GameVO> selectByPrice(int price, PageCriteria criteria);
 	List<GameVO> selectByNameOrGenre(String keyword, PageCriteria criteria);
+	int getSequenceNo();
 }

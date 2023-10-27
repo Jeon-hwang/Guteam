@@ -1,6 +1,9 @@
 package project.spring.guteam.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import project.spring.guteam.domain.GameBoardVO;
+import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.GameBoardDAO;
+import project.spring.guteam.persistence.GameDAO;
+import project.spring.guteam.persistence.MemberDAO;
 
 @Service
 public class GameBoardServiceImple implements GameBoardService {
@@ -18,6 +24,12 @@ public class GameBoardServiceImple implements GameBoardService {
 	@Autowired
 	private GameBoardDAO gameBoardDAO;
 	
+	@Autowired
+	private GameDAO gameDAO;
+	
+	@Autowired
+	private MemberDAO memberDAO;
+	
 	@Override
 	public int create(GameBoardVO vo) {
 		logger.info("gameBoard create() 호출 : vo = " + vo);
@@ -25,9 +37,19 @@ public class GameBoardServiceImple implements GameBoardService {
 	}
 
 	@Override
-	public List<GameBoardVO> read(int gameId, PageCriteria criteria) {
+	public Map<String, Object> read(int gameId, PageCriteria criteria) {
 		logger.info("gameBoard read() 호출 : gameId = " + gameId);
-		return gameBoardDAO.select(gameId, criteria);
+		List<GameBoardVO> gameBoardVOList = gameBoardDAO.select(gameId, criteria);
+		List<String> nicknameList = new ArrayList<>();
+		for(int i = 0 ; i < gameBoardVOList.size(); i++) {
+			nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+		}
+		GameVO gameVO = gameDAO.select(gameId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("gameBoardVOList", gameBoardVOList);
+		args.put("nicknameList",nicknameList);
+		args.put("gameVO", gameVO);
+		return args;
 	}
 
 	@Override
@@ -49,19 +71,35 @@ public class GameBoardServiceImple implements GameBoardService {
 	}
 
 	@Override
-	public List<GameBoardVO> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword) {
+	public Map<String, Object> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword) {
 		logger.info("gameBoard read(keyword) 호출 : keywordCriteria = " + keywordCriteria + ",keyword = " + keyword);
+		List<GameBoardVO> gameBoardVOList = null;
 		if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
-			return gameBoardDAO.selectByMemberId(gameId, keyword, criteria);
+			gameBoardVOList = gameBoardDAO.selectByMemberId(gameId, keyword, criteria);
 		}else {
-			return gameBoardDAO.selectByKeyword(gameId, keyword, criteria);
+			gameBoardVOList = gameBoardDAO.selectByKeyword(gameId, keyword, criteria);
 		}
+		List<String> nicknameList = new ArrayList<>();
+		for(int i = 0 ; i < gameBoardVOList.size(); i++) {
+			nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+		}
+		GameVO gameVO = gameDAO.select(gameId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("gameBoardVOList", gameBoardVOList);
+		args.put("nicknameList",nicknameList);
+		args.put("gameVO", gameVO);
+		return args;
 	}
 
 	@Override
-	public GameBoardVO read(int gameBoardId) {
+	public Map<String, Object> read(int gameBoardId) {
 		logger.info("gameBoard read(gameBoardId) 호출 : gameBoardId = " + gameBoardId);
-		return gameBoardDAO.selectByBoardId(gameBoardId);
+		GameBoardVO gameBoardVO = gameBoardDAO.selectByBoardId(gameBoardId);
+		String nickname = memberDAO.select(gameBoardVO.getMemberId()).getNickname();
+		Map<String, Object> args = new HashMap<>();
+		args.put("gameBoardVO", gameBoardVO);
+		args.put("nickname", nickname);
+		return args;
 	}
 
 	@Override

@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -27,12 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.spring.guteam.domain.GameVO;
-import project.spring.guteam.fileutil.FileUploadUtil;
+import project.spring.guteam.fileutil.GameImageUploadUtil;
 import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.GameService;
-import project.spring.guteam.service.ReviewService;
 
 @Controller
 @RequestMapping(value = "/game")
@@ -41,9 +40,6 @@ public class GameController {
 
 	@Autowired
 	private GameService gameService;
-
-	@Autowired
-	private ReviewService reviewService;
 
 	@Resource(name = "uploadPath")
 	private String uploadPath;
@@ -61,41 +57,12 @@ public class GameController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		List<GameVO> list;
-		if (keyword == null || keyword.equals("")) {
-			pageMaker.setTotalCount(gameService.getTotalCount());
-			paging(pageMaker, criteria);
-			list = gameService.read(criteria);
-		} else if (keywordCriteria != null && keywordCriteria.equals("price")) {
-			pageMaker.setTotalCount(gameService.getTotalCount(Integer.parseInt(keyword)));
-			paging(pageMaker, criteria);
-			list = gameService.read(Integer.parseInt(keyword), criteria);
-			model.addAttribute("keywordCriteria", keywordCriteria);
-		} else {
-			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
-			paging(pageMaker, criteria);
-			list = gameService.read(keyword, criteria);
-		}
-		List<Integer> ratingList = new ArrayList<>();
-		for (int i = 0; i < list.size(); i++) {
-			int gameId = list.get(i).getGameId();
-			ratingList.add(reviewService.getRating(gameId));
-		}
-		model.addAttribute("list", list);
-		model.addAttribute("ratingList", ratingList);
-		model.addAttribute("pageMaker", pageMaker);
-		model.addAttribute("keyword", keyword);
+		List<GameVO> gameVOList=null;
+		List<Integer> ratingList=null;
+		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, gameVOList, ratingList);
 	}
 
-	private void paging(PageMaker pageMaker, PageCriteria criteria) {
-		pageMaker.setPageData();
-		if (criteria.getPage() > pageMaker.getEndPageNo()) {
-			criteria.setPage(pageMaker.getEndPageNo());
-		} else if (criteria.getPage() <= 0) {
-			criteria.setPage(1);
-		}
-		pageMaker.setPageData();
-	}
+
 
 	@GetMapping("/register")
 	public void registerGET() {
@@ -109,7 +76,8 @@ public class GameController {
 			try {
 				logger.info(file.getOriginalFilename());
 				vo.setGameImageName(
-						FileUploadUtil.saveUploadedFile(uploadPath, file.getOriginalFilename(), file.getBytes()));
+						GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1),
+								file.getBytes()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -132,9 +100,10 @@ public class GameController {
 
 	@GetMapping("/detail")
 	public void detail(Model model, int gameId, String prevListUrl) {
-		GameVO vo = gameService.read(gameId);
+		Map<String, Object> args = gameService.read(gameId);
+		GameVO vo = (GameVO) args.get("vo");
 		model.addAttribute("vo", vo);
-		int rating = reviewService.getRating(gameId);
+		int rating = (int) args.get("rating");
 		model.addAttribute("rating", rating);
 		if (prevListUrl == null) {
 			prevListUrl = "list";
@@ -144,7 +113,8 @@ public class GameController {
 
 	@GetMapping("/update")
 	public void updateGET(Model model, int gameId, String prevListUrl) {
-		GameVO vo = gameService.read(gameId);
+		Map<String, Object> args = gameService.read(gameId);
+		GameVO vo = (GameVO) args.get("vo");
 		model.addAttribute("vo", vo);
 		try {
 			prevListUrl = URLEncoder.encode(prevListUrl, "UTF-8");
@@ -159,13 +129,14 @@ public class GameController {
 	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file) {
 
 		logger.info("updatePOST() 호출");
-		String beforeImageName = gameService.read(vo.getGameId()).getGameImageName();
+		String beforeImageName = ((GameVO)gameService.read(vo.getGameId()).get("vo")).getGameImageName();
 		logger.info(vo + "");
 		if (file != null && !file.getOriginalFilename().equals("")) {
 			try {
 				logger.info(file.getOriginalFilename());
 				vo.setGameImageName(
-						FileUploadUtil.saveUploadedFile(uploadPath, file.getOriginalFilename(), file.getBytes()));
+						GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1),
+								file.getBytes()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -233,9 +204,10 @@ public class GameController {
 		logger.info("uploadAgaxPOST() 호출");
 		// 파일 하나만 저장
 		String result = ""; // result : 파일 경로 및 썸네일 이미지 이름
+		
 		for (int i = 0; i < files.length; i++) {
 			try {
-				result = FileUploadUtil.saveUploadedFile(uploadPath, files[i].getOriginalFilename(),
+				result = GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+files[i].getOriginalFilename().substring(files[i].getOriginalFilename().lastIndexOf(".")+1),
 						files[i].getBytes());
 				result = URLEncoder.encode(result, "utf-8");
 			} catch (IOException e) {
@@ -243,6 +215,45 @@ public class GameController {
 			}
 		}
 		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+
+	private void readListsAndSetModel(String keyword, String keywordCriteria, PageMaker pageMaker, PageCriteria criteria,
+			Model model, List<GameVO> gameVOList, List<Integer> ratingList) {
+		if (keyword == null || keyword.equals("")) {
+			pageMaker.setTotalCount(gameService.getTotalCount());
+			paging(pageMaker, criteria);
+			Map<String, Object> args = gameService.read(criteria);
+			gameVOList = (List<GameVO>) args.get("gameVOList");
+			ratingList = (List<Integer>) args.get("ratingList");
+		} else if (keywordCriteria != null && keywordCriteria.equals("price")) {
+			pageMaker.setTotalCount(gameService.getTotalCount(Integer.parseInt(keyword)));
+			paging(pageMaker, criteria);
+			Map<String, Object> args = gameService.read(Integer.parseInt(keyword), criteria);
+			gameVOList = (List<GameVO>) args.get("gameVOList");
+			ratingList = (List<Integer>) args.get("ratingList");
+			model.addAttribute("keywordCriteria", keywordCriteria);
+		} else {
+			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
+			paging(pageMaker, criteria);
+			Map<String, Object> args = gameService.read(keyword, criteria);
+			gameVOList = (List<GameVO>) args.get("gameVOList");
+			ratingList = (List<Integer>) args.get("ratingList");
+		}
+		model.addAttribute("gameVOList", gameVOList);
+		model.addAttribute("ratingList", ratingList);
+		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("keyword", keyword);
+	}
+	
+	
+	private void paging(PageMaker pageMaker, PageCriteria criteria) {
+		pageMaker.setPageData();
+		if (criteria.getPage() > pageMaker.getEndPageNo()) {
+			criteria.setPage(pageMaker.getEndPageNo());
+		} else if (criteria.getPage() <= 0) {
+			criteria.setPage(1);
+		}
+		pageMaker.setPageData();
 	}
 
 }

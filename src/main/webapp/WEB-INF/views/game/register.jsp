@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="/WEB-INF/views/style.jsp"></jsp:include>
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token }"/>
 <meta name="_csrf_header" content="${_csrf.headerName }"/>
@@ -13,7 +14,6 @@
 <body>
 <h1>게임 등록</h1>
 <br>
-관리자로 로그인 해야만 볼 수 있는 창<br>
 <hr>
 <form action="register" method="post" enctype="multipart/form-data" accept-charset="utf-8"><br>
 <sec:csrfInput/>

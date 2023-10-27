@@ -3,6 +3,7 @@ package project.spring.guteam.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,21 +29,11 @@ import project.spring.guteam.service.ThumbService;
 @Controller
 @RequestMapping(value="/review")
 public class ReviewController {
-	private static Logger logger = LoggerFactory.getLogger(ReviewController.class);
-	
+	private static Logger logger = LoggerFactory.getLogger(ReviewController.class);	
 	
 	@Autowired
 	private ReviewService reviewService;
-	
-	@Autowired
-	private MemberService memberService;
-	
-	@Autowired
-	private ThumbService thumbService;
-	
-	@Autowired
-	private GameService gameService;
-	
+		
 	@GetMapping("/list")
 	public void list(int gameId, Model model, Integer page, Integer numsPerPage, Principal principal, String keyword) {
 		logger.info("review list() 호출");
@@ -55,34 +46,7 @@ public class ReviewController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		List<ReviewVO> list;
-		if(keyword!=null&&!keyword.equals("")) {
-			list = reviewService.read(gameId, criteria, keyword);
-			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
-
-		}else {
-			list = reviewService.read(gameId, criteria);
-			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
-		}
-		pageMaker.setPageData();
-		model.addAttribute("pageMaker",pageMaker);
-		List<String> nicknameList = new ArrayList<>();
-		for(int i = 0 ; i < list.size(); i++) {
-			String memberId = list.get(i).getMemberId();
-			MemberVO memberVO = memberService.read(memberId);
-			logger.info(memberVO.toString());
-			String nickname = memberVO.getNickname();
-			nicknameList.add(nickname);
-		}
-		model.addAttribute("nicknameList", nicknameList);
-		GameVO gameVO = gameService.read(gameId);
-		model.addAttribute("gameVO", gameVO);
-		model.addAttribute("list",list);
-		int writedReviewId = 0;
-		if(principal!=null) {
-			writedReviewId = reviewService.readWrited(gameId, principal.getName());
-		}
-		model.addAttribute("writedReviewId", writedReviewId);
+		readListsAndSetModel(model, gameId, criteria, pageMaker, principal, keyword);
 	}
 	
 	@GetMapping("/register")
@@ -103,24 +67,25 @@ public class ReviewController {
 	
 	@GetMapping("/detail")
 	public void detail(Model model, int reviewId, int page, Principal principal) {
-		ReviewVO reviewVO = reviewService.read(reviewId);
-		GameVO gameVO = gameService.read(reviewVO.getGameId());
-		model.addAttribute("reviewVO", reviewVO);
-		model.addAttribute("gameVO", gameVO);
-		model.addAttribute("page", page);
+		Map<String, Object> args = reviewService.read(reviewId, principal.getName());
+		ReviewVO reviewVO = (ReviewVO) args.get("reviewVO");
+		GameVO gameVO = (GameVO) args.get("gameVO");
 		if(principal!=null) {
 		String memberId = principal.getName();
-		ThumbVO thumbVO = thumbService.read(new ThumbVO(reviewId, memberId, 0));
+		ThumbVO thumbVO = (ThumbVO) args.get("thumbVO");
 		if(thumbVO!=null) {
 			logger.info(thumbVO.toString());
 		}
+		model.addAttribute("reviewVO", reviewVO);
+		model.addAttribute("gameVO", gameVO);
+		model.addAttribute("page", page);
 		model.addAttribute("thumbVO",thumbVO);
 		}
 	}
 	
 	@GetMapping("/update")
 	public void updateGET(Model model, int reviewId, int page) {
-		ReviewVO reviewVO = reviewService.read(reviewId);
+		ReviewVO reviewVO = (ReviewVO) reviewService.read(reviewId, "").get("reviewVO");
 		model.addAttribute("reviewVO",reviewVO);
 		model.addAttribute("page",page);
 	}
@@ -147,5 +112,39 @@ public class ReviewController {
 			return "redirect:/review/detail?reviewId="+reviewId+"&gameId="+gameId;
 		}
 	}
+	
+	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker, Principal principal, String keyword) {
+		Map<String, Object> args;
+		if(keyword!=null&&!keyword.equals("")) {
+			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
+			paging(pageMaker, criteria);
+			args = reviewService.read(gameId, criteria, keyword);
+		}else {
+			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
+			paging(pageMaker, criteria);
+			args = reviewService.read(gameId, criteria);
+		}
+		List<ReviewVO> reviewList = (List<ReviewVO>)args.get("reviewList");
+		List<String> nicknameList = (List<String>) args.get("nicknameList");	
+		GameVO gameVO = (GameVO)args.get("gameVO");
+		model.addAttribute("pageMaker",pageMaker);
+		model.addAttribute("nicknameList", nicknameList);
+		model.addAttribute("gameVO", gameVO);
+		model.addAttribute("reviewList",reviewList);
+		int writedReviewId = 0;
+		if(principal!=null) {
+			writedReviewId = reviewService.readWrited(gameId, principal.getName());
+		}
+		model.addAttribute("writedReviewId", writedReviewId);
+	}
 
+	private void paging(PageMaker pageMaker, PageCriteria criteria) {
+		pageMaker.setPageData();
+		if (criteria.getPage() > pageMaker.getEndPageNo()) {
+			criteria.setPage(pageMaker.getEndPageNo());
+		} else if (criteria.getPage() <= 0) {
+			criteria.setPage(1);
+		}
+		pageMaker.setPageData();
+	}
 }
