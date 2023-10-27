@@ -48,8 +48,11 @@ public class MemberController {
 	
 	// 로그인 화면
 	@GetMapping("/login")
-	public void loginGET() {
+	public void loginGET(HttpServletRequest request, Model model) {
 		logger.info("loginGET() 호출");
+		logger.info("referer = " + request.getHeader("referer"));
+		String referer = request.getHeader("referer");
+		model.addAttribute("referer", referer);
 	}
 
 	// 로그인

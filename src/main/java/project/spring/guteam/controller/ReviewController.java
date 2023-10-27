@@ -28,8 +28,7 @@ import project.spring.guteam.service.ThumbService;
 @Controller
 @RequestMapping(value="/review")
 public class ReviewController {
-	private static Logger logger = LoggerFactory.getLogger(ReviewController.class);
-	
+	private static Logger logger = LoggerFactory.getLogger(ReviewController.class);	
 	
 	@Autowired
 	private ReviewService reviewService;
@@ -57,14 +56,15 @@ public class ReviewController {
 		pageMaker.setCriteria(criteria);
 		List<ReviewVO> list;
 		if(keyword!=null&&!keyword.equals("")) {
-			list = reviewService.read(gameId, criteria, keyword);
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
+			paging(pageMaker, criteria);
+			list = reviewService.read(gameId, criteria, keyword);
 
 		}else {
-			list = reviewService.read(gameId, criteria);
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
+			paging(pageMaker, criteria);
+			list = reviewService.read(gameId, criteria);
 		}
-		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < list.size(); i++) {
@@ -85,6 +85,16 @@ public class ReviewController {
 		model.addAttribute("writedReviewId", writedReviewId);
 	}
 	
+	private void paging(PageMaker pageMaker, PageCriteria criteria) {
+		pageMaker.setPageData();
+		if (criteria.getPage() > pageMaker.getEndPageNo()) {
+			criteria.setPage(pageMaker.getEndPageNo());
+		} else if (criteria.getPage() <= 0) {
+			criteria.setPage(1);
+		}
+		pageMaker.setPageData();
+	}
+
 	@GetMapping("/register")
 	public void registerGET(Model model, int gameId) {
 		model.addAttribute("gameId", gameId);

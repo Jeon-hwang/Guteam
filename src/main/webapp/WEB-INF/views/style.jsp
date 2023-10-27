@@ -47,5 +47,13 @@ margin-bottom: 10px;
 	item-align:center;
 	text-align:center;
 }
-
+.page-item .page-link{
+	background-color:#e9ecef;
+	color:black;
+}
+.active .page-link{
+	background-color:#6c757d;
+	border-color:#e9ecef; 
+	color:white;
+}
 </style>

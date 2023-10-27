@@ -68,14 +68,14 @@
 	<ul class="pagination justify-content-center">
 		<c:if test="${pageMaker.hasPrev }">
 			<c:if test="${empty keyword }">
-			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }">&laquo;</a></li>
+			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }">&laquo;</a></li>
 			</c:if>
 			<c:if test="${not empty keyword }">
 			<c:if test="${not empty keywordCriteria }">
-			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&laquo;</a></li>
+			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&laquo;</a></li>
 			</c:if>
 			<c:if test="${empty keywordCriteria }">
-			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}">&laquo;</a></li>
+			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}">&laquo;</a></li>
 			</c:if>
 			</c:if>
 		</c:if>
@@ -83,41 +83,41 @@
 			end="${pageMaker.endPageNo }">
 			<c:if test="${pageMaker.criteria.page==pageLink }">
 				<c:if test="${empty keyword }">
-					<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }">${pageLink }</a></li>
+					<li class="page-item active"><a class="page-link" href="list?page=${pageLink }">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${not empty keyword }">
 				<c:if test="${not empty keywordCriteria }">
-					<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
+					<li class="page-item active"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${empty keywordCriteria }">
-					<li class="page-item active"><a style="background-color:#6c757d;border-color:#e9ecef;" class="page-link" href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
+					<li class="page-item active"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
 				</c:if>
 				</c:if>
 			</c:if>
 			<c:if test="${pageMaker.criteria.page!=pageLink }">
 				<c:if test="${empty keyword }">
-					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }">${pageLink }</a></li>
+					<li class="page-item"><a class="page-link" href="list?page=${pageLink }">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${not empty keyword }">
 				<c:if test="${not empty keywordCriteria }">
-					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
+					<li class="page-item"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
 				</c:if>
 				<c:if test="${empty keywordCriteria }">
-					<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
+					<li class="page-item"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
 				</c:if>
 				</c:if>
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
 			<c:if test="${empty keyword }">
-			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }">&raquo;</a></li>
+			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.endPageNo+1 }">&raquo;</a></li>
 			</c:if>
 			<c:if test="${not empty keyword }">
 			<c:if test="${not empty keywordCriteria }">
-			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&raquo;</a></li>
+			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&raquo;</a></li>
 			</c:if>
 			<c:if test="${empty keywordCriteria }">
-			<li class="page-item"><a style="background-color:#e9ecef;color:black;" class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}">&raquo;</a></li>
+			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}">&raquo;</a></li>
 			</c:if>
 			</c:if>
 		</c:if>

@@ -31,7 +31,7 @@ padding:20px 80px;
 <title>GUTEAM : 로그인</title>
 </head>
 <body>
-	<c:if test="${not empty param }">아이디와 비밀번호를 확인해주세요 </c:if>
+	<c:if test="${param.error=='' }">아이디와 비밀번호를 확인해주세요 </c:if>
 	<h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
 	
 	<br>
@@ -41,7 +41,7 @@ padding:20px 80px;
 		<br>
 		PW &nbsp;
 		<input type="password" name="password" required />
-		<input type="hidden" name="targetURL" value=${param.targetURL }>
+		<input type="hidden" name="referer" value="${referer }">
 		<sec:csrfInput/>
 		<br>
 		<br>

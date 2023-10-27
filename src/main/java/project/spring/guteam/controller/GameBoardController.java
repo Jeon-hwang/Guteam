@@ -51,17 +51,18 @@ public class GameBoardController {
 		pageMaker.setCriteria(criteria);
 		List<GameBoardVO> list;
 		if(keyword==null||keyword.equals("")) {
-			list = gameBoardService.read(gameId, criteria);
 			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId));
+			paging(pageMaker, criteria);
+			list = gameBoardService.read(gameId, criteria);
 		}else{
-			list = gameBoardService.read(gameId, criteria, keywordCriteria, keyword);
 			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId, criteria, keywordCriteria, keyword));
+			paging(pageMaker, criteria);
+			list = gameBoardService.read(gameId, criteria, keywordCriteria, keyword);
 			model.addAttribute("keyword", keyword);
 			if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
 				model.addAttribute("keywordCriteria", keywordCriteria);
 			}
 		}
-		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < list.size(); i++) {
@@ -77,6 +78,16 @@ public class GameBoardController {
 		model.addAttribute("list",list);
 	}
 	
+	private void paging(PageMaker pageMaker, PageCriteria criteria) {
+		pageMaker.setPageData();
+		if (criteria.getPage() > pageMaker.getEndPageNo()) {
+			criteria.setPage(pageMaker.getEndPageNo());
+		} else if (criteria.getPage() <= 0) {
+			criteria.setPage(1);
+		}
+		pageMaker.setPageData();
+	}
+
 	@GetMapping("/register")
 	public void registerGET(Model model, int gameId) {
 		model.addAttribute("gameId", gameId);
