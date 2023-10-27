@@ -91,6 +91,7 @@ public class FriendController {
     	logger.info("addFriend() vo ? " + vo.toString());
     	int result = memberService.read(vo.getReceiveMemberId(), "check");
     	logger.info("멤버 중 요청 아이디 있나? 1이면 있음 = " + result);
+    	
  		if(result == 1) {
  			result = friendRequestService.read(vo.getReceiveMemberId());
  			logger.info("친추 중복인가? 1이면 중복 = " + result);
@@ -114,18 +115,22 @@ public class FriendController {
     
 	
 	// 받은 요청 수락
-    @PostMapping
-    public void acceptPOST(FriendVO vo) {
+    @PostMapping("/accept")
+    public String acceptPOST(FriendVO vo) {
     	logger.info("acceptPOST() vo ? " + vo.toString());
     	int result = friendService.create(vo);
-    	logger.info("");
+    	logger.info("친구 수락? " + result);
     	if(result == 1) {
-    		
+    		// 수락 후 친구 요청 테이블 삭제
+//    		friendRequestService.delete(vo.getMemberId())
+    		return "redirect:/friend/list";
+    	} else {
+    		return "redirect:/friend/list";
     	}
     }
     
-    
-    
+//    // 받은 요청 거절
+//    @PostMapping("/reject")
     
     
     // 미리보기
@@ -135,6 +140,11 @@ public class FriendController {
          
          ResponseEntity<byte[]> entity = null;
          InputStream in = null;
+         
+         //  / 없을때 넣는 조건
+         if(!(fileName.charAt(0) == '/')) {
+         	fileName = "/" + fileName;
+         }
          
          String filepath = uploadPath + fileName;
          logger.info("filepath 경로 = " + filepath);

@@ -5,16 +5,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>GUTEAM : 친구 목록</title>
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<!-- Bootstrap css -->
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+   rel="stylesheet"
+   integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+   crossorigin="anonymous" />
+<!-- Bootstrap icons -->
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+   rel="stylesheet" />
+<!-- Bootstrap core JS-->
+<script
+   src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
+</script>
 <style type="text/css">
+body {
+background-color:grey;
+padding:20px 80px;
+
+}
+
 .profileImg {
 	width : 40px;
 	height : 40px;
 	border : 1px solid grey;
 }
 </style>
+<meta charset="UTF-8">
+<title>GUTEAM : 친구 목록</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
 <h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
@@ -47,15 +67,20 @@
 <h3>받은 요청</h3>
 <table>
 	<tbody>
-		<c:forEach var="vo" items="${receiveList }">
+	<c:forEach var="rvo" items="${receiveList }">
 		<div style="width:100px; hieght:140px; display:inline-block;" class="friendReq">
-			<img alt="${vo.memberImageName }" width="100px" height="100px" src="display?fileName=${vo.memberImageName }"> 
-			<input type="text" id="toNickname" value="${vo.nickname }" style="width:92px;" readonly>
-			<button>수락</button>
-			<button>거절</button>
+		<form action="../friend/accept" method="post">
+		<sec:csrfInput/>
+			<img alt="${rvo.memberImageName }" width="100px" height="100px" src="display?fileName=${rvo.memberImageName }"> 
+			<input type="text" id="toNickname" value="${rvo.nickname }" style="width:92px;" readonly>
+			<input type="hidden" name="memberId" value="${vo.memberId }">
+			<input type="hidden" name="friendId" value="${rvo.memberId }">
+			<button type="submit" formaction="../friend/accept">수락</button>
+			<button type="submit" formaction="../friend/reject">거절</button>
+		</form>
 		</div>
-			
-		</c:forEach>
+		
+	</c:forEach>
 	</tbody>
 </table>
 <hr>
