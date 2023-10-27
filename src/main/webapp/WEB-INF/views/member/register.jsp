@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,7 @@
 	<h2>회원 가입</h2>
 
 	<form action="register" method="post">
-	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"> 
+	<sec:csrfInput/>
 		<div>
 			아이디 :
 			<input type="text" id="memberId" name="memberId" placeholder="ID 입력" required />

@@ -184,7 +184,7 @@ public class MemberController {
 			return "redirect:/member/update";
 		}
 		
-	}
+	} //end updatePOST()
 	
 	// 회원 탈퇴
 	@PostMapping("/delete")
@@ -202,7 +202,6 @@ public class MemberController {
 			reAttr.addFlashAttribute("alert", "fail");
 			return "redirect:/";
 		}
-		
 	} //end delete()
 	
 	// 미리보기
@@ -212,6 +211,11 @@ public class MemberController {
         
         ResponseEntity<byte[]> entity = null;
         InputStream in = null;
+        
+        //  / 없을때 넣는 조건
+        if(!(fileName.charAt(0) == '/')) {
+        	fileName = "/" + fileName;
+        }
         
         String filepath = uploadPath + fileName;
         logger.info("filepath 경로 = " + filepath);

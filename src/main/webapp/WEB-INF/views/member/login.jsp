@@ -6,6 +6,7 @@
 <html>
 <head>
 <!-- Bootstrap css -->
+<!-- Bootstrap css -->
 <link
    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
    rel="stylesheet"
@@ -17,12 +18,19 @@
    rel="stylesheet" />
 <!-- Bootstrap core JS-->
 <script
-   src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+   src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
+</script>
 <style type="text/css">
 body {
-background-color:lightgrey;
+background-color:grey;
 padding:20px 80px;
 
+}
+
+.profileImg {
+	width : 100px;
+	height : 100px;
+	border : 1px solid grey;
 }
 </style>
 <meta charset="UTF-8" >
