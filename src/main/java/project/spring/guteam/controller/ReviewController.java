@@ -3,6 +3,7 @@ package project.spring.guteam.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,16 +33,7 @@ public class ReviewController {
 	
 	@Autowired
 	private ReviewService reviewService;
-	
-	@Autowired
-	private MemberService memberService;
-	
-	@Autowired
-	private ThumbService thumbService;
-	
-	@Autowired
-	private GameService gameService;
-	
+		
 	@GetMapping("/list")
 	public void list(int gameId, Model model, Integer page, Integer numsPerPage, Principal principal, String keyword) {
 		logger.info("review list() 호출");
@@ -54,37 +46,35 @@ public class ReviewController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		List<ReviewVO> list;
+		readListsAndSetModel(model, gameId, criteria, pageMaker, principal, keyword);
+	}
+	
+	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker, Principal principal, String keyword) {
+		List<ReviewVO> reviewList;
+		Map<String, Object> args;
 		if(keyword!=null&&!keyword.equals("")) {
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
 			paging(pageMaker, criteria);
-			list = reviewService.read(gameId, criteria, keyword);
-
+			args = reviewService.read(gameId, criteria, keyword);
 		}else {
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
 			paging(pageMaker, criteria);
-			list = reviewService.read(gameId, criteria);
+			args = reviewService.read(gameId, criteria);
 		}
+		reviewList = (List<ReviewVO>)args.get("reviewList");
+		List<String> nicknameList = (List<String>) args.get("nicknameList");	
+		GameVO gameVO = (GameVO)args.get("gameVO");
 		model.addAttribute("pageMaker",pageMaker);
-		List<String> nicknameList = new ArrayList<>();
-		for(int i = 0 ; i < list.size(); i++) {
-			String memberId = list.get(i).getMemberId();
-			MemberVO memberVO = memberService.read(memberId);
-			logger.info(memberVO.toString());
-			String nickname = memberVO.getNickname();
-			nicknameList.add(nickname);
-		}
 		model.addAttribute("nicknameList", nicknameList);
-		GameVO gameVO = gameService.read(gameId);
 		model.addAttribute("gameVO", gameVO);
-		model.addAttribute("list",list);
+		model.addAttribute("reviewList",reviewList);
 		int writedReviewId = 0;
 		if(principal!=null) {
 			writedReviewId = reviewService.readWrited(gameId, principal.getName());
 		}
 		model.addAttribute("writedReviewId", writedReviewId);
 	}
-	
+
 	private void paging(PageMaker pageMaker, PageCriteria criteria) {
 		pageMaker.setPageData();
 		if (criteria.getPage() > pageMaker.getEndPageNo()) {
@@ -113,8 +103,9 @@ public class ReviewController {
 	
 	@GetMapping("/detail")
 	public void detail(Model model, int reviewId, int page, Principal principal) {
-		ReviewVO reviewVO = reviewService.read(reviewId);
-		GameVO gameVO = gameService.read(reviewVO.getGameId());
+		Map<String, Object> args = reviewService.read(reviewId);
+		ReviewVO reviewVO = (ReviewVO) args.get("reviewVO");
+		GameVO gameVO = (GameVO) args.get("gameVO");
 		model.addAttribute("reviewVO", reviewVO);
 		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("page", page);

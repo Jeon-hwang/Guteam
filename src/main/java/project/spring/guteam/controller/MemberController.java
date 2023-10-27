@@ -50,6 +50,11 @@ public class MemberController {
 	@GetMapping("/login")
 	public void loginGET(HttpServletRequest request, Model model) {
 		logger.info("loginGET() 호출");
+		String targetURL = (String)request.getAttribute("targetURL");
+		logger.info(targetURL);
+		if(targetURL != null) {
+			model.addAttribute("targetURL", targetURL);
+		}
 		logger.info("referer = " + request.getHeader("referer"));
 		String referer = request.getHeader("referer");
 		model.addAttribute("referer", referer);

@@ -15,10 +15,15 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	private static final Logger logger = LoggerFactory.getLogger(LoginSuccessHandler.class);
 
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+	public void onAuthenticationSuccess( HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		logger.info("로그인 성공 핸들러 호출");
 		logger.info("referer = " + request.getParameter("referer"));
+		logger.info("targetURL = " + request.getParameter("targetURL"));
+		String targetURL = request.getParameter("targetURL");
+		if(targetURL != null&&!targetURL.equals("")) {
+			response.sendRedirect(targetURL);
+		}
 		String referer = request.getParameter("referer");
 		response.sendRedirect(referer);	
 	}

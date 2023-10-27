@@ -1,14 +1,20 @@
 package project.spring.guteam.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.domain.ReviewVO;
 import project.spring.guteam.pageutil.PageCriteria;
+import project.spring.guteam.persistence.GameDAO;
+import project.spring.guteam.persistence.MemberDAO;
 import project.spring.guteam.persistence.ReviewDAO;
 
 @Service
@@ -18,6 +24,12 @@ public class ReviewServiceImple implements ReviewService {
 	@Autowired
 	private ReviewDAO reviewDAO;	
 	
+	@Autowired
+	private MemberDAO memberDAO;
+	
+	@Autowired
+	private GameDAO gameDAO;
+	
 	@Override
 	public int create(ReviewVO vo) {
 		logger.info("review create() 호출");
@@ -25,15 +37,28 @@ public class ReviewServiceImple implements ReviewService {
 	}
 
 	@Override
-	public List<ReviewVO> read(int gameId, PageCriteria criteria) {
+	public Map<String, Object> read(int gameId, PageCriteria criteria) {
 		logger.info("review read() 호출");
-		return reviewDAO.select(gameId, criteria);
+		Map<String, Object> args = new HashMap<>();
+		List<ReviewVO> reviewList = reviewDAO.select(gameId, criteria);
+		List<String> nicknameList = new ArrayList<>();
+		for(int i = 0 ; i < reviewList.size(); i++) {
+			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
+		}
+		GameVO gameVO = gameDAO.select(gameId);
+		args.put("reivewList", reviewList);
+		args.put("nicknameList", nicknameList);
+		args.put("gameVO", gameVO);
+		return args;
 	}
 
 	@Override
-	public ReviewVO read(int reviewId) {
+	public Map<String, Object> read(int reviewId) {
 		logger.info("review read(reviewId) 호출 : reviewId = " + reviewId );
-		return reviewDAO.select(reviewId);
+		Map<String, Object> args = new HashMap<>();
+		ReviewVO reviewVO = reviewDAO.select(reviewId);
+		
+		return args;
 	}
 
 	@Override
@@ -73,9 +98,19 @@ public class ReviewServiceImple implements ReviewService {
 	}
 
 	@Override
-	public List<ReviewVO> read(int gameId, PageCriteria criteria, String keyword) {
+	public Map<String, Object> read(int gameId, PageCriteria criteria, String keyword) {
 		logger.info("review read(keyword) 호출");
-		return reviewDAO.selectByKeyword(gameId, criteria, keyword);
+		Map<String, Object> args = new HashMap<>();
+		List<ReviewVO> reviewList = reviewDAO.selectByKeyword(gameId, criteria, keyword);
+		List<String> nicknameList = new ArrayList<>();
+		for(int i = 0 ; i < reviewList.size(); i++) {
+			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
+		}
+		GameVO gameVO = gameDAO.select(gameId);
+		args.put("reivewList", reviewList);
+		args.put("nicknameList", nicknameList);
+		args.put("gameVO", gameVO);
+		return args;
 	}
 
 	@Override

@@ -35,7 +35,7 @@
 	</form>
 	
 	<br>
-	<c:forEach varStatus="status" var="vo" items="${list }">
+	<c:forEach varStatus="status" var="vo" items="${gameVOList }">
 	<div class="btn btn-secondary" style="margin:5px; width:330px; height:500px; display:inline-block; ">
 			<div class="gameInfo">
 				<img class="rounded mx-auto d-block" alt="${vo.gameName }"

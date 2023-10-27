@@ -1,6 +1,6 @@
 package project.spring.guteam.service;
 
-import java.util.List;
+import java.util.Map;
 
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.pageutil.PageCriteria;
@@ -8,12 +8,12 @@ import project.spring.guteam.pageutil.PageCriteria;
 public interface GameService {
 	// CRUD(Create, Read, Update, Delete)
 	int create(GameVO vo);
-	List<GameVO> read(PageCriteria criteria);
-	GameVO read(int gameId);
+	Map<String, Object> read(PageCriteria criteria);
+	Map<String, Object> read(int gameId);
 	int update(GameVO vo);
 	int getTotalCount();
 	int getTotalCount(int price);
-	List<GameVO> read(int price, PageCriteria criteria);
-	List<GameVO> read(String keyword, PageCriteria criteria);
+	Map<String, Object> read(int price, PageCriteria criteria);
+	Map<String, Object> read(String keyword, PageCriteria criteria);
 	int getTotalCount(String keyword);
 }
