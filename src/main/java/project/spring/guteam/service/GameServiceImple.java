@@ -109,4 +109,10 @@ public class GameServiceImple implements GameService {
 		return gameDAO.getTotalCounts(price);
 	}
 
+	@Override
+	public int getSeqNo() {
+		int sequence = gameDAO.getSequenceNo();
+		return sequence;
+	}
+
 }

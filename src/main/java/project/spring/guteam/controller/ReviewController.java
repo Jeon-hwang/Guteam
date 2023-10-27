@@ -49,42 +49,6 @@ public class ReviewController {
 		readListsAndSetModel(model, gameId, criteria, pageMaker, principal, keyword);
 	}
 	
-	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker, Principal principal, String keyword) {
-		List<ReviewVO> reviewList;
-		Map<String, Object> args;
-		if(keyword!=null&&!keyword.equals("")) {
-			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
-			paging(pageMaker, criteria);
-			args = reviewService.read(gameId, criteria, keyword);
-		}else {
-			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
-			paging(pageMaker, criteria);
-			args = reviewService.read(gameId, criteria);
-		}
-		reviewList = (List<ReviewVO>)args.get("reviewList");
-		List<String> nicknameList = (List<String>) args.get("nicknameList");	
-		GameVO gameVO = (GameVO)args.get("gameVO");
-		model.addAttribute("pageMaker",pageMaker);
-		model.addAttribute("nicknameList", nicknameList);
-		model.addAttribute("gameVO", gameVO);
-		model.addAttribute("reviewList",reviewList);
-		int writedReviewId = 0;
-		if(principal!=null) {
-			writedReviewId = reviewService.readWrited(gameId, principal.getName());
-		}
-		model.addAttribute("writedReviewId", writedReviewId);
-	}
-
-	private void paging(PageMaker pageMaker, PageCriteria criteria) {
-		pageMaker.setPageData();
-		if (criteria.getPage() > pageMaker.getEndPageNo()) {
-			criteria.setPage(pageMaker.getEndPageNo());
-		} else if (criteria.getPage() <= 0) {
-			criteria.setPage(1);
-		}
-		pageMaker.setPageData();
-	}
-
 	@GetMapping("/register")
 	public void registerGET(Model model, int gameId) {
 		model.addAttribute("gameId", gameId);
@@ -148,5 +112,39 @@ public class ReviewController {
 			return "redirect:/review/detail?reviewId="+reviewId+"&gameId="+gameId;
 		}
 	}
+	
+	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker, Principal principal, String keyword) {
+		Map<String, Object> args;
+		if(keyword!=null&&!keyword.equals("")) {
+			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
+			paging(pageMaker, criteria);
+			args = reviewService.read(gameId, criteria, keyword);
+		}else {
+			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
+			paging(pageMaker, criteria);
+			args = reviewService.read(gameId, criteria);
+		}
+		List<ReviewVO> reviewList = (List<ReviewVO>)args.get("reviewList");
+		List<String> nicknameList = (List<String>) args.get("nicknameList");	
+		GameVO gameVO = (GameVO)args.get("gameVO");
+		model.addAttribute("pageMaker",pageMaker);
+		model.addAttribute("nicknameList", nicknameList);
+		model.addAttribute("gameVO", gameVO);
+		model.addAttribute("reviewList",reviewList);
+		int writedReviewId = 0;
+		if(principal!=null) {
+			writedReviewId = reviewService.readWrited(gameId, principal.getName());
+		}
+		model.addAttribute("writedReviewId", writedReviewId);
+	}
 
+	private void paging(PageMaker pageMaker, PageCriteria criteria) {
+		pageMaker.setPageData();
+		if (criteria.getPage() > pageMaker.getEndPageNo()) {
+			criteria.setPage(pageMaker.getEndPageNo());
+		} else if (criteria.getPage() <= 0) {
+			criteria.setPage(1);
+		}
+		pageMaker.setPageData();
+	}
 }

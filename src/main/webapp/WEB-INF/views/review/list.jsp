@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,16 +36,17 @@
 			<th width="80px">작성자</th>
 			<th width="150px">작성일</th>
 			<th width="120px">평점</th>
+			<th width="50px">추천수</th>
 		</tr>
 	</thead>
 	<tbody>
-	<c:forEach varStatus="status" var="reviewVO" items="${list }">
+	<c:forEach varStatus="status" var="reviewVO" items="${reviewList }">
 	<input type="hidden" class="url" value="detail?reviewId=${reviewVO.reviewId }&page=${pageMaker.criteria.page}&gameId=${gameVO.gameId}">
 		<tr class="reviewInfo">
 			<td>${reviewVO.reviewId }</td>
 			<td>${reviewVO.reviewTitle }</td>
 			<td>${nicknameList[status.index] }</td>		
-			<td>${reviewVO.reviewDateCreated }</td>
+			<td><fmt:formatDate	value="${reviewVO.reviewDateCreated }" pattern="yyyy년 MM월 dd일" /></td>
 			<td>
 				<c:forEach begin="1" end="${reviewVO.rating/2 }" step="1">
 				<i class="bi bi-star-fill"></i>
@@ -56,6 +58,7 @@
 				<i class="bi bi-star"></i>
 				</c:forEach>
 			</td>
+			<td>${reviewVO.thumbUpCount }</td>
 		</tr>
 	</c:forEach>
 	</tbody>

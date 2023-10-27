@@ -51,7 +51,7 @@ public class ReviewServiceImple implements ReviewService {
 			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
 		}
 		GameVO gameVO = gameDAO.select(gameId);
-		args.put("reivewList", reviewList);
+		args.put("reviewList", reviewList);
 		args.put("nicknameList", nicknameList);
 		args.put("gameVO", gameVO);
 		return args;

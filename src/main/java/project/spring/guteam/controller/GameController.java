@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.spring.guteam.domain.GameVO;
-import project.spring.guteam.fileutil.FileUploadUtil;
+import project.spring.guteam.fileutil.GameImageUploadUtil;
 import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
@@ -76,7 +76,8 @@ public class GameController {
 			try {
 				logger.info(file.getOriginalFilename());
 				vo.setGameImageName(
-						FileUploadUtil.saveUploadedFile(uploadPath, file.getOriginalFilename(), file.getBytes()));
+						GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1),
+								file.getBytes()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -134,7 +135,8 @@ public class GameController {
 			try {
 				logger.info(file.getOriginalFilename());
 				vo.setGameImageName(
-						FileUploadUtil.saveUploadedFile(uploadPath, file.getOriginalFilename(), file.getBytes()));
+						GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1),
+								file.getBytes()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -202,9 +204,10 @@ public class GameController {
 		logger.info("uploadAgaxPOST() 호출");
 		// 파일 하나만 저장
 		String result = ""; // result : 파일 경로 및 썸네일 이미지 이름
+		
 		for (int i = 0; i < files.length; i++) {
 			try {
-				result = FileUploadUtil.saveUploadedFile(uploadPath, files[i].getOriginalFilename(),
+				result = GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+files[i].getOriginalFilename().substring(files[i].getOriginalFilename().lastIndexOf(".")+1),
 						files[i].getBytes());
 				result = URLEncoder.encode(result, "utf-8");
 			} catch (IOException e) {

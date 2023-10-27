@@ -16,4 +16,5 @@ public interface GameService {
 	Map<String, Object> read(int price, PageCriteria criteria);
 	Map<String, Object> read(String keyword, PageCriteria criteria);
 	int getTotalCount(String keyword);
+	int getSeqNo();
 }
