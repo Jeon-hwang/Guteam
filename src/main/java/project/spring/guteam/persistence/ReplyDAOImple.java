@@ -48,4 +48,10 @@ public class ReplyDAOImple implements ReplyDAO {
 		return sqlSession.delete(NAMESPACE+".delete",replyId);
 	}
 
+	@Override
+	public List<ReplyVO> select(String memberId) {
+		logger.info("reply select by memberId 실행");
+		return sqlSession.selectList(NAMESPACE+".select_all_by_member_id",memberId);
+	}
+
 }

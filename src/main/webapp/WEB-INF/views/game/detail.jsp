@@ -56,7 +56,8 @@
 <div class="wish_list_btn_area">
 	<button  class="btn btn-light" id="addWishList">위시리스트에 추가</button>
 	<button  class="btn btn-light" id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
-	<a href="../purchased/purchaseWindow?gameId=${vo.gameId }&memberId=${principal.username }">구매</a>
+	<p id="alreadyOwnGame" style="display : none">이미 보유한 게임입니다.</p> 
+	<a href="../purchased/purchaseWindow?gameId=${vo.gameId }&memberId=${principal.username }" id="buyOwnBtn">구매</a>
 </div>
 </sec:authorize>
 </div>
@@ -92,27 +93,38 @@
 					console.log(result);
 					if(result==1){
 						alert('위시리스트 추가 성공');
-						removeWishListOn();
+						checkMyGame();
 					}
 				}
 			});// end ajax
 		}); // end add_wish_list.click
-		removeWishListOn();
-		function removeWishListOn(){
-			
-			var url = '../wishList/find/'+memberId+'?gameId='+gameId;
+		checkMyGame();
+		function checkMyGame(){
+			var firstUrl = "../purchased/find/"+memberId+'?gameId='+gameId;
+			var secondUrl = '../wishList/find/'+memberId+'?gameId='+gameId;
 			$.getJSON(
-					url,
+					firstUrl,
 					function(data){
 						console.log(data);
-						if(data != null){
+						if(data == null){
+					
+						 }else{
+						$('#alreadyOwnGame').css("display","inline");
+						$('#addWishList').css("display","none");
+						$('#buyOwnBtn').css("display","none");
+					 }
+			});//end firstJson 
+			
+			$.getJSON(
+					secondUrl,
+					function(gameData){
+						console.log(gameData);
+						if(gameData != null){
 							$('#addWishList').css("display","none");
 							$('#removeWishList').css("display","inline");
 						}
-					});//end JSON
-					
+			});//end secondJson					
 		}//end removeWishListOn()
-		
 		$('#removeWishList').click(function(){
 			
 			$.ajax({

@@ -50,11 +50,33 @@ padding:20px 80px;
 			<input type="hidden" name="memberId" id="memberId" value="${vo.memberId }">
 			<input type="submit" value="회원 탈퇴">	
 		</form>
+		<hr>
+		<div id="commentsArea">
+			<button id="showMyComments">내가 쓴 댓글 보기</button>
+			<div id="myComments">
+			<ul id="myCommentsList"></ul></div>
+		</div>
 	</div>
 <input type="hidden" id="alert" value="${alert }">
 	
 <script type="text/javascript">
 	$(document).ready(function(){
+		function dateFormat(date) {
+	        var month = date.getMonth() + 1;
+	        var day = date.getDate();
+	        var hour = date.getHours();
+	        var minute = date.getMinutes();	
+	        var second = date.getSeconds();
+
+	        month = month >= 10 ? month : '0' + month;
+	        day = day >= 10 ? day : '0' + day;
+	        hour = hour >= 10 ? hour : '0' + hour;
+	        minute = minute >= 10 ? minute : '0' + minute;
+	        second = second >= 10 ? second : '0' + second;
+
+	        return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+		}
+		
 		var result = $('#alert').val();
 			if(result == 'success'){
 				alert('회원정보가 수정되었습니다!');
@@ -62,6 +84,36 @@ padding:20px 80px;
 			else if(result == 'fail'){
 				alert('요청에 실패하였습니다.');
 			}
+			
+			$('#showMyComments').click(function(){
+				console.log("클릭확인");
+				
+				var memberId = $('#memberId').val();
+				var url = '../boardComment/comments/'+memberId;
+				var list = '';
+				$.getJSON(
+					url,
+					function(data){
+						data.sort((a,b) => b.createdDate - a.createdDate);
+						
+						console.log(data);
+					
+						$(data).each(function(){
+						var createdDate = new Date(this.createdDate);
+						list += '<li class="comment_reply_item">'
+							 +  '<span>'+this.nickname+'</span>'
+							 +  '<span><a href="detail?gameBoardId='+this.boradId+'">'+this.content+'</a></span>'
+							 +	'<span>'+dateFormat(createdDate)+'</span>'
+							 +  '</li>';
+						});
+						$('#myCommentsList').html(list);
+					}
+					
+				);//end getJson
+				
+				
+				
+			});//end showMyComments
 	});
 </script>
 </body>

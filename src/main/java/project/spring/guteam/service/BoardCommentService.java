@@ -2,6 +2,7 @@ package project.spring.guteam.service;
 
 import java.util.List;
 
+import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.pageutil.PageCriteria;
 
@@ -13,4 +14,5 @@ public interface BoardCommentService {
 	int getTotalCount(int boardId);
 	int getBoardId(int commentId);
 	int updateReplyCnt(int commentId, int amount);
+	public List<BoardAndReplyVO> getAllCommentsAndReplies(String memberId);
 }

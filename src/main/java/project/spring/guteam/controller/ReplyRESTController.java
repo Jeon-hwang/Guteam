@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +31,6 @@ public class ReplyRESTController {
 	public ResponseEntity<Integer> createReply(@RequestBody ReplyVO vo){
 		logger.info("createReply 호출");
 		int result = 0;
-		
 		result = replyService.create(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}

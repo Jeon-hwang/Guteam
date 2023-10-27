@@ -4,13 +4,83 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <meta charset="UTF-8">
+<style type="text/css">
+	body{
+		width : 1000px;
+		margin : auto;
+	}
+	.game_item{
+		display : flex;
+		justify-content: space-between;
+	}
+</style>
 <title>나의 구매내역</title>
 </head>
 <body>
+	<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 	<sec:authentication property="principal" var="principal"/>
+	
+	<a href="../"><h1>Guteam</h1></a>
 	<h2>나의 게임 목록</h2>
+	<input type="hidden" id="memberId" value="${principal.username }">
+	<div id="myGameArea">
+		<ul id="games"></ul>
+	</div>
+	
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var memberId = $('#memberId').val();
+		getGameList();
+		function dateFormat(date) {
+	        var month = date.getMonth() + 1;
+	        var day = date.getDate();
+	        var hour = date.getHours();
+	        var minute = date.getMinutes();	
+	        var second = date.getSeconds();
+
+	        month = month >= 10 ? month : '0' + month;
+	        day = day >= 10 ? day : '0' + day;
+	        hour = hour >= 10 ? hour : '0' + hour;
+	        minute = minute >= 10 ? minute : '0' + minute;
+	        second = second >= 10 ? second : '0' + second;
+
+	        return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+		}
+		function getGameList(){
+			var url = "all/"+memberId;
+		
+			$.getJSON(
+				url,
+				function(data){
+				console.log(data);
+				var list='';
+				var principalMemberId = $('#memberId').text();
+			
+				$(data.gameList).each(function(){
+					var i = 0;
+					var purchaseDate = new Date(data.purchasedList[i].purchaseDate);
+					list += '<li class="game_item">'
+						 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
+						 + 'src="../game/display?fileName='+this.gameImageName+'">'
+						 + '<a href=../game/detail?gameId='+this.gameId+'><span id="gameName">'+this.gameName+'</span></a>'
+						 + '<span class="genre"'+this.genre+'</span>'
+						 + '<div>'
+						 + '<button class="executionGame">다운로드</button><br>'
+						 + '<button class="executionGame" style="display : none">실행</button><br>'
+						 + '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span>'
+						 + '</div>'
+						 + '</li><hr>';
+						 i++;
+				}); // end data.each
+					$('#games').html(list);
+				}
+			); // end getJSON*/
+		}// end getGameList()
+	});// end document
+	</script>
 </body>
 </html>

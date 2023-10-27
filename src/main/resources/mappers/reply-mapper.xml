@@ -27,4 +27,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		set ${replyContent} = '삭제된 댓글입니다.'
 		where ${replyId} = #{replyId}
 	</update>
+	
+	<select id="select_all_by_member_id" resultType="ReplyVO">
+		select * from ${reply}
+		where ${memberId} = #{memberId}
+		order by ${replyId}
+	</select>
 </mapper>

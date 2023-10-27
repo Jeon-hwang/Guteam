@@ -14,4 +14,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where ${memberId} = #{memberId}
 	</select>
 	
+	<select id="find" resultType="PurchasedVO">
+		select * from ${purchased}
+		where ${memberId} = #{memberId} and ${gameId} = #{gameId}
+	</select>
+	
 </mapper>
