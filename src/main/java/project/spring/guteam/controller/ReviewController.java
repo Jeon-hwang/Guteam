@@ -103,12 +103,12 @@ public class ReviewController {
 	
 	@GetMapping("/detail")
 	public void detail(Model model, int reviewId, int page, Principal principal) {
-		Map<String, Object> args = reviewService.read(reviewId);
+		Map<String, Object> args = reviewService.read(reviewId, principal.getName());
 		ReviewVO reviewVO = (ReviewVO) args.get("reviewVO");
 		GameVO gameVO = (GameVO) args.get("gameVO");
 		if(principal!=null) {
 		String memberId = principal.getName();
-		ThumbVO thumbVO = thumbService.read(new ThumbVO(reviewId, memberId, 0));
+		ThumbVO thumbVO = (ThumbVO) args.get("thumbVO");
 		if(thumbVO!=null) {
 			logger.info(thumbVO.toString());
 		}
@@ -121,7 +121,7 @@ public class ReviewController {
 	
 	@GetMapping("/update")
 	public void updateGET(Model model, int reviewId, int page) {
-		ReviewVO reviewVO = reviewService.read(reviewId);
+		ReviewVO reviewVO = (ReviewVO) reviewService.read(reviewId, "").get("reviewVO");
 		model.addAttribute("reviewVO",reviewVO);
 		model.addAttribute("page",page);
 	}

@@ -8,7 +8,7 @@ import project.spring.guteam.pageutil.PageCriteria;
 public interface ReviewService {
 	int create(ReviewVO vo);
 	Map<String, Object> read(int gameId, PageCriteria criteria);
-	Map<String, Object> read(int reviewId);
+	Map<String, Object> read(int reviewId, String memberId);
 	int update(ReviewVO vo);
 	int delete(int reviewId);
 	int update(int riviewId, int amount);

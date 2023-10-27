@@ -64,6 +64,9 @@ public class ReviewServiceImple implements ReviewService {
 		ReviewVO reviewVO = reviewDAO.select(reviewId);
 		GameVO gameVO = gameDAO.select(reviewVO.getGameId());
 		ThumbVO thumbVO = thumbDAO.select(new ThumbVO(reviewId, memberId, 0));
+		args.put("reviewVO", reviewVO);
+		args.put("gameVO", gameVO);
+		args.put("thumbVO",thumbVO);
 		return args;
 	}
 
