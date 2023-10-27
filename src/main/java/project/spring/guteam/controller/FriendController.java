@@ -28,7 +28,6 @@ import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.service.FriendRequestService;
 import project.spring.guteam.service.FriendService;
-import project.spring.guteam.service.FriendServiceImple;
 import project.spring.guteam.service.MemberService;
 
 @Controller // @Component
@@ -123,10 +122,6 @@ public class FriendController {
     		
     	}
     }
-    
-    
-    
-    
     
     // 미리보기
  	@GetMapping("/display")

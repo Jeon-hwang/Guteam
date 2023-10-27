@@ -9,5 +9,5 @@ public interface ReplyDAO {
 	List<ReplyVO> select(int commentId);
 	int update(String replyComment, int replyId);
 	int delete(int replyId);
-	
+	List<ReplyVO> select(String memberId);
 }

@@ -48,4 +48,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	set ${replyCnt} = ${replyCnt}+#{amount}
 	 	where ${commentId}= #{commentId}
 	 </update>
+	 
+	 <select id="select_all_by_member_id" resultType="BoardCommentVO">
+	 	select * from ${board_comment}
+	 	where ${memberId} = #{memberId}
+	 </select>
 </mapper>

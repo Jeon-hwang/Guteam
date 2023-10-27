@@ -59,7 +59,7 @@ public class GameBoardController {
 			model.addAttribute("keyword", keyword);
 			if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
 				model.addAttribute("keywordCriteria", keywordCriteria);
-			}
+			}                                                                                                                                                                                                     
 		}
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker",pageMaker);

@@ -79,6 +79,12 @@ public class BoardCommentDAOImple implements BoardCommentDAO {
 		args.put("amount", amount);
 		return sqlSession.update(NAMESPACE+".reply_cnt_update", args);
 	}
+
+	@Override
+	public List<BoardCommentVO> select(String memberId) {
+		logger.info("select by memberId 실행");
+		return sqlSession.selectList(NAMESPACE+".select_all_by_member_id",memberId);
+	}
 	
 	
 

@@ -67,19 +67,16 @@
 				gameIdArr.each(function(){
 					gameIds.push($(this).val());
 				});
-				console.log(gameIds);
-					var obj = {
-						'memberId' : memberId,
-						'gameIds' : '{'+gameIds+'}'
-					};
-					console.log(obj);
+		
+				for(var i=0;i<gameIds.length;i++){
+					var gameId = gameIds[i];
 					$.ajax({
 						type : 'POST',
-						url : 'buy',
+						url : 'buy/'+memberId,
 						headers : {
 							'Content-Type' : 'application/json'
 						},
-						data : JSON.stringify(obj),
+						data : gameId,
 						beforeSend : function(xhr) {
 					        xhr.setRequestHeader(header, token);
 					    },
@@ -91,7 +88,7 @@
 						}
 						
 					});//end ajax
-				
+				}
 			});// end buyNow.click
 		});//end document
 	</script>

@@ -58,17 +58,17 @@
 							$(data).each(function(){
 								console.log(this);
 								list +=	'<li class="wish_list_item">'
-									 + '<input type="hidden" id="gameId" value='+this.gameId+'>'
-									 + '<input type="checkbox" id="listCheck">'
+									 + '<input type="hidden" class="gameId" value='+this.gameId+'>'
+									 + '<input type="checkbox" class="listCheck">'
 									 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
 									 + 'src="../game/display?fileName='+this.gameImageName+'">'
 									 + '<a href=../game/detail?gameId='+this.gameId+'><span id="gameName">'+this.gameName+'</span></a>'
-									 + '<span id="genre">'+this.genre+'</span>'
-									 + '<span id="showPrice">￦'+this.price+'</span>'
-									 + '<input type="hidden" id="price" value='+this.price+'>'
+									 + '<span class="genre">'+this.genre+'</span>'
+									 + '<span class="showPrice">￦'+this.price+'</span>'
+									 + '<input type="hidden" class="price" value='+this.price+'>'
 									 + '<div class="buy_or_remove">'
-									 + '<button id="buyBtn">구매</button>'
-									 + '<button id="removeWishList">X</button></div>'
+									 + '<button class="oneBuyBtn">구매</button>'
+									 + '<button class="removeWishList">X</button></div>'
 									 + '</li>'
 									 + '<hr>';
 							});//end data.each
@@ -77,8 +77,8 @@
 							
 						});// end getJSON
 			}//end showWishList()
-			$('.wish_list').on('click','.wish_list_item .buy_or_remove #removeWishList',function(){
-				var gameId = $(this).parent().prevAll('#gameId').val();
+			$('.wish_list').on('click','.wish_list_item .buy_or_remove .removeWishList',function(){
+				var gameId = $(this).parent().prevAll('.gameId').val();
 				var memberId = $('#memberId').val();
 				var token = $("meta[name='_csrf']").attr("content");
 				var header = $("meta[name='_csrf_header']").attr("content");
@@ -102,13 +102,13 @@
 				});// end ajax
 			});//end removeWishList.click
 			
-			$('.wish_list').on('click','.wish_list_item #listCheck',function(){
-				var price = parseInt($(this).nextAll('#price').val());
+			$('.wish_list').on('click','.wish_list_item .listCheck',function(){
+				var price = parseInt($(this).nextAll('.price').val());
 				var totalPrice = parseInt($('#totalPrice').text());
-				var gameId = $(this).prevAll('#gameId').val();
+				var gameId = $(this).prevAll('.gameId').val();
 				if($(this).is(':checked')){
 					//console.log("체크 수행 확인!");
-					//console.log("가격? "+price);
+					console.log("가격? "+price);
 					totalPrice += price;
 					checkGameId.push(gameId);
 					//console.log(checkGameId);

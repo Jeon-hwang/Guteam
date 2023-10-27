@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
@@ -82,5 +83,11 @@ public class BoardCommentRESTContorller {
 		logger.info("comment delete 호출");
 		int result = service.delete(commentId, gameBoardId);
 		return new ResponseEntity<Integer>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{memberId}")
+	public ResponseEntity<List<BoardAndReplyVO>> readAllComment(@PathVariable("memberId") String memberId){
+		List<BoardAndReplyVO> list = service.getAllCommentsAndReplies(memberId);
+		return new ResponseEntity<List<BoardAndReplyVO>>(list,HttpStatus.OK);
 	}
 }

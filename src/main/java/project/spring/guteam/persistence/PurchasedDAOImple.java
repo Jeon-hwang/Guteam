@@ -1,6 +1,8 @@
 package project.spring.guteam.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -28,6 +30,16 @@ public class PurchasedDAOImple implements PurchasedDAO {
 	public List<PurchasedVO> select(String memberId) { // 구매 내역에 보여줄 리스트
 		logger.info("select 호출");
 		return sqlSession.selectList(NAMESPACE+".select",memberId);
+	}
+	
+	@Override
+	public PurchasedVO find(String memberId, int gameId) {
+		
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("memberId", memberId);
+		args.put("gameId", gameId);
+		
+		return sqlSession.selectOne(NAMESPACE+".find",args);
 	}
 
 }

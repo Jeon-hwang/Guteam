@@ -40,6 +40,7 @@
 </div>
 
 <input type="hidden" id="updateResult" value="${update_result }">
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
