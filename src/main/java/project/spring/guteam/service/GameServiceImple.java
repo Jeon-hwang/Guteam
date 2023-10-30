@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.GameDAO;
-import project.spring.guteam.persistence.MemberDAO;
 import project.spring.guteam.persistence.ReviewDAO;
 
 @Service

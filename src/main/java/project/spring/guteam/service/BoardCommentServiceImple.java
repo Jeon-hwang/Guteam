@@ -2,7 +2,9 @@ package project.spring.guteam.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.domain.ReplyVO;
 import project.spring.guteam.pageutil.PageCriteria;
+import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.persistence.BoardCommentDAO;
 import project.spring.guteam.persistence.GameBoardDAO;
 import project.spring.guteam.persistence.MemberDAO;
@@ -45,10 +48,26 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		return 1;
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
-	public List<BoardCommentVO> read(int gameBoardId,PageCriteria criteria) {
+	public Map<String, Object> read(int gameBoardId,PageCriteria criteria) {
 		logger.info("Comment read() 실행");
-		return boardCommentDAO.select(gameBoardId,criteria);
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(criteria);
+		pageMaker.setTotalCount(boardCommentDAO.getTotalCount(gameBoardId));
+		pageMaker.setPageData();
+		List<BoardCommentVO> list = boardCommentDAO.select(gameBoardId,criteria);
+		List<String> nicknameList = new ArrayList<String>();
+		for(int i =0; i<  list.size();i++) {
+			String memberId = list.get(i).getMemberId();
+			String nickname = memberDAO.select(memberId).getNickname();
+			nicknameList.add(nickname);
+		}
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("list", list);
+		args.put("nicknameList", nicknameList);
+		args.put("pageMaker", pageMaker);
+		return args;
 	}
 
 	@Override
@@ -63,11 +82,6 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		return boardCommentDAO.delete(commentId);
 	}
 
-	@Override
-	public int getTotalCount(int boardId) {
-		logger.info("service getTotalCount 실행");
-		return boardCommentDAO.getTotalCount(boardId);
-	}
 
 	@Override
 	public int getBoardId(int commentId) {
@@ -89,9 +103,10 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		for(BoardCommentVO vo : commentList) {
 			String nickname = memberDAO.select(memberId).getNickname();
 			int boardId = vo.getGameBoardId();
+			int gameId = gameBoardDAO.selectByBoardId(boardId).getGameId();
 			String content = vo.getCommentContent();
 			Date createdDate = vo.getCommentDateCreated();
-			BoardAndReplyVO bnlVO = new BoardAndReplyVO(nickname, boardId, content, createdDate);
+			BoardAndReplyVO bnlVO = new BoardAndReplyVO(nickname, boardId, gameId, content, createdDate);
 			bnlList.add(bnlVO);
 		}
 		
@@ -99,9 +114,10 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		for(ReplyVO vo : replyList) {
 			String nickname = memberDAO.select(memberId).getNickname();
 			int boardId = boardCommentDAO.getBoardId(vo.getCommentId());
+			int gameId = gameBoardDAO.selectByBoardId(boardId).getGameId();
 			String content = vo.getReplyContent();
 			Date createdDate = vo.getReplyDateCreated();
-			BoardAndReplyVO bnlVO = new BoardAndReplyVO(nickname, boardId, content, createdDate);
+			BoardAndReplyVO bnlVO = new BoardAndReplyVO(nickname, boardId, gameId, content, createdDate);
 			bnlList.add(bnlVO);
 		}
 		

@@ -12,7 +12,10 @@
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
+	<sec:authorize access="isAuthenticated()">
 	<sec:authentication property="principal" var="principal"/>
+	<input type="hidden" id="memberId" value=${principal.username }>
+	</sec:authorize>
 	<h1>댓글 테스트</h1>
 	
 	<!-- 대충 아래에 댓글 생성 -->
@@ -23,7 +26,6 @@
 		<input type="hidden" name="page" id="page" value="${page }">
 		<input type="hidden" name="gameBoardId" id="gameBoardId" value="${vo.gameBoardId }">
 		<sec:authorize access="isAuthenticated()">
-		닉네임 : <span id=memberId>${principal.username }</span> &nbsp;&nbsp;&nbsp;
 		내용 : <input type="text" id="commentContent">
 		<button id="commentAddBtn">작성</button>
 		</sec:authorize>
@@ -40,7 +42,7 @@
 		$(document).ready(function(){
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			var principalMemberId = $('#memberId').text();
+			var principalMemberId = $('#memberId').val();
 			
 			function dateFormat(date) {
 		        var month = date.getMonth() + 1;
@@ -57,6 +59,23 @@
 
 		        return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 		}
+			
+			$("#commentContent").keydown(function(keyNum){
+				//현재의 키보드의 입력값을 keyNum으로 받음
+				if(keyNum.keyCode == 13){ 
+
+					$('#commentAddBtn').click();	
+				}
+			});// end commentContent.keydown
+			
+			$('#comments').on('keydown','.comment_item .replyContent',function(keyNum){
+				if(keyNum.keyCode == 13){ 
+					
+					$(this).next().click();	
+				}
+			});// end replyContent.keydown
+			
+			
 			
 			$('#commentAddBtn').click(function(){
 				var gameBoardId = $('#gameBoardId').val();
@@ -107,9 +126,12 @@
 					var memberId = $('#memberId').val();
 					var list = '';
 					var commentRow = 1;
+					var varStatus = 0;
 					$(data.list).each(function(){
 						console.log(this);
-						
+						console.log(data.nicknameList);
+						var nickname = data.nicknameList[varStatus];
+						varStatus++;
 						var commentDateCreated = new Date(this.commentDateCreated);
 						
 						if(this.commentContent=="삭제된 댓글입니다."){
@@ -118,7 +140,7 @@
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">'
-								+ '<p>삭제된 댓글입니다.</p>'
+								+ '<p>삭제된 댓글입니다.('+this.replyCnt+')</p>'
 								+ '<div class="reply_btn_area">'
 								+ '<button class="reply_view_btn" style="display:block">답글보기</button>'
 								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
@@ -129,8 +151,8 @@
 								+ '<pre>'
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
-								+ '<span>'+this.memberId+'</span> :&nbsp&nbsp'
-								+ '<span id="commentContentView">'+this.commentContent+'</span>&nbsp&nbsp&nbsp&nbsp'
+								+ '<span>'+nickname+'</span> :&nbsp&nbsp'
+								+ '<span id="commentContentView">'+this.commentContent+'('+this.replyCnt+')</span>&nbsp&nbsp&nbsp&nbsp'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">&nbsp&nbsp&nbsp&nbsp'
 								+ '<span>'+dateFormat(commentDateCreated)+'</span>&nbsp&nbsp'
 								if(principalMemberId==this.memberId){
@@ -254,13 +276,15 @@
 						url,
 						function(data){
 						console.log(data);
-						
+						var nick
 						var list = '';
 						var repliesArea = '.replies_area'+commentRow;
-						
-						$(data).each(function(){
+						var varStatus = 0; 
+						$(data.list).each(function(){
 							console.log(this);
-							
+		
+							var nickname = data.nicknameList[varStatus];
+							varStatus++;
 							var replyDateCreated = new Date(this.replyDateCreated);
 							if(this.replyContent=="삭제된 댓글입니다."){
 							list += '<li class="reply_item">'
@@ -271,14 +295,16 @@
 							}else {
 							list += '<li class="reply_item">'
 							+ '<input type="hidden" id="replyId" value="'+this.replyId+'">'
-							+ this.memberId + ':&nbsp&nbsp'	
-							+ '<input type="hidden" id="replyContent" value="'+this.replyContent+'">&nbsp&nbsp'
+							+ nickname + ':&nbsp&nbsp'	
+							+ '<input type="hidden" class="replyContent" value="'+this.replyContent+'">&nbsp&nbsp'
 							+ '<span id="replyView">'+this.replyContent + '</span>&nbsp&nbsp'
 							+ dateFormat(replyDateCreated) + '&nbsp&nbsp'
-							+ '<button class="update_reply" >수정</button>'
+							if(principalMemberId==this.memberId){
+							list += '<button class="update_reply" >수정</button>'
 							+ '<button class="update_reply_check" style="display : none" >수정확인</button>'
 							+ '<button class="delete_reply" >삭제</button>'
-							+ '</li>';
+							}
+							list += '</li>';
 							}
 						});//end each
 							if(commentContent == '삭제된 댓글입니다.'){
@@ -288,8 +314,7 @@
 								const encoded = encodeURI(uri);
 								list += '<a href="../member/login?targetURL=">로그인을 하셔야 답글을 달 수 있습니다</a>';
 							}else{
-								list += '아이디 : <span id="replyMemberId">'+principalMemberId+'</span>&nbsp&nbsp&nbsp&nbsp'
-								+ '내용 : <input type="text" name="replyContent" id="replyContent">'
+								list += '내용 : <input type="text" name="replyContent" class="replyContent">' 
 								+ '<button class="reply_add_btn" >작성</button>';
 							}
 					
@@ -311,7 +336,7 @@
 				
 				var commentId = $(this).parent().prevAll('#commentId').val();	
 			
-				var replyContent = $(this).prevAll('#replyContent').val();
+				var replyContent = $(this).prevAll('.replyContent').val();
 				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
 				//var replyViewBtnClick = $(this).parent().parent().parent().nextAll(".reply_btn_area").children(".reply_view_btn").prop('tagName');
 				var replyViewBtnClick = $(this).parent().prevAll(".reply_btn_area").children(".reply_view_btn");
@@ -356,7 +381,7 @@
 				$(this).next().css("display","inline");
 				$(this).css("display","none");
 				}
-				$(this).prevAll("#replyContent").prop("type","text");
+				$(this).prevAll(".replyContent").prop("type","text");
 				$(this).prevAll("#replyView").css("display","none");
 			});
 			$('#comments').on('click','.comment_item .reply_item .update_reply_check',function(){
@@ -364,7 +389,7 @@
 				//console.log(repliesAreaNum);
 				var replyViewBtnClick = $(this).parent().parent().prevAll(".reply_btn_area").children(".reply_view_btn");
 				var replyId = $(this).prevAll('#replyId').val();
-				var replyContent = $(this).prevAll('#replyContent').val();
+				var replyContent = $(this).prevAll('.replyContent').val();
 				
 				console.log('대댓글Id 및 내용 : '+replyId+','+replyContent);
 				

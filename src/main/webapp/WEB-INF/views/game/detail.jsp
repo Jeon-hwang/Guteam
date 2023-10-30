@@ -57,7 +57,11 @@
 	<button  class="btn btn-light" id="addWishList">위시리스트에 추가</button>
 	<button  class="btn btn-light" id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
 	<p id="alreadyOwnGame" style="display : none">이미 보유한 게임입니다.</p> 
-	<a href="../purchased/purchaseWindow?gameId=${vo.gameId }&memberId=${principal.username }" id="buyOwnBtn">구매</a>
+	<form id="buyown" action="../purchased/purchaseWindow" method="get">
+		<sec:csrfInput/>
+		<input type="hidden" id="gameIdInput" name="gameIds" value="${vo.gameId }">
+		<input type="submit" id="submit" value="게임 구매">
+	</form>
 </div>
 </sec:authorize>
 </div>
@@ -108,10 +112,10 @@
 						console.log(data);
 						if(data == null){
 					
-						 }else{
+						 }else{ // 게임을 보유하고 있을경우
 						$('#alreadyOwnGame').css("display","inline");
 						$('#addWishList').css("display","none");
-						$('#buyOwnBtn').css("display","none");
+						$('#buyown').css("display","none");
 					 }
 			});//end firstJson 
 			

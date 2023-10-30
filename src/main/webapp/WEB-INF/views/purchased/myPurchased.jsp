@@ -59,10 +59,11 @@
 				console.log(data);
 				var list='';
 				var principalMemberId = $('#memberId').text();
-			
+				var i = 0;
 				$(data.gameList).each(function(){
-					var i = 0;
+				
 					var purchaseDate = new Date(data.purchasedList[i].purchaseDate);
+					i++;
 					list += '<li class="game_item">'
 						 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
 						 + 'src="../game/display?fileName='+this.gameImageName+'">'
@@ -74,7 +75,7 @@
 						 + '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span>'
 						 + '</div>'
 						 + '</li><hr>';
-						 i++;
+						 
 				}); // end data.each
 					$('#games').html(list);
 				}
