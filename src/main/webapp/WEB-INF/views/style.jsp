@@ -61,7 +61,33 @@ margin-bottom: 10px;
 	color:white;
 }
 .btnOrderGroup{
-	margin-left:40px;
+	margin-left:10px;
 	text-align:left;
+	margin-bottom:10px;
+}
+.btnOrderGroup input{
+	color: #6c757d;
+    border-color: #6c757d;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    background-color: white;
+    border-width: var(--bs-border-width);
+    border-color: transparent;
+    border-radius: var(--bs-border-radius);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15),0 1px 1px rgba(0, 0, 0, 0.075);
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btnOrderGroup input:hover{
+	color: #fff;
+	background-color: #6c757d;
+	border-color: #6c757d;
 }
 </style>

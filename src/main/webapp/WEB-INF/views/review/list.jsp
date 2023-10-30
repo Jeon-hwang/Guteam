@@ -28,9 +28,10 @@
 <input class="form-control" type="submit" value="검색">
 </div>
 </form>
-
+<div class="btnOrderGroup">
 <input type="hidden" class="orderByItem" name="orderBy" value="thumbUpCnt">
 <input type="submit" class="orderBy" value="추천수↑">
+</div>
 <table class="table table-secondary table-hover">
 	<thead>
 		<tr>
