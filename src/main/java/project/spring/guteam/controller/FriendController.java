@@ -28,7 +28,6 @@ import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.service.FriendRequestService;
 import project.spring.guteam.service.FriendService;
-import project.spring.guteam.service.FriendServiceImple;
 import project.spring.guteam.service.MemberService;
 
 @Controller // @Component
@@ -66,8 +65,11 @@ public class FriendController {
     	logger.info("(friend) listGET() 호출");
     	List<String> sendMemberList;
     	List<String> receiveMemberList;
+    	List<String> myFriendList;
+    	
     	List<MemberVO> sendList = new ArrayList<MemberVO>();
     	List<MemberVO> receiveList = new ArrayList<MemberVO>();
+    	List<MemberVO> friendList = new ArrayList<MemberVO>();
     	
     	sendMemberList = friendRequestService.readTo(principal.getName());
     	for(int i=0; i<sendMemberList.size(); i++) {
@@ -80,37 +82,64 @@ public class FriendController {
     		MemberVO vo = memberService.read(receiveMemberList.get(i));
     		receiveList.add(vo);
     	}
+    	
+    	myFriendList = friendService.read(principal.getName());
+    	for(int i=0; i<myFriendList.size(); i++) {
+    		MemberVO vo = memberService.read(myFriendList.get(i));
+    		friendList.add(vo);
+    	}
+    	
     	model.addAttribute("vo", memberService.read(principal.getName()));
     	model.addAttribute("sendList", sendList);
     	model.addAttribute("receiveList", receiveList);
+    	model.addAttribute("friendList", friendList);
     }
     
     // 친구 추가 요청
     @PostMapping("/addFriend")
-    public String addFriend (FriendRequestVO vo, RedirectAttributes reAttr) {
+    public String addFriend (FriendRequestVO vo, RedirectAttributes reAttr, Principal principal) {
     	logger.info("addFriend() vo ? " + vo.toString());
-    	int result = memberService.read(vo.getReceiveMemberId(), "check");
-    	logger.info("멤버 중 요청 아이디 있나? 1이면 있음 = " + result);
+    	// 이미 친구인지?
+    	int result = friendService.read(principal.getName(), vo.getReceiveMemberId());
     	
- 		if(result == 1) {
- 			result = friendRequestService.read(vo.getReceiveMemberId());
- 			logger.info("친추 중복인가? 1이면 중복 = " + result);
- 			if(result != 1) {
- 				result = friendRequestService.create(vo);
- 	 			logger.info("친구 요청 성공");
- 	 			reAttr.addFlashAttribute("alert", "success");
- 	 			return "redirect:/friend/list";
- 	 		} else {
- 	 			logger.info("친구 신청 중복? y");
- 	 			reAttr.addFlashAttribute("alert", "dupl");
- 	 			return "redirect:/friend/list";
- 	 		}
- 		} else {
- 			logger.info("없는 아이디 입니다.");
-	 		reAttr.addFlashAttribute("alert", "fail");
-	 		return "redirect:/friend/list";
- 			
- 		}
+    	if(result == 1) { // 이미 친구
+    		reAttr.addFlashAttribute("alert", "friend");
+	 			return "redirect:/friend/list";
+    	}else {
+    		// 친추할 아이디가 이미 나한테 요청
+    		// ㄴ 조회시에는 friendRequestService.read(vo.getSendMemberId(), principal.getName())
+    		//--> 초대시 바로 친구
+    		result = friendRequestService.read(vo.getSendMemberId());
+    		logger.info("이미 요청 받아 친추시 바로 친구됨");
+    		if(result == 1) {// id로 부터 받은 요청 조회
+    			FriendVO fvo = new FriendVO(vo.getSendMemberId(), vo.getReceiveMemberId());
+    			reAttr.addFlashAttribute("alert", "alreadyFrd");
+        		return acceptPOST(fvo);
+    		}else {
+    			result = memberService.read(vo.getReceiveMemberId(), "check");
+    			logger.info("멤버 중 아이디 있나? 1이면 있음 = " + result);
+    			
+    			if(result == 1) {
+    				result = friendRequestService.read(vo.getReceiveMemberId());
+    				logger.info("이미 친추 요청 상태? 1이면 이미 신청함 = " + result);
+    				if(result != 1) {
+    					result = friendRequestService.create(vo);
+    					logger.info("친구 요청 성공");
+    					reAttr.addFlashAttribute("alert", "success");
+    					return "redirect:/friend/list";
+    				} else {
+    					// 취소로 바꿔 줄 수 있음
+    					logger.info("친구 신청 중복? y");
+    					reAttr.addFlashAttribute("alert", "dupl");
+    					return "redirect:/friend/list";
+    				}
+    			} else {
+    				logger.info("없는 아이디 입니다.");
+    				reAttr.addFlashAttribute("alert", "fail");
+    				return "redirect:/friend/list";
+    			}
+    		}
+    	}
  	} //end addFirend()
     
 	
@@ -121,22 +150,29 @@ public class FriendController {
     	int result = friendService.create(vo);
     	logger.info("친구 수락? " + result);
     	if(result == 1) {
-    		// 수락 후 친구 요청 테이블 삭제
-//    		friendRequestService.delete(vo.getMemberId())
     		return "redirect:/friend/list";
     	} else {
     		return "redirect:/friend/list";
     	}
     }
     
-//    // 받은 요청 거절
-//    @PostMapping("/reject")
+    // 받은 요청 거절
+    @PostMapping("/reject")
+    public String rejectPOST(FriendVO vo) {
+    	logger.info("친구 요청 거절 vo? " + vo.toString());
+    	int result = friendRequestService.delete(vo.getFriendId(), vo.getMemberId());
+    	if(result == 1) {
+    		return "redirect:/friend/list";
+    	} else {
+    		return "redirect:/friend/list";
+    	}
+    }
     
     
     // 미리보기
  	@GetMapping("/display")
      public ResponseEntity<byte[]> display(String fileName) {
-         logger.info("display() 호출 fileName = " + fileName);
+//         logger.info("display() 호출 fileName = " + fileName);
          
          ResponseEntity<byte[]> entity = null;
          InputStream in = null;
@@ -147,7 +183,7 @@ public class FriendController {
          }
          
          String filepath = uploadPath + fileName;
-         logger.info("filepath 경로 = " + filepath);
+//         logger.info("filepath 경로 = " + filepath);
          
          try {
              in = new FileInputStream(filepath); // InputStream에 넣어서
@@ -155,7 +191,7 @@ public class FriendController {
              // 파일 확장자
              String extension = 
                      filepath.substring(filepath.lastIndexOf(".") + 1);
-             logger.info(extension);
+//             logger.info(extension);
              
              // 응답 헤더(response header)에 Content-type 설정
              HttpHeaders httpHeaders = new HttpHeaders();

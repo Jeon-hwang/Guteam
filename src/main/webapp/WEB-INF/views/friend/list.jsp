@@ -85,29 +85,33 @@ padding:20px 80px;
 </table>
 <hr>
 <h2>친구 목록</h2>
-<%-- <table>
+<table>
 	<tbody>
-		<c:forEach var="vo" items="${friendList }">
+		<c:forEach var="fvo" items="${friendList }">
 			<tr>
-				<td><input type="image" class="profileImg" alt="${vo.memberId }" 
-					src="display?fileName=${vo.memberImageName }" readonly /></td>
-				<td></td>
+				<td><input type="image" class="profileImg" alt="${fvo.memberId }" 
+					src="display?fileName=${fvo.memberImageName }" readonly /></td>
+				<td><input type="text" id="toNickname" value="${fvo.nickname }" style="width:92px;" readonly></td>
 			</tr>
 		</c:forEach>
 	</tbody>
-</table> --%>
+</table>
 <input type="hidden" id="alert" value="${alert }">
 
 <script type="text/javascript">
 	$(document).ready(function(){
 		var result = $('#alert').val();
-			if(result == 'dupl'){
+			if(result == 'friend'){
+				alert('이미 친구인 유저입니다.')
+			}else if(result == 'alreadyFrd'){
+				alert('먼저 친구 요청 받아 친구가 되었습니다.')
+			} else if(result == 'dupl'){
 				alert('이미 친구 요청된 아이디입니다.');
 			} else if(result=='success'){
 				alert('친구요청이 완료되었습니다.');
-			}else if(result == 'fail'){
+			} else if(result == 'fail'){
 				alert('없는 아이디입니다.');
-			}
+			} 
 	});
 </script>
 </body>

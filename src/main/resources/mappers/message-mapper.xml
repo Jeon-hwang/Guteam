@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.spring.guteam.MessageMapper">
+	 <!-- <insert id="insert">
+	 	insert into ${test_board}
+	 	(${boardTitle},${boardContent},${memberId})
+	 	values (#{boardTitle}, #{boardContent},#{memberId})
+	 	 $ : Colum명 
+	 	 # : ? (쿼리문) vo 변수와 정확히 일치해야 한다(방식은 get메서드) 
+	 </insert> -->
+	 <insert id="insert">
+	 insert into ${message}
+	 (${receiveMemberId}, ${sendMemberId}, ${sendMemeberNickname}, ${messageTitle}, ${messageContent})
+	 values (#{receiveMemberId}, #{sendMemberId}, #{sendMemeberNickname}, #{messageTitle}, #{messageContent})
+	 
+	 </insert>
+	 
+	 <select id="select" resultType="MessageVO">
+	 select * from ${message} order by ${receiveMemberId} desc
+	 </select>
+	 
+	 <delete id="delete">
+	 delete from ${message} where ${messageId} = #{messageId}
+	 </delete>
+	 
+</mapper>

@@ -12,10 +12,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 values (#{sendMemberId}, #{receiveMemberId}, sysdate)
 	 </insert>
 	 
-	 <!-- 친구 요청 내역 확인 -->
-	<select id="select_all" resultType="Integer">
+	 <!-- 내가 보낸 친구 요청 내역 확인 -->
+	<select id="select_to_chk" resultType="Integer">
 	 select count(${sendMemberId}) from ${friend_request} where ${receiveMemberId} = #{receiveMemberId} 
 	</select>
+	
+	<!-- 특정 친구에게 받은 요청 내역 확인 -->
+	<select id="select_all" resultType="Integer">
+	 select count(${receiveMemberId}) from ${friend_request} where ${sendMemberId} = #{sendMemberId} 
+	</select>
+	
 	 <!-- 친구 요청 내역 -->
 	 <select id="select_to_request" resultType="String">
 	 select ${receiveMemberId} from ${friend_request} where ${sendMemberId} = #{sendMemberId} 
@@ -28,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 
 	 <!-- 응답시(수락/거절) 해당 row 삭제 -->
 	 <delete id="delete">
-	 delete from ${friend_request} where ${sendMemberId} = #{sendMemberId}
+	 delete from ${friend_request} where ${sendMemberId} = #{sendMemberId} and ${receiveMemberId} = #{receiveMemberId}
 	 </delete>
 	 
 </mapper>

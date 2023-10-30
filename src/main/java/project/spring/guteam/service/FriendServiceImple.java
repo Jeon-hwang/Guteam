@@ -32,24 +32,37 @@ public class FriendServiceImple implements FriendService {
 		FriendVO rvo = new FriendVO(vo.getFriendId(), vo.getMemberId());
 		logger.info("vo 반대로? rvo = " + rvo.toString());
 		if(result == 1) {
-			frdDao.insert(rvo);
-			logger.info("친구 추가 완료");
-			reqDao.delete(vo.getMemberId());
-			// 여기서부터 시작
+			result = frdDao.insert(rvo);
+			logger.info("요청 받은 아이디 : " + vo.getMemberId());
+			reqDao.delete(vo.getFriendId(), vo.getMemberId());
+			// 내가 친추 요청을 했다면 .delete 해야함
+			result = reqDao.select(vo.getFriendId());
+			if(result == 1) {
+				result = reqDao.delete(vo.getMemberId(), vo.getFriendId());				
+				logger.info("내가 한 요청 삭제");
+			}
+			
 		}
-		return 1;
+		return result;
 	}
 
 	@Override
-	public List<FriendVO> read(String memberId) {
+	public List<String> read(String memberId) {
 		logger.info("read() 호출 memId? " + memberId);
 		return frdDao.select(memberId);
 	}
 
 	@Override
+	public int read(String memberId, String friendId) {
+		logger.info("이미 친구인가? " + memberId + " " + friendId);
+		return frdDao.select(memberId, friendId);
+	}
+	
+	@Override
 	public int delete(String friendId) {
 		logger.info("delete() 호출 friendId? " + friendId);
 		return frdDao.delete(friendId);
 	}
+
 
 }

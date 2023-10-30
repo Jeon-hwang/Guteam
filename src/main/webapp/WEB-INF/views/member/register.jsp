@@ -4,6 +4,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Bootstrap css -->
+<!-- Bootstrap css -->
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+   rel="stylesheet"
+   integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+   crossorigin="anonymous" />
+<!-- Bootstrap icons -->
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+   rel="stylesheet" />
+<!-- Bootstrap core JS-->
+<script
+   src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
+</script>
+<style type="text/css">
+body {
+background-color:grey;
+padding:20px 80px;
+
+}
+
+.profileImg {
+	width : 100px;
+	height : 100px;
+	border : 1px solid grey;
+}
+</style>
 <meta charset="UTF-8">
 <title>GUTEAM : 회원 가입</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -18,8 +46,8 @@
 		<div>
 			아이디 :
 			<input type="text" id="memberId" name="memberId" placeholder="ID 입력" required />
-			<span id="checkOk" style="display:none; color:green;">사용 가능한 아이디입니다.</span>
-			<span id="checkNo" style="display:none; color:red;" >아이디가 이미 존재합니다.</span><br>
+			<span id="checkOk" style="display:none; color:green; text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;">사용 가능한 아이디입니다.</span>
+			<span id="checkNo" style="display:none; color:red; text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;" >아이디가 이미 존재합니다.</span><br>
 			비번 :&nbsp;&nbsp;&nbsp;
 			<input type="password" name="password" placeholder="PW 입력" required /><br>
 			닉네임 :
@@ -62,7 +90,7 @@
 				    },
 					success : function(result) {
 						$('#btnCheck').hide();
-						console.log("성공? " + result);
+						console.log("중복? " + result);
 						if(result != 'fail'){
 							$('#checkOk').hide();
 							$('#checkNo').show(); //id 중복

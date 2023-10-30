@@ -28,12 +28,23 @@ public class FriendDAOImpleTest {
 	public void testDao() {
 //		testInsert();
 //		testSelect();
+		testFriendSel();
+		
+	}
+
+	private void testFriendSel() {
+		int result = dao.select("test", "test22");
+		if(result == 1) {
+			logger.info("친구다");
+		}else{
+			logger.info("친구 아님");
+		}
 		
 	}
 
 	private void testSelect() {
-		List<FriendVO> list = dao.select("test");
-		for(FriendVO vo : list) {
+		List<String> list = dao.select("test");
+		for(String vo : list) {
 			logger.info(vo.toString());
 		}
 		
