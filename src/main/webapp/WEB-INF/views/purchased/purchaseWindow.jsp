@@ -6,20 +6,43 @@
 <html>
 <head>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<style type="text/css">
+	body{
+		width : 1000px;
+		margin : auto;
+	}
+	#waitingForPurchase{
+		width : 1000px;
+		margin : auto;
+		margin-top: 100px;
+	}
+	table{
+		width : 1000px;
+		margin : auto;
+		text-align: center;
+	}
+	#buyNow{
+		float: right;
+	}
+</style>
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <meta charset="UTF-8">
 <title>구매 창</title>
 </head>
 <body>
+	
 	<sec:authentication property="principal" var="principal"/>
-	<div id="waitingForPurchase"> 
+	<div id="waitingForPurchase">
+	<h2>구매 확인</h2>
+	<br>
+	나의 보유금 : <span id="myCash">${cash }</span> 
 	<table>
 		<thead>
 			<tr>
 				<th style="width : 60px">순번</th>
 				<th style="width : 100px">이미지</th>
-				<th style="width : 100px">제목</th>
+				<th style="width : 200px">제목</th>
 				<th style="width : 120px">가격</th>
 				<th style="width : 100px">장르</th>
 			</tr>
@@ -38,7 +61,7 @@
 		</tbody>
 	</table>
 	</div>
-	
+	<br><br>
 	<div id="totalPriceArea">
 		전체 가격 : <span id="totalPrice">0</span>
 	</div>
@@ -83,13 +106,25 @@
 					    success : function(result){
 							console.log(result);
 							if(result==1){
-								location.href("../");
+								location.href = "../purchased/myPurchased";
+								alert("구매완료!");
 							}
 						}
 						
 					});//end ajax
 				}
 			});// end buyNow.click
+			showMyCash();
+			function showMyCash(){
+				var memberId = $('#memberId').val();
+				
+				var url = '../member/'
+				$.ajax(
+							
+				);
+				
+				
+			}
 		});//end document
 	</script>
 </body>

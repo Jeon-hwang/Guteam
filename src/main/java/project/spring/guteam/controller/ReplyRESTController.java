@@ -1,6 +1,6 @@
 package project.spring.guteam.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +36,11 @@ public class ReplyRESTController {
 	}
 	
 	@GetMapping("/all/{commentId}")
-	public ResponseEntity<List<ReplyVO>> readReply(@PathVariable("commentId") int commentId){
+	public ResponseEntity<Map<String, Object>> readReply(@PathVariable("commentId") int commentId){
 		logger.info("readReply 호출");
-		List<ReplyVO> list = replyService.read(commentId);
+		Map<String, Object> data = replyService.read(commentId);
 		
-		return new ResponseEntity<List<ReplyVO>>(list,HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(data,HttpStatus.OK);
 	}
 	
 	@PutMapping("/{replyId}")

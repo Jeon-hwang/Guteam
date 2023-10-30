@@ -1,8 +1,8 @@
 package project.spring.guteam.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import project.spring.guteam.domain.GameVO;
-import project.spring.guteam.service.GameService;
+import project.spring.guteam.service.PurchasedService;
 
 @Controller
 @RequestMapping(value="/purchased")
@@ -21,7 +21,7 @@ public class PurchasedController {
 	private static final Logger logger = LoggerFactory.getLogger(PurchasedController.class);
 	
 	@Autowired
-	GameService gameService;
+	PurchasedService purchasedService;
 	
 	@GetMapping("/myPurchased")
 	public void myPurchased() {}
@@ -38,15 +38,12 @@ public class PurchasedController {
 		  	logger.info(principal.getName()); // 로그인 되 어있는 아이디
 			logger.info(gameIds + "게임"); // 체크해둔 게임들
 			
-			String[] StrArr = gameIds.split(",");
-			List<GameVO> list = new ArrayList<GameVO>();
-			for(String x : StrArr) {
-				logger.info(x);
-				GameVO vo = (GameVO) gameService.read(Integer.parseInt(x)).get("vo");
-				list.add(vo);
-			}
+			Map<String, Object> data = purchasedService.readBuyGame(gameIds, principal.getName());
+			List<GameVO> list = (List<GameVO>) data.get("list");
+			int cash = (int) data.get("cash");
+			
 			model.addAttribute("list", list);
-			model.addAttribute("principal", principal);
+			model.addAttribute("cash", cash);
   }
 /*	public void purchaseWindow(Model model,int gameId,String memberId) {
 		logger.info("구매창으로 이동 게임아디 : , 멤버 아디 : "+gameId+", "+memberId);

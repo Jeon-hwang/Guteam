@@ -15,7 +15,7 @@
 		width : 1000px;
 		margin : auto;
 	}
-	.wish_list li{
+	.wish_list_area li{
 		display : flex;
 		justify-content: space-between;
 	}
@@ -36,7 +36,7 @@
 		<form action="../purchased/purchaseWindow" method="get">
 		<sec:csrfInput/>
 		<input type="hidden" id="gameIdInput" name="gameIds" value="">
-		<input type="submit" id="submit" value="선택한 게임 구매">
+		<input type="submit" id="submit" value="선택한 게임 구매" disabled>
 		</form>
 	</div>
 	<script type="text/javascript">
@@ -116,9 +116,16 @@
 					totalPrice  -= price;
 					checkGameId = checkGameId.filter((element) => element != gameId);
 					//console.log(checkGameId);
-				}			
+				}
 				$(gameIdInput).attr('value',checkGameId);
 				console.log($(gameIdInput).attr('value'));
+				if($(gameIdInput).attr('value')!=''){
+				
+					$("#submit").removeAttr("disabled");
+				
+				}else{
+					$('#submit').attr("disabled",'disabled');
+				}
 				$('#totalPrice').html(totalPrice);
 			});// end wish_list_item.on
 			
@@ -127,6 +134,15 @@
 				console.log(checkGameId);
 				
 			});
+			
+			$('.wish_list').on('click','.wish_list_item .oneBuyBtn',function(){
+				
+				var gameId = $(this).parent().prevAll('.gameId').val();
+				console.log("gmaeId="+gameId);
+				
+				location.href = "../purchased/purchaseWindow?gameIds="+gameId;
+			}); // end oneBuyBtn
+			
 		}); // end document
 	</script>
 </body>

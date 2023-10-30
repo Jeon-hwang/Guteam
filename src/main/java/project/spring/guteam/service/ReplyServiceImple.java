@@ -1,6 +1,9 @@
 package project.spring.guteam.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,12 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.ReplyVO;
+import project.spring.guteam.persistence.MemberDAO;
 import project.spring.guteam.persistence.ReplyDAO;
 
 @Service
 public class ReplyServiceImple implements ReplyService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ReplyServiceImple.class);
+	
+	@Autowired
+	private MemberDAO memberDAO;
 	
 	@Autowired
 	private ReplyDAO replyDAO;
@@ -36,11 +43,22 @@ public class ReplyServiceImple implements ReplyService {
 		
 		return 1;
 	}
-
+	
+	@Transactional(value = "transactionManager")
 	@Override
-	public List<ReplyVO> read(int commentId) {
+	public Map<String, Object> read(int commentId) {
 		logger.info("read 호출");
-		return replyDAO.select(commentId);
+		List<ReplyVO> list = replyDAO.select(commentId);
+		List<String> nicknameList = new ArrayList<String>();
+		for(int i = 0; i<list.size();i++) {
+			String memberId = list.get(i).getMemberId();
+			String nickname = memberDAO.select(memberId).getNickname();
+			nicknameList.add(nickname);
+		}
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("list", list);
+		args.put("nicknameList", nicknameList);
+		return args;
 	}
 
 	@Override

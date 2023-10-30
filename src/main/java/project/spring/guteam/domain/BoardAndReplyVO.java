@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class BoardAndReplyVO {
 	private String nickname;
-	private int boradId;
+	private int boardId;
+	private int gameId;
 	private String content;
 	private Date createdDate;
 	
@@ -12,10 +13,11 @@ public class BoardAndReplyVO {
 	
 	public BoardAndReplyVO() {}
 
-	public BoardAndReplyVO(String nickname, int boradId, String content, Date createdDate) {
+	public BoardAndReplyVO(String nickname, int boradId,int gameId, String content, Date createdDate) {
 		super();
 		this.nickname = nickname;
-		this.boradId = boradId;
+		this.boardId = boradId;
+		this.gameId= gameId;
 		this.content = content;
 		this.createdDate = createdDate;
 	}
@@ -28,14 +30,21 @@ public class BoardAndReplyVO {
 		this.nickname = nickname;
 	}
 
-	public int getBoradId() {
-		return boradId;
+	public int getBoardId() {
+		return boardId;
 	}
 
-	public void setBoradId(int boradId) {
-		this.boradId = boradId;
+	public void setBoardId(int boardId) {
+		this.boardId = boardId;
+	}
+	
+	public int getGameId() {
+		return gameId;
 	}
 
+	public void setgameId(int gameId) {
+		this.gameId = gameId;
+	}
 	public String getContent() {
 		return content;
 	}

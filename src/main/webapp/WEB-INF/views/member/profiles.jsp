@@ -86,7 +86,7 @@ padding:20px 80px;
 			}
 			
 			$('#showMyComments').click(function(){
-				console.log("클릭확인");
+				//console.log("클릭확인");
 				
 				var memberId = $('#memberId').val();
 				var url = '../boardComment/comments/'+memberId;
@@ -94,17 +94,19 @@ padding:20px 80px;
 				$.getJSON(
 					url,
 					function(data){
-						data.sort((a,b) => b.createdDate - a.createdDate);
+						data.sort((a,b) => b.createdDate - a.createdDate); // 해당 List데이터를 날짜 역순으로 정렬
 						
 						console.log(data);
 					
 						$(data).each(function(){
 						var createdDate = new Date(this.createdDate);
+						if(this.content!="삭제된 댓글입니다."){
 						list += '<li class="comment_reply_item">'
 							 +  '<span>'+this.nickname+'</span>'
-							 +  '<span><a href="detail?gameBoardId='+this.boradId+'">'+this.content+'</a></span>'
+							 +  '<span><a href="/guteam/gameBoard/detail?gameBoardId='+this.boardId+'&page=1&gameId='+this.gameId+'">'+this.content+'</a></span>'
 							 +	'<span>'+dateFormat(createdDate)+'</span>'
 							 +  '</li>';
+						}
 						});
 						$('#myCommentsList').html(list);
 					}
