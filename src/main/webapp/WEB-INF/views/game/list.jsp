@@ -33,7 +33,7 @@
 		<input class="btn btn-light form-control"  type="submit" value="검색">
 		</div>
 	</form>
-	
+	<div class="btnOrderGroup">
 		<input type="hidden" class="orderByItem" name="orderBy" value="priceDesc">
 		<input type="submit" class="orderBy" value="가격↑">
 		<input type="hidden" class="orderByItem" name="orderBy" value="price">
@@ -42,9 +42,7 @@
 		<input type="submit" class="orderBy" value="구매순↑">
 		<input type="hidden" class="orderByItem" name="orderBy" value="wishlist">
 		<input type="submit" class="orderBy" value="위시리스트순↑">
-	
-	
-	<br>
+	</div>
 	<c:forEach varStatus="status" var="vo" items="${gameVOList }">
 	<div class="btn btn-secondary" style="margin:5px; width:330px; height:500px; display:inline-block; ">
 			<div class="gameInfo">

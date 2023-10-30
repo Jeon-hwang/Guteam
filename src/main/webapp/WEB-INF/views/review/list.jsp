@@ -23,11 +23,14 @@
 <br>
 <form action="list" method="get">
 <div class="d-flex input-group mb-3" style="display: inline-block; text-align: center; width:60%; margin:auto;">
-<input  class="form-control w-25" type="text" value="${keyword }" name="keyword" style="margin-right:5px;">
-<input type="hidden" name="gameId" value="${gameVO.gameId }">
+<input  class="form-control w-25" id="keyword" type="text" value="${param.keyword }" name="keyword" style="margin-right:5px;">
+<input type="hidden" id="gameId" name="gameId" value="${gameVO.gameId }">
 <input class="form-control" type="submit" value="검색">
 </div>
 </form>
+
+<input type="hidden" class="orderByItem" name="orderBy" value="thumbUpCnt">
+<input type="submit" class="orderBy" value="추천수↑">
 <table class="table table-secondary table-hover">
 	<thead>
 		<tr>
@@ -140,6 +143,16 @@
 			console.log(url);
 			location.href=url;
 		}); // reviewInfo.onclick()
+		
+		$('.orderBy').on('click', function(){
+			var gameId = $('#gameId').attr('value');
+			var orderBy = $(this).prev('.orderByItem').attr('value');
+			var keyword = $('#keyword').attr('value');
+			var queryString = 'gameId='+gameId+'&orderBy='+orderBy+'&keyword='+keyword;
+			console.log(queryString);	
+			var url = 'list?'+queryString;
+			location.href=url;
+		}); // orderBy.onclick()
 	});
 </script>
 

@@ -35,7 +35,7 @@ public class ReviewController {
 	private ReviewService reviewService;
 
 	@GetMapping("/list")
-	public void list(int gameId, Model model, Integer page, Integer numsPerPage, Principal principal, String keyword) {
+	public void list(int gameId, Model model, Integer page, Integer numsPerPage, Principal principal, String keyword, String orderBy) {
 		logger.info("review list() 호출");
 		PageCriteria criteria = new PageCriteria();
 		if (page != null) {
@@ -46,7 +46,7 @@ public class ReviewController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		readListsAndSetModel(model, gameId, criteria, pageMaker, principal, keyword);
+		readListsAndSetModel(model, gameId, criteria, pageMaker, principal, keyword, orderBy);
 	}
 
 	@GetMapping("/register")
@@ -128,9 +128,19 @@ public class ReviewController {
 	}
 
 	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker,
-			Principal principal, String keyword) {
-		Map<String, Object> args;
-		if (keyword != null && !keyword.equals("")) {
+			Principal principal, String keyword, String orderBy) {
+		Map<String, Object> args=null;
+		if(orderBy!=null&&orderBy.equals("thumbUpCnt")) {
+			if (keyword != null && !keyword.equals("")) {
+				pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
+				paging(pageMaker, criteria);
+				args = reviewService.read(orderBy, criteria, keyword, gameId);
+			} else {
+				pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
+				paging(pageMaker, criteria);
+				args = reviewService.read(orderBy, gameId, criteria);
+			}
+		}else if (keyword != null && !keyword.equals("")) {
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
 			paging(pageMaker, criteria);
 			args = reviewService.read(gameId, criteria, keyword);

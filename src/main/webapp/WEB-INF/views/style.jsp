@@ -16,6 +16,7 @@ body {
 background-color:grey;
 padding:20px 80px;
 }
+
 a{
 color:inherit;
 text-decoration:none;
@@ -58,5 +59,9 @@ margin-bottom: 10px;
 	background-color:#6c757d;
 	border-color:#e9ecef; 
 	color:white;
+}
+.btnOrderGroup{
+	margin-left:40px;
+	text-align:left;
 }
 </style>

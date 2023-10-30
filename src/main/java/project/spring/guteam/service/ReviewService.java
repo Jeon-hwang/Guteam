@@ -17,4 +17,6 @@ public interface ReviewService {
 	Map<String, Object> read(int gameId, PageCriteria criteria, String keyword);
 	int getTotalCount(int gameId, String keyword);
 	int readWrited(int gameId, String memberId);
+	Map<String, Object> read(String orderBy, PageCriteria criteria, String keyword, int gameId);
+	Map<String, Object> read(String orderBy, int gameId, PageCriteria criteria);
 }

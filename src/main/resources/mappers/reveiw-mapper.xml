@@ -62,4 +62,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where ${reviewId} = #{reviewId}
     </update>
 
+	<select id="order_by_thumbUpCnt" resultType="ReviewVO">
+		select ${reviewId}, ${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}, ${reviewDateCreated}, ${rating}, ${thumbUpCount}
+    	from (select rownum rn, a.* from(
+    	select * from ${review} where ${gameId}=#{gameId} order by ${thumbUpCount} desc, ${reviewId} desc)a
+    	) where rn between #{start} and #{end}
+	</select>
+	
+	<select id="select_by_keyword_order_by_thumbUpCnt" resultType="ReviewVO">
+		select ${reviewId}, ${gameId}, ${memberId}, ${reviewTitle}, ${reviewContent}, ${reviewDateCreated}, ${rating}, ${thumbUpCount}
+    	from (select rownum rn, a.*
+    	from (select * from ${review}
+    	where (lower(${reviewTitle}) like '%'||lower(#{keyword})||'%' or
+    		lower(${reviewContent}) like '%'||lower(#{keyword})||'%') and ${gameId}=#{gameId}
+    		order by ${thumbUpCount} desc, ${reviewId} desc)a
+    	) where rn between #{start} and #{end}
+	</select>
 </mapper>

@@ -117,7 +117,7 @@ public class ReviewServiceImple implements ReviewService {
 			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
 		}
 		GameVO gameVO = gameDAO.select(gameId);
-		args.put("reivewList", reviewList);
+		args.put("reviewList", reviewList);
 		args.put("nicknameList", nicknameList);
 		args.put("gameVO", gameVO);
 		return args;
@@ -127,6 +127,38 @@ public class ReviewServiceImple implements ReviewService {
 	public int getTotalCount(int gameId, String keyword) {
 		logger.info("review getTotalCount(keyword) 호출");
 		return reviewDAO.getTotalCount(gameId, keyword);
+	}
+
+	@Override
+	public Map<String, Object> read(String orderBy, PageCriteria criteria, String keyword, int gameId) {
+		logger.info("review read(keyword, orderBy) 호출");
+		Map<String, Object> args = new HashMap<>();
+		List<ReviewVO> reviewList = reviewDAO.selectByKeywordOrderBy(gameId, criteria, keyword);
+		List<String> nicknameList = new ArrayList<>();
+		for(int i = 0 ; i < reviewList.size(); i++) {
+			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
+		}
+		GameVO gameVO = gameDAO.select(gameId);
+		args.put("reviewList", reviewList);
+		args.put("nicknameList", nicknameList);
+		args.put("gameVO", gameVO);
+		return args;
+	}
+
+	@Override
+	public Map<String, Object> read(String orderBy, int gameId, PageCriteria criteria) {
+		logger.info("review read(orderBy) 호출");
+		Map<String, Object> args = new HashMap<>();
+		List<ReviewVO> reviewList = reviewDAO.selectOrderBy(gameId, criteria);
+		List<String> nicknameList = new ArrayList<>();
+		for(int i = 0 ; i < reviewList.size(); i++) {
+			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
+		}
+		GameVO gameVO = gameDAO.select(gameId);
+		args.put("reviewList", reviewList);
+		args.put("nicknameList", nicknameList);
+		args.put("gameVO", gameVO);
+		return args;
 	}
 
 }
