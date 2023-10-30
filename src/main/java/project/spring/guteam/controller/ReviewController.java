@@ -66,7 +66,10 @@ public class ReviewController {
 	}
 
 	@GetMapping("/detail")
-	public void detail(Model model, int reviewId, int page, Principal principal) {
+	public void detail(Model model, int reviewId, Integer page, Principal principal) {
+		if(page==null) {
+			page=1;
+		}
 		Map<String, Object> args = null;
 		if (principal != null) {
 			args = reviewService.read(reviewId, principal.getName());
@@ -89,14 +92,20 @@ public class ReviewController {
 	}
 
 	@GetMapping("/update")
-	public void updateGET(Model model, int reviewId, int page) {
+	public void updateGET(Model model, int reviewId, Integer page) {
+		if(page==null) {
+			page=1;
+		}
 		ReviewVO reviewVO = (ReviewVO) reviewService.read(reviewId, "").get("reviewVO");
 		model.addAttribute("reviewVO", reviewVO);
 		model.addAttribute("page", page);
 	}
 
 	@PostMapping("/update")
-	public String updatePOST(ReviewVO vo, RedirectAttributes reAttr, int page) {
+	public String updatePOST(ReviewVO vo, RedirectAttributes reAttr, Integer page) {
+		if(page==null) {
+			page=1;
+		}
 		int result = reviewService.update(vo);
 		if (result == 1) {
 			reAttr.addFlashAttribute("update_result", "success");

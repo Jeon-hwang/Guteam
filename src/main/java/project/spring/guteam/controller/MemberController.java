@@ -48,12 +48,11 @@ public class MemberController {
 	
 	// 로그인 화면
 	@GetMapping("/login")
-	public void loginGET(HttpServletRequest request, Model model) {
+	public void loginGET(HttpServletRequest request, Model model, String targetURL) {
 		logger.info("loginGET() 호출");
-		String targetURL = (String)request.getAttribute("targetURL");
 		logger.info(targetURL);
 		if(targetURL != null) {
-			model.addAttribute("targetURL", targetURL);
+			model.addAttribute("targetURL", targetURL);	
 		}
 		logger.info("referer = " + request.getHeader("referer"));
 		String referer = request.getHeader("referer");
@@ -65,43 +64,13 @@ public class MemberController {
 	public String loginPOST(String memberId, String password, String targetURL, HttpServletRequest request) {
 		logger.info("loginPOST() 호출");
 		if(memberService.read(memberId, "checking")==1) {
-			if(passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {
-				logger.info("로그인 성공");
-//				HttpSession session = request.getSession();
-//				session.setAttribute("memberId", memberId);
-//				session.setMaxInactiveInterval(600);
-//				logger.info("세션 = " + session);
-				logger.info("targetURL = " + targetURL);
-				if(!targetURL.equals("")) {
-					logger.info(targetURL);
-					return "redirect:/" + targetURL;
-				} else {
-					return "redirect:/game/list";
-				}
-			} else {
+			if(!passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {		
 				logger.info("로그인 실패 targetURL = " + targetURL);
-				return "redirect:/member/login";
 			}
-			}else {
-				logger.info("로그인 실패 targetURL = " + targetURL);
-				return "redirect:/member/login";
-			}
+		}
+		return "redirect:/member/login?error=1&targetURL=" + targetURL ;
 	} //end loginPOST()
-	
-//	//로그아웃
-//	@PostMapping("/logout")
-//	public String logout(HttpServletRequest request) {
-//		logger.info("logout() 호출");
-//		HttpSession session = request.getSession();
-//		if(session.getAttribute("memberId") != null) {
-//			session.removeAttribute("memberId");
-//			logger.info("로그아웃 성공");
-//			return "redirect:/";
-//		} else {
-//			return "redirect:/";
-//		}
-//	}
-	
+		
 	// id 중복체크
 	@PostMapping("/checkId")
 	@ResponseBody

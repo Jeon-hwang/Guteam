@@ -34,12 +34,14 @@
 					onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','memberId');">
 					작성자</a></li>
 			</ul>
-			<input type="hidden" class="keywordCriteria" name="keywordCriteria" value="keyword"> 
-			<input type="hidden" name="gameId" value="${gameVO.gameId }"> 
-			<input class="form-control w-25" type="text" name="keyword" value="${keyword }" maxlength="30" style="margin-right:4px;"> 
+			<input type="hidden" id="keywordCriteria" class="keywordCriteria" name="keywordCriteria" value="keyword"> 
+			<input type="hidden" id="gameId" name="gameId" value="${gameVO.gameId }"> 
+			<input class="form-control w-25" type="text" id="keyword" name="keyword" value="${keyword }" maxlength="30" style="margin-right:4px;"> 
 			<input class="btn btn-light form-control" type="submit" value="검색">
 		</div>
 	</form>
+	<input type="hidden" class="orderByItem" name="orderBy" value="commentCnt">
+	<input type="submit" class="orderBy" value="댓글수↑">
 	<table class="table table-secondary table-hover">
 		<thead>
 			<tr>
@@ -152,6 +154,17 @@
 				console.log(url);
 				location.href = url;
 			}); // end gameBoardInfo.onclick()
+			
+			$('.orderBy').on('click', function(){
+				var gameId = $('#gameId').attr('value');
+				var orderBy = $(this).prev('.orderByItem').attr('value');
+				var keyword = $('#keyword').attr('value');
+				var keywordCriteria = $('#keywordCriteria').attr('value');
+				var queryString = 'gameId='+gameId+'&orderBy='+orderBy+'&keyword='+keyword+'&keywordCriteria='+keywordCriteria;
+				console.log(queryString);	
+				var url = 'list?'+queryString;
+				location.href=url;
+			}); // orderBy.onclick()
 		}); // document
 	</script>
 

@@ -31,6 +31,7 @@
 		authentication-failure-url="/member/login?error=1" 
 		always-use-default-target="false"
 		authentication-success-handler-ref="loginSuccessHandler"
+		authentication-failure-handler-ref="loginFailureHandler"
 		 />
 		<s:logout logout-url="/member/logout" invalidate-session="true" delete-cookies="true" 		
 		success-handler-ref="logoutSuccessHandler"
@@ -41,7 +42,9 @@
 		
 	</s:http>
 	<bean id="loginSuccessHandler" class="project.spring.guteam.authentication.LoginSuccessHandler"></bean>
+	<bean id="loginFailureHandler" class="project.spring.guteam.authentication.LoginFailureHandler"></bean>
 	<bean id="logoutSuccessHandler" class="project.spring.guteam.authentication.LogoutSuccessHandlerImple"></bean>
+	
 	<bean id="bcryptPasswordEncoder" 
 	class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 	<s:authentication-manager>

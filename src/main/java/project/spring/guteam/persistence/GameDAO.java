@@ -17,4 +17,5 @@ public interface GameDAO {
 	List<GameVO> selectByPrice(int price, PageCriteria criteria);
 	List<GameVO> selectByNameOrGenre(String keyword, PageCriteria criteria);
 	int getSequenceNo();
+	List<GameVO> selectOrderBy(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria);
 }

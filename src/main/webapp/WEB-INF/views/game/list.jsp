@@ -28,11 +28,21 @@
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','keyword');$('#keyword').attr('type','text');">이름/장르</a></li>
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','price');$('#keyword').attr('type','number');$('#keyword').attr('min','0');">가격</a></li>
 		</ul>
-		<input type="hidden" class="keywordCriteria" name="keywordCriteria" value="keyword">
-		<input class="form-control w-50" type="text" name="keyword" id="keyword" maxlength="20" style="margin-right:4px;">
+		<input type="hidden" id="keywordCriteria" class="keywordCriteria" name="keywordCriteria" value="keyword">
+		<input class="form-control w-50" type="text" name="keyword" id="keyword" maxlength="20" style="margin-right:4px;" value="${keyword }">
 		<input class="btn btn-light form-control"  type="submit" value="검색">
 		</div>
 	</form>
+	
+		<input type="hidden" class="orderByItem" name="orderBy" value="priceDesc">
+		<input type="submit" class="orderBy" value="가격↑">
+		<input type="hidden" class="orderByItem" name="orderBy" value="price">
+		<input type="submit" class="orderBy" value="가격↓">
+		<input type="hidden" class="orderByItem" name="orderBy" value="purchased">
+		<input type="submit" class="orderBy" value="구매순↑">
+		<input type="hidden" class="orderByItem" name="orderBy" value="wishlist">
+		<input type="submit" class="orderBy" value="위시리스트순↑">
+	
 	
 	<br>
 	<c:forEach varStatus="status" var="vo" items="${gameVOList }">
@@ -146,6 +156,16 @@
 				var url = "detail?gameId="+gameId+"&prevListUrl="+prevListUrl;
 				location.href=url;
 			}); // end gameInfo.onclick()
+			
+			$('.orderBy').on('click', function(){
+				var orderBy = $(this).prev('.orderByItem').attr('value');
+				var keyword = $('#keyword').attr('value');
+				var keywordCriteria = $('#keywordCriteria').attr('value');
+				var queryString = 'orderBy='+orderBy+'&keyword='+keyword+'&keywordCriteria='+keywordCriteria;
+				console.log(queryString);	
+				var url = 'list?'+queryString;
+				location.href=url;
+			}); // orderBy.onclick()
 			
 		}); // end document.ready()
 	</script>

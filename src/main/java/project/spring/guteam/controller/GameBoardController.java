@@ -28,7 +28,10 @@ public class GameBoardController {
 	private GameBoardService gameBoardService;
 		
 	@GetMapping("/list")
-	public void list(Model model, int gameId,Integer page, Integer numsPerPage, String keywordCriteria, String keyword) {
+	public void list(Model model, int gameId, Integer page, Integer numsPerPage, String keywordCriteria, String keyword, String orderBy) {
+		if(orderBy==null) {
+			orderBy="";
+		}
 		logger.info("gameBoard list 호출");
 		logger.info("page = " + page + ", numsPerPage = "+ numsPerPage);
 		PageCriteria criteria = new PageCriteria();
@@ -40,7 +43,7 @@ public class GameBoardController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		readListsAndSetModel(model, gameId, criteria, pageMaker, keyword, keywordCriteria);		
+		readListsAndSetModel(model, gameId, criteria, pageMaker, keyword, keywordCriteria, orderBy);		
 	}
 	
 	@GetMapping("/register")
@@ -60,7 +63,10 @@ public class GameBoardController {
 	}
 	
 	@GetMapping("/detail")
-	public void detail(Model model, int gameBoardId, int page, int gameId) {
+	public void detail(Model model, int gameBoardId, Integer page, int gameId) {
+		if(page==null) {
+			page=1;
+		}
 		GameBoardVO vo = (GameBoardVO) gameBoardService.read(gameBoardId).get("gameBoardVO");
 		String nickname = (String) gameBoardService.read(gameBoardId).get("nickname");
 		model.addAttribute("nickname", nickname);
@@ -70,7 +76,10 @@ public class GameBoardController {
 	}
 	
 	@GetMapping("/update")
-	public void update(Model model, int gameBoardId, int page, int gameId) {
+	public void update(Model model, int gameBoardId, Integer page, int gameId) {
+		if(page==null) {
+			page=1;
+		}
 		GameBoardVO vo = (GameBoardVO) gameBoardService.read(gameBoardId).get("gameBoardVO");
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
@@ -78,7 +87,10 @@ public class GameBoardController {
 	}
 	
 	@PostMapping("/update")
-	public String update(GameBoardVO vo, RedirectAttributes reAttr, int page, int gameId) {
+	public String update(GameBoardVO vo, RedirectAttributes reAttr, Integer page, int gameId) {
+		if(page==null) {
+			page=1;
+		}
 		int result = gameBoardService.update(vo);
 		if(result == 1) {
 			reAttr.addFlashAttribute("update_result","success");
@@ -101,17 +113,29 @@ public class GameBoardController {
 	}
 
 	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker,
-			String keyword, String keywordCriteria) {
-
-		List<GameBoardVO> gameBoardVOList;
-		List<String> nicknameList;
-		Map<String, Object> args;
-		if(keyword==null||keyword.equals("")) {
+			String keyword, String keywordCriteria, String orderBy) {
+		List<GameBoardVO> gameBoardVOList=null;
+		List<String> nicknameList=null;
+		Map<String, Object> args=null;
+		if(orderBy.equals("commentCnt")) {
+			if(keyword==null||keyword.equals("")) {
+				pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId));
+				paging(pageMaker, criteria);
+				args=gameBoardService.read(gameId, criteria, orderBy);
+			}else {
+				pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId, criteria, keywordCriteria, keyword));
+				paging(pageMaker, criteria);
+				args=gameBoardService.read(gameId, criteria, keywordCriteria, keyword, orderBy);
+				if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
+					model.addAttribute("keywordCriteria", keywordCriteria);
+				}
+			}
+		} else if(keyword==null||keyword.equals("")) {
 			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId));
 			paging(pageMaker, criteria);
 			args = gameBoardService.read(gameId, criteria);
 			
-		}else{
+		} else{
 			pageMaker.setTotalCount(gameBoardService.getTotalCount(gameId, criteria, keywordCriteria, keyword));
 			paging(pageMaker, criteria);
 			args = gameBoardService.read(gameId, criteria, keywordCriteria, keyword);

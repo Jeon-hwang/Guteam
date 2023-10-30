@@ -27,11 +27,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	) where rn between #{start} and #{end}
     </select>
     
-    <!-- 
-    #{start} : criteria.getStart()
-    #{end} : criteria.getEnd()
-     -->
-     
     <select id="total_count" resultType="Integer">
     	select count(*) total_cnt from ${game}
     </select>
@@ -51,7 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from(select rownum rn, a.* from (select * from ${game}
     	where ${price} >= #{price}
-    	order by ${gameId} desc)a )
+    	order by ${price}, ${gameId} desc)a )
     	where rn between #{start} and #{end}
     </select>
     
@@ -69,4 +64,72 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select last_number from user_sequences where sequence_name='GAME_SEQ'
     </select>
     
+    <select id="select_keyword_order_by_price" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, a.* from (select * from ${game}
+    	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
+    		lower(${genre}) like '%'||lower(#{keyword})||'%' order by ${price}, ${gameId} desc)a )
+    	where rn between #{start} and #{end}
+    </select>
+    
+     <select id="select_keyword_order_by_price_desc" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, a.* from (select * from ${game}
+    	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
+    		lower(${genre}) like '%'||lower(#{keyword})||'%' order by ${price} desc, ${gameId} desc)a )
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_keyword_order_by_purchased" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, b.* from (select a.*, (select count(*) from ${purchased} c where a.${gameId}=c.${gameId}) as purchased_cnt 
+    	from ${game} a
+    	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
+    		lower(${genre}) like '%'||lower(#{keyword})||'%' order by purchased_cnt desc, ${gameId} desc)b )
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_keyword_order_by_wishlist" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, b.* from (select a.*, (select count(*) from ${wish_list} c where a.${gameId}=c.${gameId}) as wishlist_cnt 
+    	from ${game} a
+    	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
+    		lower(${genre}) like '%'||lower(#{keyword})||'%' order by wishlist_cnt desc, ${gameId} desc)b )
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_by_price_order_by_price" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, a.* from (select * from ${game}
+    	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
+    		lower(${genre}) like '%'||lower(#{keyword})||'%' order by ${price}, ${gameId} desc)a )
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_by_price_order_by_price_desc" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from(select rownum rn, a.* from (select * from ${game}
+    	where ${price} >= #{price}
+    	order by ${price} desc, ${gameId} desc)a )
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_by_price_order_by_purchased" resultType="GameVO">
+    select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, b.* from (select a.*, (select count(*) from ${purchased} c where a.${gameId}=c.${gameId}) as purchased_cnt 
+    	from ${game} a
+    	where ${price} >= #{price}
+    	order by purchased_cnt desc, ${price}, ${gameId} desc)b )
+    	where rn between #{start} and #{end}
+    </select>
+    
+     <select id="select_by_price_order_by_wishlist" resultType="GameVO">
+    select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, b.* from (select a.*, (select count(*) from ${wish_list} c where a.${gameId}=c.${gameId}) as wishlist_cnt 
+    	from ${game} a
+    	where ${price} >= #{price}
+    	order by wishlist_cnt desc, ${price}, ${gameId} desc)b )
+    	where rn between #{start} and #{end}
+    </select>
+   
 </mapper>

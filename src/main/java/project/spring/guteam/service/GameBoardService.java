@@ -15,4 +15,6 @@ public interface GameBoardService {
 	int getTotalCount(int gameId, PageCriteria criteria, String keywordCriteria, String keyword);
 	Map<String, Object> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword);
 	int update(int gameBoardId, int amount);
+	Map<String, Object> read(int gameId, PageCriteria criteria, String orderBy);
+	Map<String, Object> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword, String orderBy);
 }

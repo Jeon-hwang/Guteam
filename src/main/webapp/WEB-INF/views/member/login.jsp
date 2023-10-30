@@ -50,7 +50,7 @@ padding:20px 80px;
 		PW &nbsp;
 		<input type="password" name="password" required />
 		<input type="hidden" name="referer" value="${referer }">
-		<input type="hidden" name="targetURL" value="${targetURL }">
+		<input type="hidden" name="targetURL" value="${param.targetURL }">
 		<sec:csrfInput/>
 		<br>
 		<br>

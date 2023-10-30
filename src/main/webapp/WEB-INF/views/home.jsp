@@ -15,7 +15,7 @@
 	<input type="hidden" id="alert" value="${alert }">
 	<div class="auth" style="display:inline-block; margin-right: 50px; float:right;">
 	<sec:authorize access="isAnonymous()">
-			<a href="/guteam/member/login"><button type="button" class="btn btn-light">로그인</button></a>
+			<a href="/guteam/member/login?targetURL=" id="btnLogin"><button type="button" class="btn btn-light">로그인</button></a>
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
@@ -32,6 +32,9 @@
 	
 <script type="text/javascript">
 	$(document).ready(function(){
+		console.log(location.href);
+		var btnLogin = $('#btnLogin').attr('href');
+		$('#btnLogin').attr('href', btnLogin+location.href);
 		var result = $('#alert').val();
 			if(result == 'success'){
 				alert('회원 탈퇴가 완료되었습니다!');

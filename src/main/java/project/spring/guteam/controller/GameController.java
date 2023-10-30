@@ -45,7 +45,7 @@ public class GameController {
 	private String uploadPath;
 
 	@GetMapping("/list")
-	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria) {
+	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria, String orderBy) {
 		logger.info("list 호출");
 		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
 		PageCriteria criteria = new PageCriteria();
@@ -57,12 +57,8 @@ public class GameController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		List<GameVO> gameVOList=null;
-		List<Integer> ratingList=null;
-		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, gameVOList, ratingList);
+		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, orderBy);
 	}
-
-
 
 	@GetMapping("/register")
 	public void registerGET() {
@@ -218,27 +214,41 @@ public class GameController {
 	}
 
 	private void readListsAndSetModel(String keyword, String keywordCriteria, PageMaker pageMaker, PageCriteria criteria,
-			Model model, List<GameVO> gameVOList, List<Integer> ratingList) {
-		if (keyword == null || keyword.equals("")) {
+			Model model, String orderBy) {
+		Map<String, Object> args;
+		if(orderBy!=null) {
+			if (keyword == null || keyword.equals("")) {
+				pageMaker.setTotalCount(gameService.getTotalCount());
+				paging(pageMaker, criteria);
+			}else if (keywordCriteria != null && keywordCriteria.equals("price")) {
+				pageMaker.setTotalCount(gameService.getTotalCount(Integer.parseInt(keyword)));
+				paging(pageMaker, criteria);
+				model.addAttribute("keywordCriteria", keywordCriteria);
+			}else {
+				pageMaker.setTotalCount(gameService.getTotalCount(keyword));
+				paging(pageMaker, criteria);
+			}
+			args = gameService.read(keyword, keywordCriteria, orderBy, criteria);
+			
+		} else if (keyword == null || keyword.equals("")) {
 			pageMaker.setTotalCount(gameService.getTotalCount());
 			paging(pageMaker, criteria);
-			Map<String, Object> args = gameService.read(criteria);
-			gameVOList = (List<GameVO>) args.get("gameVOList");
-			ratingList = (List<Integer>) args.get("ratingList");
+			args = gameService.read(criteria);
+			
 		} else if (keywordCriteria != null && keywordCriteria.equals("price")) {
 			pageMaker.setTotalCount(gameService.getTotalCount(Integer.parseInt(keyword)));
 			paging(pageMaker, criteria);
-			Map<String, Object> args = gameService.read(Integer.parseInt(keyword), criteria);
-			gameVOList = (List<GameVO>) args.get("gameVOList");
-			ratingList = (List<Integer>) args.get("ratingList");
+			args = gameService.read(Integer.parseInt(keyword), criteria);
+			
 			model.addAttribute("keywordCriteria", keywordCriteria);
 		} else {
 			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
 			paging(pageMaker, criteria);
-			Map<String, Object> args = gameService.read(keyword, criteria);
-			gameVOList = (List<GameVO>) args.get("gameVOList");
-			ratingList = (List<Integer>) args.get("ratingList");
+			args = gameService.read(keyword, criteria);
+		
 		}
+		List<GameVO> gameVOList = (List<GameVO>) args.get("gameVOList");
+		List<Integer> ratingList = (List<Integer>) args.get("ratingList");
 		model.addAttribute("gameVOList", gameVOList);
 		model.addAttribute("ratingList", ratingList);
 		model.addAttribute("pageMaker", pageMaker);

@@ -97,4 +97,32 @@ public class GameDAOImple implements GameDAO {
 		return sqlSession.selectOne(NAMESPACE+".get_seq_no");
 	}
 
+	@Override
+	public List<GameVO> selectOrderBy(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria) {
+		logger.info("Game selectOrderBy()호출");
+		Map<String, Object> args = new HashMap<>();
+		args.put("keyword", keyword);
+		args.put("price", keyword);
+		args.put("keywordCriteria", keywordCriteria);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		logger.info(orderBy);
+		if(keywordCriteria.equals("keyword")) {
+			switch(orderBy) {
+			case "price": return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_price", args);
+			case "priceDesc": return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_price_desc", args);
+			case "purchased": return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_purchased", args);
+			case "wishlist": return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_wishlist", args);
+		}
+		}else if(keywordCriteria.equals("price")) {
+			switch(orderBy) {
+			case "price": return sqlSession.selectList(NAMESPACE + ".select_by_price", args);
+			case "priceDesc": return sqlSession.selectList(NAMESPACE + ".select_by_price_order_by_price_desc", args);
+			case "purchased": return sqlSession.selectList(NAMESPACE + ".select_by_price_order_by_purchased", args);
+			case "wishlist": return sqlSession.selectList(NAMESPACE + ".select_by_price_order_by_wishlist", args);
+			}
+		}
+		return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_price", args);
+	}
+
 }

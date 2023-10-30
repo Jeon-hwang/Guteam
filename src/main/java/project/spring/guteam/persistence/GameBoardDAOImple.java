@@ -116,5 +116,36 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		return result;
 	}
 
+	@Override
+	public List<GameBoardVO> select(int gameId, PageCriteria criteria, String orderBy) {
+		logger.info("GameBoard select(order) 호출 : gameId = " + gameId );
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("gameId", gameId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE+".select_all_order_by_comment_cnt",args);
+	}
+
+	@Override
+	public List<GameBoardVO> selectByMemberId(int gameId, String keyword, PageCriteria criteria, String orderBy) {
+		logger.info("GameBoard selectByMemberId(order) 호출 : gameId = " + gameId + ", memberNickname = " + keyword);
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("keyword", keyword);
+		args.put("gameId", gameId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE+".select_by_member_id_order_by_comment_cnt", args);
+	}
+
+	@Override
+	public List<GameBoardVO> selectByKeyword(int gameId, String keyword, PageCriteria criteria, String orderBy) {
+		logger.info("GameBoard selectByKeyword(order) 호출 : gameId = " + gameId + ", keyword = " + keyword);
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("keyword", keyword);
+		args.put("gameId", gameId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE+".select_by_keyword_order_by_comment_cnt", args);
+	}
 
 }

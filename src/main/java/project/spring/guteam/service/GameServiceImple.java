@@ -115,4 +115,18 @@ public class GameServiceImple implements GameService {
 		return sequence;
 	}
 
+	@Override
+	public Map<String, Object> read(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria) {
+		Map<String, Object> args = new HashMap<>();
+		logger.info("read(orderBy)호출 : orderBy = " + orderBy);
+		List<GameVO> gameVOList = gameDAO.selectOrderBy(keyword, keywordCriteria, orderBy, criteria);
+		List<Integer> ratingList = new ArrayList<>();
+		for(int i = 0 ; i < gameVOList.size(); i++) {
+			ratingList.add(reviewDAO.getRating(gameVOList.get(i).getGameId()));
+		}
+		args.put("gameVOList", gameVOList);
+		args.put("ratingList", ratingList);
+		return args;
+	}
+
 }

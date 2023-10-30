@@ -42,6 +42,9 @@ margin-bottom: 10px;
 .bi {
 	color:#ffc100;
 }
+.dropdown-item:hover{
+	cursor:pointer;
+}
 #container {
 	content-align:center;
 	item-align:center;

@@ -113,6 +113,44 @@ public class GameBoardServiceImple implements GameBoardService {
 		logger.info("getTotalCount(keyword) 호출 : keyword = " + keyword);
 		return gameBoardDAO.getTotalCounts(gameId, criteria, keywordCriteria, keyword);
 	}
+
+	@Override
+	public Map<String, Object> read(int gameId, PageCriteria criteria, String orderBy) {
+		logger.info("gameBoard read(orderBy)호출");
+		List<GameBoardVO> gameBoardVOList = gameBoardDAO.select(gameId, criteria, orderBy);
+		List<String> nicknameList = new ArrayList<>();
+		for(int i = 0 ; i < gameBoardVOList.size(); i++) {
+			nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+		}
+		GameVO gameVO = gameDAO.select(gameId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("gameBoardVOList", gameBoardVOList);
+		args.put("nicknameList",nicknameList);
+		args.put("gameVO", gameVO);
+		return args;
+	}
+
+	@Override
+	public Map<String, Object> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword,
+			String orderBy) {
+		logger.info("gameBoard read(keyword, orderBy)호출");
+		List<GameBoardVO> gameBoardVOList = null;
+		if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
+			gameBoardVOList = gameBoardDAO.selectByMemberId(gameId, keyword, criteria, orderBy);
+		}else {
+			gameBoardVOList = gameBoardDAO.selectByKeyword(gameId, keyword, criteria, orderBy);
+		}
+		List<String> nicknameList = new ArrayList<>();
+		for(int i = 0 ; i < gameBoardVOList.size(); i++) {
+			nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+		}
+		GameVO gameVO = gameDAO.select(gameId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("gameBoardVOList", gameBoardVOList);
+		args.put("nicknameList",nicknameList);
+		args.put("gameVO", gameVO);
+		return args;
+	}
 	
 	
 }
