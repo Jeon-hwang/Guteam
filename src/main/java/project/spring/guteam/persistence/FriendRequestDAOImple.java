@@ -1,6 +1,8 @@
 package project.spring.guteam.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -28,7 +30,7 @@ public class FriendRequestDAOImple implements FriendRequestDAO {
 	@Override
 	public int select(String receiveMemberId) {
 		logger.info("select_all() 호출 receiveMemberId " + receiveMemberId);
-		return sqlSession.selectOne(NAMESPACE + ".select_all", receiveMemberId);
+		return sqlSession.selectOne(NAMESPACE + ".select_to_chk", receiveMemberId);
 	}
 
 	@Override
@@ -44,9 +46,12 @@ public class FriendRequestDAOImple implements FriendRequestDAO {
 	}
 
 	@Override
-	public int delete(String sendMemberId) {
+	public int delete(String sendMemberId, String receiveMemberId) {
 		logger.info("delete() 호출");
-		return sqlSession.delete(sendMemberId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("sendMemberId", sendMemberId);
+		map.put("receiveMemberId", receiveMemberId);
+		return sqlSession.delete(NAMESPACE + ".delete", map);
 	}
 
 }

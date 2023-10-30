@@ -10,7 +10,10 @@ public interface FriendDAO {
 	int insert(FriendVO vo);
 	
 	// 내 친구 목록
-	List<FriendVO> select(String memberId);
+	List<String> select(String memberId);
+	
+	// 친구 중복 검사
+	int select(String memberId, String friendId);
 	
 	// 친구 삭제
 	int delete(String friendId);

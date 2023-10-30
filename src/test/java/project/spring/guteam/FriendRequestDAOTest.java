@@ -26,7 +26,18 @@ public class FriendRequestDAOTest {
 	@Test
 	public void testDAO() {
 //		testInsert();
-		testSelect();
+//		testSelect();
+//		testDelete();
+	}
+
+	private void testDelete() {
+		int result = dao.delete("test22", "test");
+		if(result == 1) {
+			logger.info("삭제 성공");
+		} else {
+			logger.info("삭제 실패");
+		}
+		
 	}
 
 	private void testSelect() {

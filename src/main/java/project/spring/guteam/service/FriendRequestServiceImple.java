@@ -42,9 +42,9 @@ public class FriendRequestServiceImple implements FriendRequestService {
 	}
 
 	@Override
-	public int delete(String sendMemberId) {
+	public int delete(String sendMemberId, String receiveMemberId) {
 		logger.info("delete() 호출");
-		return dao.delete(sendMemberId);
+		return dao.delete(sendMemberId, receiveMemberId);
 	}
 
 

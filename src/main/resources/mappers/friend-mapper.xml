@@ -19,8 +19,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 </insert>
 	 
 	 <!-- 친구 목록 -->
-	 <select id="select_by_member_id" resultType="friendVO">
-	 select * from ${friend} where ${memberId} = #{memberId}
+	 <select id="select_by_member_id" resultType="String">
+	 select ${friendId} from ${friend} where ${memberId} = #{memberId}
+	 </select>
+	 
+	 <select id="check_friend_id" resultType="Integer">
+	 select count(*) from ${friend} where ${memberId} = #{memberId} and ${friendId} = #{friendId}
 	 </select>
 	 
 	 <!-- 친구 삭제 -->

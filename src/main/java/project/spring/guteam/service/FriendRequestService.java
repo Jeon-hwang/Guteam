@@ -10,6 +10,6 @@ public interface FriendRequestService {
 	int read(String receiveMemberId);
 	List<String> readTo(String sendMemberId);
 	List<String> readFrom(String receiveMemberId);
-	int delete(String sendMemberId);
+	int delete(String sendMemberId, String receiveMemberId);
 	
 }
