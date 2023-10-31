@@ -6,6 +6,13 @@
 <html>
 <head>
 <jsp:include page="../style.jsp"></jsp:include>
+<style type="text/css">
+.profileImg {
+	width : 50px;
+	height : 50px;
+	border : 1px solid grey;
+}
+</style>
 <meta charset="UTF-8">
 <title>GUTEAM : 프로필</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -14,7 +21,7 @@
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 <h2>${vo.memberId }님의 프로필</h2>
 	<div>
-		<a href="../message/list" target="_blank" ><button>쪽지함</button></a>
+		<button onclick ="popUp();">쪽지함</button>
 		<a href="addCash"><button>캐쉬 충전</button></a>
 		<a href="../friend/list"><button>친구 목록</button></a>
 	</div>
@@ -36,6 +43,10 @@
 <input type="hidden" id="alert" value="${alert }">
 	
 <script type="text/javascript">
+	function popUp(){
+		window.open('../message/list', '쪽지함', 'width=715px,height=425px,scrollbars=yes');
+	};
+	
 	$(document).ready(function(){
 		function dateFormat(date) {
 	        var month = date.getMonth() + 1;
@@ -86,11 +97,8 @@
 						});
 						$('#myCommentsList').html(list);
 					}
-					
 				);//end getJson
-				
-				
-				
+	
 			});//end showMyComments
 	});
 </script>

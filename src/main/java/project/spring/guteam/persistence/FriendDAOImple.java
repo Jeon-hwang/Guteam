@@ -43,9 +43,12 @@ public class FriendDAOImple implements FriendDAO {
 	}
 
 	@Override
-	public int delete(String friendId) {
+	public int delete(String memberId, String friendId) {
 		logger.info("delete() 호출 friendId ? " + friendId);
-		return sqlSession.delete(friendId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("friendId", friendId);
+		return sqlSession.delete(NAMESPACE + ".delete", map);
 	}
 
 

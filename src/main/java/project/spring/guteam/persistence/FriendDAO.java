@@ -16,5 +16,5 @@ public interface FriendDAO {
 	int select(String memberId, String friendId);
 	
 	// 친구 삭제
-	int delete(String friendId);
+	int delete(String memberId, String friendId);
 }

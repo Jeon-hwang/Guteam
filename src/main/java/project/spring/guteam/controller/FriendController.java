@@ -109,8 +109,8 @@ public class FriendController {
     		// 친추할 아이디가 이미 나한테 요청
     		// ㄴ 조회시에는 friendRequestService.read(vo.getSendMemberId(), principal.getName())
     		//--> 초대시 바로 친구
-    		result = friendRequestService.read(vo.getSendMemberId());
-    		logger.info("이미 요청 받아 친추시 바로 친구됨");
+    		result = friendRequestService.read(vo.getReceiveMemberId(), principal.getName());
+    		logger.info("이미 요청 받아 친추시 바로 친구됨 보낸이 = " +  vo.getSendMemberId());
     		if(result == 1) {// id로 부터 받은 요청 조회
     			FriendVO fvo = new FriendVO(vo.getSendMemberId(), vo.getReceiveMemberId());
     			reAttr.addFlashAttribute("alert", "alreadyFrd");
@@ -119,8 +119,8 @@ public class FriendController {
     			result = memberService.read(vo.getReceiveMemberId(), "check");
     			logger.info("멤버 중 아이디 있나? 1이면 있음 = " + result);
     			
-    			if(result == 1) {
-    				result = friendRequestService.read(vo.getReceiveMemberId());
+    			if(result == 1) {// 위의 회원 전체 select이 밑으로 가면 좀더 효율적?
+    				result = friendRequestService.read(principal.getName(), vo.getReceiveMemberId());
     				logger.info("이미 친추 요청 상태? 1이면 이미 신청함 = " + result);
     				if(result != 1) {
     					result = friendRequestService.create(vo);
@@ -128,7 +128,7 @@ public class FriendController {
     					reAttr.addFlashAttribute("alert", "success");
     					return "redirect:/friend/list";
     				} else {
-    					// 취소로 바꿔 줄 수 있음
+    					// 취소로 바꿔 줄 수 있음 (아니면 한번 더 요청하면 친구요청 취소)
     					logger.info("친구 신청 중복? y");
     					reAttr.addFlashAttribute("alert", "dupl");
     					return "redirect:/friend/list";
@@ -161,6 +161,18 @@ public class FriendController {
     public String rejectPOST(FriendVO vo) {
     	logger.info("친구 요청 거절 vo? " + vo.toString());
     	int result = friendRequestService.delete(vo.getFriendId(), vo.getMemberId());
+    	if(result == 1) {
+    		return "redirect:/friend/list";
+    	} else {
+    		return "redirect:/friend/list";
+    	}
+    }
+    
+    // 친구 삭제
+    @PostMapping("/delete")
+    public String deletePOST(FriendVO vo, Principal principal) {
+    	logger.info("친구 삭제 요청 vo = " + vo.toString());
+    	int result = friendService.delete(principal.getName(), vo.getFriendId());
     	if(result == 1) {
     		return "redirect:/friend/list";
     	} else {
