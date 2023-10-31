@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.domain.PurchasedVO;
-import project.spring.guteam.domain.WishListVO;
 import project.spring.guteam.service.PurchasedService;
 
 

@@ -21,17 +21,22 @@
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
 			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">나의 위시리스트</button></a>
 			<a href="/guteam/purchased/myPurchased"><button type="button" class="btn btn-light">나의 보유 게임</button></a>
+			<button id="recentlyViewed" type="button" class="btn btn-light">최근 조회한 게임</button>
 			<form action="/guteam/member/logout" method="post" style="display:inline;">
 			<sec:csrfInput/>
 			<input type="submit" class="btn btn-light" value="로그아웃"></form>
 			<br><br>
+	<sec:authentication property="principal" var="principal"/>
+	<input type="hidden" id="memberId" value="${principal.username }">
 	</sec:authorize>
 	</div>
 	
-	
+	<aside id="recentlyViewedGames" class="right">
+	</aside>
 	
 <script type="text/javascript">
 	$(document).ready(function(){
+		
 		console.log(location.href);
 		var btnLogin = $('#btnLogin').attr('href');
 		$('#btnLogin').attr('href', btnLogin+location.href);
@@ -42,7 +47,81 @@
 			else if(result == 'fail'){
 				alert('요청에 실패하였습니다.');
 			}
-	});
+			
+		$('#recentlyViewed').on('click', function(){
+			var memberId = $('#memberId').attr('value');
+			var url = '/guteam/game/list-ajax/'+memberId;
+			if($(this).html()=='최근 조회한 게임'){
+				$(this).html('닫기');
+				var list = '<button class="btn btn-light" onclick="doclick()">닫기</button>';
+				
+				$.getJSON(
+						url,
+						function(data){
+							console.log(data);
+							if(data.recentlyViewedGameVOList.length==0){
+								list = '<button class="btn btn-light" onclick="doclick()">최근 조회한 게임이 없습니다</button>';
+							}else{
+								$(data.recentlyViewedGameVOList).each(function(index,vo){
+									list += '<div class="btn btn-secondary" style="margin:5px; width:330px; height:500px; ">'
+											+'<div class="gameInfo" onclick="gameDetail(this)">'
+											+'<img class="rounded mx-auto d-block" alt="'+this['gameImageName']+'" width="300px" height="300px"'
+											+'	src="/guteam/game/display?fileName='+this['gameImageName']+'"> <input type="hidden" class="gameId" value="'+this['gameId']+'"> <br>'
+											+'<div style="font-size: 1em;">	name : '+this['gameName']+'<br> price : '+this['price']+'<br>'
+											+'genre : '+this['genre']
+											+'<br> releaseDate : '+ dateformat(new Date(this['releaseDate']))
+											+'<br> rating : ';
+											var rating = $(data.recentlyViewedRatingList[index]);
+											rating = rating[0];
+												if(rating!=0){
+													var fullStar;
+													for(fullStar=1; fullStar<=rating/2; fullStar++){
+														list+='<i class="bi bi-star-fill"></i>';
+													}
+													if(rating%2==1){
+														list+='<i class="bi bi-star-half"></i>';
+													}
+													var star;
+													for(star=1; star<=5-(rating/2); star++){
+														list+='<i class="bi bi-star"></i>';
+													}
+												}
+											list += '</div><br></div></div>';
+								});// end each
+							}
+								$('#recentlyViewedGames').html(list);
+						}
+						
+					);// end getJSON()
+
+			}else{
+				$(this).html('최근 조회한 게임');
+				$('#recentlyViewedGames').html('');
+			}
+
+		});  // end recentlyViewedbtn.onclick()
+
+				
+		
+	}); // end document.ready()
+
+	
+	function dateformat(date){
+		var dateform = date.getFullYear() + '년' + ( (date.getMonth()+1) <= 9 ? "0"+(date.getMonth()+1) : (date.getMonth()+1) )
+									 + '월' + ( (date.getDate()) <= 9 ? "0" + (date.getDate()) : (date.getDate()) ) + '일';
+		return dateform;
+	} // end dateformat()
+	
+	function doclick(){
+		$('#recentlyViewed').click();
+	} // end doclick()
+	
+	function gameDetail(obj){
+		var gameId = $(obj).find('.gameId').attr('value');
+		location.href='/guteam/game/detail?gameId='+gameId;
+	}
+	
+	
 </script>
 </body>
 

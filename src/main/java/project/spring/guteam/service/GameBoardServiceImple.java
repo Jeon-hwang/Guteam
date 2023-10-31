@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.GameBoardVO;
 import project.spring.guteam.domain.GameVO;
@@ -36,6 +37,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		return gameBoardDAO.insert(vo);
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int gameId, PageCriteria criteria) {
 		logger.info("gameBoard read() 호출 : gameId = " + gameId);
@@ -70,6 +72,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		return gameBoardDAO.getTotalCounts(gameId);
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword) {
 		logger.info("gameBoard read(keyword) 호출 : keywordCriteria = " + keywordCriteria + ",keyword = " + keyword);
@@ -91,6 +94,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		return args;
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int gameBoardId) {
 		logger.info("gameBoard read(gameBoardId) 호출 : gameBoardId = " + gameBoardId);
@@ -114,6 +118,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		return gameBoardDAO.getTotalCounts(gameId, criteria, keywordCriteria, keyword);
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int gameId, PageCriteria criteria, String orderBy) {
 		logger.info("gameBoard read(orderBy)호출");
@@ -130,6 +135,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		return args;
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword,
 			String orderBy) {

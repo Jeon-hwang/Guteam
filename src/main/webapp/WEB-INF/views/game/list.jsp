@@ -43,6 +43,7 @@
 		<input type="hidden" class="orderByItem" name="orderBy" value="wishlist">
 		<input type="submit" class="orderBy" value="위시리스트순↑">
 	</div>
+	
 	<c:forEach varStatus="status" var="vo" items="${gameVOList }">
 	<div class="btn btn-secondary" style="margin:5px; width:330px; height:500px; display:inline-block; ">
 			<div class="gameInfo">
@@ -168,5 +169,6 @@
 		}); // end document.ready()
 	</script>
 	</div>
+	
 </body>
 </html>

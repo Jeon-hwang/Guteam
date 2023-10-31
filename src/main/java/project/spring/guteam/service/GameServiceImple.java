@@ -1,6 +1,8 @@
 package project.spring.guteam.service;
 
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.GameVO;
+import project.spring.guteam.domain.ViewedVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.GameDAO;
-import project.spring.guteam.persistence.MemberDAO;
 import project.spring.guteam.persistence.ReviewDAO;
+import project.spring.guteam.persistence.ViewedDAO;
 
 @Service
 public class GameServiceImple implements GameService {
@@ -25,6 +29,9 @@ public class GameServiceImple implements GameService {
 	
 	@Autowired
 	private GameDAO gameDAO;
+	
+	@Autowired
+	private ViewedDAO viewedDAO;
 		
 	@Override
 	public int create(GameVO vo) {
@@ -32,6 +39,7 @@ public class GameServiceImple implements GameService {
 		return gameDAO.insert(vo);
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(PageCriteria criteria) {
 		logger.info("game read() 호출 : criteria = " + criteria.toString());
@@ -46,8 +54,18 @@ public class GameServiceImple implements GameService {
 		return args;
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
-	public Map<String, Object> read(int gameId) {
+	public Map<String, Object> read(int gameId, Principal principal) {
+		if(principal!=null&&!principal.getName().equals("")) {
+			String memberId = principal.getName();
+			ViewedVO viewedVO = new ViewedVO(0, memberId, gameId, new Date());
+			if(viewedDAO.selectRecently(memberId)!=null&&viewedDAO.selectRecently(memberId).getGameId()==gameId) {
+				viewedDAO.update(viewedDAO.selectRecently(memberId));
+			}else {
+				viewedDAO.insert(viewedVO);
+			}
+		}
 		logger.info("game read(gameId) 호출 : gameId = " + gameId);
 		GameVO vo = gameDAO.select(gameId);
 		int rating = reviewDAO.getRating(gameId);
@@ -75,6 +93,7 @@ public class GameServiceImple implements GameService {
 		return gameDAO.getTotalCounts(keyword);
 	}
 	
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int price, PageCriteria criteria) {
 		logger.info("game read(price) 호출");
@@ -89,6 +108,7 @@ public class GameServiceImple implements GameService {
 		return args;
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(String keyword, PageCriteria criteria) {
 		logger.info("game read(keyword) 호출");
@@ -115,6 +135,7 @@ public class GameServiceImple implements GameService {
 		return sequence;
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria) {
 		Map<String, Object> args = new HashMap<>();
@@ -126,6 +147,25 @@ public class GameServiceImple implements GameService {
 		}
 		args.put("gameVOList", gameVOList);
 		args.put("ratingList", ratingList);
+		return args;
+	}
+
+	@Transactional(value = "transactionManager")
+	@Override
+	public Map<String, Object> read(String memberId) {
+		Map<String, Object> args = new HashMap<>();
+		logger.info("game read(memberId)호출 : memberId = " + memberId );
+		List<GameVO> recentlyViewedGameVOList = new ArrayList<>();
+		List<Integer> recentlyViewedRatingList = new ArrayList<>();
+		List<ViewedVO> recentlyViewed = viewedDAO.select(memberId);
+		for(int i = 0 ; i < recentlyViewed.size(); i++) {
+			if(!recentlyViewedGameVOList.contains(gameDAO.select(recentlyViewed.get(i).getGameId()))) {
+			recentlyViewedGameVOList.add(gameDAO.select(recentlyViewed.get(i).getGameId()));
+			recentlyViewedRatingList.add(reviewDAO.getRating(recentlyViewed.get(i).getGameId()));
+			}
+		}
+		args.put("recentlyViewedGameVOList", recentlyViewedGameVOList);
+		args.put("recentlyViewedRatingList", recentlyViewedRatingList);
 		return args;
 	}
 

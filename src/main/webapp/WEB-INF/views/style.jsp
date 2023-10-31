@@ -90,4 +90,19 @@ margin-bottom: 10px;
 	background-color: #6c757d;
 	border-color: #6c757d;
 }
+.right{
+	background-color:#6c757d;
+	position : fixed;
+	display:inline-block;
+	float: right;
+	margin-right:0px;
+	padding: 3px 1px 1px 2px;
+	overflow-y:scroll;
+	top:0;
+	bottom:0;
+	right:0;
+}
+.right div{
+	display:block;
+}
 </style>

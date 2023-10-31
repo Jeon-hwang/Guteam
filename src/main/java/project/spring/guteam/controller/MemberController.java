@@ -29,7 +29,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.fileutil.FileUploadUtil;
 import project.spring.guteam.fileutil.MediaUtil;
-import project.spring.guteam.service.FriendService;
 import project.spring.guteam.service.MemberService;
 
 

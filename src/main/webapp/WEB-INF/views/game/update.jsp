@@ -22,7 +22,7 @@
 <form action="update" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 <sec:csrfInput/>
 <input type="hidden" name="prevListUrl" value="${prevListUrl }">
-<input type="hidden" name="gameId" value="${vo.gameId }">
+<input type="hidden" id="gameId" name="gameId" value="${vo.gameId }">
 게임이름=<input type="text" name="gameName" value="${vo.gameName }" required><br>
 가격=<input type="number" name="price" value="${vo.price }" required><br>
 장르=<input type="text" name="genre" value="${vo.genre }" required><br>
@@ -48,11 +48,12 @@
 				var formData = new FormData();
 				
 				var files = event.originalEvent.dataTransfer.files;
-				
+				var gameId = $('#gameId').attr('value');
 				var i = 0 ;
 				for(i = 0 ; i < files.length; i++){
 					console.log(files[i]);
 					formData.append("files",files[i]);
+					formData.append("gameId",gameId);
 				$.ajax({
 					type : 'post',
 					url : '/guteam/game/upload-ajax',

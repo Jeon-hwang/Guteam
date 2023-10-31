@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.domain.ReviewVO;
@@ -41,6 +42,7 @@ public class ReviewServiceImple implements ReviewService {
 		return reviewDAO.insert(vo);
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int gameId, PageCriteria criteria) {
 		logger.info("review read() 호출");
@@ -57,6 +59,7 @@ public class ReviewServiceImple implements ReviewService {
 		return args;
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int reviewId, String memberId) {
 		logger.info("review read(reviewId) 호출 : reviewId = " + reviewId );
@@ -107,6 +110,7 @@ public class ReviewServiceImple implements ReviewService {
 		return reviewDAO.selectWrited(gameId, memberId);
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int gameId, PageCriteria criteria, String keyword) {
 		logger.info("review read(keyword) 호출");
@@ -129,6 +133,7 @@ public class ReviewServiceImple implements ReviewService {
 		return reviewDAO.getTotalCount(gameId, keyword);
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(String orderBy, PageCriteria criteria, String keyword, int gameId) {
 		logger.info("review read(keyword, orderBy) 호출");
@@ -145,6 +150,7 @@ public class ReviewServiceImple implements ReviewService {
 		return args;
 	}
 
+	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(String orderBy, int gameId, PageCriteria criteria) {
 		logger.info("review read(orderBy) 호출");

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.spring.guteam.viewedMapper">
+
+    <insert id="insert">
+    	insert into ${viewed} (${memberId}, ${gameId}, ${viewedDate}) values (#{memberId}, #{gameId}, sysdate)
+    </insert>
+    
+    <select id="select_today" resultType="viewedVO">
+    	select ${viewedId}, ${memberId}, ${gameId}, ${viewedDate} 
+    	from (select rownum rn, a.* from 
+    	(select * from ${viewed} where ${memberId}=#{memberId} 
+    	and to_char(${viewedDate},'yyyyMMdd')=to_char(sysdate,'yyyyMMdd') 
+    	order by ${viewedDate} desc)a )
+    	where rn between 1 and 5
+    </select>
+    
+    <update id="update">
+    	update ${viewed} set ${viewedDate}=sysdate where ${viewedId}=#{viewedId}
+    </update>
+    
+    <delete id="delete">
+    	delete ${viewed} where ${viewedId}=#{viewedId}
+    </delete>
+    
+    <select id="select_recently_one" resultType="viewedVO">
+    	select ${viewedId}, ${memberId}, ${gameId}, ${viewedDate} 
+    	from (select rownum rn, a.* from 
+    	(select * from ${viewed} where ${memberId}=#{memberId} and to_char(${viewedDate},'yyyyMMdd')=to_char(sysdate,'yyyyMMdd'))a )
+    	 where rn=1
+    </select>
+    
+     
+</mapper>

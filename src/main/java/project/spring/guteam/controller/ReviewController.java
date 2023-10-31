@@ -1,7 +1,6 @@
 package project.spring.guteam.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,15 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.spring.guteam.domain.GameVO;
-import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.domain.ReviewVO;
 import project.spring.guteam.domain.ThumbVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
-import project.spring.guteam.service.GameService;
-import project.spring.guteam.service.MemberService;
 import project.spring.guteam.service.ReviewService;
-import project.spring.guteam.service.ThumbService;
 
 @Controller
 @RequestMapping(value = "/review")

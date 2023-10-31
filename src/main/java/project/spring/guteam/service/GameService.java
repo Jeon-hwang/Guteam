@@ -1,5 +1,6 @@
 package project.spring.guteam.service;
 
+import java.security.Principal;
 import java.util.Map;
 
 import project.spring.guteam.domain.GameVO;
@@ -9,7 +10,7 @@ public interface GameService {
 	// CRUD(Create, Read, Update, Delete)
 	int create(GameVO vo);
 	Map<String, Object> read(PageCriteria criteria);
-	Map<String, Object> read(int gameId);
+	Map<String, Object> read(int gameId, Principal principal);
 	int update(GameVO vo);
 	int getTotalCount();
 	int getTotalCount(int price);
@@ -18,4 +19,5 @@ public interface GameService {
 	int getTotalCount(String keyword);
 	int getSeqNo();
 	Map<String, Object> read(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria);
+	Map<String, Object> read(String memberId);
 }

@@ -1,7 +1,6 @@
 package project.spring.guteam.persistence;
 
 import java.util.List;
-import java.util.Map;
 
 import project.spring.guteam.domain.GameBoardVO;
 import project.spring.guteam.pageutil.PageCriteria;

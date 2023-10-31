@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,6 +60,7 @@ public class GameController {
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
 		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, orderBy);
+		
 	}
 
 	@GetMapping("/register")
@@ -95,8 +98,8 @@ public class GameController {
 	}
 
 	@GetMapping("/detail")
-	public void detail(Model model, int gameId, String prevListUrl) {
-		Map<String, Object> args = gameService.read(gameId);
+	public void detail(Model model, int gameId, String prevListUrl, Principal principal) {
+		Map<String, Object> args = gameService.read(gameId, principal);
 		GameVO vo = (GameVO) args.get("vo");
 		model.addAttribute("vo", vo);
 		int rating = (int) args.get("rating");
@@ -108,8 +111,8 @@ public class GameController {
 	}
 
 	@GetMapping("/update")
-	public void updateGET(Model model, int gameId, String prevListUrl) {
-		Map<String, Object> args = gameService.read(gameId);
+	public void updateGET(Model model, int gameId, String prevListUrl, Principal principal) {
+		Map<String, Object> args = gameService.read(gameId, principal);
 		GameVO vo = (GameVO) args.get("vo");
 		model.addAttribute("vo", vo);
 		try {
@@ -122,16 +125,16 @@ public class GameController {
 	}
 
 	@PostMapping("/update")
-	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file) {
+	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file, Principal principal) {
 
 		logger.info("updatePOST() 호출");
-		String beforeImageName = ((GameVO)gameService.read(vo.getGameId()).get("vo")).getGameImageName();
+		String beforeImageName = ((GameVO)gameService.read(vo.getGameId(), principal).get("vo")).getGameImageName();
 		logger.info(vo + "");
 		if (file != null && !file.getOriginalFilename().equals("")) {
 			try {
 				logger.info(file.getOriginalFilename());
 				vo.setGameImageName(
-						GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1),
+						GameImageUploadUtil.saveUploadedFile(uploadPath, vo.getGameId()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1),
 								file.getBytes()));
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -194,16 +197,28 @@ public class GameController {
 		}
 		return entity;
 	}
+	
+	@GetMapping("/list-ajax/{memberId}")
+	public ResponseEntity<Map<String, Object>> recentlyViewed(@PathVariable("memberId") String memberId){	
+		logger.info("최근 조회한 게임 불러오기");
+		Map<String, Object> args = gameService.read(memberId);
+		return new ResponseEntity<Map<String, Object>>(args, HttpStatus.OK);
+	}
 
 	@PostMapping("/upload-ajax")
-	public ResponseEntity<String> uploadAjaxPOST(MultipartFile[] files) {
+	public ResponseEntity<String> uploadAjaxPOST(MultipartFile[] files, String gameId) {
 		logger.info("uploadAgaxPOST() 호출");
 		// 파일 하나만 저장
 		String result = ""; // result : 파일 경로 및 썸네일 이미지 이름
 		
 		for (int i = 0; i < files.length; i++) {
 			try {
-				result = GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+files[i].getOriginalFilename().substring(files[i].getOriginalFilename().lastIndexOf(".")+1),
+				String fileName = gameService.getSeqNo()+"";
+				if(gameId!=null) {
+					fileName=gameId;
+				}
+				logger.info(fileName);
+				result = GameImageUploadUtil.saveUploadedFile(uploadPath, fileName+"."+files[i].getOriginalFilename().substring(files[i].getOriginalFilename().lastIndexOf(".")+1),
 						files[i].getBytes());
 				result = URLEncoder.encode(result, "utf-8");
 			} catch (IOException e) {
