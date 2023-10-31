@@ -21,7 +21,7 @@
 		margin : auto;
 		text-align: center;
 	}
-	#buyNow{
+	#btnArea{
 		float: right;
 	}
 </style>
@@ -65,9 +65,12 @@
 	<div id="totalPriceArea">
 		전체 가격 : <span id="totalPrice">0</span>
 	</div>
+	<div id='btnArea'>
 	<button id="buyNow">구매 확정</button>
+	<button id="cancle">취소</button>
+	</div>
 	<input type="hidden" id="memberId" value=${principal.username }>
-	
+		
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$(window).on('load',function totalPrice(){
@@ -85,17 +88,32 @@
 				var header = $("meta[name='_csrf_header']").attr("content");
 				var gameIdArr = $('.gameId');
 				var gameIds = [];
+				var priceArr = [];
 				var memberId = $('#memberId').val();
+				var cash = parseInt(($('#myCash').text()));
+				var totalPrice = parseInt($('#totalPrice').text());
 				
+				console.log(cash);
+				if(cash<totalPrice){
+					alert('보유한 금액이 모자랍니다.');
+				}else{
+		
 				gameIdArr.each(function(){
 					gameIds.push($(this).val());
+					var price = parseInt($(this).parent().nextAll('.price').text());
+					console.log("price? "+price);
+					priceArr.push(price);
 				});
 		
 				for(var i=0;i<gameIds.length;i++){
 					var gameId = gameIds[i];
+					var price = priceArr[i];
+					console.log(price);
+					cash = cash - price;
+					console.log(cash);  
 					$.ajax({
 						type : 'POST',
-						url : 'buy/'+memberId,
+						url : 'buy/'+memberId+'?cash='+cash,
 						headers : {
 							'Content-Type' : 'application/json'
 						},
@@ -113,18 +131,13 @@
 						
 					});//end ajax
 				}
+				}
 			});// end buyNow.click
-			showMyCash();
-			function showMyCash(){
-				var memberId = $('#memberId').val();
-				
-				var url = '../member/'
-				$.ajax(
-							
-				);
-				
-				
-			}
+			
+			$('#cancle').click(function(){
+				location.href = "../"
+			});// end cancle.click
+			
 		});//end document
 	</script>
 </body>

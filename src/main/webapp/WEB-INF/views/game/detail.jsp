@@ -10,6 +10,22 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <title>${vo.gameName }</title>
 <style type="text/css">
+	#friendsOwnGame{
+		float : right;
+	}
+	#friendsOwnGame ul li{
+		float : right;
+	}
+	
+	#preview{
+			z-index: 99;
+			position:absolute;
+			border:1px solid #ccc;
+			background:#333;
+			padding:5px;
+			display:none;
+			color:#fff;
+	}
 </style>
 </head>
 <body>
@@ -23,6 +39,12 @@
 <input type="hidden" id="username" value="${principal.username }">
 </sec:authorize>
 <img alt="${vo.gameName }" width="300px" height="300px" src="display?fileName=${vo.gameImageName }">
+<sec:authorize access="isAuthenticated()">
+<div id="friendsOwnGame">
+이 게임을 가지고 있는 친구
+<ul id="friendsList"></ul>
+</div>	
+</sec:authorize>
 <br>
 게임 이름 : ${vo.gameName }
 <br>
@@ -71,7 +93,8 @@
 		if(updateResult=='success'){
 			alert('게임 정보 수정 성공');
 		}
-		
+		var xOffset = 10;
+        var yOffset = 30;
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var gameId = $('#gameId').val();
@@ -151,6 +174,42 @@
 				}
 			});// end ajax
 		});//end removeWishList.click
+		showGameOwnFriend();
+		function showGameOwnFriend(){
+				var url = "../purchased/findFriends/"+memberId+'?gameId='+gameId;
+				var list = '';
+				$.getJSON(
+					url,
+					function(data){
+					
+						$(data.imageNameList).each(function(index){
+							//console.log(data.friendIdList[index]);
+							//console.log("인덱스가 나오나?"+index);
+							list += '<li class="profileImg">' 
+								 + '<img alt="'+data.friendIdList[index]+'" width="50px" height="50px" title="'+data.friendIdList[index]+'" src="display?fileName='+this+'">'
+								 + '</li>';
+						});
+						$('#friendsList').html(list);
+					}
+					
+				);//end getJSON
+				
+		}// end showGameOwnFriend()
+		
+		$('#friendsOwnGame').on('mouseover','#friendsList .profileImg',function(e){
+			//console.log('오리자');
+			 var image_data = $(this).children().data("image");
+			// console.log('확인!'+$(this).children().attr('alt'));
+			 $("body").append("<p id='preview'><img src='"+ $(this).children().attr("src") +"' width='100px' />"+ $(this).children().attr('alt') +"</p>");
+			 $("#preview")
+	            .css("top",(e.pageY - xOffset) + "px")
+	            .css("left",(e.pageX + yOffset) + "px")
+	            .fadeIn("fast");
+		});//end profileImg.mouseover 
+		$('#friendsOwnGame').on('mouseout','#friendsList .profileImg',function(){
+			//console.log('내리자');
+			$("#preview").remove();
+		});//end profileImg.mouseover 
 	});// document
 
 </script>

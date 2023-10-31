@@ -30,10 +30,11 @@ public class PurchasedRESTController {
 	private PurchasedService service;
 	
 	@PostMapping("/buy/{memberId}")
-	public ResponseEntity<Integer> insertPurchased(@RequestBody int gameId,@PathVariable("memberId") String memberId){
+	public ResponseEntity<Integer> insertPurchased(@RequestBody int gameId,@PathVariable("memberId") String memberId,int cash){
 			PurchasedVO vo = new PurchasedVO(memberId, gameId, null);
 			try {
-				int result = service.create(vo);
+//				logger.info("cash? "+cash);
+				int result = service.create(vo,cash);
 				return new ResponseEntity<Integer>(result,HttpStatus.OK);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -60,7 +61,14 @@ public class PurchasedRESTController {
 		return new ResponseEntity<PurchasedVO>(vo, HttpStatus.OK);
 		}else {
 		return null;
-		}
-		
+		}	
 	}
+	
+	@GetMapping("findFriends/{memberId}")
+	public ResponseEntity<Map<String, Object>> findFriendOwnGame(@PathVariable("memberId") String memberId, int gameId){
+			Map<String, Object> data = service.findFriends(memberId, gameId);
+			logger.info(data.toString());
+		return new ResponseEntity<Map<String, Object>>(data,HttpStatus.OK);		
+	}
+	//"../purchased/findFriends/"+memberId+'?gameId='+gameId;
 }

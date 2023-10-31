@@ -44,7 +44,7 @@ public class MemberDAOImpleTest {
 
 	private void testUpdateCach() {
 		MemberVO vo = new MemberVO("test2", "1234", "테스트", "test", "00", 999999, "test", "N");
-		int result = dao.updateCash(vo);
+		int result = dao.updateCash(vo.getCash(),vo.getMemberId());
 		if(result == 1) {
 			logger.info("updateCash() 성공");
 		}else {

@@ -1,6 +1,7 @@
 package project.spring.guteam.persistence;
 
 import java.util.List;
+import java.util.Map;
 
 import project.spring.guteam.domain.MemberVO;
 
@@ -22,7 +23,7 @@ public interface MemberDAO {
 	int updateMem(MemberVO vo);
 	
 	// 캐쉬 충전
-	int updateCash(MemberVO vo);
+	int updateCash(int cash,String memberId);
 	
 	// 회원 정보 삭제
 	int delete(String memberId);

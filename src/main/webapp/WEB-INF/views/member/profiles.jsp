@@ -14,7 +14,7 @@
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 <h2>${vo.memberId }님의 프로필</h2>
 	<div>
-			<a href="../message/list" target="_blank" ><button>쪽지함</button></a>
+		<a href="../message/list" target="_blank" ><button>쪽지함</button></a>
 		<a href="addCash"><button>캐쉬 충전</button></a>
 		<a href="../friend/list"><button>친구 목록</button></a>
 	</div>
@@ -95,3 +95,5 @@
 	});
 </script>
 </body>
+</html>
+

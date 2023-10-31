@@ -38,11 +38,13 @@ public class PurchasedServiceImple implements PurchasedService {
 	
 	@Override
 	@Transactional(value = "transactionManager")
-	public int create(PurchasedVO vo) throws Exception{
+	public int create(PurchasedVO vo,int cash) throws Exception{
 		logger.info("create 생성");
 		purchasedDAO.insert(vo);
 		WishListVO wishVO = new WishListVO(vo.getMemberId(), vo.getGameId());
-		wishListDAO.delete(wishVO);
+		memberDAO.updateCash(cash, vo.getMemberId()); //캐쉬 업데이트
+		wishListDAO.delete(wishVO); // 위시리스트에서 삭제
+		
 		return 1;
 	}
 	
@@ -88,6 +90,23 @@ public class PurchasedServiceImple implements PurchasedService {
 	public PurchasedVO find(String memeberId, int gameId) {
 		logger.info("find 실행");
 		return purchasedDAO.find(memeberId, gameId);
+	}
+
+	@Transactional(value = "transactionManager")
+	@Override
+	public Map<String, Object> findFriends(String memberId, int gameId) {
+		logger.info("findFriends 실행");
+		List<String> friendIdList = purchasedDAO.findFriends(memberId, gameId); // 게임을 가지고있는 친구 id만 List로 나온다
+		List<String> imageNameList = new ArrayList<String>();
+		for(int i = 0; i<friendIdList.size();i++) { 
+			String friendId = friendIdList.get(i);
+			String imageName = memberDAO.select(friendId).getMemberImageName();
+			imageNameList.add(imageName);
+		}
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("imageNameList", imageNameList);
+		args.put("friendIdList", friendIdList);
+		return args;
 	}
 
 }
