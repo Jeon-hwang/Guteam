@@ -1,6 +1,8 @@
 package project.spring.guteam.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -50,9 +52,12 @@ public class MemberDAOImple implements MemberDAO {
 	}
 	
 	@Override
-	public int updateCash(MemberVO vo) {
-		logger.info("updateCash() 호출 vo = " + vo.toString());
-		return sqlSession.update(NAMESPACE + ".update_cash", vo);
+	public int updateCash(int cash,String memberId) {
+		logger.info("updateCash() 호출 cash, memberId = " + cash+","+memberId );
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("cash", cash);
+		args.put("memberId", memberId);
+		return sqlSession.update(NAMESPACE + ".update_cash", args);
 	}
 
 	@Override

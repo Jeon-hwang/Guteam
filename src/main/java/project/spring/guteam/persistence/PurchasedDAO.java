@@ -8,4 +8,5 @@ public interface PurchasedDAO {
 	int insert(PurchasedVO vo);
 	List<PurchasedVO> select(String memberId);
 	public PurchasedVO find(String memberId, int gameId);
+	List<String> findFriends(String memberId, int gameId);
 }

@@ -42,4 +42,13 @@ public class PurchasedDAOImple implements PurchasedDAO {
 		return sqlSession.selectOne(NAMESPACE+".find",args);
 	}
 
+	@Override
+	public List<String> findFriends(String memberId, int gameId) {
+		logger.info("findFriends호출");
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("memberId", memberId);
+		args.put("gameId", gameId);
+		return sqlSession.selectList(NAMESPACE+".find_friend",args);
+	}
+
 }

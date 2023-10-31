@@ -19,4 +19,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where ${memberId} = #{memberId} and ${gameId} = #{gameId}
 	</select>
 	
+	<select id="find_friend" resultType="String">
+		select ${friendId} FROM ${friend} where ${memberId} = #{memberId}
+		intersect
+		select ${memberId} FROM ${purchased} where ${gameId} = #{gameId}
+	</select>
 </mapper>
