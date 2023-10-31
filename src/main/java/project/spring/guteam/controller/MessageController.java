@@ -1,5 +1,12 @@
 package project.spring.guteam.controller;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.security.Principal;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
