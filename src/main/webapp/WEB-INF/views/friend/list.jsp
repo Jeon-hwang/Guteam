@@ -85,17 +85,19 @@ padding:20px 80px;
 </table>
 <hr>
 <h2>친구 목록</h2>
-<table>
-	<tbody>
-		<c:forEach var="fvo" items="${friendList }">
-			<tr>
-				<td><input type="image" class="profileImg" alt="${fvo.memberId }" 
-					src="display?fileName=${fvo.memberImageName }" readonly /></td>
-				<td><input type="text" id="toNickname" value="${fvo.nickname }" style="width:92px;" readonly></td>
-			</tr>
-		</c:forEach>
-	</tbody>
-</table>
+	<c:forEach var="fvo" items="${friendList }">
+		<div>
+		<form action="../friend/delete" method="post">
+			<sec:csrfInput/>
+			<input type="image" class="profileImg" alt="${fvo.memberId }" 
+				src="display?fileName=${fvo.memberImageName }" readonly />
+			<input type="text" id="toNickname" value="${fvo.nickname }" style="width:92px;" readonly>
+			<input type="hidden" name="friendId" id="friendId" value="${fvo.memberId }">
+			<input type="submit" value="친구삭제">
+		</form>
+		</div>
+	</c:forEach>
+
 <input type="hidden" id="alert" value="${alert }">
 
 <script type="text/javascript">

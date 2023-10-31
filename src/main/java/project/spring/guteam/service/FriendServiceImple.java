@@ -36,7 +36,7 @@ public class FriendServiceImple implements FriendService {
 			logger.info("요청 받은 아이디 : " + vo.getMemberId());
 			reqDao.delete(vo.getFriendId(), vo.getMemberId());
 			// 내가 친추 요청을 했다면 .delete 해야함
-			result = reqDao.select(vo.getFriendId());
+			result = reqDao.select(vo.getMemberId(), vo.getFriendId());
 			if(result == 1) {
 				result = reqDao.delete(vo.getMemberId(), vo.getFriendId());				
 				logger.info("내가 한 요청 삭제");
@@ -58,10 +58,15 @@ public class FriendServiceImple implements FriendService {
 		return frdDao.select(memberId, friendId);
 	}
 	
+	@Transactional(value = "transactionManager")
 	@Override
-	public int delete(String friendId) {
+	public int delete(String memberId, String friendId) {
 		logger.info("delete() 호출 friendId? " + friendId);
-		return frdDao.delete(friendId);
+		int result = frdDao.delete(memberId, friendId);
+		if(result == 1) {
+			result = frdDao.delete(friendId, memberId);
+		}
+		return result;
 	}
 
 

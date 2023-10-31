@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
@@ -12,6 +11,17 @@
 	width : 40px;
 	height : 40px;
 	border : 1px solid grey;
+}
+.th {
+	width : 100px;
+	height : 250px;
+}
+.td {
+	width : 480px;
+	height : 250px;
+}
+.tdc {
+	text-align: center;
 }
 body {
     margin: 0;
@@ -53,9 +63,6 @@ thead {
 	background-color : darkgrey;
 	text-align : center;
 }
-th {
-	border-left : solid 1px gray;
-}
 #board-head {
 	margin : 5px;
     
@@ -70,7 +77,7 @@ th {
 <div id="leftMenu">
 <div><img width="110px" height="50px" src="display?fileName=/logo.png"></div>
 	<ul>
-	<li><a href="../message/register"><button>쪽지 쓰기</button></a></li>
+	<li><button>쪽지 쓰기</button></li>
 	<br>
 	<li><button>받은 쪽지함</button></li>
 	<li><button>보낸 쪽지함</button></li>
@@ -78,30 +85,46 @@ th {
 	</ul>
 </div>
 <div id="board-top">
-	<button>삭제</button>
+	<button>12345</button>
+	
 </div>
 <div id="main">
-<table>
-	<thead>
-	<tr>
-		<th style="width: 30px"><label class="chkbox"><input type="checkbox" onclick="allCheck()"></label></th>
-		<th style="width: 370px">제목</th>
-		<th style="width: 100px">보낸 사람</th>
-		<th style="width: 80px">보낸 날짜</th>
-	</tr>
-	</thead>
-	<tbody>
-	<c:forEach var="vo" items="${list }">
-	<tr>
-		<td style="width: 30px"><label class="chkbox"><input type="checkbox" onclick="allCheck()"></label>></td>
-		<td>${vo.messageTitle }</td>
-		<td>${vo.sendMemberNickname }</td>
-		<fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/>
-		<td>${vo.messageDateCreated }</td>
-	</tr>
-	</c:forEach>
-	</tbody>
-</table>
+	<form action="register" method="post">
+	<sec:csrfInput/>
+	<h2>${vo.memberId }님의 쪽지 쓰기</h2>
+	<div id="msg-title">
+		<table>
+		<colgroup>
+			<col class="th">
+			<col class="td">
+		</colgroup>
+		<tbody>
+			<tr>
+				<td class="tdc">보낼 닉네임</td>
+				<td>
+				<input type="text" name="sendMemberNickname" id="sendMemberNickname" required>
+				</td>
+			</tr>
+			<tr>
+				<td class="tdc">제 목</td>
+				<td>
+				<input type="text" name="messageTitle" id="messageTitle" style="width: 465px;">
+				</td>
+			</tr>
+			<tr>
+				<td class="tdc">내 용</td>
+				<td>
+				<textarea style="width: 465px; height: 200px; resize:none; maxlength: 333;"></textarea><!-- 밑부분 70px -->
+				</td>
+			</tr>
+			
+		</tbody>
+		</table>
+	</div>
+	<div style="text-align: right; padding-right: 5px;">
+		<input type="submit" value="보내기">
+	</div>
+	</form>
 	
 </div>
 

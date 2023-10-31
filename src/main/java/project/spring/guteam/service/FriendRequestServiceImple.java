@@ -24,9 +24,9 @@ public class FriendRequestServiceImple implements FriendRequestService {
 	}
 
 	@Override
-	public int read(String receiveMemberId) {
+	public int read(String sendMemberId, String receiveMemberId) {
 		logger.info("read() 호출 ? " + receiveMemberId);
-		return dao.select(receiveMemberId);
+		return dao.select(sendMemberId, receiveMemberId);
 	}
 	
 	@Override

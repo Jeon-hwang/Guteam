@@ -28,9 +28,12 @@ public class FriendRequestDAOImple implements FriendRequestDAO {
 	}
 	
 	@Override
-	public int select(String receiveMemberId) {
+	public int select(String sendMemberId, String receiveMemberId) {
 		logger.info("select_all() 호출 receiveMemberId " + receiveMemberId);
-		return sqlSession.selectOne(NAMESPACE + ".select_to_chk", receiveMemberId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("sendMemberId", sendMemberId);
+		map.put("receiveMemberId", receiveMemberId);
+		return sqlSession.selectOne(NAMESPACE + ".select_all", map);
 	}
 
 	@Override
