@@ -96,5 +96,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	order by ${commentCnt} desc, ${gameBoardId} desc)
 	where rn between #{start} and #{end}
     </select>
+    
+    <select id="select_my_board" resultType="GameBoardVO">
+	    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+	    from (select rownum rn, a.* from 
+	    (select * from ${game_board} where ${memberId}=#{memberId} order by ${gameBoardDateCreated} desc)a )
+	    where rn between #{start} and #{end}
+    </select>
  
 </mapper>
