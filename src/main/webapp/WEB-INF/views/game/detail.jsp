@@ -15,6 +15,7 @@
 	}
 	#friendsOwnGame ul li{
 		float : right;
+		margin-left : 5px;
 	}
 	
 	#preview{
@@ -91,7 +92,7 @@
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
 		if(updateResult=='success'){
-			alert('게임 정보 수정 성공');
+			alert('게임 정보 수정 성공'); 	
 		}
 		var xOffset = 10;
         var yOffset = 30;
@@ -181,7 +182,6 @@
 				$.getJSON(
 					url,
 					function(data){
-					
 						$(data.imageNameList).each(function(index){
 							//console.log(data.friendIdList[index]);
 							//console.log("인덱스가 나오나?"+index);
@@ -191,9 +191,7 @@
 						});
 						$('#friendsList').html(list);
 					}
-					
 				);//end getJSON
-				
 		}// end showGameOwnFriend()
 		
 		$('#friendsOwnGame').on('mouseover','#friendsList .profileImg',function(e){
@@ -210,6 +208,12 @@
 			//console.log('내리자');
 			$("#preview").remove();
 		});//end profileImg.mouseover 
+		
+		$('#friendsOwnGame').on('mousemove','#friendsList .profileImg',function(e){
+            $("#preview")
+            .css("top",(e.pageY - xOffset) + "px")
+            .css("left",(e.pageX + yOffset) + "px");
+        });
 	});// document
 
 </script>

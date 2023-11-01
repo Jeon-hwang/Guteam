@@ -36,8 +36,10 @@
 		<hr>
 		<div id="commentsArea">
 			<button id="showMyComments">내가 쓴 댓글 보기</button>
+			<button id="closeMyComments" style="display : none">접기</button>
 			<div id="myComments">
-			<ul id="myCommentsList"></ul></div>
+				<ul id="myCommentsList"></ul>
+			</div>
 		</div>
 	</div>
 <input type="hidden" id="alert" value="${alert }">
@@ -72,34 +74,71 @@
 				alert('요청에 실패하였습니다.');
 			}
 			
-			$('#showMyComments').click(function(){
+			function showMyComments(page){
 				//console.log("클릭확인");
-				
+				var nowPage = page;
 				var memberId = $('#memberId').val();
-				var url = '../boardComment/comments/'+memberId;
+				var url = '../boardComment/comments/'+memberId+'?page='+nowPage;
 				var list = '';
+
 				$.getJSON(
 					url,
-					function(data){
-						data.sort((a,b) => b.createdDate - a.createdDate); // 해당 List데이터를 날짜 역순으로 정렬
-						
+					function(data){						
 						console.log(data);
 					
-						$(data).each(function(){
+						$(data.list).each(function(){
 						var createdDate = new Date(this.createdDate);
-						if(this.content!="삭제된 댓글입니다."){
+						
 						list += '<li class="comment_reply_item">'
-							 +  '<span>'+this.nickname+'</span>'
 							 +  '<span><a href="/guteam/gameBoard/detail?gameBoardId='+this.boardId+'&page=1&gameId='+this.gameId+'">'+this.content+'</a></span>'
 							 +	'<span>'+dateFormat(createdDate)+'</span>'
 							 +  '</li>';
+						
+						}); //end data.each
+						var hasPrev = data.pageMaker.hasPrev;
+						var hasNext = data.pageMaker.hasNext;
+						var startPageNo = data.pageMaker.startPageNo;
+						var endPageNo = data.pageMaker.endPageNo;
+						
+						list += '<div class="comment_paging">';
+						if(hasPrev){
+							list += '<button class="paging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp'; 
 						}
-						});
+						for(var i = startPageNo ; i<=endPageNo ; i++ ){
+							if(nowPage==i){
+								list += '<em>'+i+'</em>';									
+							}else{
+								list += '<button class="paging" value="'+i+'">'+i+'</button>';		
+							}
+						}
+						if(hasNext){
+							list += '&nbsp&nbsp<button class="paging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp';		
+						}
+						list +=	'</div>';
+						
 						$('#myCommentsList').html(list);
 					}
 				);//end getJson
-	
+			}
+			
+			$('#showMyComments').click(function(){
+				$('#showMyComments').css("display","none");
+				$('#closeMyComments').css("display","block");
+				showMyComments(1);
 			});//end showMyComments
+			
+			$('#closeMyComments').click(function(){
+				$('#showMyComments').css("display","block");
+				$('#closeMyComments').css("display","none");
+				$('#myCommentsList').html('');
+				
+			});
+			
+			$('#myCommentsList').on('click','.comment_paging .paging',function(){
+				var clickPage = $(this).val();
+				console.log("선택한 페이지 :"+clickPage);
+				showMyComments(clickPage);
+			})
 	});
 </script>
 </body>

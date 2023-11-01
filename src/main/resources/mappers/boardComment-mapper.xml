@@ -53,4 +53,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	select * from ${board_comment}
 	 	where ${memberId} = #{memberId}
 	 </select>
+	
+	 <select id="select_all_comment" resultType="BoardAndReplyVO">
+	 	select b.* from 
+	 	(select rownum rn, a.* from
+	 	(select a.${gameBoardId} as ${boardId}, a.${commentContent} as content,a.${commentDateCreated} as ${createdDate},b.${gameId} from (select * from ${board_comment} where ${memberId}=#{memberId})a, (select * from ${game_board})b where a.${gameBoardId} = b.${gameBoardId}
+		union all
+		select c.${gameBoardId} as ${boardId},c.${replyContent} as content ,c.${replyDateCreated} as ${createdDate},d.${gameId} from (select a.*,b.${gameBoardId} from (select * from ${reply} where ${memberId}=#{memberId})a, (select * from ${board_comment})b where a.${commentId}=b.${commentId})c, (select * from ${game_board})d where c.${gameBoardId}=d.${gameBoardId} order by ${createdDate} desc
+		)
+		a)b where rn between #{start} and #{end}
+	</select>	 
+	 <select id="select_all_comment_count" resultType="Integer">
+	 	select count(*) from
+	 	(select a.${gameBoardId} as ${boardId}, a.${commentContent} as content,a.${commentDateCreated} as ${createdDate},b.${gameId} from (select * from ${board_comment} where ${memberId}=#{memberId})a, (select * from ${game_board})b where a.${gameBoardId} = b.${gameBoardId}
+		union all
+		select c.${gameBoardId} as ${boardId},c.${replyContent} as content ,c.${replyDateCreated} as ${createdDate},d.${gameId} from (select a.*,b.${gameBoardId} from (select * from ${reply} where ${memberId}=#{memberId})a, (select * from ${board_comment})b where a.${commentId}=b.${commentId})c, (select * from ${game_board})d where c.${gameBoardId}=d.${gameBoardId} order by ${createdDate} desc)
+	</select>	 
 </mapper>

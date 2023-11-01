@@ -14,5 +14,5 @@ public interface BoardCommentService {
 	int delete(int commentId, int gameBoardId);
 	int getBoardId(int commentId);
 	int updateReplyCnt(int commentId, int amount);
-	public List<BoardAndReplyVO> getAllCommentsAndReplies(String memberId);
+	public Map<String, Object> getAllCommentsAndReplies(String memberId,PageCriteria criteria);
 }

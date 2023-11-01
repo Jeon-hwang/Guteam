@@ -94,35 +94,18 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		logger.info("updateReplyCnt 실행");
 		return boardCommentDAO.updateReplyCnt(commentId, amount);
 	}
-	
-	@Transactional(value= "transactionManager")
+
 	@Override
-	public List<BoardAndReplyVO> getAllCommentsAndReplies(String memberId){
-		List<BoardAndReplyVO> bnlList = new ArrayList<BoardAndReplyVO>();
-		List<BoardCommentVO> commentList = boardCommentDAO.select(memberId);
-		for(BoardCommentVO vo : commentList) {
-			String nickname = memberDAO.select(memberId).getNickname();
-			int boardId = vo.getGameBoardId();
-			int gameId = gameBoardDAO.selectByBoardId(boardId).getGameId();
-			String content = vo.getCommentContent();
-			Date createdDate = vo.getCommentDateCreated();
-			BoardAndReplyVO bnlVO = new BoardAndReplyVO(nickname, boardId, gameId, content, createdDate);
-			bnlList.add(bnlVO);
-		}
-		
-		List<ReplyVO> replyList = replyDAO.select(memberId);
-		for(ReplyVO vo : replyList) {
-			String nickname = memberDAO.select(memberId).getNickname();
-			int boardId = boardCommentDAO.getBoardId(vo.getCommentId());
-			int gameId = gameBoardDAO.selectByBoardId(boardId).getGameId();
-			String content = vo.getReplyContent();
-			Date createdDate = vo.getReplyDateCreated();
-			BoardAndReplyVO bnlVO = new BoardAndReplyVO(nickname, boardId, gameId, content, createdDate);
-			bnlList.add(bnlVO);
-		}
-		
-		
-		return bnlList;
+	public Map<String, Object> getAllCommentsAndReplies(String memberId,PageCriteria criteria){
+		List<BoardAndReplyVO> list = boardCommentDAO.select(memberId,criteria);
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(criteria);
+		pageMaker.setTotalCount(boardCommentDAO.getTotalCount(memberId));
+		pageMaker.setPageData();
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("pageMaker", pageMaker);
+		args.put("list", list);
+		return args;
 	}
 	
 	
