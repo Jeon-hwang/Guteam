@@ -37,7 +37,7 @@
 		<hr>
 		<div id="boardsAndReviewsArea" style="display:flex;">
 		<div id="boardsArea" style="display:inline-block;margin-right:40px;">
-			<button id="showMyBoards" class="btn btn-light">내가 쓴 게시글 보기</button>
+			<button id="showMyBoards" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 게시글 보기</button>
 			<input type="hidden" id="boardPage" value="1">
 			<div id="myBoards">
 			<table id="myBoardList" style="width:560px;" class="table table-secondary table-hover"></table>
@@ -46,10 +46,10 @@
 		</div>
 
 		<div id="reviewsArea" style="display:inline-block;">
-			<button id="showMyReviews" class="btn btn-light">내가 쓴 리뷰 보기</button>
+			<button id="showMyReviews" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 리뷰 보기</button>
 			<input type="hidden" id="reviewPage" value="1">
 			<div id="myReviews">
-			<table id="myReviewList" style="width:560px;" class="table table-secondary table-hover"></table>
+			<table id="myReviewList" style="width:600px;" class="table table-secondary table-hover"></table>
 			<div id="reviewPaging" class="paging" style="display:inline-block; text-align:left;"></div>
 			</div>
 		</div>
