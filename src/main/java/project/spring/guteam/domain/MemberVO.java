@@ -7,7 +7,8 @@ public class MemberVO {
 	public int hashCode() {
 		return Objects.hash(cash, email, isAdmin, memberId, memberImageName, nickname, password, phone);
 	}
-
+	
+	// 시큐리티 사용시 기본 설정
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

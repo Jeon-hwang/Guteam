@@ -77,9 +77,9 @@ thead {
 <div id="leftMenu">
 <div><img width="110px" height="50px" src="display?fileName=/logo.png"></div>
 	<ul>
-	<li><button>쪽지 쓰기</button></li>
+	<li><a href="../message/register"><button>쪽지 쓰기</button></a></li>
 	<br>
-	<li><button>받은 쪽지함</button></li>
+	<li><a href="../message/list"><button>받은 쪽지함</button></a></li>
 	<li><button>보낸 쪽지함</button></li>
 	<li><button>쪽지 보관함</button></li>
 	</ul>
@@ -102,7 +102,7 @@ thead {
 			<tr>
 				<td class="tdc">보낼 닉네임</td>
 				<td>
-				<input type="text" name="sendMemberNickname" id="sendMemberNickname" required>
+				<input type="text" name="receiveMemberId" id="receiverNickname" required>
 				</td>
 			</tr>
 			<tr>
@@ -114,7 +114,7 @@ thead {
 			<tr>
 				<td class="tdc">내 용</td>
 				<td>
-				<textarea style="width: 465px; height: 200px; resize:none; maxlength: 333;"></textarea><!-- 밑부분 70px -->
+				<textarea name="messageContent" id="messageContent" style="width: 465px; height: 200px; resize:none; maxlength: 333;"></textarea><!-- 밑부분 70px -->
 				</td>
 			</tr>
 			
@@ -122,6 +122,8 @@ thead {
 		</table>
 	</div>
 	<div style="text-align: right; padding-right: 5px;">
+		<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
+		<input type="hidden" name="sendMemberNickname" id="sendMemberNickname" value="${vo.nickname }">
 		<input type="submit" value="보내기">
 	</div>
 	</form>

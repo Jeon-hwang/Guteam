@@ -11,6 +11,7 @@ public interface MemberService {
 	List<MemberVO> read();
 	MemberVO read(String memberId);
 	int read(String memberId, String checking);
+	int read(String nickname, int checking);
 	int update(MemberVO vo, String isCash);
 	int delete(String memberId);
 	

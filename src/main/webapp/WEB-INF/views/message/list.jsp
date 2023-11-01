@@ -72,7 +72,7 @@ th {
 	<ul>
 	<li><a href="../message/register"><button>쪽지 쓰기</button></a></li>
 	<br>
-	<li><button>받은 쪽지함</button></li>
+	<li><a href="../message/list"><button>받은 쪽지함</button></a></li>
 	<li><button>보낸 쪽지함</button></li>
 	<li><button>쪽지 보관함</button></li>
 	</ul>
@@ -93,8 +93,8 @@ th {
 	<tbody>
 	<c:forEach var="vo" items="${list }">
 	<tr>
-		<td style="width: 30px"><label class="chkbox"><input type="checkbox" onclick="allCheck()"></label>></td>
-		<td>${vo.messageTitle }</td>
+		<td style="width: 30px"><label class="chkbox"><input type="checkbox" onclick="oneCheck()" value="${vo.messageId }"></label>></td>
+		<td><a href="../message/detail?messageId=${vo.messageId}">${vo.messageTitle }</a></td>
 		<td>${vo.sendMemberNickname }</td>
 		<fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/>
 		<td>${vo.messageDateCreated }</td>
