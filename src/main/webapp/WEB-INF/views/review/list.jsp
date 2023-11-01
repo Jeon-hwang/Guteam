@@ -21,11 +21,11 @@
 <a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button class="btn btn-light">게임 정보로 돌아가기</button></a>
 <br>
 <br>
-<form action="list" method="get">
-<div class="d-flex input-group mb-3" style="display: inline-block; text-align: center; width:60%; margin:auto;">
-<input  class="form-control w-25" id="keyword" type="text" value="${param.keyword }" name="keyword" style="margin-right:5px;">
+<form class="justify-content-center formSearch" action="list" method="get">
+<div class="input-group mb-3">
+<input class="form-control" id="keyword" type="text" value="${param.keyword }" name="keyword">
 <input type="hidden" id="gameId" name="gameId" value="${gameVO.gameId }">
-<input class="form-control" type="submit" value="검색">
+<input class="btn btn-light" id="btnSearch" type="submit" value="검색">
 </div>
 </form>
 <div class="btnOrderGroup">
@@ -55,7 +55,7 @@
 				<c:forEach begin="1" end="${reviewVO.rating/2 }" step="1">
 				<i class="bi bi-star-fill"></i>
 				</c:forEach>
-				<c:if test="${reviewVO.rating%2!=0 }">
+				<c:if test="${reviewVO.rating%2==1 }">
 				<i class="bi bi-star-half"></i>
 				</c:if>
 				<c:forEach begin="1" end="${5-(reviewVO.rating/2) }" step="1">

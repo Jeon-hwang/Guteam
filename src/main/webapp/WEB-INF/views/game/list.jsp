@@ -16,21 +16,21 @@
 	<a href="register"><button class="btn btn-light">게임등록</button></a>
 	</sec:authorize>
 	<br><br><br>
-	<form class="d-flex justify-content-center formSearch" action="/guteam/game/list" method="get" style="width:60%; margin:auto;">
+	<form class="justify-content-center formSearch" action="/guteam/game/list" method="get">
 		<div class="input-group mb-3 ">
 		<c:if test="${empty keywordCriteria}">
-		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"style="margin-right:4px;"><span class="selectedItem">이름/장르</span></button>
+		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">이름/장르</span></button>
 		</c:if>
 		<c:if test="${not empty keywordCriteria}">		
-		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"style="margin-right:4px;"><span class="selectedItem">가격</span></button>
+		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">가격</span></button>
 		</c:if>
 		<ul class="dropdown-menu">
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','keyword');$('#keyword').attr('type','text');">이름/장르</a></li>
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','price');$('#keyword').attr('type','number');$('#keyword').attr('min','0');">가격</a></li>
 		</ul>
 		<input type="hidden" id="keywordCriteria" class="keywordCriteria" name="keywordCriteria" value="keyword">
-		<input class="form-control w-50" type="text" name="keyword" id="keyword" maxlength="20" style="margin-right:4px;" value="${keyword }">
-		<input class="btn btn-light form-control"  type="submit" value="검색">
+		<input class="form-control" type="text" name="keyword" id="keyword" maxlength="20" value="${keyword }">
+		<input class="btn btn-light" id="btnSearch" type="submit" value="검색">
 		</div>
 	</form>
 	<div class="btnOrderGroup">
@@ -45,13 +45,13 @@
 	</div>
 	
 	<c:forEach varStatus="status" var="vo" items="${gameVOList }">
-	<div class="btn btn-secondary" style="margin:5px; width:330px; height:500px; display:inline-block; ">
+	<div class="btn btn-secondary" id="gameInfos">
 			<div class="gameInfo">
 				<img class="rounded mx-auto d-block" alt="${vo.gameName }"
 					width="300px" height="300px"
 					src="display?fileName=${vo.gameImageName }"> <input
 					type="hidden" class="gameId" value="${vo.gameId }"> <br>
-				<div style="font-size: 1em;">
+				<div class="info">
 					name : ${vo.gameName } <br> price : ${vo.price }<br>
 					genre : ${vo.genre }<br> releaseDate :
 					<fmt:formatDate value="${vo.releaseDate }" pattern="yyyy년 MM월 dd일" />

@@ -167,4 +167,15 @@ public class ReviewServiceImple implements ReviewService {
 		return args;
 	}
 
+	@Override
+	public List<ReviewVO> readMyReview(String memberId, PageCriteria criteria) {
+		logger.info("review readMyReview() 호출 : memberId = " + memberId);
+		return reviewDAO.selectByMemberId(memberId, criteria);
+	}
+
+	@Override
+	public int getCntMyReview(String memberId) {
+		return reviewDAO.getTotalCntMyReview(memberId);
+	}
+
 }

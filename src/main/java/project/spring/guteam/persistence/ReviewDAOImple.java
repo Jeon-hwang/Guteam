@@ -138,4 +138,20 @@ public class ReviewDAOImple implements ReviewDAO {
 		return sqlSession.selectList(NAMESPACE + ".select_by_keyword_order_by_thumbUpCnt", args);
 	}
 
+	@Override
+	public List<ReviewVO> selectByMemberId(String memberId, PageCriteria criteria) {
+		logger.info("Review selectByMemberId() 호출 : memberId = " + memberId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		args.put("memberId", memberId);
+		return sqlSession.selectList(NAMESPACE+".select_my_review",args);
+	}
+
+	@Override
+	public int getTotalCntMyReview(String memberId) {
+		logger.info("Review getTotalCountMyReview() 호출");
+		return sqlSession.selectOne(NAMESPACE+".total_cnt_my_review", memberId);
+	}
+
 }

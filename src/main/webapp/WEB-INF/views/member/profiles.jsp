@@ -34,6 +34,26 @@
 			<input type="submit" value="회원 탈퇴">	
 		</form>
 		<hr>
+		<div id="boardsAndReviewsArea" style="display:flex;">
+		<div id="boardsArea" style="display:inline-block;margin-right:40px;">
+			<button id="showMyBoards" class="btn btn-light">내가 쓴 게시글 보기</button>
+			<input type="hidden" id="boardPage" value="1">
+			<div id="myBoards">
+			<table id="myBoardList" style="width:560px;" class="table table-secondary table-hover"></table>
+			<div id="boardPaging" class="paging" style="display:inline-block; text-align:left;"></div>
+			</div>
+		</div>
+
+		<div id="reviewsArea" style="display:inline-block;">
+			<button id="showMyReviews" class="btn btn-light">내가 쓴 리뷰 보기</button>
+			<input type="hidden" id="reviewPage" value="1">
+			<div id="myReviews">
+			<table id="myReviewList" style="width:560px;" class="table table-secondary table-hover"></table>
+			<div id="reviewPaging" class="paging" style="display:inline-block; text-align:left;"></div>
+			</div>
+		</div>
+		</div>
+		<hr>
 		<div id="commentsArea">
 			<button id="showMyComments">내가 쓴 댓글 보기</button>
 			<div id="myComments">
@@ -99,9 +119,183 @@
 					}
 				);//end getJson
 	
-			});//end showMyComments
+			}); //end showMyComments
+			
+			$('#showMyBoards').on('click', function(){
+				var page = $('#boardPage').attr('value');
+				var memberId = $('#memberId').val();
+				var url = '../gameBoard/list-ajax/'+memberId+'?page='+page;
+				var list = '';
+				if($('#showMyBoards').text()=="내가 쓴 게시글 보기"){
+					
+				$.getJSON(
+					url,
+					function(data){
+						console.log(data);
+						if(data.list.length!=0){
+							list = '<thead>'
+							+'<tr><th whidth="60px">no</th>'
+							+'<th width="150px">제목</th>'
+							+'<th width="150px">내용</th>'
+							+'<th width="200px">작성일</th></thead><tbody>';
+						}
+						$(data.list).each(function(){
+							console.log(this);
+							var createdDate = new Date(this.gameBoardDateCreated);
+							var title = this.gameBoardTitle;
+							if(title.length>20){
+								title = title.substr(0, 20) + '…';
+							}
+							var content = this.gameBoardContent;
+							if(content.length>20){
+								content = content.substr(0, 20) + '…';
+							}
+							if(this.gameBoardContent!="삭제된 게시글 입니다"){
+								list += '<tr class="gameBoardInfo" onclick="boardInfoClick('+this.gameBoardId+','+this.gameId+')">'
+									 +  '<td>' + this.gameBoardId+'</td>'
+									 +  '<td>'+title+'</td>'
+									 +  '<td>'+content+'</td>'
+									 +	'<td>'+dateFormat(createdDate)+'</td>'
+									 +  '</tr>';
+								}
+						}); // end data.each
+						if(data.list.length!=0){
+							list += '</tbody>';
+						}
+						console.log(data.pageMaker);
+						var pages = '';
+						pages+='<ul class="pagination justify-content-center">';
+						if(data.pageMaker.hasPrev){
+							pages+='<li class="page-item"><a class="page-link" onclick="boardPageChange('+(data.pageMaker.startPageNo-1)+')">&laquo;</li>';
+						}
+						for(var i=data.pageMaker.startPageNo; i<=data.pageMaker.endPageNo; i++){
+							if(i==page){
+								pages+='<li class="page-item active"><a class="page-link" onclick="boardPageChange('+i+')">'+i+'</li>';
+							}else{
+								pages+='<li class="page-item"><a class="page-link" onclick="boardPageChange('+i+')">'+i+'</li>';							
+							}
+						}
+						if(data.pageMaker.hasNext){
+							pages+='<li class="page-item"><a class="page-link" onclick="boardPageChange('+(data.pageMaker.endPageNo+1)+')">&raquo;</li>';
+						}
+						pages+='</ul>';
+						
+						$('#myBoardList').html(list);
+						$('#showMyBoards').text('닫기');
+						$('#boardPaging').html(pages);
+					}
+				); // end getJSON()
+				}else{
+					$('#showMyBoards').text('내가 쓴 게시글 보기')
+					$('#myBoardList').html('');
+					$('#boardPaging').html('');
+				}
+			}); // end showMyBoards.onclick()
+			
+			$('#showMyReviews').on('click', function(){
+				var page = $('#reviewPage').attr('value');
+				var memberId = $('#memberId').val();
+				var url = '../review/list-ajax/'+memberId+'?page='+page;
+				var list = '';
+				if($('#showMyReviews').text()=="내가 쓴 리뷰 보기"){
+					
+				$.getJSON(
+					url,
+					function(data){
+						console.log(data);
+						if(data.list.length!=0){
+							list = '<thead>'
+							+'<tr><th whidth="60px">no</th>'
+							+'<th width="150px">제목</th>'
+							+'<th width="150px">내용</th>'
+							+'<th width="150px">평점</th>'
+							+'<th width="200px">작성일</th></thead><tbody>';
+						}
+						$(data.list).each(function(){
+							console.log(this);
+							var createdDate = new Date(this.reviewDateCreated);
+							var title = this.reviewTitle;
+							if(title.length>20){
+								title = title.substr(0, 20) + '…';
+							}
+							var content = this.reviewContent;
+							if(content.length>20){
+								content = content.substr(0, 20) + '…';
+							}
+							
+							list += '<tr class="reviewInfo" onclick="reviewInfoClick('+this.reviewId+','+this.gameId+')">'
+								 +  '<td>' + this.reviewId+'</td>'
+								 +  '<td>'+title+'</td>'
+								 +  '<td>'+content+'</td>'
+								 +  '<td>';
+							for(var i=1; i<=this.rating/2; i++){
+								list+='<i class="bi bi-star-fill"></i>';
+							}
+							if(this.rating%2==1){
+								list+='<i class="bi bi-star-half"></i>';
+							}
+							for(var i=1; i<=5-(this.rating/2); i++){
+								list+='<i class="bi bi-star"></i>';
+							}
+							list +=	'</td>'
+								 +	'<td>'+dateFormat(createdDate)+'</td>'
+								 +  '</tr>';
+							
+						}); // end data.each
+						if(data.list.length!=0){
+							list += '</tbody>';
+						}
+						console.log(data.pageMaker);
+						var pages = '';
+						pages+='<ul class="pagination justify-content-center">';
+						if(data.pageMaker.hasPrev){
+							pages+='<li class="page-item"><a class="page-link" onclick="reviewPageChange('+(data.pageMaker.startPageNo-1)+')">&laquo;</li>';
+						}
+						for(var i=data.pageMaker.startPageNo; i<=data.pageMaker.endPageNo; i++){
+							if(i==page){
+								pages+='<li class="page-item active"><a class="page-link" onclick="reviewPageChange('+i+')">'+i+'</li>';
+							}else{
+								pages+='<li class="page-item"><a class="page-link" onclick="reviewPageChange('+i+')">'+i+'</li>';							
+							}
+						}
+						if(data.pageMaker.hasNext){
+							pages+='<li class="page-item"><a class="page-link" onclick="reviewPageChange('+(data.pageMaker.endPageNo+1)+')">&raquo;</li>';
+						}
+						pages+='</ul>';
+						
+						$('#myReviewList').html(list);
+						$('#showMyReviews').text('닫기');
+						$('#reviewPaging').html(pages);
+					}
+				); // end getJSON()
+				}else{
+					$('#showMyReviews').text('내가 쓴 리뷰 보기')
+					$('#myReviewList').html('');
+					$('#reviewPaging').html('');
+				}
+			}); // end showMyBoards.onclick()
 	});
+	
+	function boardInfoClick(gameBoardId,gameId){
+		location.href="/guteam/gameBoard/detail?gameBoardId=" + gameBoardId + "&page=1&gameId=" + gameId;
+	}
+	
+	function reviewInfoClick(reviewId,gameId){
+		location.href="/guteam/review/detail?reviewId=" + reviewId + "&page=1&gameId=" + gameId;
+	}
+	
+	function boardPageChange(page){
+		$('#boardPage').attr('value',page);
+		$('#showMyBoards').text('내가 쓴 게시글 보기');
+		$('#showMyBoards').click();
+	}
+	
+	function reviewPageChange(page){
+		$('#reviewPage').attr('value',page);
+		$('#showMyReviews').text('내가 쓴 리뷰 보기');
+		$('#showMyReviews').click();
+	}
+	
 </script>
 </body>
 </html>
-

@@ -60,15 +60,16 @@
 <hr>
 <input type="hidden" id="gameId" value=${vo.gameId }>
 <br>
-<div id="btn_group_detail">
 <sec:authorize access="hasRole('ROLE_ADMIN')">
+<div class="btn_group_detail">
 <a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button class="btn btn-light">수정하기</button></a>
-<br>
+</div>
 </sec:authorize>
+<div class="btn_group_detail">
 <a href="../gameBoard/list?gameId=${vo.gameId }"><button class="btn btn-light">${vo.gameName } 커뮤니티</button></a>
-<br>
 <a href="../review/list?gameId=${vo.gameId }"><button class="btn btn-light">리뷰보기</button></a>
-<br>
+</div>
+<div class="btn_group_detail">
 <a href="${prevListUrl}"><button class="btn btn-light">리스트로 돌아가기</button></a>
 
 <input type="hidden" id="updateResult" value="${update_result }">

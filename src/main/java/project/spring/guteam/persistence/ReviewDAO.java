@@ -19,4 +19,6 @@ public interface ReviewDAO {
 	int selectWrited(int gameId, String memberId);
 	List<ReviewVO> selectOrderBy(int gameId, PageCriteria criteria);
 	List<ReviewVO> selectByKeywordOrderBy(int gameId, PageCriteria criteria, String keyword);
+	List<ReviewVO> selectByMemberId(String memberId, PageCriteria criteria);
+	int getTotalCntMyReview(String memberId);
 }

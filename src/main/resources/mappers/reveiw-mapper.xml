@@ -85,4 +85,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select * from ${review} where ${memberId}=#{memberId} order by ${reviewId} desc)a
     	) where rn between #{start} and #{end}
 	</select>
+	
+	<select id="total_cnt_my_review" resultType="Integer">
+		select count(*) total_cnt from ${review} where ${memberId}=#{memberId}
+	</select>
 </mapper>

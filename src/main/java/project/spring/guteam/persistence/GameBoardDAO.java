@@ -13,12 +13,13 @@ public interface GameBoardDAO {
 	int delete(int gameBoardId);
 	int getTotalCounts(int gameId);
 	int getTotalCounts(int gameId, PageCriteria criteria, String keywordCriteria, String keyword);
-	List<GameBoardVO> selectByMemberId(int gameId, String memberId, PageCriteria criteria);
+	List<GameBoardVO> selectByNickname(int gameId, String memberId, PageCriteria criteria);
 	List<GameBoardVO> selectByKeyword(int gameId, String keyword, PageCriteria criteria);
 	int updateCommentCnt(int gameBoardId, int amount);
 	int updateDeleted(int gameBoardId);
 	List<GameBoardVO> select(int gameId, PageCriteria criteria, String orderBy);
-	List<GameBoardVO> selectByMemberId(int gameId, String keyword, PageCriteria criteria, String orderBy);
+	List<GameBoardVO> selectByNickname(int gameId, String keyword, PageCriteria criteria, String orderBy);
 	List<GameBoardVO> selectByKeyword(int gameId, String keyword, PageCriteria criteria, String orderBy);
-	
+	List<GameBoardVO> selectByMemberId(String memberId, PageCriteria criteria);
+	int getCntMyBoard(String memberId);
 }

@@ -51,7 +51,7 @@ public class GameBoardDAOTest {
 	}
 
 	private void selectByMemberIdTest() {
-		List<GameBoardVO>list = dao.selectByMemberId(5,"test", null);
+		List<GameBoardVO>list = dao.selectByNickname(5,"test", null);
 		for(GameBoardVO vo : list) {
 			logger.info(vo.toString());
 		}

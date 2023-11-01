@@ -1,5 +1,6 @@
 package project.spring.guteam.service;
 
+import java.util.List;
 import java.util.Map;
 
 import project.spring.guteam.domain.ReviewVO;
@@ -19,4 +20,6 @@ public interface ReviewService {
 	int readWrited(int gameId, String memberId);
 	Map<String, Object> read(String orderBy, PageCriteria criteria, String keyword, int gameId);
 	Map<String, Object> read(String orderBy, int gameId, PageCriteria criteria);
+	List<ReviewVO> readMyReview(String memberId, PageCriteria criteria);
+	int getCntMyReview(String memberId);
 }

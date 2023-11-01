@@ -37,11 +37,14 @@ transition: 1s;
 .btn{
 padding-bottom: 10px;
 }
-#btn_group_detail .btn{
-margin-bottom: 10px;
-}
 .bi {
 	color:#ffc100;
+}
+#thumbUp .bi{
+	color:black;
+}
+#thumbDown .bi{
+	color:black;
 }
 .dropdown-item:hover{
 	cursor:pointer;
@@ -61,11 +64,13 @@ margin-bottom: 10px;
 	color:white;
 }
 .btnOrderGroup{
+	display:flex;
 	margin-left:10px;
 	text-align:left;
 	margin-bottom:10px;
 }
 .btnOrderGroup input{
+	margin-right:8px;
 	color: #6c757d;
     border-color: #6c757d;
     font-size: 1rem;
@@ -90,6 +95,16 @@ margin-bottom: 10px;
 	background-color: #6c757d;
 	border-color: #6c757d;
 }
+.btn_group_detail{
+	display:flex;
+}
+.btn_group_detail .btn{
+	margin-bottom: 10px;
+	margin-right: 5px;
+}
+.btn_group_detail .inline-form{
+	display:inline-flex;
+}
 .right{
 	background-color:#6c757d;
 	position : fixed;
@@ -104,5 +119,34 @@ margin-bottom: 10px;
 }
 .right div{
 	display:block;
+}
+.dropdown-toggle{
+	margin-right:4px;
+}
+#btnSearch{
+	width:120px;
+}
+#keyword{
+	width:300px;
+	margin-right:4px;
+}
+.formSearch{
+	width:50%;
+	margin:auto;
+	display:flex;
+}
+#gameInfos{
+	margin:5px; 
+	width:330px; 
+	height:500px; 
+	display:inline-block;
+}
+.gameInfo .info{
+	font-size: 1em;
+}
+.file-drop{
+	width:300px; 
+	height:300px; 
+	border : 1px solid grey;
 }
 </style>

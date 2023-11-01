@@ -1,15 +1,19 @@
 package project.spring.guteam.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -120,6 +124,25 @@ public class ReviewController {
 		} else {
 			return "redirect:/review/detail?reviewId=" + reviewId + "&gameId=" + gameId;
 		}
+	}
+	
+	@GetMapping("/list-ajax/{memberId}")
+	public ResponseEntity<Map<String, Object>> readMyReview(@PathVariable("memberId") String memberId, Integer page){
+		logger.info("내가 쓴 리뷰 조회하기");
+		Map<String, Object> args = new HashMap<>();
+		PageCriteria criteria = new PageCriteria();
+		logger.info(page+"페이지");
+		if(page != null) {
+			criteria.setPage(page);	
+		}
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(criteria);
+		pageMaker.setTotalCount(reviewService.getCntMyReview(memberId));
+		paging(pageMaker, criteria);
+		List<ReviewVO> list = reviewService.readMyReview(memberId, criteria);
+		args.put("list", list);
+		args.put("pageMaker", pageMaker);
+		return new ResponseEntity<Map<String, Object>>(args, HttpStatus.OK);
 	}
 
 	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker,

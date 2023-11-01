@@ -25,17 +25,25 @@
 내용 : ${reviewVO.reviewContent }<br>
 추천 수 : <div id="thumbUpCount">${reviewVO.thumbUpCount }</div><br>
 
-<div id="btn_group_detail">
+<div class="btn_group_detail">
 <c:if test="${principal.username==reviewVO.memberId }">
-<a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button class="btn btn-light" >수정</button></a><form style="display:inline-block;" action="delete" method="post"><sec:csrfInput/><input type="hidden" name="reviewId" value="${reviewVO.reviewId }"><input type="hidden" name="gameId" value="${gameVO.gameId }"><input class="btn btn-light" type="submit" value="삭제"></form><br>
+<a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button class="btn btn-light" >수정</button></a>
+<form class="inline-form" action="delete" method="post">
+<sec:csrfInput/>
+<input type="hidden" name="reviewId" value="${reviewVO.reviewId }">
+<input type="hidden" name="gameId" value="${gameVO.gameId }">
+<input class="btn btn-light" type="submit" value="삭제"></form>
 </c:if>
+</div>
+<div class="btn_group_detail">
 <sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
 <c:if test="${principal.username!=reviewVO.memberId }">
-<button type="button" id="thumbUp" class="btn btn-light" value="${thumbVO.upDown }"><i class="bi bi-hand-thumbs-up" style="color:black;"></i></button>
-<button type="button" id="thumbDown" class="btn btn-light" value="${thumbVO.upDown }"><i class="bi bi-hand-thumbs-down" style="color:black;"></i></button>
+<button type="button" id="thumbUp" class="btn btn-light" value="${thumbVO.upDown }"><i class="bi bi-hand-thumbs-up"></i></button>
+<button type="button" id="thumbDown" class="btn btn-light" value="${thumbVO.upDown }"><i class="bi bi-hand-thumbs-down"></i></button>
 </c:if>
-<br>
 </sec:authorize>
+</div>
+<div class="btn_group_detail">
 <a href="list?gameId=${reviewVO.gameId }&page=${page}"><button class="btn btn-light">${gameVO.gameName } 리뷰 목록으로 돌아가기</button></a>
 </div>
 

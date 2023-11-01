@@ -1,5 +1,6 @@
 package project.spring.guteam.service;
 
+import java.util.List;
 import java.util.Map;
 
 import project.spring.guteam.domain.GameBoardVO;
@@ -17,4 +18,6 @@ public interface GameBoardService {
 	int update(int gameBoardId, int amount);
 	Map<String, Object> read(int gameId, PageCriteria criteria, String orderBy);
 	Map<String, Object> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword, String orderBy);
+	List<GameBoardVO> readMyBoard(String memberId, PageCriteria criteria);
+	int getCntMyBoard(String memberId);
 }

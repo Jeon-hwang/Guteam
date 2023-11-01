@@ -60,6 +60,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	) where rn between #{start} and #{end}
     </select>
     
+    <select id="total_cnt_my_board" resultType="Integer">
+    	select count(*) total_cnt from ${game_board}
+    	where ${memberId} = #{memberId}
+    </select>
    
     <update id="update_comment_cnt">
     	update ${game_board}

@@ -63,8 +63,8 @@ public class GameBoardDAOImple implements GameBoardDAO {
 	}
 
 	@Override
-	public List<GameBoardVO> selectByMemberId(int gameId, String keyword, PageCriteria criteria) {
-		logger.info("GameBoard selectByMemberId() 호출 gameId = " + gameId + ", keyword = " + keyword);
+	public List<GameBoardVO> selectByNickname(int gameId, String keyword, PageCriteria criteria) {
+		logger.info("GameBoard selectByNickname() 호출 gameId = " + gameId + ", keyword = " + keyword);
 		Map<String, Object> args = new HashMap<>();
 		args.put("gameId", gameId);
 		args.put("keyword", keyword);
@@ -127,8 +127,8 @@ public class GameBoardDAOImple implements GameBoardDAO {
 	}
 
 	@Override
-	public List<GameBoardVO> selectByMemberId(int gameId, String keyword, PageCriteria criteria, String orderBy) {
-		logger.info("GameBoard selectByMemberId(order) 호출 : gameId = " + gameId + ", memberNickname = " + keyword);
+	public List<GameBoardVO> selectByNickname(int gameId, String keyword, PageCriteria criteria, String orderBy) {
+		logger.info("GameBoard selectByNickname(order) 호출 : gameId = " + gameId + ", memberNickname = " + keyword);
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("keyword", keyword);
 		args.put("gameId", gameId);
@@ -146,6 +146,22 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE+".select_by_keyword_order_by_comment_cnt", args);
+	}
+
+	@Override
+	public List<GameBoardVO> selectByMemberId(String memberId, PageCriteria criteria) {
+		logger.info("GameBoard selectByMemberId()호출 : memberId = " + memberId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("memberId", memberId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE+".select_my_board",args);
+	}
+
+	@Override
+	public int getCntMyBoard(String memberId) {
+		logger.info("GameBoard getCntMyBoard() 호출");
+		return sqlSession.selectOne(NAMESPACE+".total_cnt_my_board", memberId);
 	}
 
 }

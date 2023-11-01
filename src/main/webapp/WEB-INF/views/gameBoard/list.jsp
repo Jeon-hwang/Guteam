@@ -14,15 +14,15 @@
 	<a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button class="btn btn-light">게임 정보로 돌아가기</button></a>
 	<br>
 	<br>
-	<form action="list" id="search" method="get">
-		<div class="d-flex input-group mb-3" style="display: inline-block; text-align: center; width:60%; margin:auto;">
+	<form action="list" class="justify-content-center formSearch" id="search" method="get">
+		<div class="input-group mb-3">
 			<c:if test="${empty keywordCriteria}">
-				<button class="btn btn-light dropdown-toggle" type="button"	data-bs-toggle="dropdown" aria-expanded="false" style="margin-right:4px;">
+				<button class="btn btn-light dropdown-toggle" type="button"	data-bs-toggle="dropdown" aria-expanded="false">
 					<span class="selectedItem">제목/내용</span>
 				</button>
 			</c:if>
 			<c:if test="${not empty keywordCriteria}">
-				<button class="btn btn-light dropdown-toggle" type="button"	data-bs-toggle="dropdown" aria-expanded="false" style="margin-right:4px;">
+				<button class="btn btn-light dropdown-toggle" type="button"	data-bs-toggle="dropdown" aria-expanded="false">
 					<span class="selectedItem">작성자</span>
 				</button>
 			</c:if>
@@ -36,8 +36,8 @@
 			</ul>
 			<input type="hidden" id="keywordCriteria" class="keywordCriteria" name="keywordCriteria" value="keyword"> 
 			<input type="hidden" id="gameId" name="gameId" value="${gameVO.gameId }"> 
-			<input class="form-control w-25" type="text" id="keyword" name="keyword" value="${keyword }" maxlength="30" style="margin-right:4px;"> 
-			<input class="btn btn-light form-control" type="submit" value="검색">
+			<input class="form-control" type="text" id="keyword" name="keyword" value="${keyword }" maxlength="30"> 
+			<input class="btn btn-light" id="btnSearch" type="submit" value="검색">
 		</div>
 	</form>
 	<div class="btnOrderGroup">

@@ -78,7 +78,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		logger.info("gameBoard read(keyword) 호출 : keywordCriteria = " + keywordCriteria + ",keyword = " + keyword);
 		List<GameBoardVO> gameBoardVOList = null;
 		if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
-			gameBoardVOList = gameBoardDAO.selectByMemberId(gameId, keyword, criteria);
+			gameBoardVOList = gameBoardDAO.selectByNickname(gameId, keyword, criteria);
 		}else {
 			gameBoardVOList = gameBoardDAO.selectByKeyword(gameId, keyword, criteria);
 		}
@@ -142,7 +142,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		logger.info("gameBoard read(keyword, orderBy)호출");
 		List<GameBoardVO> gameBoardVOList = null;
 		if(keywordCriteria!=null&&keywordCriteria.equals("memberId")) {
-			gameBoardVOList = gameBoardDAO.selectByMemberId(gameId, keyword, criteria, orderBy);
+			gameBoardVOList = gameBoardDAO.selectByNickname(gameId, keyword, criteria, orderBy);
 		}else {
 			gameBoardVOList = gameBoardDAO.selectByKeyword(gameId, keyword, criteria, orderBy);
 		}
@@ -156,6 +156,18 @@ public class GameBoardServiceImple implements GameBoardService {
 		args.put("nicknameList",nicknameList);
 		args.put("gameVO", gameVO);
 		return args;
+	}
+
+	@Override
+	public List<GameBoardVO> readMyBoard(String memberId, PageCriteria criteria) {
+		logger.info("gameBoard readMyBoard() 호출 : memberId = "+ memberId);
+		List<GameBoardVO> myBoardList = gameBoardDAO.selectByMemberId(memberId, criteria);
+		return myBoardList;
+	}
+
+	@Override
+	public int getCntMyBoard(String memberId) {
+		return gameBoardDAO.getCntMyBoard(memberId);
 	}
 	
 	
