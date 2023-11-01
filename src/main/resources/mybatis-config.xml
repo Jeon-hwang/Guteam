@@ -20,6 +20,10 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<property name="commentContent" value="comment_content" />
 		<property name="commentDateCreated" value="comment_date_created" />
 		<property name="replyCnt" value = "reply_cnt" />
+		<property name="boardId" value="board_id"/>
+		<property name="content" value="content"/>
+		<property name="createdDate" value="created_date"/>
+		
 		
 	 	<property name="reply" value="reply" />
 	 	<property name="replyId" value="reply_id"/>

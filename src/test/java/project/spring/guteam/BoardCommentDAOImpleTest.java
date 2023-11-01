@@ -1,5 +1,6 @@
 package project.spring.guteam;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.persistence.BoardCommentDAO;
 
@@ -29,6 +31,14 @@ public class BoardCommentDAOImpleTest {
 //		selectAll();
 //		update();
 //		delete();
+//		selectAllComment();
+	}
+
+	private void selectAllComment() {
+//		List<BoardAndReplyVO> list = dao.select("test");
+//		for(BoardAndReplyVO vo : list) {
+//			logger.info("내용?"+vo.getContent());
+//		}
 	}
 
 	private void delete() {

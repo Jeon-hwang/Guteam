@@ -80,6 +80,9 @@
 			$('#commentAddBtn').click(function(){
 				var gameBoardId = $('#gameBoardId').val();
 				var commentContent = $('#commentContent').val();
+				if(commentContent == '삭제된 댓글입니다.'){
+					commentContent = '&nbsp삭제된 댓글입니다.';
+				}
 				var obj = {
 						'gameBoardId' : gameBoardId,
 						'memberId' : principalMemberId,
@@ -174,21 +177,23 @@
 					var startPageNo = data.pageMaker.startPageNo;
 					var endPageNo = data.pageMaker.endPageNo;
 						
-						list += '<div class="comment_paging">'
-							 if(hasPrev){
-						list += '<button class="paging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp' 
-							 }
-							for(var i = startPageNo ; i<=endPageNo ; i++ ){
+					list += '<div class="comment_paging">';
+						 if(hasPrev){
+					list += '<button class="paging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp'; 
+						 }
+						for(var i = startPageNo ; i<=endPageNo ; i++ ){
 								if(nowPage==i){
-						list += '<em>'+i+'</em>'									
+					list += '<em>'+i+'</em>';									
 								}else{
-						list += '<button class="paging" value="'+i+'">'+i+'</button>'		
-							}
-							}
-							if(hasNext){
-								list += '&nbsp&nbsp<button class="paging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp'		
-							}
-						list +=	'</div>'
+					list += '<button class="paging" value="'+i+'">'+i+'</button>';		
+								}
+						}
+						if(hasNext){
+							list += '&nbsp&nbsp<button class="paging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp';		
+						}
+					list +=	'</div>';
+						
+						
 					$('#comments').html(list);
 					}//end funtion(data)
 				);//end .getJSON
@@ -337,6 +342,9 @@
 				var commentId = $(this).parent().prevAll('#commentId').val();	
 			
 				var replyContent = $(this).prevAll('.replyContent').val();
+				if(replyContent == '삭제된 댓글입니다.'){
+					replyContent = '&nbsp삭제된 댓글입니다.';
+				}
 				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
 				//var replyViewBtnClick = $(this).parent().parent().parent().nextAll(".reply_btn_area").children(".reply_view_btn").prop('tagName');
 				var replyViewBtnClick = $(this).parent().prevAll(".reply_btn_area").children(".reply_view_btn");

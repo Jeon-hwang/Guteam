@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.pageutil.PageCriteria;
+import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.BoardCommentService;
 
 
@@ -50,7 +51,6 @@ public class BoardCommentRESTContorller {
 		if(page != null) {
 			criteria.setPage(page);
 		}
-		
 		Map<String, Object> data = service.read(gameBoardId,criteria);
 		
 		return new ResponseEntity<Map<String,Object>>(data,HttpStatus.OK);
@@ -74,8 +74,12 @@ public class BoardCommentRESTContorller {
 	}
 	
 	@GetMapping("/{memberId}")
-	public ResponseEntity<List<BoardAndReplyVO>> readAllComment(@PathVariable("memberId") String memberId){
-		List<BoardAndReplyVO> list = service.getAllCommentsAndReplies(memberId);
-		return new ResponseEntity<List<BoardAndReplyVO>>(list,HttpStatus.OK);
+	public ResponseEntity<Map<String, Object>> readAllComment(@PathVariable("memberId") String memberId,Integer page){
+		PageCriteria criteria = new PageCriteria(1, 10);
+		if(page != null) {
+			criteria.setPage(page);
+		}
+		Map<String, Object> data = service.getAllCommentsAndReplies(memberId,criteria);
+		return new ResponseEntity<Map<String, Object>>(data,HttpStatus.OK);
 	}
 }

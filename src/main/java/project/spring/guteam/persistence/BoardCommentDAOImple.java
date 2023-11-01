@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.pageutil.PageCriteria;
 
@@ -81,9 +82,19 @@ public class BoardCommentDAOImple implements BoardCommentDAO {
 	}
 
 	@Override
-	public List<BoardCommentVO> select(String memberId) {
+	public List<BoardAndReplyVO> select(String memberId,PageCriteria criteria) {
 		logger.info("select by memberId 실행");
-		return sqlSession.selectList(NAMESPACE+".select_all_by_member_id",memberId);
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("memberId", memberId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE+".select_all_comment",args);
+	}
+
+	@Override
+	public int getTotalCount(String memberId) {
+		logger.info("totalcount 실행");
+		return sqlSession.selectOne(NAMESPACE+".select_all_comment_count",memberId);
 	}
 	
 	
