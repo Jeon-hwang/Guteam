@@ -46,6 +46,12 @@ public class MemberDAOImple implements MemberDAO {
 	}
 
 	@Override
+	public int checkNickname(String nickname) {
+		logger.info("checkNickname() 호출 nickname = " + nickname);
+		return sqlSession.selectOne(NAMESPACE + ".check_nickname", nickname);
+	}
+	
+	@Override
 	public int updateMem(MemberVO vo) {
 		logger.info("updateMem() 호출 vo = " + vo.toString() );
 		return sqlSession.update(NAMESPACE + ".update_member", vo);
@@ -65,6 +71,14 @@ public class MemberDAOImple implements MemberDAO {
 		logger.info("delete() 호출 memberId = " + memberId);
 		return sqlSession.delete(NAMESPACE + ".delete", memberId);
 	}
+
+	@Override
+	public String selectByNickname(String nickname) {
+		logger.info("nickname 조회");
+		return sqlSession.selectOne(NAMESPACE+".select_by_nickname", nickname);
+	}
+
+	
 
 	
 

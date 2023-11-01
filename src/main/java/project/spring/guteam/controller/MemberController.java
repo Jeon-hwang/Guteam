@@ -86,6 +86,21 @@ public class MemberController {
 			return "fail";
 		}
 	}
+	
+	// 닉네임 중복 확인
+	@PostMapping("/checkNickname")
+	@ResponseBody
+	public String checkNicknamePOST(String nickname) {
+		logger.info("checkNicknamePOST() 호출");
+		int result = memberService.read(nickname, 1);
+		logger.info("memberService.read(nickname, \"check\") 값 = " +result);
+		if (result == 1) {
+			logger.info("id 있음 " + result);
+			return "dupl";
+		} else {
+			return "";
+		}
+	}
 
 	// 회원가입 화면
 	@GetMapping("/register")

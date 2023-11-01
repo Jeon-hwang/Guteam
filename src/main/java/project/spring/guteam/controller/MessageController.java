@@ -16,11 +16,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.spring.guteam.domain.MemberVO;
+import project.spring.guteam.domain.MessageVO;
 import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.service.MemberService;
+import project.spring.guteam.service.MessageService;
 
 @Controller // @Component
 @RequestMapping(value = "/message")
@@ -28,7 +32,10 @@ public class MessageController {
 	private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 	
 	@Autowired
-	MemberService memberService;
+	private MemberService memberService;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	@Resource(name="uploadPath")
 	private String uploadPath;
@@ -37,17 +44,45 @@ public class MessageController {
 	@GetMapping("/list")
 	public void listGET(Model model, Principal principal) {
 		logger.info("msg-listGET() 호출 ");
-		MemberVO vo = memberService.read(principal.getName());
+		MemberVO vo = null;
+		if(principal!=null) {
+			vo = memberService.read(principal.getName());
+		}
 		model.addAttribute("vo", vo);
+//		logger.info("vo? " + vo.toString());
 	}
 	
-	// 쪽지 보내기
+	// 쪽지 상세 보기
+	@GetMapping("/detail")
+	public void detailGET(Model model, Integer messageId, Principal principal) {
+		logger.info("msg-detailGET() 호출");
+	}
+	
+	// 쪽지 보내기 화면
 	@GetMapping("/register")
 	public void registerGET(Model model, Principal principal) {
 		logger.info("msg-registerGET() 호출");
 		MemberVO vo = memberService.read(principal.getName());
 		model.addAttribute("vo", vo);
+		logger.info("vo? " + vo.toString());
 	}
+	
+	// 쪽지 보내기
+	@PostMapping("/register")
+	public String registerPOST(MessageVO vo, String receiverNickname, Principal principal, RedirectAttributes reAttr) {
+		logger.info("msg-registerPOST() 호출 vo ? " + vo.toString());
+		int result = messageService.create(vo);
+		if(result == 1) {
+			logger.info("쪽지 보내기 성공");
+			reAttr.addFlashAttribute("alert", "send");
+			return "redirect:/message/list";
+		} else {
+			// 전송 실패시 작성 내역 유지되게 바꾸기
+			logger.info("쪽지 전송 실패");
+			return "redirect:/message/register";
+		}
+	}
+	
 	
 	// 미리보기
  	@GetMapping("/display")

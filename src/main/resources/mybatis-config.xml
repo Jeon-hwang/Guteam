@@ -62,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
    		<property name="upDown" value="up_down"/>
    		
    		<property name="member" value="member"/>
+   		<property name="memberId" value="member_id"/>
    		<property name="password" value="password"/>
    		<property name="nickname" value="nickname"/>
    		<property name="email" value="email"/>
@@ -83,9 +84,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	<property name="messageId" value="message_id"/>
 	 	<property name="receiveMemberId" value="receive_member_id"/>
 	 	<property name="sendMemberId" value="send_member_id"/>
-	 	<property name="sendMemberNicname" value="send_member_nicname"/>
+	 	<property name="sendMemberNickname" value="send_member_nickname"/>
 	 	<property name="messageTitle" value="message_title"/>
-	 	<property name="messageContent" value="message_cotent"/>
+	 	<property name="messageContent" value="message_content"/>
 	 	<property name="messageDateCreated" value="message_date_created"/>
 	 	
 	 	<property name="wish_list" value="wish_list"/>

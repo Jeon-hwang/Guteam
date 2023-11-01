@@ -13,13 +13,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 </insert> -->
 	 <insert id="insert">
 	 insert into ${message}
-	 (${receiveMemberId}, ${sendMemberId}, ${sendMemeberNickname}, ${messageTitle}, ${messageContent})
-	 values (#{receiveMemberId}, #{sendMemberId}, #{sendMemeberNickname}, #{messageTitle}, #{messageContent})
+	 (${receiveMemberId}, ${sendMemberId}, ${sendMemberNickname}, ${messageTitle}, ${messageContent})
+	 values (#{receiveMemberId}, #{sendMemberId}, #{sendMemberNickname}, #{messageTitle}, #{messageContent})
 	 
 	 </insert>
 	 
 	 <select id="select" resultType="MessageVO">
-	 select * from ${message} order by ${receiveMemberId} desc
+	 select * from ${message} where ${receiveMemberId} = #{receiveMemberId}
 	 </select>
 	 
 	 <delete id="delete">

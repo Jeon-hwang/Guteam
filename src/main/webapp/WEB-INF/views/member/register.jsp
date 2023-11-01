@@ -51,7 +51,8 @@ padding:20px 80px;
 			비번 :&nbsp;&nbsp;&nbsp;
 			<input type="password" name="password" placeholder="PW 입력" required /><br>
 			닉네임 :
-			<input type="text" name="nickname" placeholder="닉네임" required /><br>
+			<input type="text" id="nickname" name="nickname" placeholder="닉네임" required />
+			<span id="nickCheckNo" style="display:none; color:red; text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;" >사용 중인 닉네임입니다.</span><br>
 			이메일 :
 			<input type="text" name="email" required /><br>
 			연락처 :
@@ -89,7 +90,6 @@ padding:20px 80px;
 				        xhr.setRequestHeader(header, token);
 				    },
 					success : function(result) {
-						$('#btnCheck').hide();
 						console.log("중복? " + result);
 						if(result != 'fail'){
 							$('#checkOk').hide();
@@ -101,7 +101,39 @@ padding:20px 80px;
 					}
 				}); //end ajax
 				
-			}); //end click()
+			}); //end memberId.blur()
+			
+			// 닉네임 중복 체크
+			$('#nickname').blur(function(){
+				console.log("nickname중복 검사 체크")
+				// id 미입력
+				if($('#nickname').val() == '') {
+					alert('닉네임을 입력해 주세요.')
+					$('#nickCheckNo').hide();
+					return;
+				}
+				
+				var nickname = $('#nickname').val();
+				console.log('nickname = ' + nickname);
+				
+				$.ajax({
+					type : 'POST',
+					url : "../member/checkNickname",
+					data : {nickname : nickname},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(result) {
+						console.log("중복? " + result);
+						if(result == 'dupl'){
+							$('#nickCheckNo').show(); // 닉넴 중복
+						} else {
+							$('#nickCheckNo').hide();
+						}
+					}
+				}); //end ajax
+				
+			}); //end nickname.blur()
 			
 		}); //end document
 		
