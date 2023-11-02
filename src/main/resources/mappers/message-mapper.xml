@@ -15,15 +15,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 insert into ${message}
 	 (${receiveMemberId}, ${sendMemberId}, ${sendMemberNickname}, ${messageTitle}, ${messageContent})
 	 values (#{receiveMemberId}, #{sendMemberId}, #{sendMemberNickname}, #{messageTitle}, #{messageContent})
-	 
 	 </insert>
 	 
-	 <select id="select" resultType="MessageVO">
-	 select * from ${message} where ${receiveMemberId} = #{receiveMemberId}
+	 <select id="select_by_message_id" resultType="MessageVO">
+	 select * from ${message} where ${messageId} = #{messageId}
+	 </select>
+	 	 
+	 <select id="select_paging" resultType="MessageVO">
+	 select ${messageId}, ${receiveMemberId}, ${sendMemberId}, ${sendMemberNickname}, ${messageTitle}, ${messageContent}, ${messageDateCreated}
+	 from (
+	 select rownum rn, a.* 
+	 	from (select * from ${message} where ${receiveMemberId}=#{receiveMemberId} order by ${messageId} desc)a
+	 ) where rn between #{start} and #{end}
+	 </select>
+	 
+	 <select id="total_count" resultType="Integer">
+	 select count(*) total_cnt from ${message} 
 	 </select>
 	 
 	 <delete id="delete">
 	 delete from ${message} where ${messageId} = #{messageId}
 	 </delete>
+	 
 	 
 </mapper>

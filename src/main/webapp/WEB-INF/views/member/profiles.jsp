@@ -22,17 +22,17 @@
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 <h2>${vo.memberId }님의 프로필</h2>
 	<div>
-		<button onclick ="popUp();">쪽지함</button>
-		<a href="addCash"><button>캐쉬 충전</button></a>
-		<a href="../friend/list"><button>친구 목록</button></a>
+		<button class="btn btn-light" onclick ="popUp();">쪽지함</button>
+		<a href="addCash"><button class="btn btn-light">캐쉬 충전</button></a>
+		<a href="../friend/list"><button class="btn btn-light">친구 목록</button></a>
 	</div>
 	<br>
 	<div>
 		<form action="delete" method="post">
 		<sec:csrfInput/>
-			<a href="update"><button type="button">회원 수정</button></a>
+			<a href="update"><button type="button" class="btn btn-light">회원 수정</button></a>
 			<input type="hidden" name="memberId" id="memberId" value="${vo.memberId }">
-			<input type="submit" value="회원 탈퇴">	
+			<input type="submit" class="btn btn-light" value="회원 탈퇴">	
 		</form>
 		<hr>
 		<div id="boardsAndReviewsArea" style="display:flex;">
@@ -56,7 +56,7 @@
 		</div>
 		<hr>
 		<div id="commentsArea">
-			<button id="showMyComments">내가 쓴 댓글 보기</button>
+			<button id="showMyComments" class="btn btn-light">내가 쓴 댓글 보기</button>
 			<button id="closeMyComments" style="display : none">접기</button>
 			<div id="myComments">
 				<ul id="myCommentsList"></ul>

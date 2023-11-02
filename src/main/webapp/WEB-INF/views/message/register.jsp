@@ -12,6 +12,13 @@
 	height : 40px;
 	border : 1px solid grey;
 }
+.btn {
+	margin : 1px;
+	padding-top : 5px;
+	padding-left : 5px;
+	padding-right : 5px;
+    padding-bottom : 5px;
+}
 .th {
 	width : 100px;
 	height : 250px;
@@ -58,6 +65,10 @@ ul{
     padding-right : 10px;
     padding-bottom : 0px;
    	list-style : none;
+   	text-align : center;
+}
+li {
+	display : inline-block;
 }
 thead {
 	background-color : darkgrey;
@@ -77,15 +88,16 @@ thead {
 <div id="leftMenu">
 <div><img width="110px" height="50px" src="display?fileName=/logo.png"></div>
 	<ul>
-	<li><a href="../message/register"><button>쪽지 쓰기</button></a></li>
+	<li><a href="../message/register"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
-	<li><a href="../message/list"><button>받은 쪽지함</button></a></li>
-	<li><button>보낸 쪽지함</button></li>
-	<li><button>쪽지 보관함</button></li>
+	<br>
+	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
+	<li><button class="btn btn-light">보낸 쪽지함</button></li>
+	<li><button class="btn btn-light">쪽지 보관함</button></li>
 	</ul>
 </div>
 <div id="board-top">
-	<button>12345</button>
+	
 	
 </div>
 <div id="main">
@@ -102,7 +114,9 @@ thead {
 			<tr>
 				<td class="tdc">보낼 닉네임</td>
 				<td>
-				<input type="text" name="receiveMemberId" id="receiverNickname" required>
+				<c:if test="">
+					<input type="text" name="receiveMemberId" id="receiverNickname" required>				
+				</c:if>
 				</td>
 			</tr>
 			<tr>
@@ -124,7 +138,7 @@ thead {
 	<div style="text-align: right; padding-right: 5px;">
 		<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
 		<input type="hidden" name="sendMemberNickname" id="sendMemberNickname" value="${vo.nickname }">
-		<input type="submit" value="보내기">
+		<input class="btn btn-light" type="submit" value="보내기">
 	</div>
 	</form>
 	

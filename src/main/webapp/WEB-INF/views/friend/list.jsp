@@ -5,27 +5,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Bootstrap css -->
-<link
-   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-   rel="stylesheet"
-   integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-   crossorigin="anonymous" />
-<!-- Bootstrap icons -->
-<link
-   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-   rel="stylesheet" />
-<!-- Bootstrap core JS-->
-<script
-   src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
-</script>
+<jsp:include page="../style.jsp"></jsp:include>
 <style type="text/css">
 body {
 background-color:grey;
 padding:20px 80px;
-
 }
-
+h2 {
+	margin-top : 0.5rem;
+	margin-bottom : 0.5rem;
+	vertical-align: middle;
+}
 .profileImg {
 	width : 40px;
 	height : 40px;
@@ -37,17 +27,18 @@ padding:20px 80px;
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-<h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
-<input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
-
 <div>
-	<h2>나의 친구 목록</h2>
+<h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
+</div>
+<div>
+	<h2><input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
+	나의 친구 목록</h2>
 </div>
 <form action="../friend/addFriend" method="post">
 	<sec:csrfInput/>
 	<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
 	<input type="text" name="receiveMemberId" placeholder="ID 입력" required>
-	<input type="submit" value="친구 추가">
+	<input class="btn btn-light" type="submit" value="친구 추가">
 </form>
 
 <hr>

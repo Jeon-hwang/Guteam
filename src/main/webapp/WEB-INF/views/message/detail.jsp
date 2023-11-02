@@ -13,18 +13,31 @@
 	height : 40px;
 	border : 1px solid grey;
 }
-.cen {
-	text-align : center;
-}
-.title {
-	padding-left : 10px;
-}
 .btn {
 	margin : 1px;
 	padding-top : 5px;
 	padding-left : 5px;
 	padding-right : 5px;
     padding-bottom : 5px;
+}
+.lbl {
+	width : 150px;
+	height : 300px;
+	border-top : solid 1px darkgray;
+	border-right : solid 1px darkgray;	
+	border-bottom : solid 1px darkgray;
+}
+.val {
+	width : 480px;
+	height : 300px;
+	border-top : solid 1px darkgray;
+	border-right : solid 1px darkgray;	
+	border-bottom : solid 1px darkgray;
+}
+.hdl {
+	margin-left : 20px;
+	margin-right : 20px;
+	text-align: center;
 }
 body {
     margin: 0;
@@ -54,7 +67,7 @@ body {
 	height : 350px;
 	float : left;
 }
-ul {
+ul{
 	margin: 0px;
     padding-top : 20px;
     padding-left : 10px;
@@ -69,13 +82,6 @@ li {
 thead {
 	background-color : darkgrey;
 	text-align : center;
-}
-th {
-	border-left : solid 1px gray;
-}
-td {
-	border-left : solid 1px darkgray;	
-	border-bottom : solid 1px darkgray;
 }
 #board-head {
 	margin : 5px;
@@ -100,44 +106,42 @@ td {
 	</ul>
 </div>
 <div id="board-top">
-	<button class="btn btn-light">삭제</button>
+	
+	
 </div>
 <div id="main">
-<table>
-	<thead>
-	<tr>
-		<th class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" onclick="allCheck()"></label></th>
-		<th style="width: 350px">제목</th>
-		<th style="width: 100px">보낸 사람</th>
-		<th style="width: 100px">보낸 날짜</th>
-	</tr>
-	</thead>
-	<tbody>
-	<c:forEach var="pvo" items="${list }">
-	<tr>
-		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" onclick="oneCheck()" value="${pvo.messageId }"></label></td>
-		<td class="title"><a href="../message/detail?messageId=${pvo.messageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
-		<td class="cen" >${pvo.sendMemberNickname }</td>
-		<fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" var="messageDateCreated"/>
-		<td style="font-size: 10pt;">${messageDateCreated }</td>
-	</tr>
-	</c:forEach>
-	</tbody>
-</table>
-<ul>
-	<c:if test="${pageMaker.hasPrev }">
-		<li><a href="list?page=${pageMaker.startPageNo - 1}">이전</a></li>
-	</c:if>
-	<c:forEach begin="${pageMaker.startPageNo }" end="${pageMaker.endPageNo }" var="num">
-		<li><a href="list?page=${num }">${num }</a></li>
-	</c:forEach>
-	<c:if test="${pageMaker.hasNext }">
-		<li><a href="list?page=${pageMaker.endPageNo + 1 }">다음</a></li>
-	</c:if>
-</ul>
-</div>
+	<ul>
+		<li class="hdl">보낸 사람 : ${mvo.sendMemberId }</li>
+		<fmt:formatDate value="${mvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" var="messageDateCreated"/>
+		<li class="hdl">보낸 날짜 : ${messageDateCreated }</li>
+	</ul>
+	
+	<div>
+	<table>
+	<colgroup>
+		<col class="lbl">
+		<col class="val">
+	</colgroup>
+		<tbody>
+			<tr style="border-bottom : solid 1px darkgray;">
+			<td><h5>제목</h5></td>
+			<td>${mvo.messageTitle }</td>
+			</tr>
+			<tr>
+			<td><h5>내용</h5></td>
+			<td>${mvo.messageContent }</td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+	<div>
+	<form action="../message/register">
+		<input type="hidden" name="sendMemberId" value="${mvo.sendMemberId }">
+		<input type="submit" class="btn btn-light" style="float: right; margin-right: 10px;" value="답장하기">
+	</form>
+	</div>
 </div>
 
-
+</div>
 </body>
 </html>
