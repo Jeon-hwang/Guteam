@@ -60,8 +60,8 @@ public class GameServiceImple implements GameService {
 		if(principal!=null&&!principal.getName().equals("")) {
 			String memberId = principal.getName();
 			ViewedVO viewedVO = new ViewedVO(0, memberId, gameId, new Date());
-			if(viewedDAO.selectRecently(memberId)!=null&&viewedDAO.selectRecently(memberId).getGameId()==gameId) {
-				viewedDAO.update(viewedDAO.selectRecently(memberId));
+			if(viewedDAO.selectRecently(memberId, gameId)!=null&&viewedDAO.selectRecently(memberId, gameId).getGameId()==gameId) {
+				viewedDAO.update(viewedDAO.selectRecently(memberId, gameId));
 			}else {
 				viewedDAO.insert(viewedVO);
 			}
@@ -152,7 +152,7 @@ public class GameServiceImple implements GameService {
 
 	@Transactional(value = "transactionManager")
 	@Override
-	public Map<String, Object> read(String memberId) {
+	public Map<String, Object> recentlyViewedGames(String memberId) {
 		Map<String, Object> args = new HashMap<>();
 		logger.info("game read(memberId)호출 : memberId = " + memberId );
 		List<GameVO> recentlyViewedGameVOList = new ArrayList<>();
@@ -166,6 +166,37 @@ public class GameServiceImple implements GameService {
 		}
 		args.put("recentlyViewedGameVOList", recentlyViewedGameVOList);
 		args.put("recentlyViewedRatingList", recentlyViewedRatingList);
+		return args;
+	}
+
+	@Override
+	public int getTotalCountInterest(String memberId) {
+		List<GameVO> interestList = gameDAO.selectInterest(memberId);
+		List<String> keywords = new ArrayList<>();
+		for(int i = 0 ; i < interestList.size(); i++) {
+			keywords.add(interestList.get(i).getGenre());
+		}
+		if(keywords.size()<3) {
+			return 0;
+		}
+		return gameDAO.getTotalCountsInterest(keywords);
+	}
+
+	@Override
+	public Map<String, Object> getInterestGames(String memberId, PageCriteria criteria) {
+		Map<String, Object> args = new HashMap<>();
+		List<GameVO> interestList = gameDAO.selectInterest(memberId);
+		List<String> keywords = new ArrayList<>();
+		for(int i = 0 ; i < interestList.size(); i++) {
+			keywords.add(interestList.get(i).getGenre());
+		}
+		List<GameVO> gameVOList = gameDAO.selectInterestByKeyword(keywords, criteria);
+		List<Integer> ratingList = new ArrayList<>();
+		for(int i = 0 ; i < gameVOList.size(); i++) {
+			ratingList.add(reviewDAO.getRating(gameVOList.get(i).getGameId()));
+		}
+		args.put("gameVOList", gameVOList);
+		args.put("ratingList", ratingList);
 		return args;
 	}
 

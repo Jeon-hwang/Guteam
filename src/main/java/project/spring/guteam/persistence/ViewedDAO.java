@@ -8,6 +8,6 @@ public interface ViewedDAO {
 	int insert(ViewedVO vo);
 	List<ViewedVO> select(String memberId);
 	int update(ViewedVO vo);
-	ViewedVO selectRecently(String memberId);
+	ViewedVO selectRecently(String memberId, int gameId);
 	int delete(int viewedId);
 }

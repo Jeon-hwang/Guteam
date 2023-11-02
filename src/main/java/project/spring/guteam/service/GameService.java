@@ -19,5 +19,7 @@ public interface GameService {
 	int getTotalCount(String keyword);
 	int getSeqNo();
 	Map<String, Object> read(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria);
-	Map<String, Object> read(String memberId);
+	Map<String, Object> recentlyViewedGames(String memberId);
+	int getTotalCountInterest(String memberId);
+	Map<String, Object> getInterestGames(String memberId, PageCriteria criteria);
 }

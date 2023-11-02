@@ -1,5 +1,6 @@
 package project.spring.guteam.persistence;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,5 +125,45 @@ public class GameDAOImple implements GameDAO {
 		}
 		return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_price", args);
 	}
+
+	@Override
+	public List<GameVO> selectInterest(String memberId) {
+		logger.info("Game Interest() 호출 ");
+		List<GameVO> list = sqlSession.selectList(NAMESPACE+".select_by_interest_point", memberId);
+		List<GameVO> interestList = new ArrayList<>(); 
+		for(GameVO vo : list) {
+			interestList.add(select(vo.getGameId()));
+		}
+		return interestList;
+	}
+
+	@Override
+	public List<GameVO> selectInterestByKeyword(List<String> keywords, PageCriteria criteria) {
+		logger.info("Game Interest By Keyword() 호출");
+		Map<String, Object> args = new HashMap<>();
+		for(int i = 0; i < keywords.size(); i++) {
+			int no = i+1;
+			String string = "keyword"+no;
+			args.put(string, keywords.get(i));
+			logger.info(string+"="+keywords.get(i));
+		}
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		List<GameVO> list = sqlSession.selectList(NAMESPACE+".select_by_interest_keyword", args);
+		return list;
+	}
+
+	@Override
+	public int getTotalCountsInterest(List<String> keywords) {
+		Map<String, Object> args = new HashMap<>();
+		for(int i = 0; i < keywords.size(); i++) {
+			int no = i+1;
+			String string = "keyword"+no;
+			args.put(string, keywords.get(i));
+		}
+		return sqlSession.selectOne(NAMESPACE+".total_count_by_interest", args);
+	}
+	
+	
 
 }

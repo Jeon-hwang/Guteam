@@ -18,4 +18,7 @@ public interface GameDAO {
 	List<GameVO> selectByNameOrGenre(String keyword, PageCriteria criteria);
 	int getSequenceNo();
 	List<GameVO> selectOrderBy(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria);
+	List<GameVO> selectInterest(String memberId);
+	List<GameVO> selectInterestByKeyword(List<String> keywords, PageCriteria criteria);
+	int getTotalCountsInterest(List<String>keywords);
 }

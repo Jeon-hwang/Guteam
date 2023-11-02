@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +48,7 @@ public class GameController {
 	private String uploadPath;
 
 	@GetMapping("/list")
-	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria, String orderBy) {
+	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria, String orderBy, String interest, Principal principal) {
 		logger.info("list 호출");
 		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
 		PageCriteria criteria = new PageCriteria();
@@ -58,9 +59,8 @@ public class GameController {
 			criteria.setNumsPerPage(numsPerPage);
 		}
 		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCriteria(criteria);
-		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, orderBy);
-		
+		pageMaker.setCriteria(criteria);		
+		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, orderBy, interest, principal);
 	}
 
 	@GetMapping("/register")
@@ -201,7 +201,7 @@ public class GameController {
 	@GetMapping("/list-ajax/{memberId}")
 	public ResponseEntity<Map<String, Object>> recentlyViewed(@PathVariable("memberId") String memberId){	
 		logger.info("최근 조회한 게임 불러오기");
-		Map<String, Object> args = gameService.read(memberId);
+		Map<String, Object> args = gameService.recentlyViewedGames(memberId);
 		return new ResponseEntity<Map<String, Object>>(args, HttpStatus.OK);
 	}
 
@@ -229,9 +229,20 @@ public class GameController {
 	}
 
 	private void readListsAndSetModel(String keyword, String keywordCriteria, PageMaker pageMaker, PageCriteria criteria,
-			Model model, String orderBy) {
-		Map<String, Object> args;
-		if(orderBy!=null) {
+			Model model, String orderBy, String interest, Principal principal) {
+		Map<String, Object> args = new HashMap<>();
+		if(principal!=null&&interest!=null&&interest.equals("interest")) {
+			pageMaker.setTotalCount(gameService.getTotalCountInterest(principal.getName()));
+			if(pageMaker.getTotalCount()==0) {
+				model.addAttribute("noData", "noData");
+				pageMaker.setTotalCount(gameService.getTotalCount());
+				paging(pageMaker, criteria);
+				args = gameService.read(criteria);
+			}else {
+				paging(pageMaker, criteria);
+				args = gameService.getInterestGames(principal.getName(),criteria);
+			}
+		}else if(orderBy!=null) {
 			if (keyword == null || keyword.equals("")) {
 				pageMaker.setTotalCount(gameService.getTotalCount());
 				paging(pageMaker, criteria);

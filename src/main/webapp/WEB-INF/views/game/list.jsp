@@ -42,6 +42,11 @@
 		<input type="submit" class="orderBy" value="구매순↑">
 		<input type="hidden" class="orderByItem" name="orderBy" value="wishlist">
 		<input type="submit" class="orderBy" value="위시리스트순↑">
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_USER')">
+		<input type="hidden" class="interest" name="orderBy" value="interest">
+		<input type="submit" class="interest" value="추천순">
+		<input type="hidden" id="interestDataNull" value="${noData }">
+		</sec:authorize>
 	</div>
 	
 	<c:forEach varStatus="status" var="vo" items="${gameVOList }">
@@ -135,6 +140,8 @@
 	<input type="hidden" id="insertResult" value="${insert_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var gameVOList = $('#gameVOList').attr('value');
+			console.log(gameVOList);
 			var selectedItem = $('.selectedItem').html();
 			if(selectedItem=='가격'){
 				$('.keywordCriteria').attr('value','price');
@@ -145,6 +152,10 @@
 			var insertResult = $('#insertResult').val();
 			if(insertResult=='success'){
 				alert('게임 등록 성공!');
+			} 
+			var interestDataNull = $('#interestDataNull').val();
+			if(interestDataNull=='noData'){
+				alert('추천할 만한 데이터가 쌓이지 않았습니다!');
 			} 
 			
 			$('.gameInfo').on('click', function(){
@@ -165,6 +176,11 @@
 				var url = 'list?'+queryString;
 				location.href=url;
 			}); // orderBy.onclick()
+			
+			$('.interest').on('click', function(){
+				var url = 'list?interest=interest';
+				location.href=url;
+			}); // interest.onclick()
 			
 		}); // end document.ready()
 	</script>

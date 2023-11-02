@@ -1,5 +1,6 @@
 package project.spring.guteam;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,30 @@ public class GameDAOTest {
 //		getTotalTest();
 //		selectByPriceTest();
 //		selectByNameOrGenretest();
+//		selectByInterestPoint();
+//		selectInterestPoint();
+	}
+
+	private void selectInterestPoint() {
+		List<GameVO>list=dao.selectInterest("test");
+		List<String>keywords=new ArrayList<>();
+		for(GameVO vo : list) {
+			keywords.add(vo.getGenre());
+			logger.info(vo.getGenre());
+		}
+		PageCriteria criteria = new PageCriteria();
+		List<GameVO>gameList=dao.selectInterestByKeyword(keywords, criteria);
+		for(GameVO vo : gameList) {
+			logger.info(vo.toString());
+		}
+	}
+
+	private void selectByInterestPoint() {
+		List<GameVO>list=dao.selectInterest("test");
+		for(GameVO vo : list) {
+			logger.info(vo.toString());
+		}
+		
 	}
 
 	private void selectByNameOrGenretest() {

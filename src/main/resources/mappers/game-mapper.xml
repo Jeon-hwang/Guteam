@@ -123,13 +123,90 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where rn between #{start} and #{end}
     </select>
     
-     <select id="select_by_price_order_by_wishlist" resultType="GameVO">
+    <select id="select_by_price_order_by_wishlist" resultType="GameVO">
     select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from (select rownum rn, b.* from (select a.*, (select count(*) from ${wish_list} c where a.${gameId}=c.${gameId}) as wishlist_cnt 
     	from ${game} a
     	where ${price} >= #{price}
     	order by wishlist_cnt desc, ${price}, ${gameId} desc)b )
     	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_by_interest_point" resultType="GameVO">
+    	select point, ${gameId} from (
+    		select rownum rn, a.* from (
+    			select sum(point) point, ${gameId} from (
+    				select count(*) point, ${gameId} 
+    				from ${game_board} 
+    				where ${memberId}=#{memberId} 
+    				group by ${gameId}
+    				union all
+    				select count(*)*10 point, ${gameId}
+    				from ${purchased}
+    				where ${memberId}=#{memberId} 
+    				group by ${gameId}
+    				union all
+    				select count(*) point, ${gameId}
+    				from ${wish_list}
+    				where ${memberId}=#{memberId} 
+    				group by ${gameId}
+    				union all
+    				select ${rating} point, ${gameId} 
+    				from ${review}
+    				where ${memberId}=#{memberId}
+    				union all
+    				select count(*) point, ${gameId}
+    				from ${viewed}
+    				where ${memberId}=#{memberId}
+    				group by ${gameId}
+    				)
+    			group by ${gameId}
+    			order by point desc
+    			)a 
+    		) 
+    	where rn between 1 and 3
+    </select>
+    
+    <select id="select_by_interest_keyword" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName} from (
+   			 select rownum rn, ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName} from (
+    			 select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}, count(*) row_count from (
+			    	select * from ${game}
+			    	where lower(${gameName}) like '%'||lower(#{keyword1})||'%' or
+		    		lower(${genre}) like '%'||lower(#{keyword1})||'%'
+		    		union all
+		    		select * from ${game}
+			    	where lower(${gameName}) like '%'||lower(#{keyword2})||'%' or
+		    		lower(${genre}) like '%'||lower(#{keyword2})||'%'
+		    		union all
+		    		select * from ${game}
+			    	where lower(${gameName}) like '%'||lower(#{keyword3})||'%' or
+		    		lower(${genre}) like '%'||lower(#{keyword3})||'%'
+	    			)
+	    		group by ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+   				)
+    		order by row_count desc
+    		)
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="total_count_by_interest" resultType="Integer">
+    	select count(*) total_cnt from (
+    			 select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}, count(*) row_count from (
+			    	select * from ${game}
+			    	where lower(${gameName}) like '%'||lower(#{keyword1})||'%' or
+		    		lower(${genre}) like '%'||lower(#{keyword1})||'%'
+		    		union all
+		    		select * from ${game}
+			    	where lower(${gameName}) like '%'||lower(#{keyword2})||'%' or
+		    		lower(${genre}) like '%'||lower(#{keyword2})||'%'
+		    		union all
+		    		select * from ${game}
+			    	where lower(${gameName}) like '%'||lower(#{keyword3})||'%' or
+		    		lower(${genre}) like '%'||lower(#{keyword3})||'%'
+	    			)
+	    		group by ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+   				)
     </select>
    
 </mapper>

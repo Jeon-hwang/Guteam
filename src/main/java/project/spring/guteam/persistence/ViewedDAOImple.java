@@ -1,6 +1,8 @@
 package project.spring.guteam.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -40,9 +42,12 @@ public class ViewedDAOImple implements ViewedDAO{
 	}
 
 	@Override
-	public ViewedVO selectRecently(String memberId) {
+	public ViewedVO selectRecently(String memberId, int gameId) {
 		logger.info("viewed selectRecently() 호출 : memberId = " + memberId);
-		return sqlSession.selectOne(NAMESPACE + ".select_recently_one", memberId);
+		Map<String, Object> args = new HashMap<>();
+		args.put("memberId", memberId);
+		args.put("gameId", gameId);
+		return sqlSession.selectOne(NAMESPACE + ".select_recently_one", args);
 	}
 
 	@Override
