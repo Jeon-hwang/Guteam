@@ -8,9 +8,9 @@
 <meta charset="UTF-8">
 <title>${gameVO.gameName } 리뷰</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 
 <c:if test="${writedReviewId==0 }">
 <a href="register?gameId=${gameVO.gameId }"><button class="btn btn-light">리뷰 쓰기</button></a>

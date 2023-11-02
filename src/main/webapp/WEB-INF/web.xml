@@ -11,7 +11,10 @@
 		/WEB-INF/spring/appServlet/security-context.xml</param-value>
 		
 	</context-param>
-
+	<servlet-mapping>
+	    <servlet-name>default</servlet-name>
+	    <url-pattern>*.ico</url-pattern>
+	</servlet-mapping>
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

@@ -7,9 +7,9 @@
 <head>
 <meta charset="UTF-8">
 <title>${gameVO.gameName }커뮤니티</title>
+	<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 	<a href="register?gameId=${gameVO.gameId }"><button	class="btn btn-light">글쓰기</button></a>
 	<a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button class="btn btn-light">게임 정보로 돌아가기</button></a>
 	<br>

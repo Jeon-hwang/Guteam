@@ -1,4 +1,5 @@
-<!-- Bootstrap css -->
+<link rel="icon" href="${pageContext.request.contextPath}/image/guteam_logo_white.png" type="image/x-icon"/>
+<!-- Bootstrap css --><!-- http://localhost:8080/guteam/ -->
 <link
    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
    rel="stylesheet"
@@ -147,6 +148,11 @@ padding-bottom: 10px;
 .file-drop{
 	width:300px; 
 	height:300px; 
+	border : 1px solid grey;
+}
+.profileImg {
+	width : 100px;
+	height : 100px;
 	border : 1px solid grey;
 }
 </style>

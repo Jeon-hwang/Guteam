@@ -8,9 +8,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Guteam Game List</title>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 <div id="container">
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<a href="register"><button class="btn btn-light">게임등록</button></a>

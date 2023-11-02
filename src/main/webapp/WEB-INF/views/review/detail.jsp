@@ -10,9 +10,9 @@
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>${reviewVO.reviewTitle }</title>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
 <sec:authentication property="principal" var="principal"/>
 <input type="hidden" id="reviewId" value="${reviewVO.reviewId }">

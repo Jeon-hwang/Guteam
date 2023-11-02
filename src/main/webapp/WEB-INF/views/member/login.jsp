@@ -5,34 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Bootstrap css -->
-<!-- Bootstrap css -->
-<link
-   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-   rel="stylesheet"
-   integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-   crossorigin="anonymous" />
-<!-- Bootstrap icons -->
-<link
-   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-   rel="stylesheet" />
-<!-- Bootstrap core JS-->
-<script
-   src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js">
-</script>
-<style type="text/css">
-body {
-background-color:grey;
-padding:20px 80px;
-
-}
-
-.profileImg {
-	width : 100px;
-	height : 100px;
-	border : 1px solid grey;
-}
-</style>
+<jsp:include page="../style.jsp"/>
 <meta charset="UTF-8" >
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -40,7 +13,7 @@ padding:20px 80px;
 </head>
 <body>
 	<c:if test="${param.error==1 }">아이디와 비밀번호를 확인해주세요 </c:if>
-	<h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
+	<h1><a href="../"><img width="100px" height="100px" src="display?fileName=guteam_logo_white.png"></a></h1>
 	
 	<br>
 	<form action="login" method="post">

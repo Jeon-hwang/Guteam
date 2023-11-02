@@ -26,6 +26,7 @@
 		<s:intercept-url pattern="/member/register" access="permitAll" />
 		<s:intercept-url pattern="/*/detail" access="permitAll" />
 		<s:intercept-url pattern="/*/list" access="permitAll" />
+		<s:intercept-url pattern="/resources/*" access="permitAll" />
 		
 		<s:form-login username-parameter="memberId" password-parameter="password" 
 		login-page="/member/login" login-processing-url="/member/login"

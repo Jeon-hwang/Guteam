@@ -28,9 +28,9 @@
 			color:#fff;
 	}
 </style>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 <div class="category">
 <a href="list">All Games</a> > <a href="list?keyword=${vo.genre }">${vo.genre }</a>
 </div>

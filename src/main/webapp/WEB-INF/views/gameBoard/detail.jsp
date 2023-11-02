@@ -8,9 +8,9 @@
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
 <title>${vo.gameBoardTitle }</title>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 	제목 : ${vo.gameBoardTitle }
 	<br> 작성자 : ${nickname}
 	<br> 내용 : ${vo.gameBoardContent }
