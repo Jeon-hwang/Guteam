@@ -10,11 +10,13 @@ public interface MessageDAO {
 	// 메세지 등록
 	int insert(MessageVO vo);
 	
-	// 메세지 조회
-	List<MessageVO> select(String memberId);
+	// 메세지 상세보기
+	MessageVO select(int messageId);
 	
-	// 페이징 리스트 데이터
-	List<MessageVO> select(PageCriteria criteria);
+	// 메세지 조회 - 페이징 리스트 데이터
+	List<MessageVO> select(String receiveMemberId, PageCriteria criteria);
+	
+	int getTotalCounts();
 	
 	// 메세지 삭제
 	int delete(int messageId);

@@ -3,6 +3,7 @@ package project.spring.guteam.controller;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.Principal;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -23,6 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.domain.MessageVO;
 import project.spring.guteam.fileutil.MediaUtil;
+import project.spring.guteam.pageutil.PageCriteria;
+import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.MemberService;
 import project.spring.guteam.service.MessageService;
 
@@ -42,20 +45,43 @@ public class MessageController {
 	
 	// 쪽지함 메인
 	@GetMapping("/list")
-	public void listGET(Model model, Principal principal) {
+	public void listGET(Model model, Principal principal, Integer page, Integer numsPerPage) {
 		logger.info("msg-listGET() 호출 ");
+		logger.info("page = " + page + "/ numsPerPage = " + numsPerPage);
 		MemberVO vo = null;
-		if(principal!=null) {
+		PageCriteria criteria = new PageCriteria();
+		criteria.setNumsPerPage(8);
+		if(page != null) {
+			criteria.setPage(page);
+		}
+		if(numsPerPage != null) {
+			criteria.setNumsPerPage(numsPerPage);
+		}
+		
+		if(principal != null) {
 			vo = memberService.read(principal.getName());
+			logger.info("vo? " + vo.toString());
 		}
 		model.addAttribute("vo", vo);
-//		logger.info("vo? " + vo.toString());
-	}
+		
+		List<MessageVO> list = messageService.read(vo.getMemberId(), criteria);
+		model.addAttribute("list", list);
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(criteria);
+		pageMaker.setTotalCount(messageService.getTotalCounts());
+		pageMaker.setPageData();
+		model.addAttribute("pageMaker", pageMaker);
+		
+	} //end list()
 	
 	// 쪽지 상세 보기
 	@GetMapping("/detail")
-	public void detailGET(Model model, Integer messageId, Principal principal) {
+	public void detailGET(Model model, Integer messageId, Integer page, Principal principal) {
 		logger.info("msg-detailGET() 호출");
+		MessageVO vo = messageService.read(messageId);
+		model.addAttribute("mvo", vo);
+		model.addAttribute("page", page);
 	}
 	
 	// 쪽지 보내기 화면
