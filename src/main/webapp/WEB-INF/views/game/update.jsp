@@ -12,21 +12,49 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
 </head>
 <body>
+<header>
+<div class="logo">
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+	</div>
+</header>
+<section>
+	<div id="wrap">
+<div class="titleArea">
+<h1>${vo.gameName } 수정</h1>
+</div>
+<div class="formArea">
 <form action="update" method="post" enctype="multipart/form-data" accept-charset="utf-8">
 <sec:csrfInput/>
+<div class="info">
+<div class="caption">
+<p>게임이름 = </p>
+<p>가격 = </p>
+<p>장르 = </p>
+<p>게임 이미지 = </p>
+</div>
+<div class="inputArea">
 <input type="hidden" name="prevListUrl" value="${prevListUrl }">
 <input type="hidden" id="gameId" name="gameId" value="${vo.gameId }">
-게임이름=<input type="text" name="gameName" value="${vo.gameName }" required><br>
-가격=<input type="number" name="price" value="${vo.price }" required><br>
-장르=<input type="text" name="genre" value="${vo.genre }" required><br>
-게임 이미지 = <img class="file-drop" width="300px" height="300px" alt="${vo.gameName }" src="display?fileName=${vo.gameImageName }"><br>
+<input type="text" name="gameName" value="${vo.gameName }" required><br>
+<input type="number" name="price" value="${vo.price }" required><br>
+<input type="text" name="genre" value="${vo.genre }" required><br>
+<img class="file-drop" width="300px" height="300px" alt="${vo.gameName }" src="display?fileName=${vo.gameImageName }"><br>
 <input type="file" name="file" id="file" accept="image/*" onchange="display(event)">
 <input type="hidden" class="gameImageName" name="gameImageName" value="${vo.gameImageName }">
 <!-- <img alt="${vo.gameImageName }" src=""> -->
 <br>
-<input type="submit" value="수정">
+<input type="submit" class="btn btn-secondary" value="수정">
+</div>
+</div>
 </form>
-<a href="detail?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button>취소</button></a>
+<div class="justify-content-center">
+<a href="detail?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button class="btn btn-secondary">취소</button></a>
+</div>
+</div>
+</div>
+</section>
+
+<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 		$(document).ready(function(){
 			var token = $("meta[name='_csrf']").attr("content");

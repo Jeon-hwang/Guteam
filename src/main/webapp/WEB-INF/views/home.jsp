@@ -36,7 +36,7 @@
 	</sec:authorize>
 	</div>
 </header>	
-	<aside id="recentlyViewedGames" class="right">
+	<aside id="recentlyViewedGames" class="today-viewed">
 	</aside>
 	
 <script type="text/javascript">
@@ -58,18 +58,18 @@
 			var url = '/guteam/game/list-ajax/'+memberId;
 			if($(this).html()=='최근 조회한 게임'){
 				$(this).html('닫기');
-				var list = '<button class="btn btn-light" onclick="doclick()">닫기</button>';
+				var list = '<button class="btn btn-light close" onclick="doclick()">닫기</button>';
 				
 				$.getJSON(
 						url,
 						function(data){
 							console.log(data);
 							if(data.recentlyViewedGameVOList.length==0){
-								list = '<button class="btn btn-light" onclick="doclick()">최근 조회한 게임이 없습니다</button>';
+								list = '<button class="btn btn-light close" onclick="doclick()">최근 조회한 게임이 없습니다</button>';
 							}else{
 								$(data.recentlyViewedGameVOList).each(function(index,vo){
-									list += '<div class="btn btn-secondary" style="margin:5px; width:330px; height:500px; ">'
-											+'<div class="gameInfo" onclick="gameDetail(this)">'
+									list += '<div class="btn btn-secondary" onclick="gameDetail(this)" style="margin:5px; width:330px; height:500px;">'
+											+'<div class="gameInfo">'
 											+'<img class="rounded mx-auto d-block" alt="'+this['gameImageName']+'" width="300px" height="300px"'
 											+'	src="/guteam/game/display?fileName='+this['gameImageName']+'"> <input type="hidden" class="gameId" value="'+this['gameId']+'"> <br>'
 											+'<div style="font-size: 1em;">	name : '+this['gameName']+'<br> price : '+this['price']+'<br>'

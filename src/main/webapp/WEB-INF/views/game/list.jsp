@@ -11,11 +11,14 @@
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
+<section>
 <div id="container">
+	<div class="btnAdmin">
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<a href="register"><button class="btn btn-light">게임등록</button></a>
 	</sec:authorize>
-	<br><br><br>
+	</div>
+	<div class="formArea">
 	<form class="justify-content-center formSearch" action="/guteam/game/list" method="get">
 		<div class="input-group mb-3 ">
 		<c:if test="${empty keywordCriteria}">
@@ -36,6 +39,7 @@
 		<button class="btn btn-light" id="btnSearch" type="submit"><i class="bi bi-search"></i></button>
 		</div>
 	</form>
+	</div>
 	<div class="btnOrderGroup">
 		<input type="hidden" class="orderByItem" name="orderBy" value="priceDesc">
 		<input type="submit" class="orderBy" value="가격↑">
@@ -123,6 +127,8 @@
 		</c:if>
 	</ul>
 	</div>
+	</div>
+	</section>
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 	<input type="hidden" id="insertResult" value="${insert_result }">
 	<script type="text/javascript">
@@ -169,7 +175,7 @@
 			
 		}); // end document.ready()
 	</script>
-	</div>
+	
 	
 </body>
 </html>
