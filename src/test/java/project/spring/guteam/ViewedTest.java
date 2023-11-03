@@ -34,7 +34,7 @@ public class ViewedTest {
 	}
 
 	private void selectOne() {
-		ViewedVO vo = viewedDAO.selectRecently("test",80);
+		ViewedVO vo = viewedDAO.selectToday("test",80);
 		logger.info(vo.toString());
 		
 	}

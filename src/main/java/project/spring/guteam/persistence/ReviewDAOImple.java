@@ -85,9 +85,9 @@ public class ReviewDAOImple implements ReviewDAO {
 	}
 
 	@Override
-	public int getRating(int gameId) {
+	public int getRatingAvg(int gameId) {
 		logger.info("Review getRating() 호출 : gameId = " + gameId);
-		Integer rating = sqlSession.selectOne(NAMESPACE+".get_rating", gameId);
+		Integer rating = sqlSession.selectOne(NAMESPACE+".get_rating_avg", gameId);
 		if(rating==null) {
 			rating = 0;
 		}

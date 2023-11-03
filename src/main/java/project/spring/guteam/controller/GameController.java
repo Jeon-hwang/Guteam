@@ -48,7 +48,7 @@ public class GameController {
 	private String uploadPath;
 
 	@GetMapping("/list")
-	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria, String orderBy, String interest, Principal principal) {
+	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria, String orderBy, Principal principal) {
 		logger.info("list 호출");
 		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
 		PageCriteria criteria = new PageCriteria();
@@ -60,7 +60,7 @@ public class GameController {
 		}
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);		
-		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, orderBy, interest, principal);
+		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, orderBy, principal);
 	}
 
 	@GetMapping("/register")
@@ -99,7 +99,7 @@ public class GameController {
 
 	@GetMapping("/detail")
 	public void detail(Model model, int gameId, String prevListUrl, Principal principal) {
-		Map<String, Object> args = gameService.read(gameId, principal);
+		Map<String, Object> args = gameService.readGame(gameId, principal);
 		GameVO vo = (GameVO) args.get("vo");
 		model.addAttribute("vo", vo);
 		int rating = (int) args.get("rating");
@@ -112,7 +112,7 @@ public class GameController {
 
 	@GetMapping("/update")
 	public void updateGET(Model model, int gameId, String prevListUrl, Principal principal) {
-		Map<String, Object> args = gameService.read(gameId, principal);
+		Map<String, Object> args = gameService.readGame(gameId, principal);
 		GameVO vo = (GameVO) args.get("vo");
 		model.addAttribute("vo", vo);
 		try {
@@ -128,7 +128,7 @@ public class GameController {
 	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file, Principal principal) {
 
 		logger.info("updatePOST() 호출");
-		String beforeImageName = ((GameVO)gameService.read(vo.getGameId(), principal).get("vo")).getGameImageName();
+		String beforeImageName = ((GameVO)gameService.readGame(vo.getGameId(), principal).get("vo")).getGameImageName();
 		logger.info(vo + "");
 		if (file != null && !file.getOriginalFilename().equals("")) {
 			try {
@@ -229,56 +229,63 @@ public class GameController {
 	}
 
 	private void readListsAndSetModel(String keyword, String keywordCriteria, PageMaker pageMaker, PageCriteria criteria,
-			Model model, String orderBy, String interest, Principal principal) {
+			Model model, String orderBy, Principal principal) {
 		Map<String, Object> args = new HashMap<>();
-		if(principal!=null&&interest!=null&&interest.equals("interest")) {
-			pageMaker.setTotalCount(gameService.getTotalCountInterest(principal.getName()));
-			if(pageMaker.getTotalCount()==0) {
-				model.addAttribute("noData", "noData");
-				pageMaker.setTotalCount(gameService.getTotalCount());
-				paging(pageMaker, criteria);
-				args = gameService.read(criteria);
-			}else {
-				paging(pageMaker, criteria);
-				args = gameService.getInterestGames(principal.getName(),criteria);
-			}
-		}else if(orderBy!=null) {
-			if (keyword == null || keyword.equals("")) {
-				pageMaker.setTotalCount(gameService.getTotalCount());
-				paging(pageMaker, criteria);
-			}else if (keywordCriteria != null && keywordCriteria.equals("price")) {
-				pageMaker.setTotalCount(gameService.getTotalCount(Integer.parseInt(keyword)));
-				paging(pageMaker, criteria);
-				model.addAttribute("keywordCriteria", keywordCriteria);
-			}else {
-				pageMaker.setTotalCount(gameService.getTotalCount(keyword));
-				paging(pageMaker, criteria);
-			}
-			args = gameService.read(keyword, keywordCriteria, orderBy, criteria);
-			
-		} else if (keyword == null || keyword.equals("")) {
+		if(principal!=null&&(keyword==null||keyword.equals(""))&&(keywordCriteria==null||keywordCriteria.equals(""))) {
+			String memberId = principal.getName();
 			pageMaker.setTotalCount(gameService.getTotalCount());
 			paging(pageMaker, criteria);
-			args = gameService.read(criteria);
-			
-		} else if (keywordCriteria != null && keywordCriteria.equals("price")) {
-			pageMaker.setTotalCount(gameService.getTotalCount(Integer.parseInt(keyword)));
+			int interestingCount = gameService.getInterestKeywordCnt(memberId);
+			if(interestingCount>=3) {
+				args = gameService.readInterestGames(memberId, criteria);
+			}else {
+				if(orderBy==null||orderBy.equals("")) {
+					args = gameService.readAll(criteria);
+				}else {
+					args = gameService.readOrderBy(keyword, keywordCriteria, orderBy, criteria);
+				}
+			}
+		}else if(keyword==null||keyword.equals("")) {
+			pageMaker.setTotalCount(gameService.getTotalCount());
 			paging(pageMaker, criteria);
-			args = gameService.read(Integer.parseInt(keyword), criteria);
-			
-			model.addAttribute("keywordCriteria", keywordCriteria);
-		} else {
-			pageMaker.setTotalCount(gameService.getTotalCount(keyword));
-			paging(pageMaker, criteria);
-			args = gameService.read(keyword, criteria);
-		
+			if(orderBy==null||orderBy.equals("")) {
+				args = gameService.readAll(criteria);
+			}else {
+				args = gameService.readOrderBy(keyword, keywordCriteria, orderBy, criteria);
+			}
+		}else if(keywordCriteria!=null&&keywordCriteria.equals("keyword")) {
+			if(orderBy==null||orderBy.equals("")) {
+				pageMaker.setTotalCount(gameService.getTotalCountByKeyword(keyword));
+				paging(pageMaker, criteria);
+				args = gameService.readByKeyword(keyword, criteria);
+			}else {
+				pageMaker.setTotalCount(gameService.getTotalCountByKeyword(keyword));
+				paging(pageMaker, criteria);
+				args = gameService.readOrderBy(keyword, keywordCriteria, orderBy, criteria);
+			}
+		}else if(keywordCriteria!=null&&keywordCriteria.equals("price")) {
+			if(orderBy==null||orderBy.equals("")) {
+				int price = Integer.parseInt(keyword);
+				pageMaker.setTotalCount(gameService.getTotalCountByPrice(price));
+				paging(pageMaker, criteria);
+				args = gameService.readByPrice(price, criteria);
+			}else {
+				pageMaker.setTotalCount(gameService.getTotalCountByPrice(Integer.parseInt(keyword)));
+				paging(pageMaker, criteria);
+				args = gameService.readOrderBy(keyword, keywordCriteria, orderBy, criteria);
+			}
+		}else {
+			//에러 페이지
 		}
 		List<GameVO> gameVOList = (List<GameVO>) args.get("gameVOList");
 		List<Integer> ratingList = (List<Integer>) args.get("ratingList");
 		model.addAttribute("gameVOList", gameVOList);
 		model.addAttribute("ratingList", ratingList);
+		model.addAttribute("orderBy", orderBy);
+		model.addAttribute("keywordCriteria", keywordCriteria);
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("keyword", keyword);
+		logger.info(model.toString());
 	}
 	
 	

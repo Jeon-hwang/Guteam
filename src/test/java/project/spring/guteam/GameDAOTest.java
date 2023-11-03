@@ -29,7 +29,6 @@ public class GameDAOTest {
 	@Test
 	public void testGameDAO() {
 //		insertTest();
-//		selectTest();
 //		updateTest();
 //		selectCriTest();
 //		getTotalTest();
@@ -40,21 +39,21 @@ public class GameDAOTest {
 	}
 
 	private void selectInterestPoint() {
-		List<GameVO>list=dao.selectInterest("test");
+		List<GameVO>list=dao.selectInterestGames("test");
 		List<String>keywords=new ArrayList<>();
 		for(GameVO vo : list) {
 			keywords.add(vo.getGenre());
 			logger.info(vo.getGenre());
 		}
 		PageCriteria criteria = new PageCriteria();
-		List<GameVO>gameList=dao.selectInterestByKeyword(keywords, criteria);
+		List<GameVO>gameList=dao.selectByInterest(keywords, criteria);
 		for(GameVO vo : gameList) {
 			logger.info(vo.toString());
 		}
 	}
 
 	private void selectByInterestPoint() {
-		List<GameVO>list=dao.selectInterest("test");
+		List<GameVO>list=dao.selectInterestGames("test");
 		for(GameVO vo : list) {
 			logger.info(vo.toString());
 		}
@@ -86,7 +85,7 @@ public class GameDAOTest {
 
 	private void selectCriTest() {
 		PageCriteria criteria = new PageCriteria(1, 2);
-		List<GameVO> list = dao.select(criteria);
+		List<GameVO> list = dao.selectAll(criteria);
 		for(int i = 0 ; i < list.size(); i++) {
 			logger.info(list.get(i).toString());
 		}
@@ -98,13 +97,6 @@ public class GameDAOTest {
 		GameVO vo = new GameVO(8, "changeGame", 2000, "changeGenre", null, null, "");
 		dao.update(vo);
 		
-	}
-
-	private void selectTest() {
-		List<GameVO> list = dao.select();
-		for(int i = 0 ; i < list.size(); i++) {
-			logger.info(list.get(i).toString());
-		}
 	}
 
 	private void insertTest() {

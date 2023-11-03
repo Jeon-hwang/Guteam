@@ -39,14 +39,20 @@ public class GameServiceImple implements GameService {
 		return gameDAO.insert(vo);
 	}
 
+	@Override
+	public int getTotalCount() {
+		logger.info("game getTotalCount() 호출");
+		return gameDAO.getTotalCounts();
+	}
+
 	@Transactional(value = "transactionManager")
 	@Override
-	public Map<String, Object> read(PageCriteria criteria) {
+	public Map<String, Object> readAll(PageCriteria criteria) {
 		logger.info("game read() 호출 : criteria = " + criteria.toString());
-		List<GameVO> gameVOList = gameDAO.select(criteria);
+		List<GameVO> gameVOList = gameDAO.selectAll(criteria);
 		List<Integer> ratingList = new ArrayList<>();
 		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRating(gameVOList.get(i).getGameId()));
+			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
 		}
 		Map<String, Object> args = new HashMap<>();
 		args.put("gameVOList", gameVOList);
@@ -56,19 +62,19 @@ public class GameServiceImple implements GameService {
 
 	@Transactional(value = "transactionManager")
 	@Override
-	public Map<String, Object> read(int gameId, Principal principal) {
+	public Map<String, Object> readGame(int gameId, Principal principal) {
 		if(principal!=null&&!principal.getName().equals("")) {
 			String memberId = principal.getName();
 			ViewedVO viewedVO = new ViewedVO(0, memberId, gameId, new Date());
-			if(viewedDAO.selectRecently(memberId, gameId)!=null&&viewedDAO.selectRecently(memberId, gameId).getGameId()==gameId) {
-				viewedDAO.update(viewedDAO.selectRecently(memberId, gameId));
+			if(viewedDAO.selectToday(memberId, gameId)!=null&&viewedDAO.selectToday(memberId, gameId).getGameId()==gameId) {
+				viewedDAO.update(viewedDAO.selectToday(memberId, gameId));
 			}else {
 				viewedDAO.insert(viewedVO);
 			}
 		}
 		logger.info("game read(gameId) 호출 : gameId = " + gameId);
 		GameVO vo = gameDAO.select(gameId);
-		int rating = reviewDAO.getRating(gameId);
+		int rating = reviewDAO.getRatingAvg(gameId);
 		Map<String, Object> args = new HashMap<>();
 		args.put("vo", vo);
 		args.put("rating", rating);
@@ -82,40 +88,19 @@ public class GameServiceImple implements GameService {
 	}
 
 	@Override
-	public int getTotalCount() {
-		logger.info("game getTotalCount() 호출");
-		return gameDAO.getTotalCounts();
-	}
-
-	@Override
-	public int getTotalCount(String keyword) {
+	public int getTotalCountByKeyword(String keyword) {
 		logger.info("getTotalCount(keyword) 호출 : keyword = " + keyword);
 		return gameDAO.getTotalCounts(keyword);
 	}
 	
 	@Transactional(value = "transactionManager")
 	@Override
-	public Map<String, Object> read(int price, PageCriteria criteria) {
-		logger.info("game read(price) 호출");
-		List<GameVO> gameVOList = gameDAO.selectByPrice(price, criteria);
-		List<Integer> ratingList = new ArrayList<>();
-		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRating(gameVOList.get(i).getGameId()));
-		}
-		Map<String, Object> args = new HashMap<>();
-		args.put("gameVOList", gameVOList);
-		args.put("ratingList", ratingList);
-		return args;
-	}
-
-	@Transactional(value = "transactionManager")
-	@Override
-	public Map<String, Object> read(String keyword, PageCriteria criteria) {
+	public Map<String, Object> readByKeyword(String keyword, PageCriteria criteria) {
 		logger.info("game read(keyword) 호출");
 		List<GameVO> gameVOList = gameDAO.selectByNameOrGenre(keyword, criteria);
 		List<Integer> ratingList = new ArrayList<>();
 		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRating(gameVOList.get(i).getGameId()));
+			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
 		}
 		Map<String, Object> args = new HashMap<>();
 		args.put("gameVOList", gameVOList);
@@ -124,26 +109,35 @@ public class GameServiceImple implements GameService {
 	}
 
 	@Override
-	public int getTotalCount(int price) {
+	public int getTotalCountByPrice(int price) {
 		logger.info("getTotalCount(price) 호출 : price = " + price);
 		return gameDAO.getTotalCounts(price);
 	}
-
+	
+	@Transactional(value = "transactionManager")
 	@Override
-	public int getSeqNo() {
-		int sequence = gameDAO.getSequenceNo();
-		return sequence;
+	public Map<String, Object> readByPrice(int price, PageCriteria criteria) {
+		logger.info("game read(price) 호출");
+		List<GameVO> gameVOList = gameDAO.selectByPrice(price, criteria);
+		List<Integer> ratingList = new ArrayList<>();
+		for(int i = 0 ; i < gameVOList.size(); i++) {
+			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
+		}
+		Map<String, Object> args = new HashMap<>();
+		args.put("gameVOList", gameVOList);
+		args.put("ratingList", ratingList);
+		return args;
 	}
 
 	@Transactional(value = "transactionManager")
 	@Override
-	public Map<String, Object> read(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria) {
+	public Map<String, Object> readOrderBy(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria) {
 		Map<String, Object> args = new HashMap<>();
 		logger.info("read(orderBy)호출 : orderBy = " + orderBy);
 		List<GameVO> gameVOList = gameDAO.selectOrderBy(keyword, keywordCriteria, orderBy, criteria);
 		List<Integer> ratingList = new ArrayList<>();
 		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRating(gameVOList.get(i).getGameId()));
+			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
 		}
 		args.put("gameVOList", gameVOList);
 		args.put("ratingList", ratingList);
@@ -161,7 +155,7 @@ public class GameServiceImple implements GameService {
 		for(int i = 0 ; i < recentlyViewed.size(); i++) {
 			if(!recentlyViewedGameVOList.contains(gameDAO.select(recentlyViewed.get(i).getGameId()))) {
 			recentlyViewedGameVOList.add(gameDAO.select(recentlyViewed.get(i).getGameId()));
-			recentlyViewedRatingList.add(reviewDAO.getRating(recentlyViewed.get(i).getGameId()));
+			recentlyViewedRatingList.add(reviewDAO.getRatingAvg(recentlyViewed.get(i).getGameId()));
 			}
 		}
 		args.put("recentlyViewedGameVOList", recentlyViewedGameVOList);
@@ -170,34 +164,33 @@ public class GameServiceImple implements GameService {
 	}
 
 	@Override
-	public int getTotalCountInterest(String memberId) {
-		List<GameVO> interestList = gameDAO.selectInterest(memberId);
-		List<String> keywords = new ArrayList<>();
-		for(int i = 0 ; i < interestList.size(); i++) {
-			keywords.add(interestList.get(i).getGenre());
-		}
-		if(keywords.size()<3) {
-			return 0;
-		}
-		return gameDAO.getTotalCountsInterest(keywords);
-	}
-
-	@Override
-	public Map<String, Object> getInterestGames(String memberId, PageCriteria criteria) {
+	public Map<String, Object> readInterestGames(String memberId, PageCriteria criteria) {
 		Map<String, Object> args = new HashMap<>();
-		List<GameVO> interestList = gameDAO.selectInterest(memberId);
+		List<GameVO> interestList = gameDAO.selectInterestGames(memberId);
 		List<String> keywords = new ArrayList<>();
 		for(int i = 0 ; i < interestList.size(); i++) {
 			keywords.add(interestList.get(i).getGenre());
 		}
-		List<GameVO> gameVOList = gameDAO.selectInterestByKeyword(keywords, criteria);
+		List<GameVO> gameVOList = gameDAO.selectByInterest(keywords, criteria);
 		List<Integer> ratingList = new ArrayList<>();
 		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRating(gameVOList.get(i).getGameId()));
+			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
 		}
 		args.put("gameVOList", gameVOList);
 		args.put("ratingList", ratingList);
 		return args;
+	}
+
+	@Override
+	public int getSeqNo() {
+		int sequence = gameDAO.getSequenceNo();
+		return sequence;
+	}
+
+	@Override
+	public int getInterestKeywordCnt(String memberId) {
+		int keywordCnt = gameDAO.selectInterestGames(memberId).size();
+		return keywordCnt;
 	}
 
 }

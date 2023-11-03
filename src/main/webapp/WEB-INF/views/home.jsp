@@ -12,17 +12,22 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
+<header>
+	<div class="logo">
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+	</div>
 	<input type="hidden" id="alert" value="${alert }">
-	<div class="auth" style="display:inline-block; margin-right: 50px; float:right;">
+	<div class="auth">
 	<sec:authorize access="isAnonymous()">
 			<a href="/guteam/member/login?targetURL=" id="btnLogin"><button type="button" class="btn btn-light">로그인</button></a>
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">
+			<!-- 여기에 프로필 사진과 닉네임 캐시 표현하시면 됩니다. -->
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
 			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">나의 위시리스트</button></a>
 			<a href="/guteam/purchased/myPurchased"><button type="button" class="btn btn-light">나의 보유 게임</button></a>
 			<button id="recentlyViewed" type="button" class="btn btn-light">최근 조회한 게임</button>
-			<form action="/guteam/member/logout" method="post" style="display:inline;">
+			<form action="/guteam/member/logout" method="post" style="display:flex;">
 			<sec:csrfInput/>
 			<input type="submit" class="btn btn-light" value="로그아웃"></form>
 			<br><br>
@@ -30,7 +35,7 @@
 	<input type="hidden" id="memberId" value="${principal.username }">
 	</sec:authorize>
 	</div>
-	
+</header>	
 	<aside id="recentlyViewedGames" class="right">
 	</aside>
 	

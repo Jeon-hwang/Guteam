@@ -77,11 +77,11 @@ h2 {
 <hr>
 <h2>친구 목록</h2>
 	<c:forEach var="fvo" items="${friendList }">
-		<div>
-		<form action="../friend/delete" method="post">
-			<sec:csrfInput/>
+		<div class="friend" style="display:flex;">
 			<input type="image" class="profileImg" alt="${fvo.memberId }" 
 				src="display?fileName=${fvo.memberImageName }" readonly />
+		<form action="../friend/delete" method="post">
+			<sec:csrfInput/>
 			<input type="text" id="toNickname" value="${fvo.nickname }" style="width:92px;" readonly>
 			<input type="hidden" name="friendId" id="friendId" value="${fvo.memberId }">
 			<input type="submit" value="친구삭제">

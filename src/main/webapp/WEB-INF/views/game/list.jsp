@@ -21,16 +21,19 @@
 		<c:if test="${empty keywordCriteria}">
 		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">이름/장르</span></button>
 		</c:if>
-		<c:if test="${not empty keywordCriteria}">		
+		<c:if test="${keywordCriteria=='keyword'}">
+		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">이름/장르</span></button>
+		</c:if>
+		<c:if test="${keywordCriteria=='price'}">		
 		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">가격</span></button>
 		</c:if>
 		<ul class="dropdown-menu">
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','keyword');$('#keyword').attr('type','text');">이름/장르</a></li>
 			<li><a class="dropdown-item" onclick="$('.selectedItem').html(this.innerText);$('.keywordCriteria').attr('value','price');$('#keyword').attr('type','number');$('#keyword').attr('min','0');">가격</a></li>
 		</ul>
-		<input type="hidden" id="keywordCriteria" class="keywordCriteria" name="keywordCriteria" value="keyword">
+		<input type="hidden" id="keywordCriteria" class="keywordCriteria" name="keywordCriteria" value="${keywordCriteria }">
 		<input class="form-control" type="text" name="keyword" id="keyword" maxlength="20" value="${keyword }">
-		<input class="btn btn-light" id="btnSearch" type="submit" value="검색">
+		<button class="btn btn-light" id="btnSearch" type="submit"><i class="bi bi-search"></i></button>
 		</div>
 	</form>
 	<div class="btnOrderGroup">
@@ -42,13 +45,11 @@
 		<input type="submit" class="orderBy" value="구매순↑">
 		<input type="hidden" class="orderByItem" name="orderBy" value="wishlist">
 		<input type="submit" class="orderBy" value="위시리스트순↑">
-		<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_USER')">
-		<input type="hidden" class="interest" name="orderBy" value="interest">
-		<input type="submit" class="interest" value="추천순">
-		<input type="hidden" id="interestDataNull" value="${noData }">
-		</sec:authorize>
+		<input type="hidden" class="orderByItem" name="orderBy" value="rating">
+		<input type="submit" class="orderBy" value="평점순↑">
 	</div>
 	
+	<div class="listArea">
 	<c:forEach varStatus="status" var="vo" items="${gameVOList }">
 	<div class="btn btn-secondary" id="gameInfos">
 			<div class="gameInfo">
@@ -78,6 +79,7 @@
 			</div>
 		</div>
 	</c:forEach>
+	</div>
 	<div class="paging">
 	<ul class="pagination justify-content-center">
 		<c:if test="${pageMaker.hasPrev }">
@@ -86,7 +88,7 @@
 			</c:if>
 			<c:if test="${not empty keyword }">
 			<c:if test="${not empty keywordCriteria }">
-			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&laquo;</a></li>
+			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}&orderBy=${orderBy}">&laquo;</a></li>
 			</c:if>
 			<c:if test="${empty keywordCriteria }">
 			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}">&laquo;</a></li>
@@ -96,30 +98,14 @@
 		<c:forEach var="pageLink" begin="${pageMaker.startPageNo }"
 			end="${pageMaker.endPageNo }">
 			<c:if test="${pageMaker.criteria.page==pageLink }">
-				<c:if test="${empty keyword }">
-					<li class="page-item active"><a class="page-link" href="list?page=${pageLink }">${pageLink }</a></li>
-				</c:if>
-				<c:if test="${not empty keyword }">
-				<c:if test="${not empty keywordCriteria }">
-					<li class="page-item active"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
-				</c:if>
-				<c:if test="${empty keywordCriteria }">
-					<li class="page-item active"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
-				</c:if>
-				</c:if>
+			
+					<li class="page-item active"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}&orderBy=${orderBy}">${pageLink }</a></li>
+				
 			</c:if>
 			<c:if test="${pageMaker.criteria.page!=pageLink }">
-				<c:if test="${empty keyword }">
-					<li class="page-item"><a class="page-link" href="list?page=${pageLink }">${pageLink }</a></li>
-				</c:if>
-				<c:if test="${not empty keyword }">
-				<c:if test="${not empty keywordCriteria }">
-					<li class="page-item"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">${pageLink }</a></li>
-				</c:if>
-				<c:if test="${empty keywordCriteria }">
-					<li class="page-item"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}" >${pageLink }</a></li>
-				</c:if>
-				</c:if>
+				
+					<li class="page-item"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}&orderBy=${orderBy}">${pageLink }</a></li>
+				
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
@@ -137,6 +123,7 @@
 		</c:if>
 	</ul>
 	</div>
+	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 	<input type="hidden" id="insertResult" value="${insert_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -144,19 +131,17 @@
 			console.log(gameVOList);
 			var selectedItem = $('.selectedItem').html();
 			if(selectedItem=='가격'){
-				$('.keywordCriteria').attr('value','price');
+				$('#keywordCriteria').attr('value','price');
 				$('#keyword').attr('type','number');
 				$('#keyword').attr('min','0');
+			}else{
+				$('#keywordCriteria').attr('value','keyword');
 			}
 			
 			var insertResult = $('#insertResult').val();
 			if(insertResult=='success'){
 				alert('게임 등록 성공!');
-			} 
-			var interestDataNull = $('#interestDataNull').val();
-			if(interestDataNull=='noData'){
-				alert('추천할 만한 데이터가 쌓이지 않았습니다!');
-			} 
+			} 			
 			
 			$('.gameInfo').on('click', function(){
 				var gameId = $(this).find("input").val();
@@ -171,7 +156,7 @@
 				var orderBy = $(this).prev('.orderByItem').attr('value');
 				var keyword = $('#keyword').attr('value');
 				var keywordCriteria = $('#keywordCriteria').attr('value');
-				var queryString = 'orderBy='+orderBy+'&keyword='+keyword+'&keywordCriteria='+keywordCriteria;
+				var queryString = 'keyword='+keyword+'&keywordCriteria='+keywordCriteria+'&orderBy='+orderBy;
 				console.log(queryString);	
 				var url = 'list?'+queryString;
 				location.href=url;

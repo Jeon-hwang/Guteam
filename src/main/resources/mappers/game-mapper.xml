@@ -7,18 +7,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insert">
     	insert into ${game} (${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}) values (#{gameName}, #{price}, #{genre}, sysdate, sysdate, #{gameImageName})
     </insert>
-    <select id="select_all" resultType="GameVO">
-    	select * from ${game} order by ${gameId} desc
-    </select>
+    
     <select id="select_by_game_id" resultType="GameVO">
     	select * from ${game} where ${gameId}=#{gameId}
     </select>
+    
     <update id="update">
     	update ${game} set ${gameName}=#{gameName}, ${price}=#{price}, ${genre}=#{genre}, ${gameImageName}=#{gameImageName}, ${updateDate}=sysdate where ${gameId}=#{gameId}
     </update>
-    <delete id="delete">
-    	delete ${game} where ${gameId}=#{gameId}
-    </delete>
     
     <select id="paging" resultType="GameVO">
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
@@ -39,13 +35,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="total_count_by_price" resultType="Integer">
     	select count(*) total_cnt from ${game}
-    	where ${price} >= #{price}
+    	where ${price} between 0 and #{price}
     </select>
     
     <select id="select_by_price" resultType="GameVO">
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from(select rownum rn, a.* from (select * from ${game}
-    	where ${price} >= #{price}
+    	where ${price} between 0 and #{price}
     	order by ${price}, ${gameId} desc)a )
     	where rn between #{start} and #{end}
     </select>
@@ -64,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select last_number from user_sequences where sequence_name='GAME_SEQ'
     </select>
     
-    <select id="select_keyword_order_by_price" resultType="GameVO">
+    <select id="select_by_keyword_order_by_price" resultType="GameVO">
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from (select rownum rn, a.* from (select * from ${game}
     	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
@@ -72,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where rn between #{start} and #{end}
     </select>
     
-     <select id="select_keyword_order_by_price_desc" resultType="GameVO">
+     <select id="select_by_keyword_order_by_price_desc" resultType="GameVO">
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from (select rownum rn, a.* from (select * from ${game}
     	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
@@ -80,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where rn between #{start} and #{end}
     </select>
     
-    <select id="select_keyword_order_by_purchased" resultType="GameVO">
+    <select id="select_by_keyword_order_by_purchased" resultType="GameVO">
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from (select rownum rn, b.* from (select a.*, (select count(*) from ${purchased} c where a.${gameId}=c.${gameId}) as purchased_cnt 
     	from ${game} a
@@ -89,12 +85,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where rn between #{start} and #{end}
     </select>
     
-    <select id="select_keyword_order_by_wishlist" resultType="GameVO">
+    <select id="select_by_keyword_order_by_wishlist" resultType="GameVO">
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from (select rownum rn, b.* from (select a.*, (select count(*) from ${wish_list} c where a.${gameId}=c.${gameId}) as wishlist_cnt 
     	from ${game} a
     	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
     		lower(${genre}) like '%'||lower(#{keyword})||'%' order by wishlist_cnt desc, ${gameId} desc)b )
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_by_keyword_order_by_rating" resultType="GameVO">
+    	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, b.* from (select a.*, (select avg(${rating}) from ${review} c where a.${gameId}=c.${gameId}) as rating 
+    	from ${game} a
+    	where lower(${gameName}) like '%'||lower(#{keyword})||'%' or
+    		lower(${genre}) like '%'||lower(#{keyword})||'%' order by rating desc nulls last, ${gameId} desc)b )
     	where rn between #{start} and #{end}
     </select>
     
@@ -109,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="select_by_price_order_by_price_desc" resultType="GameVO">
     	select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from(select rownum rn, a.* from (select * from ${game}
-    	where ${price} >= #{price}
+    	where ${price} between 0 and #{price}
     	order by ${price} desc, ${gameId} desc)a )
     	where rn between #{start} and #{end}
     </select>
@@ -118,7 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from (select rownum rn, b.* from (select a.*, (select count(*) from ${purchased} c where a.${gameId}=c.${gameId}) as purchased_cnt 
     	from ${game} a
-    	where ${price} >= #{price}
+    	where ${price} between 0 and #{price}
     	order by purchased_cnt desc, ${price}, ${gameId} desc)b )
     	where rn between #{start} and #{end}
     </select>
@@ -127,8 +132,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
     	from (select rownum rn, b.* from (select a.*, (select count(*) from ${wish_list} c where a.${gameId}=c.${gameId}) as wishlist_cnt 
     	from ${game} a
-    	where ${price} >= #{price}
+    	where ${price} between 0 and #{price}
     	order by wishlist_cnt desc, ${price}, ${gameId} desc)b )
+    	where rn between #{start} and #{end}
+    </select>
+    
+    <select id="select_by_price_order_by_rating" resultType="GameVO">
+    select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
+    	from (select rownum rn, b.* from (select a.*, (select avg(${rating}) from ${review} c where a.${gameId}=c.${gameId}) as rating 
+    	from ${game} a
+    	where ${price} between 0 and #{price}
+    	order by rating desc nulls last, ${price}, ${gameId} desc)b )
     	where rn between #{start} and #{end}
     </select>
     
@@ -182,6 +196,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    		select * from ${game}
 			    	where lower(${gameName}) like '%'||lower(#{keyword3})||'%' or
 		    		lower(${genre}) like '%'||lower(#{keyword3})||'%'
+		    		union all
+		    		select * from ${game}
 	    			)
 	    		group by ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
    				)
@@ -190,23 +206,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where rn between #{start} and #{end}
     </select>
     
-    <select id="total_count_by_interest" resultType="Integer">
-    	select count(*) total_cnt from (
-    			 select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}, count(*) row_count from (
-			    	select * from ${game}
-			    	where lower(${gameName}) like '%'||lower(#{keyword1})||'%' or
-		    		lower(${genre}) like '%'||lower(#{keyword1})||'%'
-		    		union all
-		    		select * from ${game}
-			    	where lower(${gameName}) like '%'||lower(#{keyword2})||'%' or
-		    		lower(${genre}) like '%'||lower(#{keyword2})||'%'
-		    		union all
-		    		select * from ${game}
-			    	where lower(${gameName}) like '%'||lower(#{keyword3})||'%' or
-		    		lower(${genre}) like '%'||lower(#{keyword3})||'%'
-	    			)
-	    		group by ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}
-   				)
-    </select>
    
 </mapper>

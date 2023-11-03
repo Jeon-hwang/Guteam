@@ -30,12 +30,6 @@ public class GameDAOImple implements GameDAO {
 	}
 
 	@Override
-	public List<GameVO> select() {
-		logger.info("Game select() 호출");
-		return sqlSession.selectList(NAMESPACE+".select_all");
-	}
-
-	@Override
 	public GameVO select(int gameId) {
 		logger.info("Game select_by_game_id() 호출 : gameId = " + gameId);
 		return sqlSession.selectOne(NAMESPACE + ".select_by_game_id", gameId);
@@ -48,7 +42,7 @@ public class GameDAOImple implements GameDAO {
 	}
 
 	@Override
-	public List<GameVO> select(PageCriteria criteria) {
+	public List<GameVO> selectAll(PageCriteria criteria) {
 		logger.info("Game select(criteria) 호출 : criteria = " + criteria);
 		return sqlSession.selectList(NAMESPACE + ".paging", criteria);
 	}
@@ -102,32 +96,41 @@ public class GameDAOImple implements GameDAO {
 	public List<GameVO> selectOrderBy(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria) {
 		logger.info("Game selectOrderBy()호출");
 		Map<String, Object> args = new HashMap<>();
-		args.put("keyword", keyword);
-		args.put("price", keyword);
+		if(keywordCriteria.equals("keyword")) {
+			args.put("keyword", keyword);			
+		}else {
+			if(keyword==null||keyword!=null&&keyword.equals("")) {
+				args.put("price", Integer.MAX_VALUE);
+			}else {
+				args.put("price", Integer.parseInt(keyword));
+			}
+		}
 		args.put("keywordCriteria", keywordCriteria);
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
-		logger.info(orderBy);
+		
 		if(keywordCriteria.equals("keyword")) {
 			switch(orderBy) {
-			case "price": return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_price", args);
-			case "priceDesc": return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_price_desc", args);
-			case "purchased": return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_purchased", args);
-			case "wishlist": return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_wishlist", args);
-		}
+			case "price": return sqlSession.selectList(NAMESPACE + ".select_by_keyword_order_by_price", args);
+			case "priceDesc": return sqlSession.selectList(NAMESPACE + ".select_by_keyword_order_by_price_desc", args);
+			case "purchased": return sqlSession.selectList(NAMESPACE + ".select_by_keyword_order_by_purchased", args);
+			case "wishlist": return sqlSession.selectList(NAMESPACE + ".select_by_keyword_order_by_wishlist", args);
+			case "rating": return sqlSession.selectList(NAMESPACE+".select_by_keyword_order_by_rating", args);
+			}
 		}else if(keywordCriteria.equals("price")) {
 			switch(orderBy) {
 			case "price": return sqlSession.selectList(NAMESPACE + ".select_by_price", args);
 			case "priceDesc": return sqlSession.selectList(NAMESPACE + ".select_by_price_order_by_price_desc", args);
 			case "purchased": return sqlSession.selectList(NAMESPACE + ".select_by_price_order_by_purchased", args);
 			case "wishlist": return sqlSession.selectList(NAMESPACE + ".select_by_price_order_by_wishlist", args);
+			case "rating": return sqlSession.selectList(NAMESPACE+".select_by_price_order_by_rating", args);
 			}
 		}
-		return sqlSession.selectList(NAMESPACE + ".select_keyword_order_by_price", args);
+		return sqlSession.selectList(NAMESPACE + ".paging", criteria);
 	}
 
 	@Override
-	public List<GameVO> selectInterest(String memberId) {
+	public List<GameVO> selectInterestGames(String memberId) {
 		logger.info("Game Interest() 호출 ");
 		List<GameVO> list = sqlSession.selectList(NAMESPACE+".select_by_interest_point", memberId);
 		List<GameVO> interestList = new ArrayList<>(); 
@@ -138,7 +141,7 @@ public class GameDAOImple implements GameDAO {
 	}
 
 	@Override
-	public List<GameVO> selectInterestByKeyword(List<String> keywords, PageCriteria criteria) {
+	public List<GameVO> selectByInterest(List<String> keywords, PageCriteria criteria) {
 		logger.info("Game Interest By Keyword() 호출");
 		Map<String, Object> args = new HashMap<>();
 		for(int i = 0; i < keywords.size(); i++) {
@@ -153,17 +156,5 @@ public class GameDAOImple implements GameDAO {
 		return list;
 	}
 
-	@Override
-	public int getTotalCountsInterest(List<String> keywords) {
-		Map<String, Object> args = new HashMap<>();
-		for(int i = 0; i < keywords.size(); i++) {
-			int no = i+1;
-			String string = "keyword"+no;
-			args.put(string, keywords.get(i));
-		}
-		return sqlSession.selectOne(NAMESPACE+".total_count_by_interest", args);
-	}
-	
-	
 
 }

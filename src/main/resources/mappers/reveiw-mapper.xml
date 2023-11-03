@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		lower(${reviewContent}) like '%'||lower(#{keyword})||'%')
     </select>
     
-    <select id="get_rating" resultType="Integer">
+    <select id="get_rating_avg" resultType="Integer">
     	select avg(${rating}) avg_rating from ${review} where ${gameId}=#{gameId}
     </select>
     

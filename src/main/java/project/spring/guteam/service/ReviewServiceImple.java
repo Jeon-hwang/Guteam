@@ -101,7 +101,7 @@ public class ReviewServiceImple implements ReviewService {
 	@Override
 	public int getRating(int gameId) {
 		logger.info("review getRating() 호출");
-		return reviewDAO.getRating(gameId);
+		return reviewDAO.getRatingAvg(gameId);
 	}
 
 	@Override

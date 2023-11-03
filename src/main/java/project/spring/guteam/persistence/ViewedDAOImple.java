@@ -42,7 +42,7 @@ public class ViewedDAOImple implements ViewedDAO{
 	}
 
 	@Override
-	public ViewedVO selectRecently(String memberId, int gameId) {
+	public ViewedVO selectToday(String memberId, int gameId) {
 		logger.info("viewed selectRecently() 호출 : memberId = " + memberId);
 		Map<String, Object> args = new HashMap<>();
 		args.put("memberId", memberId);
