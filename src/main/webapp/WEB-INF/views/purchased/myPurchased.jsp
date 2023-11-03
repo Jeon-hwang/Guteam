@@ -34,7 +34,7 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var memberId = $('#memberId').val();
-		getGameList();
+		getGameList();	
 		function dateFormat(date) {
 	        var month = date.getMonth() + 1;
 	        var day = date.getDate();
@@ -67,11 +67,13 @@
 					list += '<li class="game_item">'
 						 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
 						 + 'src="../game/display?fileName='+this.gameImageName+'">'
+						 + '<input type="hidden" class="gameImageName" value="'+this.gameImageName+'">'
 						 + '<a href=../game/detail?gameId='+this.gameId+'><span id="gameName">'+this.gameName+'</span></a>'
-						 + '<span class="genre"'+this.genre+'</span>'
-						 + '<div>'
-						 + '<button class="executionGame">다운로드</button><br>'
-						 + '<button class="executionGame" style="display : none">실행</button><br>'
+						 + '<span class="genre">'+this.genre+'</span>'
+						 + '<div class="active_game">'
+						 + '<button class="download_btn"><a href="'
+						 + 'download'+this.gameImageName+'">다운로드</a></button><br>'
+						 + '<button class="active_game" style="display : none">실행</button><br>'
 						 + '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span>'
 						 + '</div>'
 						 + '</li><hr>';
@@ -81,6 +83,29 @@
 				}
 			); // end getJSON*/
 		}// end getGameList()
+		$('#games').on('click','.game_item .active_game .download_btn',function(){
+			console.log("클릭");
+			var imageName = $(this).parent().prevAll('.gameImageName').val();
+			console.log(imageName);
+		});// end games.on
+		var hi = checkGame("2023/10/23/s_035022_leage.jpg");
+		console.log(hi);
+		function checkGame(gameImageName){
+			var result=0; 
+			console.log(gameImageName);
+			var url = 'check/'+gameImageName;
+			$.getJSON(
+				 url,
+				 function(data){
+					 console.log("제이슨성공?");
+					 console.log(data);
+					 if(data.data=='Y'){
+						result=1;
+					 }
+				 }
+			);// end getJSON
+			return result;
+		}//end checkGame()
 	});// end document
 	</script>
 </body>

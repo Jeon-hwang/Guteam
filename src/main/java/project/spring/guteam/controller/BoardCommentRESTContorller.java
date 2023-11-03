@@ -1,6 +1,5 @@
 package project.spring.guteam.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -17,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.pageutil.PageCriteria;
-import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.BoardCommentService;
 
 
@@ -80,6 +77,8 @@ public class BoardCommentRESTContorller {
 			criteria.setPage(page);
 		}
 		Map<String, Object> data = service.getAllCommentsAndReplies(memberId,criteria);
+		
+		
 		return new ResponseEntity<Map<String, Object>>(data,HttpStatus.OK);
 	}
 }

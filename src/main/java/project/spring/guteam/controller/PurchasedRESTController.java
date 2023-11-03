@@ -1,8 +1,13 @@
 package project.spring.guteam.controller;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +33,9 @@ public class PurchasedRESTController {
 	
 	@Autowired
 	private PurchasedService service;
+
+	@Resource(name = "downloadPath")
+	private String downloadPath;
 	
 	@PostMapping("/buy/{memberId}")
 	public ResponseEntity<Integer> insertPurchased(@RequestBody int gameId,@PathVariable("memberId") String memberId,int cash){
@@ -71,4 +79,21 @@ public class PurchasedRESTController {
 		return new ResponseEntity<Map<String, Object>>(data,HttpStatus.OK);		
 	}
 	//"../purchased/findFriends/"+memberId+'?gameId='+gameId;
+	
+	@GetMapping(value="check/****/**/**/{fileName:.+}")
+	public ResponseEntity<Map<String, Object>> checkFile(@PathVariable String fileName) {
+		logger.info("파일 확인 : "+fileName);
+		String data="N";
+		Path sourceFilePath = Paths.get(downloadPath).resolve(fileName);
+		File sourceFile = sourceFilePath.toFile();
+		logger.info(sourceFilePath.toString());
+		if(sourceFile.exists()) { //소스파일이 다운로드 경로에 존재한다면?
+			logger.info("존재.. 합니까!!?");
+			data = "Y"; // check이 true 면 다운로드 버튼을 - > 실행버튼으로
+		}
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("data", data);
+		return new ResponseEntity<Map<String,Object>>(args, HttpStatus.OK);
+	}
+	
 }
