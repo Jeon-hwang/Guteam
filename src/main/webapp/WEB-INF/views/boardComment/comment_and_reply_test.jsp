@@ -63,14 +63,12 @@
 			$("#commentContent").keydown(function(keyNum){
 				//현재의 키보드의 입력값을 keyNum으로 받음
 				if(keyNum.keyCode == 13){ 
-
 					$('#commentAddBtn').click();	
 				}
 			});// end commentContent.keydown
 			
 			$('#comments').on('keydown','.comment_item .replyContent',function(keyNum){
 				if(keyNum.keyCode == 13){ 
-					
 					$(this).next().click();	
 				}
 			});// end replyContent.keydown
@@ -134,6 +132,7 @@
 						console.log(this);
 						console.log(data.nicknameList);
 						var nickname = data.nicknameList[varStatus];
+						var memberImageName = data.memberImageNameList[varStatus];
 						varStatus++;
 						var commentDateCreated = new Date(this.commentDateCreated);
 						
@@ -154,6 +153,7 @@
 								+ '<pre>'
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
+								+ '<img class="profileImg" alt="'+nickname+'" src="../game/display?fileName='+memberImageName+'" width="25px" height="25px" />'
 								+ '<span>'+nickname+'</span> :&nbsp&nbsp'
 								+ '<span id="commentContentView">'+this.commentContent+'('+this.replyCnt+')</span>&nbsp&nbsp&nbsp&nbsp'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">&nbsp&nbsp&nbsp&nbsp'

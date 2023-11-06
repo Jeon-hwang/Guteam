@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
+import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.domain.ReplyVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
@@ -58,14 +59,19 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		pageMaker.setPageData();
 		List<BoardCommentVO> list = boardCommentDAO.select(gameBoardId,criteria);
 		List<String> nicknameList = new ArrayList<String>();
+		List<String> memberImageNameList = new ArrayList<String>();
 		for(int i =0; i<  list.size();i++) {
 			String memberId = list.get(i).getMemberId();
-			String nickname = memberDAO.select(memberId).getNickname();
+			MemberVO memberVO = memberDAO.select(memberId);
+			String nickname = memberVO.getNickname();
+			String memberImageName = memberVO.getMemberImageName();
 			nicknameList.add(nickname);
+			memberImageNameList.add(memberImageName);
 		}
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("list", list);
 		args.put("nicknameList", nicknameList);
+		args.put("memberImageNameList",memberImageNameList);
 		args.put("pageMaker", pageMaker);
 		return args;
 	}

@@ -1,8 +1,13 @@
 package project.spring.guteam.controller;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.spring.guteam.domain.GameVO;
@@ -28,6 +34,9 @@ public class PurchasedRESTController {
 	
 	@Autowired
 	private PurchasedService service;
+
+	@Resource(name = "downloadPath")
+	private String downloadPath;
 	
 	@PostMapping("/buy/{memberId}")
 	public ResponseEntity<Integer> insertPurchased(@RequestBody int gameId,@PathVariable("memberId") String memberId,int cash){
@@ -71,4 +80,23 @@ public class PurchasedRESTController {
 		return new ResponseEntity<Map<String, Object>>(data,HttpStatus.OK);		
 	}
 	//"../purchased/findFriends/"+memberId+'?gameId='+gameId;
+	
+	@GetMapping(value="check/****/**/**/{fileName:.+}")
+	public ResponseEntity<String> checkFile(@PathVariable String fileName) {
+		logger.info("파일 확인 : "+fileName);
+		String result="N";
+		String userPath = System.getProperty("user.home");
+		Path sourceFilePath = Paths.get(userPath+downloadPath).resolve(fileName);
+		File sourceFile = sourceFilePath.toFile();
+		logger.info(sourceFilePath.toString());
+		if(sourceFile.exists()) { //소스파일이 다운로드 경로에 존재한다면?
+			logger.info("존재.. 합니까!!?");
+			result = "Y"; // check이 true 면 다운로드 버튼을 - > 실행버튼으로
+			logger.info("result = "+result);
+		}		
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+	}
+	
+	
+	
 }

@@ -34,7 +34,7 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var memberId = $('#memberId').val();
-		getGameList();
+		getGameList();	
 		function dateFormat(date) {
 	        var month = date.getMonth() + 1;
 	        var day = date.getDate();
@@ -67,12 +67,17 @@
 					list += '<li class="game_item">'
 						 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
 						 + 'src="../game/display?fileName='+this.gameImageName+'">'
+						 + '<input type="hidden" class="gameImageName" value="'+this.gameImageName+'">'
 						 + '<a href=../game/detail?gameId='+this.gameId+'><span id="gameName">'+this.gameName+'</span></a>'
-						 + '<span class="genre"'+this.genre+'</span>'
-						 + '<div>'
-						 + '<button class="executionGame">다운로드</button><br>'
-						 + '<button class="executionGame" style="display : none">실행</button><br>'
-						 + '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span>'
+						 + '<span class="genre">'+this.genre+'</span>'
+						 + '<div class="active_game">'
+						 if(checkGame(this.gameImageName)==0){
+					list += '<button class="download_btn"><a href="'
+						 + 'download'+this.gameImageName+'">다운로드</a></button><br>';
+						 }else{
+					list += '<button class="run_game">실행</button><br>';
+						 }
+					list += '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span>'
 						 + '</div>'
 						 + '</li><hr>';
 						 
@@ -81,7 +86,46 @@
 				}
 			); // end getJSON*/
 		}// end getGameList()
+		$('#games').on('click','.game_item .active_game .download_btn',function(){
+			console.log("클릭");
+			var imageName = $(this).parent().prevAll('.gameImageName').val();
+			console.log(imageName);
+			getGameList();
+		});// end games.on
+		
+		function checkGame(gameImageName){
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var result = 0;
+			console.log(gameImageName);
+			$.ajax({
+				type : 'GET' ,
+				url : 'check'+gameImageName ,
+				headers : {
+					'Content-Type' : 'application/json'
+				} ,
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    } ,
+			    async : false ,
+			    success : function(data){
+			    	console.log(data);
+			    	if(data=="Y"){
+			    		result = 1;
+			    	}    
+			    }
+			}); //end ajax
+			return result;
+		}
+		
+		$('#games').on('click','.game_item .active_game .run_game',function(){
+			console.log("게임실행 확인");
+			var imageName = $(this).parent().prevAll('.gameImageName').val();
+			window.open("runningGame"+imageName, "게임", "width=750px,height=750px,scrollbars=yes");
+		});
+		
 	});// end document
+	
 	</script>
 </body>
 </html>
