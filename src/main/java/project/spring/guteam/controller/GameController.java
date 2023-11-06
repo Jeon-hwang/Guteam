@@ -50,8 +50,9 @@ public class GameController {
 	@GetMapping("/list")
 	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria, String orderBy, Principal principal) {
 		logger.info("list 호출");
+		
 		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
-		PageCriteria criteria = new PageCriteria();
+		PageCriteria criteria = new PageCriteria(1, 10);
 		if (page != null) {
 			criteria.setPage(page);
 		}

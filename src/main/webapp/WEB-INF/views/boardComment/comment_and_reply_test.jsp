@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>댓글창</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<jsp:include page="/WEB-INF/views/style.jsp"></jsp:include>
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
@@ -16,27 +17,22 @@
 	<sec:authentication property="principal" var="principal"/>
 	<input type="hidden" id="memberId" value=${principal.username }>
 	</sec:authorize>
-	<h1>댓글 테스트</h1>
-	
 	<!-- 대충 아래에 댓글 생성 -->
-	<section id="CommentGroup">
-	
-	<div style="text-align : center;">
+	<div id="CommentGroup">
 		<input type="hidden" name="gameId" id="gameId" value="${gameId }">
 		<input type="hidden" name="page" id="page" value="${page }">
 		<input type="hidden" name="gameBoardId" id="gameBoardId" value="${vo.gameBoardId }">
 		<sec:authorize access="isAuthenticated()">
-		내용 : <input type="text" id="commentContent">
-		<button id="commentAddBtn">작성</button>
+		<div class="insertComment">
+		댓글 입력 : <input type="text" id="commentContent">
+		<button id="commentAddBtn" class="btn btn-secondary"><i class="bi bi-check"></i></button>
+		</div>		
 		</sec:authorize>
 		<sec:authorize access="isAnonymous()">
 			<a href="../member/login">로그인을 하셔야 댓글이 작성 가능합니다.	</a>
 		</sec:authorize>
-	</div>
-	<div style="text-align : center;">
 		<ul id="comments"></ul>
 	</div>
-	</section>
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -109,7 +105,7 @@
 					
 				});// end ajax
 			})// commentAddBtn
-			$('#comments').on('click','.comment_paging .paging',function(){
+			$('#comments').on('click','.comment_paging .btnPaging',function(){
 				var clickPage = $(this).val();
 				console.log("선택한 페이지 :"+clickPage);
 				getAllComments(clickPage);
@@ -143,9 +139,9 @@
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">'
-								+ '<p>삭제된 댓글입니다.('+this.replyCnt+')</p>'
+								+ '<p>삭제된 댓글입니다.</p>'
 								+ '<div class="reply_btn_area">'
-								+ '<button class="reply_view_btn" style="display:block">답글보기</button>'
+								+ '<button class="reply_view_btn" style="display:block"><i class="bi bi-chat-left-dots-fill"></i>'+this.replyCnt+'</button>'
 								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
 								+ '<div class="replies_area'+commentRow+'"></div>'
 								+ '</pre></li>';
@@ -155,7 +151,7 @@
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
 								+ '<span>'+nickname+'</span> :&nbsp&nbsp'
-								+ '<span id="commentContentView">'+this.commentContent+'('+this.replyCnt+')</span>&nbsp&nbsp&nbsp&nbsp'
+								+ '<span id="commentContentView">'+this.commentContent+'</span>&nbsp&nbsp&nbsp&nbsp'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">&nbsp&nbsp&nbsp&nbsp'
 								+ '<span>'+dateFormat(commentDateCreated)+'</span>&nbsp&nbsp'
 								if(principalMemberId==this.memberId){
@@ -164,7 +160,7 @@
 								+ '<button class="delete_comment" >삭제</button>'
 								}
 						list += '<div class="reply_btn_area">'
-								+ '<button class="reply_view_btn" style="display:block">답글보기</button>'
+								+ '<button class="reply_view_btn" style="display:block"><i class="bi bi-chat-left-dots-fill"></i>'+this.replyCnt+'</button>'
 								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
 								+ '<div class="replies_area'+commentRow+'"></div>'
 								+ '</pre></li>';
@@ -179,17 +175,17 @@
 						
 					list += '<div class="comment_paging">';
 						 if(hasPrev){
-					list += '<button class="paging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp'; 
+					list += '<button class="btnPaging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp'; 
 						 }
 						for(var i = startPageNo ; i<=endPageNo ; i++ ){
 								if(nowPage==i){
 					list += '<em>'+i+'</em>';									
 								}else{
-					list += '<button class="paging" value="'+i+'">'+i+'</button>';		
+					list += '<button class="btnPaging" value="'+i+'">'+i+'</button>';		
 								}
 						}
 						if(hasNext){
-							list += '&nbsp&nbsp<button class="paging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp';		
+							list += '&nbsp&nbsp<button class="btnPaging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp';		
 						}
 					list +=	'</div>';
 						

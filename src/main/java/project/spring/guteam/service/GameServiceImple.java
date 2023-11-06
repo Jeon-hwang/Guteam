@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import project.spring.guteam.domain.DiscountVO;
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.domain.ViewedVO;
 import project.spring.guteam.pageutil.PageCriteria;
+import project.spring.guteam.persistence.DiscountDAO;
 import project.spring.guteam.persistence.GameDAO;
 import project.spring.guteam.persistence.ReviewDAO;
 import project.spring.guteam.persistence.ViewedDAO;
@@ -32,6 +34,9 @@ public class GameServiceImple implements GameService {
 	
 	@Autowired
 	private ViewedDAO viewedDAO;
+	
+	@Autowired
+	private DiscountDAO discountDAO;
 		
 	@Override
 	public int create(GameVO vo) {
@@ -50,13 +55,8 @@ public class GameServiceImple implements GameService {
 	public Map<String, Object> readAll(PageCriteria criteria) {
 		logger.info("game read() 호출 : criteria = " + criteria.toString());
 		List<GameVO> gameVOList = gameDAO.selectAll(criteria);
-		List<Integer> ratingList = new ArrayList<>();
-		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
-		}
 		Map<String, Object> args = new HashMap<>();
-		args.put("gameVOList", gameVOList);
-		args.put("ratingList", ratingList);
+		setRatingAndPrice(gameVOList, args);
 		return args;
 	}
 
@@ -74,6 +74,14 @@ public class GameServiceImple implements GameService {
 		}
 		logger.info("game read(gameId) 호출 : gameId = " + gameId);
 		GameVO vo = gameDAO.select(gameId);
+		List<DiscountVO> discountList = discountDAO.selectAll();
+		Map<String, Double> discounts = new HashMap<>();
+		for(DiscountVO discountVO : discountList) {
+			discounts.put(discountVO.getGenre(), (double) discountVO.getDiscountRate());
+		}
+		if(discounts.containsKey(vo.getGenre())) {
+			vo.setPrice(vo.getPrice() - (int) (vo.getPrice()*discounts.get(vo.getGenre())));
+		}
 		int rating = reviewDAO.getRatingAvg(gameId);
 		Map<String, Object> args = new HashMap<>();
 		args.put("vo", vo);
@@ -98,13 +106,8 @@ public class GameServiceImple implements GameService {
 	public Map<String, Object> readByKeyword(String keyword, PageCriteria criteria) {
 		logger.info("game read(keyword) 호출");
 		List<GameVO> gameVOList = gameDAO.selectByNameOrGenre(keyword, criteria);
-		List<Integer> ratingList = new ArrayList<>();
-		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
-		}
 		Map<String, Object> args = new HashMap<>();
-		args.put("gameVOList", gameVOList);
-		args.put("ratingList", ratingList);
+		setRatingAndPrice(gameVOList, args);
 		return args;
 	}
 
@@ -119,13 +122,8 @@ public class GameServiceImple implements GameService {
 	public Map<String, Object> readByPrice(int price, PageCriteria criteria) {
 		logger.info("game read(price) 호출");
 		List<GameVO> gameVOList = gameDAO.selectByPrice(price, criteria);
-		List<Integer> ratingList = new ArrayList<>();
-		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
-		}
 		Map<String, Object> args = new HashMap<>();
-		args.put("gameVOList", gameVOList);
-		args.put("ratingList", ratingList);
+		setRatingAndPrice(gameVOList, args);
 		return args;
 	}
 
@@ -135,12 +133,7 @@ public class GameServiceImple implements GameService {
 		Map<String, Object> args = new HashMap<>();
 		logger.info("read(orderBy)호출 : orderBy = " + orderBy);
 		List<GameVO> gameVOList = gameDAO.selectOrderBy(keyword, keywordCriteria, orderBy, criteria);
-		List<Integer> ratingList = new ArrayList<>();
-		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
-		}
-		args.put("gameVOList", gameVOList);
-		args.put("ratingList", ratingList);
+		setRatingAndPrice(gameVOList, args);
 		return args;
 	}
 
@@ -151,11 +144,20 @@ public class GameServiceImple implements GameService {
 		logger.info("game read(memberId)호출 : memberId = " + memberId );
 		List<GameVO> recentlyViewedGameVOList = new ArrayList<>();
 		List<Integer> recentlyViewedRatingList = new ArrayList<>();
+		List<DiscountVO> discountList = discountDAO.selectAll();
+		Map<String, Double> discounts = new HashMap<>();
+		for(DiscountVO vo : discountList) {
+			discounts.put(vo.getGenre(), (double) vo.getDiscountRate());
+		}
 		List<ViewedVO> recentlyViewed = viewedDAO.select(memberId);
 		for(int i = 0 ; i < recentlyViewed.size(); i++) {
-			if(!recentlyViewedGameVOList.contains(gameDAO.select(recentlyViewed.get(i).getGameId()))) {
-			recentlyViewedGameVOList.add(gameDAO.select(recentlyViewed.get(i).getGameId()));
-			recentlyViewedRatingList.add(reviewDAO.getRatingAvg(recentlyViewed.get(i).getGameId()));
+			GameVO vo = gameDAO.select(recentlyViewed.get(i).getGameId());
+			if(!recentlyViewedGameVOList.contains(vo)) {
+				if(discounts.containsKey(vo.getGenre())) {
+					vo.setPrice(vo.getPrice() - (int) (vo.getPrice()*discounts.get(vo.getGenre())));
+				}
+			recentlyViewedGameVOList.add(vo);
+			recentlyViewedRatingList.add(reviewDAO.getRatingAvg(vo.getGameId()));
 			}
 		}
 		args.put("recentlyViewedGameVOList", recentlyViewedGameVOList);
@@ -172,12 +174,7 @@ public class GameServiceImple implements GameService {
 			keywords.add(interestList.get(i).getGenre());
 		}
 		List<GameVO> gameVOList = gameDAO.selectByInterest(keywords, criteria);
-		List<Integer> ratingList = new ArrayList<>();
-		for(int i = 0 ; i < gameVOList.size(); i++) {
-			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
-		}
-		args.put("gameVOList", gameVOList);
-		args.put("ratingList", ratingList);
+		setRatingAndPrice(gameVOList, args);
 		return args;
 	}
 
@@ -191,6 +188,25 @@ public class GameServiceImple implements GameService {
 	public int getInterestKeywordCnt(String memberId) {
 		int keywordCnt = gameDAO.selectInterestGames(memberId).size();
 		return keywordCnt;
+	}
+	
+	private void setRatingAndPrice(List<GameVO> gameVOList, Map<String, Object> args) {
+		List<DiscountVO> discountList = discountDAO.selectAll();
+		Map<String, Double> discounts = new HashMap<>();
+		for(DiscountVO vo : discountList) {
+			discounts.put(vo.getGenre(), (double) vo.getDiscountRate());
+		}
+		List<Integer> ratingList = new ArrayList<>();
+		for(int i = 0 ; i < gameVOList.size(); i++) {
+			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
+			if(discounts.containsKey(gameVOList.get(i).getGenre())) {
+				gameVOList.get(i).setPrice(gameVOList.get(i).getPrice() - (int) (gameVOList.get(i).getPrice()*discounts.get(gameVOList.get(i).getGenre())));
+			}
+		}
+		args.put("discountList", discountList);
+		args.put("gameVOList", gameVOList);
+		args.put("ratingList", ratingList);
+		
 	}
 
 }

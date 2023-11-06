@@ -27,28 +27,28 @@ public class ThumbRESTController {
 	
 	@PostMapping	
 	public ResponseEntity<Integer> create(@RequestBody ThumbVO vo) throws Exception{
-		logger.info(vo.toString());
+		logger.info("create 호출 vo : "+vo.toString());
 		int result = thumbService.create(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 	
 	@GetMapping
 	public ResponseEntity<ThumbVO> read(@RequestBody ThumbVO vo) {
-		logger.info(vo.toString());
+		logger.info("read 호출 vo : "+vo.toString());
 		ThumbVO result = thumbService.read(vo);
 		return new ResponseEntity<ThumbVO>(result,HttpStatus.OK);
 	}
 	
 	@PutMapping
 	public ResponseEntity<Integer> update(@RequestBody ThumbVO vo) throws Exception{
-		logger.info(vo.toString());
+		logger.info("update 호출 vo : "+vo.toString());
 		int result = thumbService.update(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 	
 	@DeleteMapping
 	public ResponseEntity<Integer> delete(@RequestBody ThumbVO vo) throws Exception{
-		logger.info(vo.toString());
+		logger.info("delete 호출 vo : "+vo.toString());
 		int result = thumbService.delete(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}

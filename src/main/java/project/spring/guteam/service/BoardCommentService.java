@@ -1,9 +1,7 @@
 package project.spring.guteam.service;
 
-import java.util.List;
 import java.util.Map;
 
-import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.pageutil.PageCriteria;
 
