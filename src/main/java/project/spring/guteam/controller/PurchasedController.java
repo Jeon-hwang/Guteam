@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,9 +17,13 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import project.spring.guteam.domain.GameVO;
+import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.service.PurchasedService;
 
 @Controller
@@ -75,9 +82,13 @@ public class PurchasedController {
 	        File sourceFile = sourceFilePath.toFile(); // toFIle : 해당 경로의 파일화
 	        logger.info(sourceFilePath.toString());
 	        
-	        String directoryPath = downloadPath; // 생성하려는 디렉토리 경로
-	        Path directory = Paths.get(directoryPath);
+	        String userPath = System.getProperty("user.home"); // 사용자의 디렉토리 경로 확인
+	        logger.info("사용자의 경로 : "+userPath);
 	        
+	        
+	        String directoryPath = userPath+"\\Documents\\GuteamDownload"; // 생성하려는 디렉토리 경로
+	        Path directory = Paths.get(directoryPath);
+	        logger.info("사용자의 경로 : "+directoryPath);
 	        if (!Files.exists(directory)) {
 	            try {
 	                Files.createDirectories(directory); // 디렉토리 생성
@@ -87,8 +98,8 @@ public class PurchasedController {
 	            }
 	        }
 	        
-	        if (sourceFile.exists()) { // 소스파일이 업로드 경로에 존재한다면?
-	            Path destinationFilePath = Paths.get(downloadPath).resolve(fileName); 
+	        if (sourceFile.exists()) { // 소스파일이 다운로드 경로에 존재한다면?
+	            Path destinationFilePath = Paths.get(userPath+downloadPath).resolve(fileName); 
 	            File destinationFile = destinationFilePath.toFile();
 	          
 	            if (!destinationFile.exists()) {
@@ -109,8 +120,49 @@ public class PurchasedController {
 	        }//end if(sourceFile.exists)
 	      
 	    }
+	  
+	  @GetMapping("runningGame/****/**/**/{fileName:.+}")
+	  public ResponseEntity<byte[]> runningGame(@PathVariable("fileName") String fileName,	HttpServletResponse response) {
+				logger.info("display() 호출");
+
+				ResponseEntity<byte[]> entity = null;
+
+				InputStream in = null;
+
+				try {
+					fileName = URLDecoder.decode(fileName, "utf-8");
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				if (!(fileName.charAt(0) == '/')) {
+					fileName = "/" + fileName;
+				}
+				 String userPath = System.getProperty("user.home");
+				String filePath = userPath+ downloadPath + fileName;
+
+				try {
+					in = new FileInputStream(filePath);
+					// 파일 확장자
+					String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
+					logger.info(extension);
+
+					// 응답 헤더(response header) 에 Content-Type 설정
+					HttpHeaders httpHeaders = new HttpHeaders();
+					httpHeaders.setContentType(MediaUtil.getMediaType(extension));
+					// 데이터 전송
+					entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), // 파일에서 읽은 데이터
+							httpHeaders, // 응답 헤더
+							HttpStatus.OK);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return entity;
+			}
+	  
 /*	public void purchaseWindow(Model model,int gameId,String memberId) {
-		logger.info("구매창으로 이동 게임아디 : , 멤버 아디 : "+gameId+", "+memberId);
+		logger.info("구매창으로 이동 게임아디 : , 멤버 아디 : "+gameId+                                                      ", "+memberId);
 		GameVO gameVO = gameService.read(gameId);
 		MemberVO memberVO = memberService.read(memberId);
 		model.addAttribute("memberVO", memberVO);

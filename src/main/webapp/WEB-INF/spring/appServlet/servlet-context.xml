@@ -42,7 +42,7 @@
 	</beans:bean>
 	
 	<beans:bean id="downloadPath" class="java.lang.String">	
-		<beans:constructor-arg value="C:\\Users\\goott3\\Documents\\GuteamDownload" />
+		<beans:constructor-arg value="${downloadPath.img}" />
 	</beans:bean>
 	
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import project.spring.guteam.domain.GameVO;
@@ -81,19 +82,21 @@ public class PurchasedRESTController {
 	//"../purchased/findFriends/"+memberId+'?gameId='+gameId;
 	
 	@GetMapping(value="check/****/**/**/{fileName:.+}")
-	public ResponseEntity<Map<String, Object>> checkFile(@PathVariable String fileName) {
+	public ResponseEntity<String> checkFile(@PathVariable String fileName) {
 		logger.info("파일 확인 : "+fileName);
-		String data="N";
-		Path sourceFilePath = Paths.get(downloadPath).resolve(fileName);
+		String result="N";
+		String userPath = System.getProperty("user.home");
+		Path sourceFilePath = Paths.get(userPath+downloadPath).resolve(fileName);
 		File sourceFile = sourceFilePath.toFile();
 		logger.info(sourceFilePath.toString());
 		if(sourceFile.exists()) { //소스파일이 다운로드 경로에 존재한다면?
 			logger.info("존재.. 합니까!!?");
-			data = "Y"; // check이 true 면 다운로드 버튼을 - > 실행버튼으로
-		}
-		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("data", data);
-		return new ResponseEntity<Map<String,Object>>(args, HttpStatus.OK);
+			result = "Y"; // check이 true 면 다운로드 버튼을 - > 실행버튼으로
+			logger.info("result = "+result);
+		}		
+		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
+	
+	
 	
 }

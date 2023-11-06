@@ -71,10 +71,13 @@
 						 + '<a href=../game/detail?gameId='+this.gameId+'><span id="gameName">'+this.gameName+'</span></a>'
 						 + '<span class="genre">'+this.genre+'</span>'
 						 + '<div class="active_game">'
-						 + '<button class="download_btn"><a href="'
-						 + 'download'+this.gameImageName+'">다운로드</a></button><br>'
-						 + '<button class="active_game" style="display : none">실행</button><br>'
-						 + '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span>'
+						 if(checkGame(this.gameImageName)==0){
+					list += '<button class="download_btn"><a href="'
+						 + 'download'+this.gameImageName+'">다운로드</a></button><br>';
+						 }else{
+					list += '<button class="run_game">실행</button><br>';
+						 }
+					list += '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span>'
 						 + '</div>'
 						 + '</li><hr>';
 						 
@@ -87,26 +90,42 @@
 			console.log("클릭");
 			var imageName = $(this).parent().prevAll('.gameImageName').val();
 			console.log(imageName);
+			getGameList();
 		});// end games.on
-		var hi = checkGame("2023/10/23/s_035022_leage.jpg");
-		console.log(hi);
+		
 		function checkGame(gameImageName){
-			var result=0; 
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var result = 0;
 			console.log(gameImageName);
-			var url = 'check/'+gameImageName;
-			$.getJSON(
-				 url,
-				 function(data){
-					 console.log("제이슨성공?");
-					 console.log(data);
-					 if(data.data=='Y'){
-						result=1;
-					 }
-				 }
-			);// end getJSON
+			$.ajax({
+				type : 'GET' ,
+				url : 'check'+gameImageName ,
+				headers : {
+					'Content-Type' : 'application/json'
+				} ,
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    } ,
+			    async : false ,
+			    success : function(data){
+			    	console.log(data);
+			    	if(data=="Y"){
+			    		result = 1;
+			    	}    
+			    }
+			}); //end ajax
 			return result;
-		}//end checkGame()
+		}
+		
+		$('#games').on('click','.game_item .active_game .run_game',function(){
+			console.log("게임실행 확인");
+			var imageName = $(this).parent().prevAll('.gameImageName').val();
+			window.open("runningGame"+imageName, "게임", "width=750px,height=750px,scrollbars=yes");
+		});
+		
 	});// end document
+	
 	</script>
 </body>
 </html>
