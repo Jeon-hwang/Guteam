@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.spring.guteam.MessageSendMapper">
+	 <!-- <insert id="insert">
+	 	insert into ${test_board}
+	 	(${boardTitle},${boardContent},${memberId})
+	 	values (#{boardTitle}, #{boardContent},#{memberId})
+	 	 $ : Colum명 
+	 	 # : ? (쿼리문) vo 변수와 정확히 일치해야 한다(방식은 get메서드) 
+	 </insert> -->
+	 <insert id="insert">
+	 insert into ${message_send}
+	 (${sendMemberId}, ${receiveMemberId}, ${receiveMemberNickname}, ${messageTitle}, ${messageContent})
+	 values (#{sendMemberId}, #{receiveMemberId}, #{receiveMemberNickname}, #{messageTitle}, #{messageContent})
+	 </insert>
+	 
+	 <select id="select_by_message_id" resultType="MessageVO">
+	 select * from ${message_send} where ${sendMessageId} = #{sendMessageId}
+	 </select>
+	 	 
+	 <select id="select_paging" resultType="MessageVO">
+	 select ${sendMessageId}, ${sendMemberId}, ${receiveMemberId}, ${receiveMemberNickname}, ${messageTitle}, ${messageContent}, ${messageDateCreated}
+	 from (
+	 select rownum rn, a.* 
+	 	from (select * from ${message_send} where ${sendMemberId} = #{sendMemberId} order by ${sendMessageId} desc)a
+	 ) where rn between #{start} and #{end}
+	 </select>
+	 
+	 <!-- <select id="select_to_paging" resultType="MessageVO">
+	 select ${messageId}, ${receiveMemberId}, ${sendMemberId}, ${sendMemberNickname}, ${messageTitle}, ${messageContent}, ${messageDateCreated}
+	 from (
+	 select rownum rn, a.* 
+	 	from (select * from ${message_send} where ${sendMemberId}=#{sendMemberId} order by ${messageId} desc)a
+	 ) where rn between #{start} and #{end}
+	 </select> -->
+	 
+	 <select id="total_count" resultType="Integer">
+	 select count(*) total_cnt from ${message_send} 
+	 </select>
+	 
+	 <delete id="delete">
+	 delete from ${message_send} where ${sendMessageId} = #{sendMessageId}
+	 </delete>
+	 
+	 
+</mapper>

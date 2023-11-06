@@ -33,4 +33,6 @@ public interface MemberDAO {
 
 	String selectByNickname(String nickname);
 	
+	String selectByMemberId(String memberId);
+	
 }

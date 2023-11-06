@@ -84,11 +84,20 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	<property name="receiveMemberId" value="receive_member_id"/>
 	 	<property name="sendDate" value="send_date"/>
 	 	
-	 	<property name="message" value="message"/>
-	 	<property name="messageId" value="message_id"/>
+	 	<property name="message_receive" value="message_receive"/>
+	 	<property name="receiveMessageId" value="receive_message_id"/>
 	 	<property name="receiveMemberId" value="receive_member_id"/>
 	 	<property name="sendMemberId" value="send_member_id"/>
 	 	<property name="sendMemberNickname" value="send_member_nickname"/>
+	 	<property name="messageTitle" value="message_title"/>
+	 	<property name="messageContent" value="message_content"/>
+	 	<property name="messageDateCreated" value="message_date_created"/>
+	 	
+	 	<property name="message_send" value="message_send"/>
+	 	<property name="sendMessageId" value="send_message_id"/>
+	 	<property name="sendMemberId" value="send_member_id"/>
+	 	<property name="receiveMemberId" value="receive_member_id"/>
+	 	<property name="receiveMemberNickname" value="receive_member_nickname"/>
 	 	<property name="messageTitle" value="message_title"/>
 	 	<property name="messageContent" value="message_content"/>
 	 	<property name="messageDateCreated" value="message_date_created"/>

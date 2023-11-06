@@ -10,51 +10,51 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import project.spring.guteam.domain.MessageVO;
+import project.spring.guteam.domain.MessageSendVO;
 import project.spring.guteam.pageutil.PageCriteria;
 
 @Repository // @Component
-public class MessageDAOImple implements MessageDAO {
-	private static final Logger logger = LoggerFactory.getLogger(MessageDAOImple.class);
+public class MessageSendDAOImple implements MessageSendDAO {
+	private static final Logger logger = LoggerFactory.getLogger(MessageSendDAOImple.class);
 	
-	public static final String NAMESPACE = "project.spring.guteam.MessageMapper";
+	public static final String NAMESPACE = "project.spring.guteam.MessageSendMapper";
 	
 	@Autowired
 	public SqlSession sqlSession;
-
+	
 	@Override
-	public int insert(MessageVO vo) {
+	public int insert(MessageSendVO vo) {
 		logger.info("insert() 호출");
 		return sqlSession.insert(NAMESPACE + ".insert", vo);
 	}
-	
+
 	@Override
-	public MessageVO select(int messageId) {
-		logger.info("select() 호출 msgId? " + messageId);
-		return sqlSession.selectOne(NAMESPACE + ".select_by_message_id", messageId);
+	public MessageSendVO select(int sendMessageId) {
+		logger.info("select() 호출 receiveMessageId? " + sendMessageId);
+		return sqlSession.selectOne(NAMESPACE + ".select_by_message_id", sendMessageId);
 	}
 
 	@Override
-	public List<MessageVO> select(String receiveMemberId, PageCriteria criteria) {
+	public List<MessageSendVO> select(String sendMemberId, PageCriteria criteria) {
 		logger.info("paging-select() 호출");
 		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
 		Map<String, Object> args = new HashMap<>();
-		args.put("receiveMemberId", receiveMemberId);
+		args.put("sendMemberId", sendMemberId);
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_paging", args);
-	}
-	
-	@Override
-	public int delete(int messageId) {
-		logger.info("delete() 호출");
-		return sqlSession.delete(NAMESPACE + ".delete", messageId);
 	}
 
 	@Override
 	public int getTotalCounts() {
 		logger.info("getTotalCount() 호출");
 		return sqlSession.selectOne(NAMESPACE + ".total_count");
+	}
+
+	@Override
+	public int delete(int sendMessageId) {
+		logger.info("delete() 호출");
+		return sqlSession.delete(NAMESPACE + ".delete", sendMessageId);
 	}
 
 }
