@@ -88,11 +88,11 @@ thead {
 <div id="leftMenu">
 <div><img width="110px" height="50px" src="display?fileName=/logo.png"></div>
 	<ul>
-	<li><a href="../message/register"><button class="btn btn-light">쪽지 쓰기</button></a></li>
+	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
 	<br>
 	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
-	<li><button class="btn btn-light">보낸 쪽지함</button></li>
+	<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
 	<li><button class="btn btn-light">쪽지 보관함</button></li>
 	</ul>
 </div>
@@ -101,7 +101,7 @@ thead {
 	
 </div>
 <div id="main">
-	<form action="register" method="post">
+	<form action="write" method="post">
 	<sec:csrfInput/>
 	<h2>${vo.memberId }님의 쪽지 쓰기</h2>
 	<div id="msg-title">
@@ -114,8 +114,12 @@ thead {
 			<tr>
 				<td class="tdc">보낼 닉네임</td>
 				<td>
-				<c:if test="">
+				<c:if test="${empty sendMemberId }">
 					<input type="text" name="receiveMemberId" id="receiverNickname" required>				
+				</c:if>
+				<c:if test="${not empty sendMemberId }">
+					<input type="hidden" name="receiveMemberId" id="receiverNickname" value="${sendMemberId }">
+					${sendMemberId }
 				</c:if>
 				</td>
 			</tr>

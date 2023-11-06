@@ -101,7 +101,7 @@ thead {
 	<br>
 	<br>
 	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
-	<li><button class="btn btn-light">보낸 쪽지함</button></li>
+	<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
 	<li><button class="btn btn-light">쪽지 보관함</button></li>
 	</ul>
 </div>
@@ -135,7 +135,7 @@ thead {
 	</table>
 	</div>
 	<div>
-	<form action="../message/register">
+	<form action="../message/write">
 		<input type="hidden" name="sendMemberId" value="${mvo.sendMemberId }">
 		<input type="submit" class="btn btn-light" style="float: right; margin-right: 10px;" value="답장하기">
 	</form>

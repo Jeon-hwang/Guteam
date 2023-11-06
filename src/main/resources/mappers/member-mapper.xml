@@ -52,4 +52,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	select ${memberId} from ${member} where ${nickname} = #{nickname}
 	 </select>
 	 
+	 <select id="select_by_member_id_to_nick" resultType="String">
+	 	select ${nickname} from ${member} where ${memberId} = #{memberId}
+	 </select>
+	 
 </mapper>

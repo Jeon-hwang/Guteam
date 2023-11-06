@@ -110,7 +110,7 @@ td {
 	<tr>
 		<th class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="allChk" id="allChk"></label></th>
 		<th style="width: 350px">제목</th>
-		<th style="width: 100px">보낸 사람</th>
+		<th style="width: 100px">받은 사람</th>
 		<th style="width: 100px">보낸 날짜</th>
 	</tr>
 	</thead>
@@ -119,7 +119,7 @@ td {
 	<tr>
 		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.messageId }"></label></td>
 		<td class="title"><a href="../message/detail?messageId=${pvo.messageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
-		<td class="cen" >${pvo.sendMemberNickname }</td>
+		<td class="cen" >${pvo.receiveMemberId }</td>
 		<fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" var="messageDateCreated"/>
 		<td style="font-size: 10pt;">${messageDateCreated }</td>
 	</tr>
@@ -128,13 +128,13 @@ td {
 </table>
 <ul>
 	<c:if test="${pageMaker.hasPrev }">
-		<li><a href="list?page=${pageMaker.startPageNo - 1}">이전</a></li>
+		<li><a href="sent?page=${pageMaker.startPageNo - 1}">이전</a></li>
 	</c:if>
 	<c:forEach begin="${pageMaker.startPageNo }" end="${pageMaker.endPageNo }" var="num">
-		<li><a href="list?page=${num }">${num }</a></li>
+		<li><a href="sent?page=${num }">${num }</a></li>
 	</c:forEach>
 	<c:if test="${pageMaker.hasNext }">
-		<li><a href="list?page=${pageMaker.endPageNo + 1 }">다음</a></li>
+		<li><a href="sent?page=${pageMaker.endPageNo + 1 }">다음</a></li>
 	</c:if>
 </ul>
 </div>
