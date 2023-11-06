@@ -11,11 +11,15 @@
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
+<section>
 <div id="container">
+	<div class="btnAdmin">
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
-	<a href="register"><button class="btn btn-light">게임등록</button></a>
+	<a href="register" class="btn btn-light">게임등록</a>
+	<a href="../discount/update" class="btn btn-light">할인율 수정</a>
 	</sec:authorize>
-	<br><br><br>
+	</div>
+	<div class="formArea">
 	<form class="justify-content-center formSearch" action="/guteam/game/list" method="get">
 		<div class="input-group mb-3 ">
 		<c:if test="${empty keywordCriteria}">
@@ -36,17 +40,18 @@
 		<button class="btn btn-light" id="btnSearch" type="submit"><i class="bi bi-search"></i></button>
 		</div>
 	</form>
+	</div>
 	<div class="btnOrderGroup">
 		<input type="hidden" class="orderByItem" name="orderBy" value="priceDesc">
-		<input type="submit" class="orderBy" value="가격↑">
+		<button type="submit" class="btn btn-secondary orderBy">가격 <i class="bi bi-sort-numeric-down-alt"></i></button>
 		<input type="hidden" class="orderByItem" name="orderBy" value="price">
-		<input type="submit" class="orderBy" value="가격↓">
+		<button type="submit" class="btn btn-secondary orderBy">가격 <i class="bi bi-sort-numeric-down"></i></button>
 		<input type="hidden" class="orderByItem" name="orderBy" value="purchased">
-		<input type="submit" class="orderBy" value="구매순↑">
+		<button type="submit" class="btn btn-secondary orderBy">구매 <i class="bi bi-sort-numeric-down-alt"></i></button>
 		<input type="hidden" class="orderByItem" name="orderBy" value="wishlist">
-		<input type="submit" class="orderBy" value="위시리스트순↑">
+		<button type="submit" class="btn btn-secondary orderBy">위시리스트 <i class="bi bi-sort-numeric-down-alt"></i></button>
 		<input type="hidden" class="orderByItem" name="orderBy" value="rating">
-		<input type="submit" class="orderBy" value="평점순↑">
+		<button type="submit" class="btn btn-secondary orderBy">평점 <i class="bi bi-sort-numeric-down-alt"></i></button>
 	</div>
 	
 	<div class="listArea">
@@ -58,10 +63,9 @@
 					src="display?fileName=${vo.gameImageName }"> <input
 					type="hidden" class="gameId" value="${vo.gameId }"> <br>
 				<div class="info">
-					name : ${vo.gameName } <br> price : ${vo.price }<br>
-					genre : ${vo.genre }<br> releaseDate :
-					<fmt:formatDate value="${vo.releaseDate }" pattern="yyyy년 MM월 dd일" />
-					<br> rating :
+					<h6>${vo.gameName }</h6> <p>₩ ${vo.price }</p>
+					<p>${vo.genre }</p>
+					<p>
 					<c:if test="${ratingList[status.index]!=0 }">
 						<c:forEach begin="1" end="${ratingList[status.index]/2 }" step="1">
 							<i class="bi bi-star-fill"></i>
@@ -74,6 +78,7 @@
 							<i class="bi bi-star"></i>
 						</c:forEach>
 					</c:if>
+					</p>
 				</div>
 				<br>
 			</div>
@@ -83,48 +88,27 @@
 	<div class="paging">
 	<ul class="pagination justify-content-center">
 		<c:if test="${pageMaker.hasPrev }">
-			<c:if test="${empty keyword }">
-			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }">&laquo;</a></li>
-			</c:if>
-			<c:if test="${not empty keyword }">
-			<c:if test="${not empty keywordCriteria }">
 			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}&orderBy=${orderBy}">&laquo;</a></li>
-			</c:if>
-			<c:if test="${empty keywordCriteria }">
-			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.startPageNo-1 }&keyword=${keyword}">&laquo;</a></li>
-			</c:if>
-			</c:if>
 		</c:if>
 		<c:forEach var="pageLink" begin="${pageMaker.startPageNo }"
 			end="${pageMaker.endPageNo }">
 			<c:if test="${pageMaker.criteria.page==pageLink }">
-			
 					<li class="page-item active"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}&orderBy=${orderBy}">${pageLink }</a></li>
-				
 			</c:if>
 			<c:if test="${pageMaker.criteria.page!=pageLink }">
-				
 					<li class="page-item"><a class="page-link" href="list?page=${pageLink }&keyword=${keyword}&keywordCriteria=${keywordCriteria}&orderBy=${orderBy}">${pageLink }</a></li>
-				
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
-			<c:if test="${empty keyword }">
-			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.endPageNo+1 }">&raquo;</a></li>
-			</c:if>
-			<c:if test="${not empty keyword }">
-			<c:if test="${not empty keywordCriteria }">
 			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&raquo;</a></li>
-			</c:if>
-			<c:if test="${empty keywordCriteria }">
-			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}">&raquo;</a></li>
-			</c:if>
-			</c:if>
 		</c:if>
 	</ul>
 	</div>
+	</div>
+	</section>
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 	<input type="hidden" id="insertResult" value="${insert_result }">
+	<input type="hidden" id="discountResult" value="${discount_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){
 			var gameVOList = $('#gameVOList').attr('value');
@@ -141,7 +125,11 @@
 			var insertResult = $('#insertResult').val();
 			if(insertResult=='success'){
 				alert('게임 등록 성공!');
-			} 			
+			} 
+			var discountResult = $('#discountResult').val();
+			if(discountResult=='success'){
+				alert('할인 수정 성공!');
+			}
 			
 			$('.gameInfo').on('click', function(){
 				var gameId = $(this).find("input").val();
@@ -169,7 +157,7 @@
 			
 		}); // end document.ready()
 	</script>
-	</div>
+	
 	
 </body>
 </html>

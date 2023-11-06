@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,18 +14,35 @@
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
+<section>
+	<div id="wrap">
+	<div class="board-box">
+	<div class="boardTitle">
+	<p>제목 : ${reviewVO.reviewTitle }</p>
+	<p><i class="bi bi-person-circle"></i> ${nickname }
+	<i class="bi bi-calendar3"></i> <fmt:formatDate value="${reviewVO.reviewDateCreated}" pattern="yyyy년 MM월 dd일" /></p>
+	</div>
+	<div class="boardContent">
+	<p>평점 : <c:forEach begin="1" end="${reviewVO.rating/2 }" step="1">
+				<i class="bi bi-star-fill"></i>
+				</c:forEach>
+				<c:if test="${reviewVO.rating%2==1 }">
+				<i class="bi bi-star-half"></i>
+				</c:if>
+				<c:forEach begin="1" end="${5-(reviewVO.rating/2) }" step="1">
+				<i class="bi bi-star"></i>
+				</c:forEach></p>
+	추천 수 : <div id="thumbUpCount">${reviewVO.thumbUpCount }</div>
+	</div>
+	<div class="boardContent">
+	내용 : ${reviewVO.reviewContent }<br>
+	</div>
 <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
 <sec:authentication property="principal" var="principal"/>
 <input type="hidden" id="reviewId" value="${reviewVO.reviewId }">
 <input type="hidden" id="memberId" value="${principal.username }">
 </sec:authorize>
-제목 : ${reviewVO.reviewTitle }<br>
-작성자 : ${reviewVO.memberId }<br>
-작성일 : ${reviewVO.reviewDateCreated}<br>
-평점 : ${reviewVO.rating}<br>
-내용 : ${reviewVO.reviewContent }<br>
-추천 수 : <div id="thumbUpCount">${reviewVO.thumbUpCount }</div><br>
-
+</div>
 <div class="btn_group_detail">
 <c:if test="${principal.username==reviewVO.memberId }">
 <a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button class="btn btn-light" >수정</button></a>
@@ -46,7 +64,9 @@
 <div class="btn_group_detail">
 <a href="list?gameId=${reviewVO.gameId }&page=${page}"><button class="btn btn-light">${gameVO.gameName } 리뷰 목록으로 돌아가기</button></a>
 </div>
-
+</div>
+</section>
+<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <input type="hidden" id="updateResult" value="${update_result }">
 
 <script type="text/javascript">

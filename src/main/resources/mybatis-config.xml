@@ -24,6 +24,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<property name="content" value="content"/>
 		<property name="createdDate" value="created_date"/>
 		
+		<property name="discount" value="discount"/>
+		<property name="genre" value="genre"/>
+		<property name="discountRate" value="discount_rate"/>
 		
 	 	<property name="reply" value="reply" />
 	 	<property name="replyId" value="reply_id"/>

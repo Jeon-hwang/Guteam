@@ -13,8 +13,18 @@
 <script
    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <style type="text/css">
+#thumbUp .btn-success{
+	background-color: #198754;
+}
+#thumbDown .btn-danger{
+	background-color: #dc3545;
+}
 aside{
 	visibility: none;
+}
+section{
+	width:100%;
+	min-height: 750px;
 }
 header{
 	width:100%;
@@ -23,7 +33,9 @@ header{
 	box-shadow: 0 0 7px 0 rgba( 0, 0, 0, 0.75 );
 	padding:10px 10px;
 	display:flex;
-	
+}
+.board-box hr{
+	margin: 1px 1px;
 }
 header .logo{	
 	width:30%;
@@ -59,14 +71,14 @@ header .logo{
 	height:20px;
 }
 #preview{
-			z-index: 99;
-			position:absolute;
-			border:1px solid #ccc;
-			background:#333;
-			padding:5px;
-			display:none;
-			color:#fff;
-	}
+	z-index: 99;
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:5px;
+	display:none;
+	color:#fff;
+}
 header .auth{
 	width:70%;
 	height:100%;
@@ -75,16 +87,55 @@ header .auth{
 	display:flex;
 	margin-right: 50px; 
 }
+.table th, .table td{
+	background-color: #0d131b;
+	color:#fff;
+	border-color:#5c5c5f;
+}
+.table tr:hover td{
+	background-color: #5c5c5f;
+	color:black;
+	cursor: pointer;
+}
 .detail-box{
 	display:flex;
 	width:100%;
 	height:100%;
+	margin-bottom: 30px;
 }
-
-.info{
+#detailInfo img{
+	border-color:transparent;
+	border-width:0.2px;
+	border-radius: 20px;
+}
+.detail-box .infoArea{
+	padding: 10px 10px;
+	background-color: #2a475e;
+	border-color:#2a475e;
+	border-width:0.2px;
+	border-radius: 20px;
+}
+.detail-box .boardInfo{
+	width:100%;
+	padding: 10px 10px;
+	background-color: #2a475e;
+	border-color:#2a475e;
+	border-width:0.2px;
+	border-radius: 20px;
+}
+.detail-box .infoArea .bi{
+	color:#ffc100;
+}
+.info h1{
 	display:flex;
 	flex-wrap: wrap;
 	width:70%;
+	color:#fff;
+}
+.titleArea{
+	display:flex;
+	color:#fff;
+	padding:20px 100px;
 }
 body {
 	width:100%;
@@ -99,19 +150,69 @@ body {
 }
 .infoArea{
 	margin-left:40px;
+	color:#fff;
+}
+.commentArea{
+	color:#fff;
+}
+.insertComment{
+	display:flex;
+	align-items: center;
+}
+.insertComment input, button{
+	margin-left: 5px;
+}
+#CommentGroup li{
+	list-style: none;
+}
+.update_comment, .update_comment_check, .reply_view_btn, .fold_replies_area, .delete_comment, .reply_add_btn, .comment_paging .btnPaging, .update_reply, .update_reply_check, .delete_reply{
+	background-color:rgba(103, 112, 123, 0.2);
+	border-color:rgba(103, 112, 123, 0.2);
+	color:#e5e4dc;
+	margin-right:5px;
+	height:40px;
+	margin-bottom: 5px;
+}
+.update_comment:hover, .update_comment_check:hover, .reply_view_btn:hover, .fold_replies_area:hover, .delete_comment:hover, .reply_add_btn:hover, .comment_paging .btnPaging:hover, .delete_reply:hover, .update_reply:hover, .update_reply_check:hover{
+	color:black;
+	background-color: #a0c5db;
+	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.commentArea input[type="text"]{
+	width: 300px;
+	margin-bottom: 1px;
+	border:none;
+	display:flex;
+	background-color:#2a3f5a;
+	color:#fff;
 }
 #detailInfo{
 	display:flex;
 	color:#fff;
+	flex-wrap:wrap;
+}
+.board-box{
+	display:block;
+	flex-wrap:wrap;
+}
+.boardTitle, .boardContent{
+	background-color: #0d131b;
+	color:#8c8b8a;
+}
+.boardTitle{
+	display:flex;
+	justify-content: space-between;
+}
+.wrapper{
+	display:flex;
+	flex-direction: column;
 }
 footer{
-	bottom:0;
 	display:flex;
 	flex-wrap:wrap;
 	background-color:#171a21;
 	width:100%;
 	height:100px;
-	align-items: center;
 	justify-content: center;
 	color:#969eab;
 }
@@ -138,7 +239,7 @@ color:inherit;
 text-decoration:none;
 }
 .category{
-	height:20px;
+	height:40px;
 	width:100%;
 	color:#fff;
 	display:flex;
@@ -149,14 +250,20 @@ text-decoration:none;
 .category a:hover{
 display:inline-block;
 font:bolder;
-font-size:17px;
+font-size:18px;
 text-decoration:underline;
 color:skyblue;
-transform: translateY(-3px);
+transform: translateY(-4px);
 transition: 0.3s;
 }
 .gameInfo .bi {
 	color:#ffc100;
+}
+.reviewInfo .bi{
+	color:#ffc100;
+}
+.reviewInfo:hover .bi{
+	color:black;
 }
 #thumbUp .bi{
 	color:black;
@@ -168,18 +275,100 @@ transition: 0.3s;
 	cursor:pointer;
 }
 #container {
-	content-align:center;
-	item-align:center;
-	text-align:center;
+	display:flex;
+	flex-wrap: wrap;
 }
-
+.formArea{
+	display:flex;
+	padding:10px 100px;
+	width:100%;
+	flex-wrap: wrap;
+}
+.formArea from{
+	display:flex;
+	flex-wrap: wrap;
+	width:100%;
+}
+.justify-content-center{
+	width:100%;
+	display:flex;
+}
+.justify-content-center .btn{
+	justify-content: center;
+}
+.formArea .info{
+	display:flex;
+	width:800px;
+	flex-wrap:wrap;
+}
+.formArea .caption{
+	align-items: flex-start;
+	width:25%;
+}
+.caption p {
+	color:#fff;
+	margin-bottom:28px;
+}
+.formArea .inputArea{
+	align-items: flex-start;
+	width:60%;
+}
+.form-control{
+	height:40px;
+	border:none;
+	display:flex;
+	background-color:#2a3f5a;
+	color:#fff;
+}
+.form-control:active{
+	background-color:#a0c5db;
+	color:black;
+}
+.inputArea input[type="file"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip:rect(0,0,0,0);
+	border: 0;
+}
+.inputArea input[type="text"]{
+	width: 300px;
+	margin-bottom: 1px;
+	border:none;
+	display:flex;
+	background-color:#2a3f5a;
+	color:#fff;
+}
+.inputArea input[type="number"]{
+	width: 300px;
+	margin-bottom: 1px;
+	border:none;
+	display:flex;
+	background-color:#2a3f5a;
+	color:#fff;
+}
+formArea input:focus{
+	background-color:#a0c5db;
+	color:black;	
+	border: none;
+}
+.btnAdmin{
+	display:flex;
+	justify-content:flex-end;
+	margin:20px 100px;
+	width:100%;
+}
 .btnOrderGroup{
 	display:flex;
 	margin-left:100px;
 	text-align:left;
 	margin-bottom:10px;
 }
-.btnOrderGroup input{
+
+.btnOrderGroup .btn-secondary, .today-viewed .close{
 	margin-right:8px;
 	color: #6c757d;
     border-color: #6c757d;
@@ -200,7 +389,7 @@ transition: 0.3s;
     user-select: none;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
-.btnOrderGroup input:hover{
+.btnOrderGroup input:hover, .today-viewed .close:hover{
 	color: #fff;
 	background-color: #6c757d;
 	border-color: #6c757d;
@@ -215,11 +404,10 @@ transition: 0.3s;
 .btn_group_detail .inline-form{
 	display:inline-flex;
 }
-.right{
-	background-color:#6c757d;
+.today-viewed{
+	background-color:#1b2838;
 	position : fixed;
-	display:inline-block;
-	float: right;
+	display:block;
 	margin-right:0px;
 	padding: 3px 1px 1px 2px;
 	overflow-y:scroll;
@@ -227,8 +415,11 @@ transition: 0.3s;
 	bottom:0;
 	right:0;
 }
-.right div{
+.today-viewed div{
 	display:block;
+}
+.today-viewed .btn:hover{
+	background-color: #a0c5db;
 }
 .dropdown-toggle{
 	margin-right:4px;
@@ -246,6 +437,11 @@ transition: 0.3s;
 	margin:auto;
 	display:flex;
 }
+.formSearch .input-group{
+	flex-wrap: nowrap;
+	display:flex;
+	align-items: stretch;
+}
 .formSearch .dropdown-toggle{
 	background-color:#2a3f5a;
 	border:none;
@@ -255,11 +451,22 @@ transition: 0.3s;
 	background-color:#a0c5db;
 	color:black;
 }
+.input-group b{
+	color:#fff;
+	font-size: 25px;
+	background-color: #2a3f5a;
+	height:40px;
+}
 .listArea{
 	display:flex;
 	flex-wrap: wrap;
 	justify-content:center;
 	width:100%;
+}
+.paging{
+	width:100%;
+	display:flex;
+	justify-content: center;
 }
 .show{
 	background-color:#2a3f5a;
@@ -302,6 +509,7 @@ transition: 0.3s;
 	background-color:#a0c5db;
 	color:black;
 }
+
 .page-item .page-link{
 	background-color:#2a475e;
 	color:white;
@@ -334,6 +542,37 @@ transition: 0.3s;
 }
 .auth .btn:hover{
 	background-color: #666666;
+	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btn-secondary {
+	background-color:rgba(103, 112, 123, 0.2);
+	border-color:rgba(103, 112, 123, 0.2);
+	color:#e5e4dc;
+	margin-right:5px;
+	height:40px;
+	margin-bottom: 5px;
+}
+.btn-light{
+	background-color:rgba(103, 112, 123, 0.2);
+	border-color:rgba(103, 112, 123, 0.2);
+	color:#e5e4dc;
+	margin-right:5px;
+	height:40px;
+	margin-bottom: 5px;
+}
+textarea{
+	background-color: #2a3f5a;
+	color:#fff;
+	border: none;
+}
+textarea:focus{
+	background-color: #a0c5db;
+	color:black;
+	border: none;
+}
+.btn:hover{
+	color:black;
+	background-color: #a0c5db;
 	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 </style>

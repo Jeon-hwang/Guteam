@@ -12,19 +12,44 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
 </head>
 <body>
+<header>
+<div class="logo">
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+	</div>
+</header>
+<section>
+	<div id="wrap">
+<div class="titleArea">
 <h1>게임 등록</h1>
-<br>
-<hr>
+</div>
+<div class="formArea">
 <form action="register" method="post" enctype="multipart/form-data" accept-charset="utf-8"><br>
 <sec:csrfInput/>
-game_name : <input type="text" autofocus="autofocus" name="gameName" required="required"><br> 
-price : <input type="number" name="price" required="required"><br>
-genre : <input type="text" name="genre" required><br>
-game_image : <img class="file-drop" width="300px" height="300px" src="display?fileName=basic.png"><br>
-<input type="file" id="file" name="file" accept="image/*" onchange="display(event)">
+<div class="info">
+<div class="caption">
+<p>game_name : </p>
+<p>price : </p>
+<p>genre : </p>
+<p>game_image : </p>
+</div>
+<div class="inputArea">
+<input type="text" autofocus="autofocus" name="gameName" required="required"><br> 
+<input type="number" name="price" required="required"><br>
+ <input type="text" name="genre" required><br>
+<img class="file-drop" width="300px" height="300px" src="display?fileName=basic.png"><br>
+<div class="input-group mb-3">
+<input type="file" class="form-control" id="file" name="file" accept="image/*" onchange="display(event)">
+<label for="file" class="btn btn-secondary"><i class="bi bi-file-earmark-arrow-up-fill"></i></label>
+</div>
 <input type="hidden" class="gameImageName" name="gameImageName" value="basic.png">
-<br>
-<input type="submit" value="등록"><br>
+<input type="submit" class="btn btn-secondary" value="등록"><br>
+</div>
+</div>
+</form>
+</div>
+</div>
+</section>
+<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 $(document).ready(function(){
 			var token = $("meta[name='_csrf']").attr("content");

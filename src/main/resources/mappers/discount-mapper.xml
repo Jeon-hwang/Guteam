@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.spring.guteam.discountMapper">
+
+    <insert id="insert">
+    	insert into ${discount} (${genre}, ${discountRate}) values (#{genre}, #{discountRate})
+    </insert>
+    <select id="select_all" resultType="DiscountVO">
+    	select * from ${discount}
+    </select>
+    <select id="select" resultType="DiscountVO">
+    	select * from ${discount} where ${genre}=#{genre}
+    </select>
+    <update id="update">
+    	update ${discount} set ${discountRate}=#{discountRate} where ${genre}=#{genre}
+    </update>
+    <delete id="delete">
+    	delete ${discount} where ${genre}=#{genre}
+    </delete>
+</mapper>

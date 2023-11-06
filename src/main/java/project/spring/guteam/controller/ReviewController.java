@@ -76,6 +76,7 @@ public class ReviewController {
 			args = reviewService.read(reviewId, "");
 		}
 		ReviewVO reviewVO = (ReviewVO) args.get("reviewVO");
+		String nickname = (String) args.get("nickname");
 		GameVO gameVO = (GameVO) args.get("gameVO");
 		if (principal != null) {
 			ThumbVO thumbVO = (ThumbVO) args.get("thumbVO");
@@ -85,6 +86,7 @@ public class ReviewController {
 			}
 		}
 		logger.info(reviewVO.toString());
+		model.addAttribute("nickname", nickname);
 		model.addAttribute("reviewVO", reviewVO);
 		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("page", page);
