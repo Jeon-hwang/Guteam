@@ -73,6 +73,8 @@
 		
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var memberId = $('#memberId').val();
+			
 			$(window).on('load',function totalPrice(){
 				var totalPrice = parseInt($('#totalPrice').text());
 				var price = $('.price');
@@ -89,7 +91,7 @@
 				var gameIdArr = $('.gameId');
 				var gameIds = [];
 				var priceArr = [];
-				var memberId = $('#memberId').val();
+				
 				var cash = parseInt(($('#myCash').text()));
 				var totalPrice = parseInt($('#totalPrice').text());
 				
@@ -109,11 +111,11 @@
 					var gameId = gameIds[i];
 					var price = priceArr[i];
 					console.log(price);
-					cash = cash - price;
-					console.log(cash);  
+
+
 					$.ajax({
 						type : 'POST',
-						url : 'buy/'+memberId+'?cash='+cash,
+						url : 'buy/'+memberId+'?price='+price,
 						headers : {
 							'Content-Type' : 'application/json'
 						},
@@ -124,8 +126,11 @@
 					    success : function(result){
 							console.log(result);
 							if(result==1){
-								location.href = "../purchased/myPurchased";
 								alert("구매완료!");
+								location.href = "myPurchased";
+							}else{
+								alert("잘못된 구매경로입니다.");
+								location.href = "myPurchased";
 							}
 						}
 						
@@ -137,6 +142,7 @@
 			$('#cancle').click(function(){
 				location.href = "../"
 			});// end cancle.click
+			
 			
 		});//end document
 	</script>

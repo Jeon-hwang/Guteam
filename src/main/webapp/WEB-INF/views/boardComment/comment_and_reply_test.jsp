@@ -6,7 +6,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>댓글창</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <jsp:include page="/WEB-INF/views/style.jsp"></jsp:include>
 <meta name="_csrf" content="${_csrf.token}"/>
@@ -149,9 +148,9 @@
 								+ '<pre>'
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
-								+ '<img class="profileImg" alt="'+nickname+'" src="../game/display?fileName='+memberImageName+'" width="25px" height="25px" />'
-								+ '<span>'+nickname+'</span> :&nbsp&nbsp'
-								+ '<span id="commentContentView">'+this.commentContent+'</span>&nbsp&nbsp&nbsp&nbsp'
+								+ '<img class="commentProfileImg" alt="'+nickname+'" src="../game/display?fileName='+memberImageName+'" width="50px" height="50px" />'
+								+ '&nbsp&nbsp<span>'+nickname+'</span> :&nbsp&nbsp'
+								+ '<span id="commentContentView" width="100px">'+this.commentContent+'('+this.replyCnt+')</span>&nbsp&nbsp&nbsp&nbsp'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">&nbsp&nbsp&nbsp&nbsp'
 								+ '<span>'+dateFormat(commentDateCreated)+'</span>&nbsp&nbsp'
 								if(principalMemberId==this.memberId){

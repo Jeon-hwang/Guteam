@@ -3,28 +3,29 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
-
 <html>
 <head>
+<jsp:include page="../home.jsp" />
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <meta charset="UTF-8">
 <style type="text/css">
 	body{
-		width : 1000px;
-		margin : auto;
+		display:block;
 	}
+
 	.wish_list_area li{
 		display : flex;
 		justify-content: space-between;
 	}
+	
 </style>
 <title>위시리스트</title>
 </head>
 <body>
 <sec:authentication property="principal" var="principal"/>
-	<h1><a href="../">Guteam</a></h1>
+	<main class="wishListBody">
 	<h2>${principal.username}님의 위시리스트</h2>
 	<input type="hidden" id="memberId" value=${principal.username }>
 	<div class="wish_list_area">
@@ -39,6 +40,7 @@
 		<input type="submit" id="submit" value="선택한 게임 구매" disabled>
 		</form>
 	</div>
+	</main>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			showWishList();
@@ -62,7 +64,7 @@
 									 + '<input type="checkbox" class="listCheck">'
 									 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
 									 + 'src="../game/display?fileName='+this.gameImageName+'">'
-									 + '<a href=../game/detail?gameId='+this.gameId+'><span id="gameName">'+this.gameName+'</span></a>'
+									 + '<span id="gameName"><a href=../game/detail?gameId='+this.gameId+'>'+this.gameName+'</a></span>'
 									 + '<span class="genre">'+this.genre+'</span>'
 									 + '<span class="showPrice">￦'+this.price+'</span>'
 									 + '<input type="hidden" class="price" value='+this.price+'>'
