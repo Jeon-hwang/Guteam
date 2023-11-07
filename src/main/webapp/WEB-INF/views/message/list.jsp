@@ -91,7 +91,8 @@ td {
 <body>
 <div id="full">
 <div id="leftMenu">
-<div><img width="110px" height="50px" src="display?fileName=/logo.png"></div>
+<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
@@ -114,14 +115,14 @@ td {
 		<th style="width: 100px">보낸 날짜</th>
 	</tr>
 	</thead>
+	
 	<tbody>
 	<c:forEach var="pvo" items="${list }">
 	<tr>
-		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.messageId }"></label></td>
-		<td class="title"><a href="../message/detail?messageId=${pvo.messageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
+		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.receiveMessageId }"></label></td>
+		<td class="title"><a href="../message/detail?messageId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
 		<td class="cen" >${pvo.sendMemberNickname }</td>
-		<fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" var="messageDateCreated"/>
-		<td style="font-size: 10pt;">${messageDateCreated }</td>
+		<td style="font-size: 10pt;"><fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
 	</c:forEach>
 	</tbody>

@@ -18,7 +18,9 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-<h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
+<div class="logo">
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+	</div>
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 <h2>${vo.memberId }님의 프로필</h2>
 	<div>

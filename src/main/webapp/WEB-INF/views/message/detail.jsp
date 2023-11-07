@@ -89,13 +89,13 @@ thead {
 }
 </style>
 <meta charset="UTF-8">
-<title>GUTEAM : ${vo.memberId }님의 쪽지함</title>
+<title>${vo.sendOrReceive }</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
 <div id="full">
 <div id="leftMenu">
-<div><img width="110px" height="50px" src="display?fileName=/logo.png"></div>
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
 	<ul>
 	<li><a href="../message/register"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
@@ -111,9 +111,22 @@ thead {
 </div>
 <div id="main">
 	<ul>
-		<li class="hdl">보낸 사람 : ${mvo.sendMemberId }</li>
-		<fmt:formatDate value="${mvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" var="messageDateCreated"/>
-		<li class="hdl">보낸 날짜 : ${messageDateCreated }</li>
+		<li class="hdl">
+		<c:if test="${sendOrReceive=='send' }">
+		수신인 : ${vo.receiveMemberNickname }
+		</c:if>
+		<c:if test="${sendOrReceive=='receive' }">
+		발신인 : ${vo.sendMembeNickname }
+		</c:if>
+		</li>
+		<li class="hdl">
+		<c:if test="${sendOrReceive=='send' }">
+		받은 날짜 : 
+		</c:if>
+		<c:if test="${sendOrReceive=='receive' }">
+		보낸 날짜 : 
+		</c:if>
+		<fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/></li>
 	</ul>
 	
 	<div>
@@ -125,18 +138,18 @@ thead {
 		<tbody>
 			<tr style="border-bottom : solid 1px darkgray;">
 			<td><h5>제목</h5></td>
-			<td>${mvo.messageTitle }</td>
+			<td>${vo.messageTitle }</td>
 			</tr>
 			<tr>
 			<td><h5>내용</h5></td>
-			<td>${mvo.messageContent }</td>
+			<td>${vo.messageContent }</td>
 			</tr>
 		</tbody>
 	</table>
 	</div>
 	<div>
 	<form action="../message/write">
-		<input type="hidden" name="sendMemberId" value="${mvo.sendMemberId }">
+		<input type="hidden" name="sendMemberId" value="${vo.sendMemberId }">
 		<input type="submit" class="btn btn-light" style="float: right; margin-right: 10px;" value="답장하기">
 	</form>
 	</div>
