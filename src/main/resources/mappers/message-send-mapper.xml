@@ -17,11 +17,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 values (#{sendMemberId}, #{receiveMemberId}, #{receiveMemberNickname}, #{messageTitle}, #{messageContent})
 	 </insert>
 	 
-	 <select id="select_by_message_id" resultType="MessageVO">
+	 <select id="select_by_message_id" resultType="MessageSendVO">
 	 select * from ${message_send} where ${sendMessageId} = #{sendMessageId}
 	 </select>
 	 	 
-	 <select id="select_paging" resultType="MessageVO">
+	 <select id="select_paging" resultType="MessageSendVO">
 	 select ${sendMessageId}, ${sendMemberId}, ${receiveMemberId}, ${receiveMemberNickname}, ${messageTitle}, ${messageContent}, ${messageDateCreated}
 	 from (
 	 select rownum rn, a.* 

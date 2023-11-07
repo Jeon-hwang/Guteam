@@ -39,11 +39,11 @@ public class PurchasedRESTController {
 	private String downloadPath;
 	
 	@PostMapping("/buy/{memberId}")
-	public ResponseEntity<Integer> insertPurchased(@RequestBody int gameId,@PathVariable("memberId") String memberId,int cash){
+	public ResponseEntity<Integer> insertPurchased(@RequestBody int gameId,@PathVariable("memberId") String memberId,int price){
 			PurchasedVO vo = new PurchasedVO(memberId, gameId, null);
 			try {
 //				logger.info("cash? "+cash);
-				int result = service.create(vo,cash);
+				int result = service.create(vo,price);
 				return new ResponseEntity<Integer>(result,HttpStatus.OK);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -96,7 +96,6 @@ public class PurchasedRESTController {
 		}		
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
-	
 	
 	
 }

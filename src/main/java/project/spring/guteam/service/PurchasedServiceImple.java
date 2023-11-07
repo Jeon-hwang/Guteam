@@ -38,14 +38,27 @@ public class PurchasedServiceImple implements PurchasedService {
 	
 	@Override
 	@Transactional(value = "transactionManager")
-	public int create(PurchasedVO vo,int cash) throws Exception{
+	public int create(PurchasedVO vo,int price) throws Exception{
 		logger.info("create 생성");
-		purchasedDAO.insert(vo);
+		int result = 0;
 		WishListVO wishVO = new WishListVO(vo.getMemberId(), vo.getGameId());
-		memberDAO.updateCash(cash, vo.getMemberId()); //캐쉬 업데이트
-		wishListDAO.delete(wishVO); // 위시리스트에서 삭제
+		int cash = getCash(vo.getMemberId())-price;
+		if(purchasedDAO.find(vo.getMemberId(), vo.getGameId())==null) {
+			if(cash>=0) {
+				result = purchasedDAO.insert(vo);
+				memberDAO.updateCash(cash, vo.getMemberId()); //캐쉬 업데이트
+				wishListDAO.delete(wishVO);
+			}else {
+				result=0;
+			}
 		
-		return 1;
+		}else {
+			//게임이 이미 존재하는 경우
+			result =2;
+		}
+		 // 위시리스트에서 삭제
+		/* 현재문제점 결제를 이중으로하면 캐쉬가 나중걸로 반영되어버린다 컨트롤러에서 계사하는게 맞는듯...*/
+		return result;
 	}
 	
 	public Map<String, Object> readBuyGame(String gameIds,String memberId){

@@ -28,7 +28,11 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 	@Override
 	public int create(WishListVO vo) {
 		logger.info("create() 실행");
-		return wishListDAO.insert(vo);
+		int result = 0;
+		if(wishListDAO.select(vo.getMemberId(), vo.getGameId())==null) {
+			result = wishListDAO.insert(vo);
+		}
+		return result;
 	}
 	
 	@Transactional(value= "transactionManager")
@@ -47,7 +51,7 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 	}
 
 	@Override
-	public List<String> read(int gameId) {
+	public List<String> read(int gameId) { // 게임을 들고있는 
 		logger.info("read() 실행");
 		return wishListDAO.select(gameId);
 	}
@@ -64,7 +68,7 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 		logger.info("find() 실행");
 		WishListVO vo = wishListDAO.select(memberId, gameId);
 		if(vo!=null) {
-		logger.info(vo.toString());
+		logger.info("vo : "+vo.toString());
 		}
 		return vo;
 	}

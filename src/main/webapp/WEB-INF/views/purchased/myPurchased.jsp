@@ -8,29 +8,32 @@
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <meta charset="UTF-8">
+<jsp:include page="/WEB-INF/views/home.jsp" />
 <style type="text/css">
 	body{
-		width : 1000px;
-		margin : auto;
+		display:block;
 	}
+
 	.game_item{
 		display : flex;
 		justify-content: space-between;
 	}
+	
 </style>
 <title>나의 구매내역</title>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
+
 	<sec:authentication property="principal" var="principal"/>
 	
-	<a href="../"><h1>Guteam</h1></a>
 	<h2>나의 게임 목록</h2>
+	
 	<input type="hidden" id="memberId" value="${principal.username }">
 	<div id="myGameArea">
 		<ul id="games"></ul>
 	</div>
 	
+	<jsp:include page="../footer.jsp" />
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var memberId = $('#memberId').val();
@@ -48,7 +51,7 @@
 	        minute = minute >= 10 ? minute : '0' + minute;
 	        second = second >= 10 ? second : '0' + second;
 
-	        return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+	        return date.getFullYear() + '-' + month + '-' + day;
 		}
 		function getGameList(){
 			var url = "all/"+memberId;
@@ -65,20 +68,20 @@
 					var purchaseDate = new Date(data.purchasedList[i].purchaseDate);
 					i++;
 					list += '<li class="game_item">'
-						 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
+						 + '<img alt="'+this.gameName+'" width="250px" height="150px"'
 						 + 'src="../game/display?fileName='+this.gameImageName+'">'
 						 + '<input type="hidden" class="gameImageName" value="'+this.gameImageName+'">'
 						 + '<a href=../game/detail?gameId='+this.gameId+'><span id="gameName">'+this.gameName+'</span></a>'
 						 + '<span class="genre">'+this.genre+'</span>'
 						 + '<div class="active_game">'
+						 + '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span><br>'
 						 if(checkGame(this.gameImageName)==0){
 					list += '<button class="download_btn"><a href="'
 						 + 'download'+this.gameImageName+'">다운로드</a></button><br>';
 						 }else{
 					list += '<button class="run_game">실행</button><br>';
 						 }
-					list += '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span>'
-						 + '</div>'
+					list += '</div>'
 						 + '</li><hr>';
 						 
 				}); // end data.each

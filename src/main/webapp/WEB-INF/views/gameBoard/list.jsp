@@ -10,7 +10,7 @@
 	<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
-	<a href="register?gameId=${gameVO.gameId }"><button	class="btn btn-light">글쓰기</button></a>
+	<a href="register?gameId=${gameVO.gameId }"><button	class="btn btn-light">글글쓰기</button></a>
 	<a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button class="btn btn-light">게임 정보로 돌아가기</button></a>
 	<br>
 	<br>
@@ -163,7 +163,7 @@
 				var keyword = $('#keyword').attr('value');
 				var keywordCriteria = $('#keywordCriteria').attr('value');
 				var queryString = 'gameId='+gameId+'&orderBy='+orderBy+'&keyword='+keyword+'&keywordCriteria='+keywordCriteria;
-				console.log(queryString);	
+				console.log(queryString);
 				var url = 'list?'+queryString;
 				location.href=url;
 			}); // orderBy.onclick()

@@ -84,7 +84,7 @@
 </sec:authorize>
 </div>
 </div>
-	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
@@ -118,6 +118,9 @@
 					console.log(result);
 					if(result==1){
 						alert('위시리스트 추가 성공');
+						checkMyGame();
+					}else{
+						alert('이미 추가 되었습니다.');
 						checkMyGame();
 					}
 				}
@@ -166,6 +169,10 @@
 					console.log(result);
 					if(result==1){
 						alert('위시리스트 제거 성공');
+						$('#addWishList').css("display","inline");
+						$('#removeWishList').css("display","none");
+					}else{
+						alert("이미 제거 되었습니다.");
 						$('#addWishList').css("display","inline");
 						$('#removeWishList').css("display","none");
 					}

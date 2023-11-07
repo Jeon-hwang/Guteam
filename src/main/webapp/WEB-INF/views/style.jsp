@@ -67,6 +67,7 @@ header .logo{
 			display:none;
 			color:#fff;
 	}
+	
 header .auth{
 	width:70%;
 	height:100%;
@@ -92,6 +93,7 @@ body {
 	display:flex;
 	flex-wrap:wrap;
 	background-color:#1b2838;
+	color: white;
 }
 #wrap{
 	padding:10px 20%;
@@ -335,5 +337,23 @@ transition: 0.3s;
 .auth .btn:hover{
 	background-color: #666666;
 	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+#CommentGroup{
+	margin: auto;
+}
+#myGameArea{
+	display : block;
+	width : 1000px;	
+	margin : auto;
+}
+	
+#myGameArea a,span,div{
+	margin : auto;
+}
+.wishListBody {
+	width : 1000px;
+	display : absolute;
+	margin : auto;	
 }
 </style>

@@ -11,6 +11,8 @@
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
+	<main>
+	<section>
 	제목 : ${vo.gameBoardTitle }
 	<br> 작성자 : ${nickname}
 	<br> 내용 : ${vo.gameBoardContent }
@@ -39,7 +41,12 @@
 	<a href="list?gameId=${gameId }&page=${page}"><button class="btn btn-light" >커뮤니티로 돌아가기</button></a>
 	</div>
 	<input type="hidden" id="updateResult" value="${update_result }">
+	</section>
 	<jsp:include page="../boardComment/comment_and_reply_test.jsp" />
+	</main>
+	<footer>
+	<jsp:include page="../footer.jsp"></jsp:include>
+	</footer>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			var updateResult = $('#updateResult').val();
