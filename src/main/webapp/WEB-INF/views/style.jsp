@@ -141,7 +141,6 @@ header .auth{
 	padding:20px 100px;
 }
 body {
-	color:#fff;
 	width:100%;
 	height:100%;
 	display:flex;
@@ -652,17 +651,16 @@ textarea:focus{
 	margin: auto;
 }
 #myGameArea{
-	display : block;
-	width : 1000px;	
-	margin : auto;
+	display:block;
+	width:1000px;	
+	margin:auto;
 }
-	
-#myGameArea a,span,div{
-	margin : auto;
+#myGameArea a, #myGameArea span, #myGameArea div{
+	margin:auto;
 }
 .wishListBody {
-	width : 1000px;
-	display : absolute;
-	margin : auto;	
+	width:1000px;
+	display:absolute;
+	margin:auto;	
 }
 </style>
