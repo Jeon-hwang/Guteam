@@ -598,8 +598,8 @@ textarea{
 }
 .chatArea .myChat .message{
 	word-break:break-all;
-	margin:5px�20px;
-	border:1px�solid�#fff;
+	margin:5px 20px;
+	border:1px solid #fff;
 	padding:5px 2px;
 	border-radius:5px;
 	background-color:#a0c5db;
@@ -607,8 +607,8 @@ textarea{
 }
 .chatArea .yourChat .message{
 	word-break:break-all;
-	margin:5px�20px;
-	border:1px�solid�#fff;
+	margin:5px 20px;
+	border:1px solid #fff;
 	padding:5px 2px;
 	border-radius:5px;
 	background-color:#2a475e;
