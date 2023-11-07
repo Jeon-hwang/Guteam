@@ -12,4 +12,3 @@ public class BoardCommentController {
 	public void commentAndReplyTest() {}
 	
 }
-          
