@@ -597,8 +597,8 @@ textarea{
 }
 .chatArea .myChat .message{
 	word-break:break-all;
-	margin:5px 20px;
-	border:1px solid #fff;
+	margin:5px 20px;
+	border:1px solid #fff;
 	padding:5px 2px;
 	border-radius:5px;
 	background-color:#a0c5db;
@@ -606,8 +606,8 @@ textarea{
 }
 .chatArea .yourChat .message{
 	word-break:break-all;
-	margin:5px 20px;
-	border:1px solid #fff;
+	margin:5px 20px;
+	border:1px solid #fff;
 	padding:5px 2px;
 	border-radius:5px;
 	background-color:#2a475e;
@@ -646,22 +646,5 @@ textarea:focus{
 	color:black;
 	background-color: #a0c5db;
 	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-#CommentGroup{
-	margin: auto;
-}
-#myGameArea{
-	display : block;
-	width : 1000px;	
-	margin : auto;
-}
-	
-#myGameArea a,span,div{
-	margin : auto;
-}
-.wishListBody {
-	width : 1000px;
-	display : absolute;
-	margin : auto;	
 }
 </style>
