@@ -24,7 +24,7 @@
 	<div class="titleArea">
 	<h4>구팀 실시간 채팅방</h4>
 	</div>
-	<div class="chatArea" id="chat">
+	<div class="chatArea px-3" id="chat">
 	
 	</div>
 	<div class="messageFormArea">
@@ -47,18 +47,25 @@
 	});
 	
 	var sock = new SockJS("/guteam/echo");
-	sock.onmessage = function(e){
-		if(e.data.substr(0,4)=='맘대로햌'||e.data.substr(0,7)=='haeyong'){
-			$("#chat").append('<strong style="color:red;">'+e.data+'</strong>' + "<br/>");
-		}else{
-			$("#chat").append(e.data + "<br/>");
-			
-		}
+	sock.onmessage = function(e){		
+		$("#chat").append(e.data +'<span class="time">('+dateFormat(new Date(e.timeStamp))+')</span></div>'+"<br/>");
 		$('.chatArea').scrollTop($('.chatArea').prop('scrollHeight'));
 	}
 	
 	sock.onclose = function(){
 		$("#chat").append("연결 종료");
+	}
+	
+	function dateFormat(date) {
+        var hour = date.getHours();
+        var minute = date.getMinutes();	
+        var second = date.getSeconds();
+
+        hour = hour >= 10 ? hour : '0' + hour;
+        minute = minute >= 10 ? minute : '0' + minute;
+        second = second >= 10 ? second : '0' + second;
+
+        return hour + ':' + minute + ':' + second;
 	}
 </script>
 </body>

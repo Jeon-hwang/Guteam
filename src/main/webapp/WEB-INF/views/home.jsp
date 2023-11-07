@@ -23,7 +23,7 @@
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">
 			<!-- 여기에 프로필 사진과 닉네임 캐시 표현하시면 됩니다. -->
-			<a href="http://localhost:8080/guteam/chat" type="button" class="btn btn-light">채팅방 입장</a>
+			<a href="/guteam/chat" type="button" class="btn btn-light">채팅방 입장</a>
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
 			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">나의 위시리스트</button></a>
 			<a href="/guteam/purchased/myPurchased"><button type="button" class="btn btn-light">나의 보유 게임</button></a>

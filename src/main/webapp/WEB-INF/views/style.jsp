@@ -346,6 +346,7 @@ transition: 0.3s;
 	color:#fff;
 }
 .messageFormArea input{
+	width:400px;
 	margin-bottom: 1px;
 	border:none;
 	background-color:#2a3f5a;
@@ -581,12 +582,60 @@ textarea{
 }
 .chatArea{
 	background-color: #2a3f5a;
-	color:#fff;
-	border: none;
 	width:800px;
 	height:500px;
 	margin-bottom:10px;
 	overflow-y:auto; 
+	display:block;
+	color:white;
+}
+.chatArea::-webkit-scrollbar{
+	width: 1px;
+}
+.chatArea .nickname{
+
+}
+.chatArea .myChat .message{
+	word-break:break-all;
+	margin:5px 20px;
+	border:1px solid #fff;
+	padding:5px 2px;
+	border-radius:5px;
+	background-color:#a0c5db;
+	color:black;
+}
+.chatArea .yourChat .message{
+	word-break:break-all;
+	margin:5px 20px;
+	border:1px solid #fff;
+	padding:5px 2px;
+	border-radius:5px;
+	background-color:#2a475e;
+	color:#fff;
+	width:100%;
+	text-align:right;
+}
+.chatArea .time{
+	color:#1b2838;
+}
+.yourChat .nickname{
+	width:100%;
+	text-align:right;
+}
+.yourChat .chatInfo{
+	display:flex;
+	justify-content:flex-end;
+	flex-wrap:wrap;
+}
+.chatArea .yourChat{
+	width:100%;
+	display:flex;
+	justify-content:flex-end;
+}
+.chatArea .myChat{
+	width:100%;
+	display:flex;
+	justify-content:flex-start;
 }
 textarea:focus{
 	background-color: #a0c5db;

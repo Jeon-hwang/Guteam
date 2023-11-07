@@ -36,9 +36,12 @@ public class EchoHandler extends TextWebSocketHandler{
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		for(WebSocketSession sess: sessionList) {
 			String memberId = session.getPrincipal().getName();
-			logger.info(memberId);
 			String nickname = memberService.read(memberId).getNickname();
-			sess.sendMessage(new TextMessage(nickname+": "+message.getPayload()));
+			if(sess.equals(session)) {
+				sess.sendMessage(new TextMessage("<span class='myChat'><div class='chatInfo'><div class='nickname'>"+nickname+"</div><div class='message'>"+message.getPayload()+"</div>"));
+			}else {
+				sess.sendMessage(new TextMessage("<span class='yourChat'><div class='chatInfo'><div class='nickname'>"+nickname+"</div><div class='message'>"+message.getPayload()+"</div>"));
+			}
 		}
 	}
 	
