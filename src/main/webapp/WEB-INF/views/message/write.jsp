@@ -86,7 +86,8 @@ thead {
 <body>
 <div id="full">
 <div id="leftMenu">
-<div><img width="110px" height="50px" src="display?fileName=/logo.png"></div>
+<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
@@ -115,7 +116,7 @@ thead {
 				<td class="tdc">보낼 닉네임</td>
 				<td>
 				<c:if test="${empty sendMemberId }">
-					<input type="text" name="receiveMemberId" id="receiverNickname" required>				
+					<input type="text" name="receiveMemberNickname" id="receiverNickname" required>				
 				</c:if>
 				<c:if test="${not empty sendMemberId }">
 					<input type="hidden" name="receiveMemberId" id="receiverNickname" value="${sendMemberId }">
@@ -138,7 +139,7 @@ thead {
 			
 		</tbody>
 		</table>
-	</div>
+	</div>		
 	<div style="text-align: right; padding-right: 5px;">
 		<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
 		<input type="hidden" name="sendMemberNickname" id="sendMemberNickname" value="${vo.nickname }">

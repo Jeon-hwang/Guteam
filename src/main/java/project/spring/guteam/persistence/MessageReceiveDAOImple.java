@@ -38,6 +38,7 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 	public List<MessageReceiveVO> select(String receiveMemberId, PageCriteria criteria) {
 		logger.info("paging-select() 호출");
 		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
+		logger.info("receiveMemberId ? " + receiveMemberId); 
 		Map<String, Object> args = new HashMap<>();
 		args.put("receiveMemberId", receiveMemberId);
 		args.put("start", criteria.getStart());
