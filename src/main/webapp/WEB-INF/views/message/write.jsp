@@ -86,7 +86,8 @@ thead {
 <body>
 <div id="full">
 <div id="leftMenu">
-<div><img width="110px" height="50px" src="display?fileName=/logo.png"></div>
+<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
