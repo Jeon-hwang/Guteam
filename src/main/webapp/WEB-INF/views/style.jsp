@@ -126,6 +126,9 @@ header .auth{
 .detail-box .infoArea .bi{
 	color:#ffc100;
 }
+.detail-box .btn_group_detail{
+	width:100%;
+}
 .info h1{
 	display:flex;
 	flex-wrap: wrap;

@@ -50,8 +50,7 @@ public class GameController {
 	@GetMapping("/list")
 	public void list(Model model, Integer page, Integer numsPerPage, String keyword, String keywordCriteria, String orderBy, Principal principal) {
 		logger.info("list 호출");
-		
-		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
+//		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
 		PageCriteria criteria = new PageCriteria(1, 10);
 		if (page != null) {
 			criteria.setPage(page);
@@ -65,30 +64,19 @@ public class GameController {
 	}
 
 	@GetMapping("/register")
-	public void registerGET() {
-	}
+	public void registerGET() {}
 
 	@PostMapping("/register")
 	public String registerPOST(GameVO vo, MultipartFile file, RedirectAttributes reAttr) {
 		logger.info("register 호출 file = " + file);
 		if (vo.getGameImageName().equals("basic.png") 
-				&& file != null && !file.getOriginalFilename().equals("")) {
-			try {
-				logger.info(file.getOriginalFilename());
-				vo.setGameImageName(
-						GameImageUploadUtil.saveUploadedFile(uploadPath, gameService.getSeqNo()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1),
-								file.getBytes()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				&& file != null && !file.getOriginalFilename().equals("")) { // ajax 가 아닌 input[type="file"]을 통해 등록 한 경우
+			int gameId = gameService.getSeqNo();
+			String extension = "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+			String gameImageName = gameId+extension;
+			saveImage(file, vo, gameImageName);
 		}
-		String gameImageName = vo.getGameImageName();
-		try {
-			gameImageName = URLEncoder.encode(gameImageName, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		vo.setGameImageName(gameImageName);
+		encodeName(vo);
 		int result = gameService.create(vo);
 		if (result == 1) {
 			reAttr.addFlashAttribute("insert_result", "success");
@@ -127,29 +115,15 @@ public class GameController {
 
 	@PostMapping("/update")
 	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file, Principal principal) {
-
 		logger.info("updatePOST() 호출");
-		String beforeImageName = ((GameVO)gameService.readGame(vo.getGameId(), principal).get("vo")).getGameImageName();
 		logger.info(vo + "");
 		if (file != null && !file.getOriginalFilename().equals("")) {
-			try {
-				logger.info(file.getOriginalFilename());
-				vo.setGameImageName(
-						GameImageUploadUtil.saveUploadedFile(uploadPath, vo.getGameId()+"."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1),
-								file.getBytes()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			int gameId = vo.getGameId();
+			String extension = "."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+			String gameImageName = gameId+extension;
+			saveImage(file, vo, gameImageName);
 		}
-		String gameImageName = vo.getGameImageName();
-		if (!beforeImageName.equals(gameImageName)) {
-			try {
-				gameImageName = URLEncoder.encode(gameImageName, "utf-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			vo.setGameImageName(gameImageName);
-		}
+		encodeName(vo);
 		int result = gameService.update(vo);
 		if (result == 1) {
 			reAttr.addFlashAttribute("update_result", "success");
@@ -157,76 +131,6 @@ public class GameController {
 		} else {
 			return "redirect:/game/update?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;
 		}
-	}
-
-	@GetMapping("/display")
-	public ResponseEntity<byte[]> display(String fileName) {
-		logger.info("display() 호출");
-
-		ResponseEntity<byte[]> entity = null;
-
-		InputStream in = null;
-
-		try {
-			fileName = URLDecoder.decode(fileName, "utf-8");
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		if (!(fileName.charAt(0) == '/')) {
-			fileName = "/" + fileName;
-		}
-
-		String filePath = uploadPath + fileName;
-
-		try {
-			in = new FileInputStream(filePath);
-			// 파일 확장자
-			String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
-			logger.info(extension);
-
-			// 응답 헤더(response header) 에 Content-Type 설정
-			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.setContentType(MediaUtil.getMediaType(extension));
-			// 데이터 전송
-			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), // 파일에서 읽은 데이터
-					httpHeaders, // 응답 헤더
-					HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return entity;
-	}
-	
-	@GetMapping("/list-ajax/{memberId}")
-	public ResponseEntity<Map<String, Object>> recentlyViewed(@PathVariable("memberId") String memberId){	
-		logger.info("최근 조회한 게임 불러오기");
-		Map<String, Object> args = gameService.recentlyViewedGames(memberId);
-		return new ResponseEntity<Map<String, Object>>(args, HttpStatus.OK);
-	}
-
-	@PostMapping("/upload-ajax")
-	public ResponseEntity<String> uploadAjaxPOST(MultipartFile[] files, String gameId) {
-		logger.info("uploadAgaxPOST() 호출");
-		// 파일 하나만 저장
-		String result = ""; // result : 파일 경로 및 썸네일 이미지 이름
-		
-		for (int i = 0; i < files.length; i++) {
-			try {
-				String fileName = gameService.getSeqNo()+"";
-				if(gameId!=null) {
-					fileName=gameId;
-				}
-				logger.info(fileName);
-				result = GameImageUploadUtil.saveUploadedFile(uploadPath, fileName+"."+files[i].getOriginalFilename().substring(files[i].getOriginalFilename().lastIndexOf(".")+1),
-						files[i].getBytes());
-				result = URLEncoder.encode(result, "utf-8");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
 	private void readListsAndSetModel(String keyword, String keywordCriteria, PageMaker pageMaker, PageCriteria criteria,
@@ -298,6 +202,89 @@ public class GameController {
 			criteria.setPage(1);
 		}
 		pageMaker.setPageData();
+	}
+
+	private void encodeName(GameVO vo) {
+		String gameImageName = vo.getGameImageName();
+		try {
+			gameImageName = URLEncoder.encode(gameImageName, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		vo.setGameImageName(gameImageName);
+	}
+
+	private void saveImage(MultipartFile file, GameVO vo, String gameImageName) {
+		try {
+			logger.info(file.getOriginalFilename());
+			vo.setGameImageName(
+					GameImageUploadUtil.saveUploadedFile(uploadPath, gameImageName, file.getBytes()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@GetMapping("/display")
+	public ResponseEntity<byte[]> display(String fileName) {
+		logger.info("display() 호출");
+		ResponseEntity<byte[]> entity = null;
+		InputStream in = null;
+		try {
+			fileName = URLDecoder.decode(fileName, "utf-8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		if (!(fileName.charAt(0) == '/')) {
+			fileName = "/" + fileName;
+		}
+		String filePath = uploadPath + fileName;
+		try {
+			in = new FileInputStream(filePath);
+			// 파일 확장자
+			String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
+			// 응답 헤더(response header) 에 Content-Type 설정
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.setContentType(MediaUtil.getMediaType(extension));
+			// 데이터 전송
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), // 파일에서 읽은 데이터
+					httpHeaders, // 응답 헤더
+					HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return entity;
+	}
+	
+	@GetMapping("/list-ajax/{memberId}")
+	public ResponseEntity<Map<String, Object>> recentlyViewed(@PathVariable("memberId") String memberId){	
+		logger.info("최근 조회한 게임 불러오기");
+		Map<String, Object> args = gameService.recentlyViewedGames(memberId);
+		return new ResponseEntity<Map<String, Object>>(args, HttpStatus.OK);
+	}
+
+	@PostMapping("/upload-ajax")
+	public ResponseEntity<String> uploadAjaxPOST(MultipartFile[] files, String gameId) {
+		logger.info("uploadAgaxPOST() 호출");
+		
+		String result = ""; 
+		
+		for (int i = 0; i < files.length; i++) {
+			try {
+				String fileName = "";
+				if(gameId!=null) { // update에서 등록하는 경우
+					fileName=gameId;
+				}else { // register에서 등록하는 경우
+					fileName = gameService.getSeqNo()+"";
+				}
+				logger.info(fileName);
+				result = GameImageUploadUtil.saveUploadedFile(uploadPath, fileName+"."+files[i].getOriginalFilename().substring(files[i].getOriginalFilename().lastIndexOf(".")+1),
+						files[i].getBytes());
+				result = URLEncoder.encode(result, "utf-8");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
 }

@@ -6,35 +6,39 @@
 <html>
 <head>
 <jsp:include page="../style.jsp"></jsp:include>
-<style type="text/css">
-.profileImg {
-	width : 50px;
-	height : 50px;
-	border : 1px solid grey;
-}
-</style>
 <meta charset="UTF-8">
 <title>GUTEAM : 프로필</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-<h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
+<header>
+<div class="logo">
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+	</div>
+</header>
+<section>
+<div id="wrap">
+<div class="detail-box">
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
+<div class="info">
+<div id="detailInfo">
+
 <h2>${vo.memberId }님의 프로필</h2>
-	<div>
+	<div class="btn_group_detail">
 		<button class="btn btn-light" onclick ="popUp();">쪽지함</button>
 		<a href="addCash"><button class="btn btn-light">캐쉬 충전</button></a>
 		<a href="../friend/list"><button class="btn btn-light">친구 목록</button></a>
 	</div>
-	<br>
-	<div>
+	<div class="btn_group_detail">
 		<form action="delete" method="post">
 		<sec:csrfInput/>
 			<a href="update"><button type="button" class="btn btn-light">회원 수정</button></a>
 			<input type="hidden" name="memberId" id="memberId" value="${vo.memberId }">
 			<input type="submit" class="btn btn-light" value="회원 탈퇴">	
 		</form>
+	</div>
 		<hr>
+	</div>
 		<div id="boardsAndReviewsArea" style="display:flex;">
 		<div id="boardsArea" style="display:inline-block;margin-right:40px;">
 			<button id="showMyBoards" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 게시글 보기</button>
@@ -64,7 +68,10 @@
 		</div>
 	</div>
 <input type="hidden" id="alert" value="${alert }">
-	
+</div>
+</div>
+</section>
+	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 	function popUp(){
 		window.open('../message/list', '쪽지함', 'width=715px,height=425px,scrollbars=yes');
