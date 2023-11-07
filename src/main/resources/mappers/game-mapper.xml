@@ -155,12 +155,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     				where ${memberId}=#{memberId} 
     				group by ${gameId}
     				union all
-    				select count(*)*10 point, ${gameId}
+    				select 10 point, ${gameId}
     				from ${purchased}
     				where ${memberId}=#{memberId} 
     				group by ${gameId}
     				union all
-    				select count(*) point, ${gameId}
+    				select 1 point, ${gameId}
     				from ${wish_list}
     				where ${memberId}=#{memberId} 
     				group by ${gameId}
@@ -186,16 +186,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    			 select rownum rn, ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName} from (
     			 select ${gameId}, ${gameName}, ${price}, ${genre}, ${releaseDate}, ${updateDate}, ${gameImageName}, count(*) row_count from (
 			    	select * from ${game}
-			    	where lower(${gameName}) like '%'||lower(#{keyword1})||'%' or
+			    	where lower(${gameName}) like '%'||lower(#{keyword2})||'%' or
 		    		lower(${genre}) like '%'||lower(#{keyword1})||'%'
 		    		union all
 		    		select * from ${game}
-			    	where lower(${gameName}) like '%'||lower(#{keyword2})||'%' or
-		    		lower(${genre}) like '%'||lower(#{keyword2})||'%'
+			    	where lower(${gameName}) like '%'||lower(#{keyword4})||'%' or
+		    		lower(${genre}) like '%'||lower(#{keyword3})||'%'
 		    		union all
 		    		select * from ${game}
-			    	where lower(${gameName}) like '%'||lower(#{keyword3})||'%' or
-		    		lower(${genre}) like '%'||lower(#{keyword3})||'%'
+			    	where lower(${gameName}) like '%'||lower(#{keyword6})||'%' or
+		    		lower(${genre}) like '%'||lower(#{keyword5})||'%'
 		    		union all
 		    		select * from ${game}
 	    			)

@@ -7,6 +7,7 @@
 
 	<s:http auto-config="true" use-expressions="true">
 	<!-- 인터셉터를 이용하여 권한확인 -->
+		<s:intercept-url pattern="/chat" access="hasAnyRole('USER, ADMIN')"/>
 		<s:intercept-url pattern="/message/write" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/message/sent" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/friend/list" access="hasAnyRole('USER, ADMIN')"/>

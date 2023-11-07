@@ -172,6 +172,7 @@ public class GameServiceImple implements GameService {
 		List<String> keywords = new ArrayList<>();
 		for(int i = 0 ; i < interestList.size(); i++) {
 			keywords.add(interestList.get(i).getGenre());
+			keywords.add(interestList.get(i).getGameName().substring(0, 2));
 		}
 		List<GameVO> gameVOList = gameDAO.selectByInterest(keywords, criteria);
 		setRatingAndPrice(gameVOList, args);

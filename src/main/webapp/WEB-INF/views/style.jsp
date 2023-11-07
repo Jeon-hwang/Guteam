@@ -345,6 +345,17 @@ transition: 0.3s;
 	background-color:#2a3f5a;
 	color:#fff;
 }
+.messageFormArea input{
+	margin-bottom: 1px;
+	border:none;
+	background-color:#2a3f5a;
+	color:#fff;
+}
+.messageFormArea input:focus{
+	background-color:#a0c5db;
+	color:black;	
+	border: none;
+}
 .inputArea input[type="number"]{
 	width: 300px;
 	margin-bottom: 1px;
@@ -567,6 +578,15 @@ textarea{
 	background-color: #2a3f5a;
 	color:#fff;
 	border: none;
+}
+.chatArea{
+	background-color: #2a3f5a;
+	color:#fff;
+	border: none;
+	width:800px;
+	height:500px;
+	margin-bottom:10px;
+	overflow-y:auto; 
 }
 textarea:focus{
 	background-color: #a0c5db;
