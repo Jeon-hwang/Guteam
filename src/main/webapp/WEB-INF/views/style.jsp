@@ -141,7 +141,7 @@ header .auth{
 	padding:20px 100px;
 }
 body {
-	color:white;
+	color:#fff;
 	width:100%;
 	height:100%;
 	display:flex;
