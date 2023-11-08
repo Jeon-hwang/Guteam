@@ -129,6 +129,68 @@
 	
 	
 </script>
+<sec:authorize access="isAuthenticated()">
+	<script type="text/javascript">
+	function makeNoti(sendMemberId){
+		if(Notification.permission == 'denied' || Notification.permission ==='default'){
+			alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
+		}else{
+			var notification = new Notification(sendMemberId, {
+				body: '친구 요청이 왔습니다.',
+				icon: '/guteam/image/logo80.png'
+			});
+			
+			notification.addEventListener("click", () => {
+				window.open('/guteam/friend/list');
+			});
+		}
+	}
+	
+	function askNotificationPermission(){
+		console.log("권한 묻기");
+		
+		function handlePermission(permission){
+			if(!("permission" in Notification)){
+				Notification.permission = permission;
+			}
+		}
+	
+	
+		if(!("Notification" in window)){
+			console.log("이 브라우저는 알림을 지원하지 않습니다.");
+		}else{
+			if(checkNotificationPromise()){
+				Notification.requestPermission().then((permission) => {
+					handlePermission(permission);
+				});
+			}else{
+				Notification.requestPermission(function (permission) {
+					handlePermission(permission);
+				});
+			}
+		}
+	}
+	
+	function checkNotificationPromise(){
+		try{
+			Notification.requestPermission().then();
+		}catch(e){
+			return false;
+		}
+		return true;
+	}
+	
+	$(document).ready(function(){
+		memberId = $('#memberId').val();
+		console.log(memberId);
+		var sse = new EventSource("/guteam/sse/connect/"+memberId);
+		sse.addEventListener(memberId, e => {
+			console.log("친구요청이 왔습니다 - from :", e.data);
+			makeNoti(e.data);
+		});
+	});
+	</script>
+</sec:authorize>
 </body>
 
 </html>
