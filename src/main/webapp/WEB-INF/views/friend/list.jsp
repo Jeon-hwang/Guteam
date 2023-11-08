@@ -23,6 +23,8 @@ h2 {
 }
 </style>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>GUTEAM : 친구 목록</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
@@ -34,13 +36,12 @@ h2 {
 	<h2><input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 	나의 친구 목록</h2>
 </div>
-<form action="../friend/addFriend" method="post">
+<form action="../friend/addFriend" method="post" onsubmit="sendRequest();">
 	<sec:csrfInput/>
 	<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
-	<input type="text" name="receiveMemberId" placeholder="ID 입력" required>
+	<input type="text" name="receiveMemberId" id="receiveMemberId" placeholder="ID 입력" required>
 	<input class="btn btn-light" type="submit" value="친구 추가">
 </form>
-
 <hr>
 <h3>보낸 요청</h3>
 <table>
@@ -92,6 +93,9 @@ h2 {
 <input type="hidden" id="alert" value="${alert }">
 
 <script type="text/javascript">
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
 	$(document).ready(function(){
 		var result = $('#alert').val();
 			if(result == 'friend'){
@@ -106,6 +110,23 @@ h2 {
 				alert('없는 아이디입니다.');
 			} 
 	});
+	function sendRequest(){
+		var memberId = $('#receiveMemberId').val();
+		var sendMemberId = $('#sendMemberId').val();
+		console.log('ajax요청');
+		$.ajax({
+			type:'post',
+			url:'/guteam/sse/friendRequest/'+memberId,
+			beforeSend : function(xhr) {
+		        xhr.setRequestHeader(header, token);
+		    },
+			data:{'sendMemberId':sendMemberId},
+			success:function(result){
+				console.log('친구 요청을 보냈습니다.');
+			}
+		});
+	}
+	
 </script>
 </body>
 </html>

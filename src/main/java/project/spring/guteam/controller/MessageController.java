@@ -1,7 +1,6 @@
 package project.spring.guteam.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
