@@ -59,7 +59,7 @@ public class MemberDAOImple implements MemberDAO {
 	
 	@Override
 	public int updateCash(int cash,String memberId) {
-		logger.info("updateCash() 호출 cash, memberId = " + cash+","+memberId );
+		logger.info("updateCash() 호출 cash, memberId = " + cash + "," + memberId );
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("cash", cash);
 		args.put("memberId", memberId);

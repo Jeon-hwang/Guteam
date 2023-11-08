@@ -84,20 +84,21 @@ public class MessageServiceImple implements MessageService {
 		return msgReceiveDAO.select(receiveMemberId, criteria);
 	}
 	
-//	@Override
-//	public List<ReceiveMessageVO> read(String memberId, String sent, PageCriteria criteria) {
-//		logger.info("page-read(me) 호출");
-//		List<ReceiveMessageVO> list = dao.selectTo(memberId, criteria);
-//		for(ReceiveMessageVO vo : list) {
-//			vo.setReceiveMemberId(memberDAO.selectByMemberId(vo.getReceiveMemberId()));// 받은 사람 memberId를 닉넴으로 바꿔주기
-//		}
-//		return list;
-//	}
-	
 	@Override
 	public int getTotalCounts() {
 		logger.info("getTotalCount() 호출");
 		return msgSendDAO.getTotalCounts();
+	}
+	
+	@Override
+	public int updateBox(String messageBox, int messageId, String check) {
+		logger.info("update(보관) 호출");
+		if(check == "send") {
+			return msgSendDAO.update(messageBox, messageId);
+		} else  {
+			return msgReceiveDAO.update(messageBox, messageId);			
+		}
+		
 	}
 
 	@Override

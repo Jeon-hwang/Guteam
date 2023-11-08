@@ -104,6 +104,7 @@ td {
 </div>
 <div id="board-top">
 	<button class="btn btn-light" onclick="deleteMsg()">삭제</button>
+	<button class="btn btn-light" onclick="saveMsg()">보관</button>
 </div>
 <div id="main">
 <table>
@@ -209,6 +210,48 @@ td {
 						location.href='list';
 					}else{
 						alert("삭제 실패");
+					}
+				}
+				
+			}); //end .ajax()
+		}
+	}
+	
+	// 쪽지 저장 기능
+	function saveMsg() {
+		var msgArr = [];
+		var msgList = $('input[name="msgIdChk"]:checked');
+		console.log(msgList); // jQuery.fn.init(8)
+		for(var i=0; i<msgList.length; i++) {
+			if(msgList[i].checked){
+				msgArr.push(msgList[i].value);
+			}
+		}
+		if(msgArr.length == 0) {
+			alert("보관할 쪽지를 선택해 주세요.");
+		} else {
+			console.log(msgArr);
+			var reAlr = confirm("선택한 쪽지를 보관합니다.");
+			
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			
+			// 쪽지 저장(ajax)
+			$.ajax({
+				url : '../message/box',
+				type : 'PUT',
+				contentType: 'application/json',
+				data : JSON.stringify(msgArr),
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				success : function(result){
+					console.log(result);
+					if(result == 1) {
+						alert("쪽지가 보관되었습니다.")
+						location.href='list';
+					}else{
+						alert("저장 실패");
 					}
 				}
 				

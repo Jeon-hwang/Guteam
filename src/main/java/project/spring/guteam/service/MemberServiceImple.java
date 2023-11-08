@@ -57,7 +57,7 @@ public class MemberServiceImple implements MemberService {
 	public int update(MemberVO vo, String isCash) {
 		if(isCash.equals("Y")) {
 			logger.info("updateCash() 호출 vo = " + vo.toString());
-			return dao.updateCash(vo.getCash(),vo.getMemberId());
+			return dao.updateCash(vo.getCash(), vo.getMemberId());
 		}else {
 		logger.info("updateMem() 호출 vo = " + vo.toString());
 		return dao.updateMem(vo);

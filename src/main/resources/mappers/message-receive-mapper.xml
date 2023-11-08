@@ -37,6 +37,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 ) where rn between #{start} and #{end}
 	 </select> -->
 	 
+	 <update id="update_box">
+	 update ${message_receive}
+	 set ${messageBox} = #{messageBox}
+	 where ${receiveMessageId} = #{receiveMessageId}
+	 </update>
+	 
 	 <select id="total_count" resultType="Integer">
 	 select count(*) total_cnt from ${message_receive} 
 	 </select>

@@ -38,7 +38,7 @@
 		</form>
 	</div>
 		<hr>
-	</div>
+</div>
 		<div id="boardsAndReviewsArea" style="display:flex;">
 		<div id="boardsArea" style="display:inline-block;margin-right:40px;">
 			<button id="showMyBoards" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 게시글 보기</button>

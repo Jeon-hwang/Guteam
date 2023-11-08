@@ -6,30 +6,20 @@
 <html>
 <head>
 <jsp:include page="../style.jsp"></jsp:include>
-<style type="text/css">
-body {
-background-color:grey;
-padding:20px 80px;
-}
-h2 {
-	margin-top : 0.5rem;
-	margin-bottom : 0.5rem;
-	vertical-align: middle;
-}
-.profileImg {
-	width : 40px;
-	height : 40px;
-	border : 1px solid grey;
-}
-</style>
+
 <meta charset="UTF-8">
 <title>GUTEAM : 친구 목록</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-<div>
-<h1><a href="../"><img width="200px" height="50px" src="display?fileName=/logo.png"></a></h1>
-</div>
+<header>
+<div class="logo">
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+	</div>
+</header>
+<section>
+<div id="wrap">
+<div class="detail-box">
 <div>
 	<h2><input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 	나의 친구 목록</h2>
@@ -90,6 +80,10 @@ h2 {
 	</c:forEach>
 
 <input type="hidden" id="alert" value="${alert }">
+</div>
+</div>
+</section>
+<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 
 <script type="text/javascript">
 	$(document).ready(function(){
