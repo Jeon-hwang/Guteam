@@ -89,7 +89,7 @@ thead {
 }
 </style>
 <meta charset="UTF-8">
-<title>${vo.sendOrReceive }</title>
+<title>${vo.messageTitle }</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
@@ -112,21 +112,21 @@ thead {
 <div id="main">
 	<ul>
 		<li class="hdl">
-		<c:if test="${sendOrReceive=='send' }">
-		수신인 : ${vo.receiveMemberNickname }
-		</c:if>
 		<c:if test="${sendOrReceive=='receive' }">
-		발신인 : ${vo.sendMembeNickname }
+		보낸 사람 : ${vo.sendMemberNickname }
+		</c:if>
+		<c:if test="${sendOrReceive=='send' }">
+		받은 사람 : ${vo.receiveMemberNickname }
 		</c:if>
 		</li>
 		<li class="hdl">
-		<c:if test="${sendOrReceive=='send' }">
-		받은 날짜 : 
-		</c:if>
 		<c:if test="${sendOrReceive=='receive' }">
-		보낸 날짜 : 
+		받은 날짜 : <fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/>
 		</c:if>
-		<fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/></li>
+		<c:if test="${sendOrReceive=='send' }">
+		보낸 날짜 : <fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/>
+		</c:if>
+		</li>
 	</ul>
 	
 	<div>

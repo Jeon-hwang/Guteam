@@ -16,9 +16,12 @@ public interface MessageSendDAO {
 	// 보낸 메세지 조회 - 페이징 리스트 데이터
 	List<MessageSendVO> select(String sendMemberId, PageCriteria criteria);
 	
-	int getTotalCounts();
+	// 메시지 보관
+	int update(String messageBox, int sendMessageId);
 	
 	// 메세지 삭제
 	int delete(int sendMessageId);
+	
+	int getTotalCounts();
 	
 }

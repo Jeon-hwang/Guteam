@@ -16,9 +16,13 @@ public interface MessageReceiveDAO {
 	// 받은 메세지 조회 - 페이징 리스트 데이터
 	List<MessageReceiveVO> select(String receiveMemberId, PageCriteria criteria);
 	
-	int getTotalCounts();
+	// 메시지 보관
+	int update(String messageBox, int receiveMessageId);
 	
 	// 메세지 삭제
 	int delete(int receiveMessageId);
+	
+	int getTotalCounts();
+	
 	
 }

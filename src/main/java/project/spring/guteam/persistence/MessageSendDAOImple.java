@@ -44,17 +44,26 @@ public class MessageSendDAOImple implements MessageSendDAO {
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_paging", args);
 	}
-
+	
 	@Override
-	public int getTotalCounts() {
-		logger.info("getTotalCount() 호출");
-		return sqlSession.selectOne(NAMESPACE + ".total_count");
+	public int update(String messageBox, int sendMessageId) {
+		logger.info("update(보낸쪽지보관) 호출");
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("messageSave", messageBox);
+		args.put("sendMessageId", sendMessageId);
+		return sqlSession.update(NAMESPACE + ".update_box", args);
 	}
 
 	@Override
 	public int delete(int sendMessageId) {
 		logger.info("delete() 호출");
 		return sqlSession.delete(NAMESPACE + ".delete", sendMessageId);
+	}
+	
+	@Override
+	public int getTotalCounts() {
+		logger.info("getTotalCount() 호출");
+		return sqlSession.selectOne(NAMESPACE + ".total_count");
 	}
 
 }

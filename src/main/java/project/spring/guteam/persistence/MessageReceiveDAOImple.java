@@ -46,16 +46,14 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 		return sqlSession.selectList(NAMESPACE + ".select_paging", args);
 	}
 	
-//	@Override
-//	public List<MessageReceiveVO> selectTo(String sendMemberId, PageCriteria criteria) {
-//		logger.info("paging-select() 호출");
-//		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
-//		Map<String, Object> args = new HashMap<>();
-//		args.put("sendMemberId", sendMemberId);
-//		args.put("start", criteria.getStart());
-//		args.put("end", criteria.getEnd());
-//		return sqlSession.selectList(NAMESPACE + ".select_to_paging", args);
-//	}
+	@Override
+	public int update(String messageBox, int receiveMessageId) {
+		logger.info("update(받은쪽지보관) 호출");
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("messageSave", messageBox);
+		args.put("receiveMessageId", receiveMessageId);
+		return sqlSession.update(NAMESPACE + ".update_box", args);
+	}
 	
 	@Override
 	public int delete(int messageId) {

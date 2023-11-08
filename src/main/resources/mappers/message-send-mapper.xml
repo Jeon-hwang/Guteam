@@ -22,10 +22,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 </select>
 	 	 
 	 <select id="select_paging" resultType="MessageSendVO">
-	 select ${sendMessageId}, ${sendMemberId}, ${receiveMemberId}, ${receiveMemberNickname}, ${messageTitle}, ${messageContent}, ${messageDateCreated}
+	 select ${sendMessageId}, ${sendMemberId}, ${receiveMemberId}, ${receiveMemberNickname}, 
+	 ${messageTitle}, ${messageContent}, ${messageDateCreated}, ${messageSave}
 	 from (
 	 select rownum rn, a.* 
-	 	from (select * from ${message_send} where ${sendMemberId} = #{sendMemberId} order by ${sendMessageId} desc)a
+	 	from (select * from ${message_send} where ${sendMemberId} = #{sendMemberId} 
+	 	and ${messageSave} = 'N' order by ${sendMessageId} desc)a
 	 ) where rn between #{start} and #{end}
 	 </select>
 	 
@@ -36,6 +38,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	from (select * from ${message_send} where ${sendMemberId}=#{sendMemberId} order by ${messageId} desc)a
 	 ) where rn between #{start} and #{end}
 	 </select> -->
+	 
+	 <update id="update_box">
+	 update ${message_send}
+	 set ${messageSave} = #{messageSave}
+	 where ${sendMessageId} = #{sendMessageId}
+	 </update>
 	 
 	 <select id="total_count" resultType="Integer">
 	 select count(*) total_cnt from ${message_send} 

@@ -104,6 +104,7 @@ td {
 </div>
 <div id="board-top">
 	<button class="btn btn-light" onclick="deleteMsg()">삭제</button>
+	<button class="btn btn-light" onclick="saveMsg()">보관</button>
 </div>
 <div id="main">
 <table>
@@ -120,7 +121,7 @@ td {
 	<c:forEach var="pvo" items="${list }">
 	<tr>
 		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.receiveMessageId }"></label></td>
-		<td class="title"><a href="../message/detail?messageId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
+		<td class="title"><a href="../message/detail?receiveMsgId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
 		<td class="cen" >${pvo.sendMemberNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
@@ -178,6 +179,7 @@ td {
 	function deleteMsg() {
 		var msgArr = [];
 		var msgList = $('input[name="msgIdChk"]:checked');
+		var sendRecv = 'receive';
 		console.log(msgList); // jQuery.fn.init(8)
 		for(var i=0; i<msgList.length; i++) {
 			if(msgList[i].checked){
@@ -195,8 +197,8 @@ td {
 			
 			// 쪽지 삭제(ajax)
 			$.ajax({
-				url : '../message/delete',
 				type : 'DELETE',
+				url : '../message/delete/'+sendRecv,
 				contentType: 'application/json',
 				data : JSON.stringify(msgArr),
 				beforeSend : function(xhr) {
@@ -212,9 +214,51 @@ td {
 					}
 				}
 				
-			}); //end .ajax()
+			}); //end .ajax(삭제)
 		}
-	}
+	} //end deleteMsg()
+	
+	// 쪽지 저장 기능
+	function saveMsg() {
+		var msgArr = [];
+		var msgList = $('input[name="msgIdChk"]:checked');
+		console.log(msgList); // jQuery.fn.init(8)
+		for(var i=0; i<msgList.length; i++) {
+			if(msgList[i].checked){
+				msgArr.push(msgList[i].value);
+			}
+		}
+		if(msgArr.length == 0) {
+			alert("보관할 쪽지를 선택해 주세요.");
+		} else {
+			console.log(msgArr);
+			var reAlr = confirm("선택한 쪽지를 보관합니다.");
+			
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			
+			// 쪽지 저장(ajax)
+			$.ajax({
+				type : 'PUT',
+				url : '../message/box',
+				contentType: 'application/json',
+				data : JSON.stringify(msgArr),
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				success : function(result){
+					console.log(result);
+					if(result == 1) {
+						alert("쪽지가 보관되었습니다.")
+						location.href='list';
+					}else{
+						alert("저장 실패");
+					}
+				}
+				
+			}); //end .ajax(저장)
+		}
+	} //end saveMsg()
 </script>
 
 </body>

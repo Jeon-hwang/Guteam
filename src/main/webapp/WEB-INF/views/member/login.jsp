@@ -13,8 +13,9 @@
 </head>
 <body>
 	<c:if test="${param.error==1 }">아이디와 비밀번호를 확인해주세요 </c:if>
-	<h1><a href="../"><img width="100px" height="100px" src="display?fileName=guteam_logo_white.png"></a></h1>
-	
+	<div class="logo">
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+	</div>
 	<br>
 	<form action="login" method="post">
 		ID &nbsp;&nbsp;&nbsp; 
