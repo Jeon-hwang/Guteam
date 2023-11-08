@@ -50,7 +50,7 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 	public int update(String messageBox, int receiveMessageId) {
 		logger.info("update(받은쪽지보관) 호출");
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("messageBox", messageBox);
+		args.put("messageSave", messageBox);
 		args.put("receiveMessageId", receiveMessageId);
 		return sqlSession.update(NAMESPACE + ".update_box", args);
 	}

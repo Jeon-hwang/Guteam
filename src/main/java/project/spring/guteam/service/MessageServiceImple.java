@@ -96,6 +96,7 @@ public class MessageServiceImple implements MessageService {
 		if(check == "send") {
 			return msgSendDAO.update(messageBox, messageId);
 		} else  {
+			logger.info("msgReceiveDAO.update로");
 			return msgReceiveDAO.update(messageBox, messageId);			
 		}
 		
@@ -110,7 +111,7 @@ public class MessageServiceImple implements MessageService {
 	@Override
 	public int deleteByReceive(int receiveMessageId) {
 		logger.info("delete() 호출");
-		return msgSendDAO.delete(receiveMessageId);
+		return msgReceiveDAO.delete(receiveMessageId);
 	}
 
 

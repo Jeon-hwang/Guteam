@@ -49,7 +49,7 @@ public class MessageSendDAOImple implements MessageSendDAO {
 	public int update(String messageBox, int sendMessageId) {
 		logger.info("update(보낸쪽지보관) 호출");
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("messageBox", messageBox);
+		args.put("messageSave", messageBox);
 		args.put("sendMessageId", sendMessageId);
 		return sqlSession.update(NAMESPACE + ".update_box", args);
 	}

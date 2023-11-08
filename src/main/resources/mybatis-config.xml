@@ -95,6 +95,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	<property name="messageTitle" value="message_title"/>
 	 	<property name="messageContent" value="message_content"/>
 	 	<property name="messageDateCreated" value="message_date_created"/>
+	 	<property name="messageSave" value="message_save"/>
 	 	
 	 	<property name="message_send" value="message_send"/>
 	 	<property name="sendMessageId" value="send_message_id"/>
@@ -104,6 +105,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	<property name="messageTitle" value="message_title"/>
 	 	<property name="messageContent" value="message_content"/>
 	 	<property name="messageDateCreated" value="message_date_created"/>
+	 	<property name="messageSave" value="message_save"/>
 	 	
 	 	<property name="wish_list" value="wish_list"/>
 	 	<property name="memberId" value="member_id"/>

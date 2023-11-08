@@ -10,7 +10,7 @@ public class MessageReceiveVO {
 	String messageTitle;
 	String messageContent;
 	Date messageDateCreated;
-	String messageBox;
+	String messageSave;
 	
 	public MessageReceiveVO() {
 		super();
@@ -19,7 +19,7 @@ public class MessageReceiveVO {
 
 	public MessageReceiveVO(int receiveMessageId, String receiveMemberId, String sendMemberId,
 			String sendMemberNickname, String messageTitle, String messageContent, Date messageDateCreated,
-			String messageBox) {
+			String messageSave) {
 		super();
 		this.receiveMessageId = receiveMessageId;
 		this.receiveMemberId = receiveMemberId;
@@ -28,7 +28,7 @@ public class MessageReceiveVO {
 		this.messageTitle = messageTitle;
 		this.messageContent = messageContent;
 		this.messageDateCreated = messageDateCreated;
-		this.messageBox = messageBox;
+		this.messageSave = messageSave;
 	}
 
 	public int getReceiveMessageId() {
@@ -87,12 +87,12 @@ public class MessageReceiveVO {
 		this.messageDateCreated = messageDateCreated;
 	}
 
-	public String getMessageBox() {
-		return messageBox;
+	public String getMessageSave() {
+		return messageSave;
 	}
 
-	public void setMessageBox(String messageBox) {
-		this.messageBox = messageBox;
+	public void setMessageSave(String messageSave) {
+		this.messageSave = messageSave;
 	}
 
 	@Override
@@ -100,8 +100,9 @@ public class MessageReceiveVO {
 		return "MessageReceiveVO [receiveMessageId=" + receiveMessageId + ", receiveMemberId=" + receiveMemberId
 				+ ", sendMemberId=" + sendMemberId + ", sendMemberNickname=" + sendMemberNickname + ", messageTitle="
 				+ messageTitle + ", messageContent=" + messageContent + ", messageDateCreated=" + messageDateCreated
-				+ ", messageBox=" + messageBox + "]";
+				+ ", messageSave=" + messageSave + "]";
 	}
+
 	
 	
 }

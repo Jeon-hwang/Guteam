@@ -102,17 +102,51 @@ public class MessageController {
 		model.addAttribute("pageMaker", pageMaker);
 	}
 	
+	// 쪽지 보관함
+	@GetMapping("/msgBox")
+	public void msgBox(Model model, Principal principal, Integer page, Integer numsPerPage) {
+		logger.info("msgBox() 호출");
+		logger.info("page = " + page + "/ numsPerPage = " + numsPerPage);
+		MemberVO vo = null;
+		PageCriteria criteria = new PageCriteria();
+		criteria.setNumsPerPage(8);
+		if(page != null) {
+			criteria.setPage(page);
+		}
+		if(numsPerPage != null) {
+			criteria.setNumsPerPage(numsPerPage);
+		}
+		
+		if(principal != null) {
+			vo = memberService.read(principal.getName());
+			logger.info("vo? " + vo.toString());
+		}
+		model.addAttribute("vo", vo);
+		
+		List<MessageSendVO> list = messageService.readSendList(vo.getMemberId(), criteria);
+		model.addAttribute("list", list);
+		logger.info(list.toString());
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(criteria);
+		pageMaker.setTotalCount(messageService.getTotalCounts());
+		pageMaker.setPageData();
+		model.addAttribute("pageMaker", pageMaker);
+	}
+	
 	
 	// 쪽지 상세 보기
 	@GetMapping("/detail")
-	public void detail(Model model, Integer receiveMessageId, Integer sendMessageId, Integer page) {
-		logger.info("msg-detail() 호출");
-		if(receiveMessageId != null) { // 매개변수를 int로 사용하면 null 값 처리를 할 수 없음
-			MessageReceiveVO rvo = messageService.readByReceive(receiveMessageId);
+	public void detail(Model model, Integer receiveMsgId, Integer sendMsgId, Integer page) {
+		logger.info("msg-detail() 호출 receiveMessageId = " + receiveMsgId + " sendMessageId " + sendMsgId);
+		if(receiveMsgId != null) { // 매개변수를 int로 사용하면 null 값 처리를 할 수 없음
+			MessageReceiveVO rvo = messageService.readByReceive(receiveMsgId);
+			logger.info("받은 쪽지의 상세 rvo = " + rvo.toString());
 			model.addAttribute("vo", rvo);
 			model.addAttribute("sendOrReceive","receive");
-		}else if(sendMessageId != null){	
-			MessageSendVO svo = messageService.readBySend(sendMessageId);
+		}else if(sendMsgId != null){	
+			MessageSendVO svo = messageService.readBySend(sendMsgId);
+			logger.info("보낸 쪽지의 상세 rvo = " + svo.toString());
 			model.addAttribute("vo", svo);
 			model.addAttribute("sendOrReceive","send");
 		}

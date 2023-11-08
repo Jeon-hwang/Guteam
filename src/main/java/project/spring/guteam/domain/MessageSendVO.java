@@ -10,11 +10,24 @@ public class MessageSendVO {
 	String messageTitle;
 	String messageContent;
 	Date messageDateCreated;
-	String messageBox;
+	String messageSave;
 	
 	public MessageSendVO() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public MessageSendVO(int sendMessageId, String sendMemberId, String receiveMemberId, String receiveMemberNickname,
+			String messageTitle, String messageContent, Date messageDateCreated, String messageSave) {
+		super();
+		this.sendMessageId = sendMessageId;
+		this.sendMemberId = sendMemberId;
+		this.receiveMemberId = receiveMemberId;
+		this.receiveMemberNickname = receiveMemberNickname;
+		this.messageTitle = messageTitle;
+		this.messageContent = messageContent;
+		this.messageDateCreated = messageDateCreated;
+		this.messageSave = messageSave;
 	}
 
 	public int getSendMessageId() {
@@ -73,12 +86,12 @@ public class MessageSendVO {
 		this.messageDateCreated = messageDateCreated;
 	}
 
-	public String getMessageBox() {
-		return messageBox;
+	public String getMessageSave() {
+		return messageSave;
 	}
 
-	public void setMessageBox(String messageBox) {
-		this.messageBox = messageBox;
+	public void setMessageSave(String messageSave) {
+		this.messageSave = messageSave;
 	}
 
 	@Override
@@ -86,7 +99,7 @@ public class MessageSendVO {
 		return "MessageSendVO [sendMessageId=" + sendMessageId + ", sendMemberId=" + sendMemberId + ", receiveMemberId="
 				+ receiveMemberId + ", receiveMemberNickname=" + receiveMemberNickname + ", messageTitle="
 				+ messageTitle + ", messageContent=" + messageContent + ", messageDateCreated=" + messageDateCreated
-				+ ", messageBox=" + messageBox + "]";
+				+ ", messageSave=" + messageSave + "]";
 	}
 	
 	

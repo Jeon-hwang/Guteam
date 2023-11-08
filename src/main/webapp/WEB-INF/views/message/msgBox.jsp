@@ -85,7 +85,7 @@ td {
 }
 </style>
 <meta charset="UTF-8">
-<title>GUTEAM : ${vo.memberId }님의 쪽지함</title>
+<title>GUTEAM : ${vo.memberId }님의 쪽지 보관함</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
@@ -104,7 +104,6 @@ td {
 </div>
 <div id="board-top">
 	<button class="btn btn-light" onclick="deleteMsg()">삭제</button>
-	<button class="btn btn-light" onclick="saveMsg()">보관</button>
 </div>
 <div id="main">
 <table>
@@ -112,36 +111,37 @@ td {
 	<tr>
 		<th class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="allChk" id="allChk"></label></th>
 		<th style="width: 350px">제목</th>
-		<th style="width: 100px">받은 사람</th>
-		<th style="width: 100px">보낸 날짜</th>
+		<th style="width: 100px">보낸/받은 사람</th>
+		<th style="width: 100px">보낸/받은 날짜</th>
 	</tr>
 	</thead>
+	
 	<tbody>
 	<c:forEach var="pvo" items="${list }">
 	<tr>
-		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.sendMessageId }"></label></td>
-		<td class="title"><a href="../message/detail?sendMsgId=${pvo.sendMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
-		<td class="cen" >${pvo.receiveMemberId }</td>
-		<fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" var="messageDateCreated"/>
-		<td style="font-size: 10pt;">${messageDateCreated }</td>
+		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.receiveMessageId }"></label></td>
+		<td class="title"><a href="../message/detail?receiveMsgId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
+		<td class="cen" >${pvo.sendMemberNickname }</td>
+		<td style="font-size: 10pt;"><fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
 	</c:forEach>
 	</tbody>
 </table>
 <ul>
 	<c:if test="${pageMaker.hasPrev }">
-		<li><a href="sent?page=${pageMaker.startPageNo - 1}">이전</a></li>
+		<li><a href="list?page=${pageMaker.startPageNo - 1}">이전</a></li>
 	</c:if>
 	<c:forEach begin="${pageMaker.startPageNo }" end="${pageMaker.endPageNo }" var="num">
-		<li><a href="sent?page=${num }">${num }</a></li>
+		<li><a href="list?page=${num }">${num }</a></li>
 	</c:forEach>
 	<c:if test="${pageMaker.hasNext }">
-		<li><a href="sent?page=${pageMaker.endPageNo + 1 }">다음</a></li>
+		<li><a href="list?page=${pageMaker.endPageNo + 1 }">다음</a></li>
 	</c:if>
 </ul>
 </div>
 </div>
 <input type="hidden" id="alert" value="${alert }">
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var result = $('#alert').val();
@@ -179,7 +179,7 @@ td {
 	function deleteMsg() {
 		var msgArr = [];
 		var msgList = $('input[name="msgIdChk"]:checked');
-		var sendRecv = 'send';
+		var sendRecv = 'receive';
 		console.log(msgList); // jQuery.fn.init(8)
 		for(var i=0; i<msgList.length; i++) {
 			if(msgList[i].checked){
@@ -197,8 +197,8 @@ td {
 			
 			// 쪽지 삭제(ajax)
 			$.ajax({
-				url : '../message/delete/'+sendRecv,
 				type : 'DELETE',
+				url : '../message/delete/'+sendRecv,
 				contentType: 'application/json',
 				data : JSON.stringify(msgArr),
 				beforeSend : function(xhr) {
@@ -208,58 +208,15 @@ td {
 					console.log(result);
 					if(result == 1) {
 						alert("삭제가 완료되었습니다.")
-						location.href='sent';
+						location.href='list';
 					}else{
 						alert("삭제 실패");
 					}
 				}
 				
-			}); //end .ajax()
+			}); //end .ajax(삭제)
 		}
 	} //end deleteMsg()
-	
-	// 쪽지 저장 기능
-	function saveMsg() {
-		var msgArr = [];
-		var msgList = $('input[name="msgIdChk"]:checked');
-		var sendRecv = 'send';
-		console.log(msgList); // jQuery.fn.init(8)
-		for(var i=0; i<msgList.length; i++) {
-			if(msgList[i].checked){
-				msgArr.push(msgList[i].value);
-			}
-		}
-		if(msgArr.length == 0) {
-			alert("보관할 쪽지를 선택해 주세요.");
-		} else {
-			console.log(msgArr);
-			var reAlr = confirm("선택한 쪽지를 보관합니다.");
-			
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			
-			// 쪽지 저장(ajax)
-			$.ajax({
-				type : 'PUT',
-				url : '../message/box/'+sendRecv,
-				contentType: 'application/json',
-				data : JSON.stringify(msgArr),
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(header, token);
-			    },
-				success : function(result){
-					console.log(result);
-					if(result == 1) {
-						alert("쪽지가 보관되었습니다.")
-						location.href='sent';
-					}else{
-						alert("저장 실패");
-					}
-				}
-				
-			}); //end .ajax(저장)
-		}
-	} //end saveMsg()
 </script>
 
 </body>

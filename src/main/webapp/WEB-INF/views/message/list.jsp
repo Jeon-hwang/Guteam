@@ -121,7 +121,7 @@ td {
 	<c:forEach var="pvo" items="${list }">
 	<tr>
 		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.receiveMessageId }"></label></td>
-		<td class="title"><a href="../message/detail?messageId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
+		<td class="title"><a href="../message/detail?receiveMsgId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
 		<td class="cen" >${pvo.sendMemberNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
@@ -179,6 +179,7 @@ td {
 	function deleteMsg() {
 		var msgArr = [];
 		var msgList = $('input[name="msgIdChk"]:checked');
+		var sendRecv = 'receive';
 		console.log(msgList); // jQuery.fn.init(8)
 		for(var i=0; i<msgList.length; i++) {
 			if(msgList[i].checked){
@@ -196,8 +197,8 @@ td {
 			
 			// 쪽지 삭제(ajax)
 			$.ajax({
-				url : '../message/delete',
 				type : 'DELETE',
+				url : '../message/delete/'+sendRecv,
 				contentType: 'application/json',
 				data : JSON.stringify(msgArr),
 				beforeSend : function(xhr) {
@@ -213,9 +214,9 @@ td {
 					}
 				}
 				
-			}); //end .ajax()
+			}); //end .ajax(삭제)
 		}
-	}
+	} //end deleteMsg()
 	
 	// 쪽지 저장 기능
 	function saveMsg() {
@@ -238,8 +239,8 @@ td {
 			
 			// 쪽지 저장(ajax)
 			$.ajax({
-				url : '../message/box',
 				type : 'PUT',
+				url : '../message/box',
 				contentType: 'application/json',
 				data : JSON.stringify(msgArr),
 				beforeSend : function(xhr) {
@@ -255,9 +256,9 @@ td {
 					}
 				}
 				
-			}); //end .ajax()
+			}); //end .ajax(저장)
 		}
-	}
+	} //end saveMsg()
 </script>
 
 </body>
