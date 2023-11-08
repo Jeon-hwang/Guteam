@@ -55,6 +55,36 @@
 		        return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 		}
 			
+			function elapsedTime(date){ //날짜 비교해서 표시하기 
+				var startDate = new Date(date); // 비교할 날짜
+				var endDate = new Date(); // 현재 날짜
+				
+				var diff = (endDate - startDate) / 1000;
+				console.log(endDate-startDate);
+				console.log(diff);
+				
+				var times = [
+					{ name: dateFormat(date), milliSeconds: 60 * 60 * 24},
+				    { name: '시간', milliSeconds: 60 * 60 },
+				    { name: '분', milliSeconds: 60 },
+				  ];
+				
+				for(var i =0 ; i<times.length;i++){
+					var betweenTime = Math.floor(diff/times[i].milliSeconds);
+					console.log(betweenTime);
+					if(betweenTime > 0 && i == 0){
+						console.log("날짜로 출력");
+						return times[i].name;
+					}else if(betweenTime > 0 && i>0){
+						console.log("시간으로 출력");
+						return betweenTime+times[i].name+'전';
+					}
+				}
+				console.log("아직 시간 안댐");
+				return "방금 전";
+			}
+
+			
 			$("#commentContent").keydown(function(keyNum){
 				//현재의 키보드의 입력값을 keyNum으로 받음
 				if(keyNum.keyCode == 13){ 
@@ -152,7 +182,7 @@
 								+ '&nbsp&nbsp<span>'+nickname+'</span> :&nbsp&nbsp'
 								+ '<span id="commentContentView" width="100px">'+this.commentContent+'('+this.replyCnt+')</span>&nbsp&nbsp&nbsp&nbsp'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">&nbsp&nbsp&nbsp&nbsp'
-								+ '<span>'+dateFormat(commentDateCreated)+'</span>&nbsp&nbsp'
+								+ '<span>'+elapsedTime(commentDateCreated)+'</span>&nbsp&nbsp'
 								if(principalMemberId==this.memberId){
 						list += '<button class="update_comment" >수정</button>'
 								+ '<button class="update_comment_check" style="display:none" >수정확인</button>'
@@ -298,7 +328,7 @@
 							+ nickname + ':&nbsp&nbsp'	
 							+ '<input type="hidden" class="replyContent" value="'+this.replyContent+'">&nbsp&nbsp'
 							+ '<span id="replyView">'+this.replyContent + '</span>&nbsp&nbsp'
-							+ dateFormat(replyDateCreated) + '&nbsp&nbsp'
+							+ elapsedTime(replyDateCreated) + '&nbsp&nbsp'
 							if(principalMemberId==this.memberId){
 							list += '<button class="update_reply" >수정</button>'
 							+ '<button class="update_reply_check" style="display : none" >수정확인</button>'

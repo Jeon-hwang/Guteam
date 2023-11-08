@@ -17,10 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.domain.PurchasedVO;
@@ -97,5 +101,11 @@ public class PurchasedRESTController {
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 	
-	
+	@PutMapping("/cashUpdate/{memberId}")
+	@JsonProperty("cash")
+	public ResponseEntity<Integer> updateCash(@PathVariable String memberId,@RequestBody Integer cash){
+		logger.info("캐쉬 업데이트!");
+		int result = service.updateCash(memberId, cash);
+		return new ResponseEntity<Integer>(result,HttpStatus.OK);
+	}
 }

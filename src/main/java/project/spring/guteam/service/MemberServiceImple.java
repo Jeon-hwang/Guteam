@@ -70,7 +70,11 @@ public class MemberServiceImple implements MemberService {
 		return dao.delete(memberId);
 	}
 
-	
+	@Override
+	public int update(String memberId, int cash) {
+		logger.info("update() 호출 cash = "+cash+" memberId= "+memberId);
+		return dao.updateCash(cash, memberId);
+	}
 
 	
 

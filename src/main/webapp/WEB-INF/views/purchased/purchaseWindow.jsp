@@ -5,11 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
+<jsp:include page="../home.jsp" />
 <style type="text/css">
-	body{
+	main{
 		width : 1000px;
 		margin : auto;
+		color : white;
 	}
 	#waitingForPurchase{
 		width : 1000px;
@@ -33,10 +36,11 @@
 <body>
 	
 	<sec:authentication property="principal" var="principal"/>
+	<main>
 	<div id="waitingForPurchase">
 	<h2>구매 확인</h2>
 	<br>
-	나의 보유금 : <span id="myCash">${cash }</span> 
+	나의 보유금 : <span id="myCash">${memberVO.cash }</span> 
 	<table>
 		<thead>
 			<tr>
@@ -53,7 +57,7 @@
 					<td class="order"><input type="hidden" class="gameId" value="${vo.gameId }">${status.count }</td>
 					<td><img alt="${vo.gameName}" width="100px" height="100px"
 						src = "../game/display?fileName=${vo.gameImageName }"></td>
-					<td>${vo.gameName }</td>
+					<td class="gameName">${vo.gameName }</td>
 					<td class="price">${vo.price }</td>
 					<td>${vo.genre }</td>
 				</tr>
@@ -70,11 +74,16 @@
 	<button id="cancle">취소</button>
 	</div>
 	<input type="hidden" id="memberId" value=${principal.username }>
-		
+	<input type="hidden" id="memberEmail" value=${memberVO.email }>
+	<input type="hidden" id="memberPhone" value=${memberVO.phone }>
+	</main>
+	<jsp:include page="../footer.jsp"></jsp:include>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			var memberId = $('#memberId').val();
-			
+			var cash = parseInt($('#myCash').text());
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 			$(window).on('load',function totalPrice(){
 				var totalPrice = parseInt($('#totalPrice').text());
 				var price = $('.price');
@@ -86,18 +95,28 @@
 			});// end load(totalPrice)
 			
 			$('#buyNow').click(function(){
-				var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
 				var gameIdArr = $('.gameId');
 				var gameIds = [];
 				var priceArr = [];
 				
-				var cash = parseInt(($('#myCash').text()));
+				 // 현재 보유금이지만 나중에는 내가 직접 정할수 있게끔
 				var totalPrice = parseInt($('#totalPrice').text());
 				
-				console.log(cash);
+				var testEmail = $('#memberEmail').val();
+				console.log(testEmail);
+				/*var gameNameArr = $('.gameName');
+	        	var gameName = '';
+	        	if(gameNameArr.length>1){
+	        		gameName = gameNameArr.first().text()+"외 "+(gameNameArr.length-1)+'개';
+	        	}else{
+	        		gameName = gameNameArr.text();
+	        	}
+	        	console.log("게임 이름 :"+ gameName);*/
+
 				if(cash<totalPrice){
+					totalPrice = totalPrice-cash; // 일단은 보유금에서 깎지만 나중에 선택할 수 있게 한다.
 					alert('보유한 금액이 모자랍니다.');
+					requestPay(totalPrice);
 				}else{
 		
 				gameIdArr.each(function(){
@@ -119,10 +138,10 @@
 						headers : {
 							'Content-Type' : 'application/json'
 						},
-						data : gameId,
 						beforeSend : function(xhr) {
 					        xhr.setRequestHeader(header, token);
 					    },
+					    data : gameId,
 					    success : function(result){
 							console.log(result);
 							if(result==1){
@@ -142,7 +161,62 @@
 			$('#cancle').click(function(){
 				location.href = "../"
 			});// end cancle.click
-			
+			// --------------------------------- 결제시스템 -------------------------------
+	        var IMP = window.IMP; 
+	        IMP.init("imp54014882");  // 스토어 id 입력
+	      
+	        var today = new Date();   
+	        var hours = today.getHours(); // 시
+	        var minutes = today.getMinutes();  // 분
+	        var seconds = today.getSeconds();  // 초
+	        var milliseconds = today.getMilliseconds();
+	        var makeMerchantUid = hours +  minutes + seconds + milliseconds;
+	        
+
+	        function requestPay(totalPrice) {
+	        	var gameNameArr = $('.gameName');
+	        	var gameName = '';
+	        	
+	        	if(gameNameArr.length>1){
+	        		gameName = gameNameArr.first().text()+"외 "+(gameNameArr.length-1)+'개';
+	        	}else{
+	        		gameName = gameNameArr.text();
+	        	}
+	        	var price = 0;
+	            IMP.request_pay({
+	                pg : 'kakaopay', // 결제수단은 카카오 페이만 
+	                merchant_uid: "GT"+makeMerchantUid, // 고유 결제 번호 중복되면 결제 안됨 
+	                name : gameName, // 이름
+	                amount : totalPrice, //최종 가격
+	                buyer_email :  $('#memberEmail').val(),
+	                buyer_name : memberId,
+	                buyer_tel : $('#memberPhone').val(),
+	            }, function (rsp) { // callback
+	                if (rsp.success) {
+	                    console.log(rsp);
+	                    cash = totalPrice+cash;
+	                   
+	                    $.ajax({
+	    					type : 'PUT',
+	    					url : 'cashUpdate/'+memberId,
+	    					data : JSON.stringify(cash),
+	    					headers : {
+	    						'Content-Type' : 'application/json'
+	    					},
+	    					beforeSend : function(xhr) {
+	    				        xhr.setRequestHeader(header, token);
+	    				    },
+	    					success : function(result){
+	    						if(result==1){
+	    							 $('#buyNow').click();
+	    						}
+	    					}	
+	    				});//end ajax
+	                } else {
+	                    console.log(rsp);
+	                }
+	            });
+	        }
 			
 		});//end document
 	</script>

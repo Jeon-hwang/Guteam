@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import project.spring.guteam.domain.GameVO;
+import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.fileutil.MediaUtil;
 import project.spring.guteam.service.PurchasedService;
 
@@ -65,10 +66,10 @@ public class PurchasedController {
 			
 			Map<String, Object> data = purchasedService.readBuyGame(gameIds, principal.getName());
 			List<GameVO> list = (List<GameVO>) data.get("list");
-			int cash = (int) data.get("cash");
+			MemberVO memberVO = (MemberVO)data.get("vo");
 			
 			model.addAttribute("list", list);
-			model.addAttribute("cash", cash);
+			model.addAttribute("memberVO", memberVO);
   }
 	  @GetMapping("/download/{firstDirectory}/{secondDirectory}/{thirdDirectory}/{fileName:.+}") // :.+ <-- 확장자까지 입력
 	    public void downloadFile(@PathVariable("fileName") String fileName,

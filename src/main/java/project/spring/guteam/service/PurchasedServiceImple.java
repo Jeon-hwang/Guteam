@@ -1,5 +1,6 @@
 package project.spring.guteam.service;
 
+import java.lang.ProcessHandle.Info;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.GameVO;
+import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.domain.PurchasedVO;
 import project.spring.guteam.domain.WishListVO;
 import project.spring.guteam.persistence.GameDAO;
@@ -69,10 +71,10 @@ public class PurchasedServiceImple implements PurchasedService {
 			GameVO vo = (GameVO) gameDAO.select(Integer.parseInt(x));
 			list.add(vo);
 		}
-		int cash = memberDAO.select(memberId).getCash();
+		MemberVO vo = memberDAO.select(memberId);
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("list", list);
-		args.put("cash", cash);
+		args.put("vo", vo);
 		return args;
 	}
 	
@@ -121,5 +123,12 @@ public class PurchasedServiceImple implements PurchasedService {
 		args.put("friendIdList", friendIdList);
 		return args;
 	}
+
+	@Override
+	public int updateCash(String memberId, int cash) {
+		logger.info("updateCash 실행");
+		return memberDAO.updateCash(cash, memberId);
+	}
+	
 
 }

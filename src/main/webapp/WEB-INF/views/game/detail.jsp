@@ -102,111 +102,140 @@
 	</div>
 	</section>
 		<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
-		<script type="text/javascript">
-			$(document).ready(function(){
-			   showWishList();
-			   var checkGameId = [];
-			   var gameIdInput = $('#gameIdInput');
-			   var totalPriceInput = $('#totalPriceInput');
-			   
-			   function showWishList(){
-				  var memberId = $('#memberId').val();
-				  console.log(memberId);
-				  var list = '';
-				  var url = 'all/'+memberId;
-				  $.getJSON(
-						url,
-						function(data){
-						   console.log(data);
-						   $(data).each(function(){
-							  console.log(this);
-							  list +=   '<li class="wish_list_item">'
-								  + '<input type="hidden" class="gameId" value='+this.gameId+'>'
-								  + '<input type="checkbox" class="listCheck">'
-								  + '<img alt="'+this.gameName+'" width="100px" height="100px"'
-								  + 'src="../game/display?fileName='+this.gameImageName+'">'
-								  + '<span id="gameName"><a href=../game/detail?gameId='+this.gameId+'>'+this.gameName+'</a></span>'
-								  + '<span class="genre">'+this.genre+'</span>'
-								  + '<span class="showPrice">￦'+this.price+'</span>'
-								  + '<input type="hidden" class="price" value='+this.price+'>'
-								  + '<div class="buy_or_remove">'
-								  + '<button class="oneBuyBtn">구매</button>'
-								  + '<button class="removeWishList">X</button></div>'
-								  + '</li>'
-								  + '<hr>';
-						   });//end data.each
-						   
-						   $('.wish_list').html(list);
-						   
-						});// end getJSON
-			   }//end showWishList()
-			   $('.wish_list').on('click','.wish_list_item .buy_or_remove .removeWishList',function(){
-				  var gameId = $(this).parent().prevAll('.gameId').val();
-				  var memberId = $('#memberId').val();
-				  var token = $("meta[name='_csrf']").attr("content");
-				  var header = $("meta[name='_csrf_header']").attr("content");
-				  $.ajax({
-					 type : 'DELETE',
-					 url : memberId,
-					 headers : {
-						'Content-Type' : 'application/json'
-					 },
-					 data : gameId,
-					 beforeSend : function(xhr) {
-						  xhr.setRequestHeader(header, token);
-					  },
-					 success : function(result){
-						console.log(result);
-						if(result==1){
-						   alert('위시리스트 제거 성공');
-						   showWishList();
-						}
+<script type="text/javascript">
+	$(document).ready(function(){
+		var updateResult = $('#updateResult').val();
+		if(updateResult=='success'){
+			alert('게임 정보 수정 성공'); 	
+		}
+		var xOffset = 10;
+        var yOffset = 30;
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var gameId = $('#gameId').val();
+		var memberId = $('#username').val();
+		
+		$('#addWishList').click(function(){
+			var obj = {
+					'gameId' : gameId,
+					'memberId' : memberId
+			}
+			
+			$.ajax({
+				type : 'POST',
+				url : '../wishList',
+				headers : {
+					'Content-Type' : 'application/json'
+				},
+				data : JSON.stringify(obj),
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				success : function(result){
+					console.log(result);
+					if(result==1){
+						alert('위시리스트 추가 성공');
+						checkMyGame();
+					}else{
+						alert('이미 추가 되었습니다.');
+						checkMyGame();
+					}
+				}
+			});// end ajax
+		}); // end add_wish_list.click
+		checkMyGame();
+		function checkMyGame(){
+			var firstUrl = "../purchased/find/"+memberId+'?gameId='+gameId;
+			var secondUrl = '../wishList/find/'+memberId+'?gameId='+gameId;
+			$.getJSON(
+					firstUrl,
+					function(data){
+						console.log(data);
+						if(data == null){
+					
+						 }else{ // 게임을 보유하고 있을경우
+						$('#alreadyOwnGame').css("display","inline");
+						$('#addWishList').css("display","none");
+						$('#buyown').css("display","none");
 					 }
-				  });// end ajax
-			   });//end removeWishList.click
-			   
-			   $('.wish_list').on('click','.wish_list_item .listCheck',function(){
-				  var price = parseInt($(this).nextAll('.price').val());
-				  var totalPrice = parseInt($('#totalPrice').text());
-				  var gameId = $(this).prevAll('.gameId').val();
-				  if($(this).is(':checked')){
-					 //console.log("체크 수행 확인!");
-					 console.log("가격? "+price);
-					 totalPrice += price;
-					 checkGameId.push(gameId);
-					 //console.log(checkGameId);
-				  }else{
-					 totalPrice  -= price;
-					 checkGameId = checkGameId.filter((element) => element != gameId);
-					 //console.log(checkGameId);
-				  }
-				  $(gameIdInput).attr('value',checkGameId);
-				  console.log($(gameIdInput).attr('value'));
-				  if($(gameIdInput).attr('value')!=''){
-				  
-					 $("#submit").removeAttr("disabled");
-				  
-				  }else{
-					 $('#submit').attr("disabled",'disabled');
-				  }
-				  $('#totalPrice').html(totalPrice);
-			   });// end wish_list_item.on
-			   
-			   $('#allBuy').click(function(){
-				  console.log("전체 구매버튼 클릭");
-				  console.log(checkGameId);
-				  
-			   });
-			   
-			   $('.wish_list').on('click','.wish_list_item .oneBuyBtn',function(){
-				  
-				  var gameId = $(this).parent().prevAll('.gameId').val();
-				  console.log("gmaeId="+gameId);
-				  
-				  location.href = "../purchased/purchaseWindow?gameIds="+gameId;
-			   }); // end oneBuyBtn
-			   
-			}); // end document
-		 </script>
+			});//end firstJson 
+			
+			$.getJSON(
+					secondUrl,
+					function(gameData){
+						console.log(gameData);
+						if(gameData != null){
+							$('#addWishList').css("display","none");
+							$('#removeWishList').css("display","inline");
+						}
+			});//end secondJson					
+		}//end removeWishListOn()
+		$('#removeWishList').click(function(){
+			
+			$.ajax({
+				type : 'DELETE',
+				url : '../wishList/'+memberId,
+				headers : {
+					'Content-Type' : 'application/json'
+				},
+				data : gameId,
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				success : function(result){
+					console.log(result);
+					if(result==1){
+						alert('위시리스트 제거 성공');
+						$('#addWishList').css("display","inline");
+						$('#removeWishList').css("display","none");
+					}else{
+						alert("이미 제거 되었습니다.");
+						$('#addWishList').css("display","inline");
+						$('#removeWishList').css("display","none");
+					}
+				}
+			});// end ajax
+		});//end removeWishList.click
+		showGameOwnFriend();
+		function showGameOwnFriend(){
+				var url = "../purchased/findFriends/"+memberId+'?gameId='+gameId;
+				var list = $('#friendsList').html();
+				$.getJSON(
+					url,
+					function(data){
+						$(data.imageNameList).each(function(index){
+							//console.log(data.friendIdList[index]);
+							//console.log("인덱스가 나오나?"+index);
+							list += '<li class="profileImg">' 
+								 + '<img alt="'+data.friendIdList[index]+'" width="50px" height="50px" title="'+data.friendIdList[index]+'" src="display?fileName='+this+'">'
+								 + '</li>';
+						});
+						$('#friendsList').html(list);
+					}
+				);//end getJSON
+		}// end showGameOwnFriend()
+		
+		$('#friendsOwnGame').on('mouseover','#friendsList .profileImg',function(e){
+			//console.log('오리자');
+			 var image_data = $(this).children().data("image");
+			// console.log('확인!'+$(this).children().attr('alt'));
+			 $("body").append("<p id='preview'><img src='"+ $(this).children().attr("src") +"' width='100px' />"+ $(this).children().attr('alt') +"</p>");
+			 $("#preview")
+	            .css("top",(e.pageY - xOffset) + "px")
+	            .css("left",(e.pageX + yOffset) + "px")
+	            .fadeIn("fast");
+		});//end profileImg.mouseover 
+		$('#friendsOwnGame').on('mouseout','#friendsList .profileImg',function(){
+			//console.log('내리자');
+			$("#preview").remove();
+		});//end profileImg.mouseover 
+		
+		$('#friendsOwnGame').on('mousemove','#friendsList .profileImg',function(e){
+            $("#preview")
+            .css("top",(e.pageY - xOffset) + "px")
+            .css("left",(e.pageX + yOffset) + "px");
+        });
+	});// document
+	</script>
 	  </body>
 	  </html>

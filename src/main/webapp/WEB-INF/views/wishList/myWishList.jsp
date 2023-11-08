@@ -13,6 +13,7 @@
 <style type="text/css">
 	body{
 		display:block;
+		color: white;
 	}
 
 	.wish_list_area li{
