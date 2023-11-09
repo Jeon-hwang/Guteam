@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import project.spring.guteam.domain.MessageReceiveVO;
+import project.spring.guteam.domain.MessageSaveVO;
 import project.spring.guteam.pageutil.PageCriteria;
 
 @Repository // @Component
@@ -35,7 +36,7 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 	}
 
 	@Override
-	public List<MessageReceiveVO> selectN(String receiveMemberId, PageCriteria criteria) {
+	public List<MessageReceiveVO> select(String receiveMemberId, PageCriteria criteria) {
 		logger.info("paging-select() 호출");
 		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
 		logger.info("receiveMemberId ? " + receiveMemberId); 
@@ -47,15 +48,15 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 	}
 	
 	@Override
-	public List<MessageReceiveVO> selectY(String receiveMemberId, PageCriteria criteria) {
+	public List<MessageSaveVO> selectSaved(String memberId, PageCriteria criteria) {
 		logger.info("paging-select() 호출");
 		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
-		logger.info("receiveMemberId ? " + receiveMemberId); 
+		logger.info("MemberId ? " + memberId); 
 		Map<String, Object> args = new HashMap<>();
-		args.put("receiveMemberId", receiveMemberId);
+		args.put("memberId", memberId);
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
-		return sqlSession.selectList(NAMESPACE + ".select_paging_y", args);
+		return sqlSession.selectList(NAMESPACE + ".select_save_message", args);
 	}
 	
 	@Override

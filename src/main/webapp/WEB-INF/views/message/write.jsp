@@ -94,7 +94,7 @@ thead {
 	<br>
 	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
 	<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
-	<li><button class="btn btn-light">쪽지 보관함</button></li>
+	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
 <div id="board-top">

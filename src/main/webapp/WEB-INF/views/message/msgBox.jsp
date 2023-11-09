@@ -99,7 +99,7 @@ td {
 	<br>
 	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
 	<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
-	<li><button class="btn btn-light">쪽지 보관함</button></li>
+	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
 <div id="board-top">
@@ -117,12 +117,12 @@ td {
 	</thead>
 	
 	<tbody>
-	<c:forEach var="pvo" items="${list }">
+	<c:forEach var="svo" items="${list }">
 	<tr>
-		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.receiveMessageId }"></label></td>
-		<td class="title"><a href="../message/detail?receiveMsgId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
-		<td class="cen" >${pvo.sendMemberNickname }</td>
-		<td style="font-size: 10pt;"><fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" /></td>
+		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${svo.messageId }"></label></td>
+		<td class="title"><a href="../message/detail?receiveMsgId=${svo.messageId}&page=${pageMaker.criteria.page}">${svo.fromTo}${svo.title }</a></td>
+		<td class="cen" >${svo.fromToNickname }</td>
+		<td style="font-size: 10pt;"><fmt:formatDate value="${svo.dateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
 	</c:forEach>
 	</tbody>

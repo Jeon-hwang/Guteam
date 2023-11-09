@@ -30,19 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	and ${messageSave} = 'N' order by ${sendMessageId} desc)a
 	 ) where rn between #{start} and #{end}
 	 </select>
-	 
-	 <select id="select_paging_y" resultType="MessageSendVO">
-	 select ${sendMessageId}, ${sendMemberId}, ${receiveMemberId}, ${receiveMemberNickname}, 
-	 ${messageTitle}, ${messageContent}, ${messageDateCreated}, ${messageSave}
-	 from (
-	 select rownum rn, a.* 
-	 	from (select * from ${message_send} where ${sendMemberId} = #{sendMemberId} 
-	 	and ${messageSave} = 'Y' order by ${sendMessageId} desc)a
-	 ) where rn between #{start} and #{end}
-	 </select>
-	 
-	 
-	 
+
 	 <update id="update_box">
 	 update ${message_send}
 	 set ${messageSave} = #{messageSave}

@@ -121,6 +121,16 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	<property name="memberId" value="member_id"/>
 	 	<property name="gameId" value="game_id"/>
 	 	<property name="viewedDate" value="viewed_date"/>
+	 	
+	 	<property name="messageId" value="message_id"/>
+	 	<property name="memberId" value="member_id"/>
+	 	<property name="fromToId" value="from_to_id"/>
+	 	<property name="fromToNickname" value="from_to_nickname"/>
+	 	<property name="fromTo" value="from_to"/>
+	 	<property name="title" value="title"/>
+	 	<property name="content" value="content"/>
+	 	<property name="dateCreated" value="date_created"/>
+	 	
 	 <!-- name은 vo변수와 이름 같게 -->
 	 <!--  select()호출시 name에 대소문자 구분을 안함 이거 따로 mybatis에 태그 넣어줘야하는데 이거 반드시 기억 -->
 	 </properties>
