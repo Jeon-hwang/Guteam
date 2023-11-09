@@ -71,14 +71,11 @@ public class PurchasedController {
 			model.addAttribute("list", list);
 			model.addAttribute("memberVO", memberVO);
   }
-	  @GetMapping("/download/{firstDirectory}/{secondDirectory}/{thirdDirectory}/{fileName:.+}") // :.+ <-- 확장자까지 입력
-	    public void downloadFile(@PathVariable("fileName") String fileName,
-	    		@PathVariable("firstDirectory") String firstDirectory,
-	    		@PathVariable("secondDirectory") String secondDirectory,
-	    		@PathVariable("thirdDirectory") String thirdDirectory,HttpServletResponse response) throws IOException {
+	  @GetMapping("/download/{fileName:.+}") // :.+ <-- 확장자까지 입력
+	    public void downloadFile(@PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
 			
 			logger.info("1.파일 이름:"+fileName);
-			Path sourceFilePath = Paths.get(uploadPath+"/"+firstDirectory+"/"+secondDirectory+"/"+thirdDirectory).resolve(fileName); // Paths.get(경로(String)) 파일 절대 경로 
+			Path sourceFilePath = Paths.get(uploadPath).resolve(fileName); // Paths.get(경로(String)) 파일 절대 경로 
 																		 // resolve(String) String 부분 덧붙이기
 	        File sourceFile = sourceFilePath.toFile(); // toFIle : 해당 경로의 파일화
 	        logger.info(sourceFilePath.toString());
@@ -122,7 +119,7 @@ public class PurchasedController {
 	      
 	    }
 	  
-	  @GetMapping("runningGame/****/**/**/{fileName:.+}")
+	  @GetMapping("runningGame/{fileName:.+}")
 	  public ResponseEntity<byte[]> runningGame(@PathVariable("fileName") String fileName,	HttpServletResponse response) {
 				logger.info("display() 호출");
 

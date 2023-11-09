@@ -1,6 +1,9 @@
 package project.spring.guteam.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -59,6 +62,15 @@ public class PurchasedRESTController {
 		logger.info("read 실행");
 		List<PurchasedVO> purchasedList = service.read(memberId);
 		List<GameVO> gameList = service.readGame(memberId);
+		for(GameVO vo : gameList) {
+			String gameImageName=vo.getGameImageName();
+			try {
+				gameImageName = URLDecoder.decode(vo.getGameImageName(), "utf-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} 
+			vo.setGameImageName(gameImageName);
+		}
 		HashMap<String , Object> args = new HashMap<String, Object>();
 		args.put("purchasedList", purchasedList);
 		args.put("gameList", gameList);
@@ -85,7 +97,7 @@ public class PurchasedRESTController {
 	}
 	//"../purchased/findFriends/"+memberId+'?gameId='+gameId;
 	
-	@GetMapping(value="check/****/**/**/{fileName:.+}")
+	@GetMapping(value="check/{fileName:.+}")
 	public ResponseEntity<String> checkFile(@PathVariable String fileName) {
 		logger.info("파일 확인 : "+fileName);
 		String result="N";

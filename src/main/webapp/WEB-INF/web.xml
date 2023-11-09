@@ -53,8 +53,6 @@
 	<filter-mapping>
 		<filter-name>encoding</filter-name>
 		<url-pattern>/*</url-pattern>
-		<!-- ASYNC -->
-		<dispatcher>ASYNC</dispatcher>
 	</filter-mapping>
 	<filter>
 		<display-name>springMultipartFilter</display-name>

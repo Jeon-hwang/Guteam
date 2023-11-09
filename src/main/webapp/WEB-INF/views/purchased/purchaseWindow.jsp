@@ -84,15 +84,7 @@
 			var cash = parseInt($('#myCash').text());
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-			$(window).on('load',function totalPrice(){
-				var totalPrice = parseInt($('#totalPrice').text());
-				var price = $('.price');
-				console.log(price);
-				price.each(function(){
-					 totalPrice = totalPrice + parseInt($(this).text());
-				});
-				$('#totalPrice').html(totalPrice);
-			});// end load(totalPrice)
+			totalPrice();
 			
 			$('#buyNow').click(function(){
 				var gameIdArr = $('.gameId');
@@ -219,6 +211,15 @@
 	        }
 			
 		});//end document
+		function totalPrice(){
+			var totalPrice = parseInt($('#totalPrice').text());
+			var price = $('.price');
+			console.log(price);
+			price.each(function(){
+				 totalPrice = totalPrice + parseInt($(this).text());
+			});
+			$('#totalPrice').html(totalPrice);
+		}
 	</script>
 </body>
 </html>

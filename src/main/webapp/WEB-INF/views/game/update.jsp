@@ -23,7 +23,7 @@
 <h1>${vo.gameName } 수정</h1>
 </div>
 <div class="formArea">
-<form action="update" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+<form action="update" method="post" enctype="multipart/form-data" accept-charset="utf-8" >
 <sec:csrfInput/>
 <div class="info">
 <div class="caption">
@@ -35,11 +35,12 @@
 <div class="inputArea">
 <input type="hidden" name="prevListUrl" value="${prevListUrl }">
 <input type="hidden" id="gameId" name="gameId" value="${vo.gameId }">
-<input type="text" name="gameName" value="${vo.gameName }" required><br>
+<input type="text" id="gameName" name="gameName" value="${vo.gameName }" required><br>
 <input type="number" name="price" value="${vo.price }" required><br>
 <input type="text" name="genre" value="${vo.genre }" required><br>
 <img class="file-drop" width="300px" height="300px" alt="${vo.gameName }" src="display?fileName=${vo.gameImageName }"><br>
 <input type="file" name="file" id="file" accept="image/*" onchange="display(event)">
+<label for="file" class="btn btn-secondary"><i class="bi bi-file-earmark-arrow-up-fill"></i></label>
 <input type="hidden" class="gameImageName" name="gameImageName" value="${vo.gameImageName }">
 <!-- <img alt="${vo.gameImageName }" src=""> -->
 <br>
@@ -103,7 +104,6 @@
 			reader.readAsDataURL(event.target.files[0]);
 			console.log(event.target.result);
 		}; // display
-		
 	</script>
 
 
