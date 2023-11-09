@@ -31,7 +31,7 @@ public class SseController {
 	public ResponseEntity<SseEmitter> connect(@PathVariable("memberId") String memberId){
 		logger.info("connect! :" + memberId);
 		SseEmitter emitter = new SseEmitter(60 * 1000L * 10);
-		sseEmitters.add(emitter);
+		sseEmitters.add(memberId, emitter);
 		return ResponseEntity.ok(emitter);
 	}
 	

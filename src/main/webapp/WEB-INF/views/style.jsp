@@ -160,7 +160,16 @@ body {
 }
 .insertComment{
 	display:flex;
-	align-items: center;
+	align-items:center;
+}
+.comment_item{
+	word-wrap:break-word;
+	white-space:normal;
+}
+.comment_item pre{
+	white-space:normal;
+	display:flex;
+	flex-wrap:wrap;
 }
 .insertComment input, button{
 	margin-left: 5px;
@@ -201,6 +210,9 @@ body {
 .boardTitle, .boardContent{
 	background-color: #0d131b;
 	color:#8c8b8a;
+	white-space:normal;
+	width:100%;
+	word-wrap: break-word;
 }
 .boardTitle{
 	display:flex;

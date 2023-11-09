@@ -39,6 +39,7 @@
 			if(result == 'success'){
 			alert('가입 성공!');
 		}
+
 	});
 </script>
 
