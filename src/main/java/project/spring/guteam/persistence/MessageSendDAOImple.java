@@ -42,8 +42,19 @@ public class MessageSendDAOImple implements MessageSendDAO {
 		args.put("sendMemberId", sendMemberId);
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
-		return sqlSession.selectList(NAMESPACE + ".select_paging", args);
+		return sqlSession.selectList(NAMESPACE + ".select_paging_n", args);
 	}
+	
+//	@Override
+//	public List<MessageSendVO> selectY(String sendMemberId, PageCriteria criteria) {
+//		logger.info("paging-select() 호출");
+//		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
+//		Map<String, Object> args = new HashMap<>();
+//		args.put("sendMemberId", sendMemberId);
+//		args.put("start", criteria.getStart());
+//		args.put("end", criteria.getEnd());
+//		return sqlSession.selectList(NAMESPACE + ".select_paging_y", args);
+//	}
 	
 	@Override
 	public int update(String messageBox, int sendMessageId) {

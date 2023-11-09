@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 select * from ${message_receive} where ${receiveMessageId} = #{receiveMessageId}
 	 </select>
 	 	 
-	 <select id="select_paging" resultType="MessageReceiveVO">
+	 <select id="select_paging_n" resultType="MessageReceiveVO">
 	 select ${receiveMessageId}, ${receiveMemberId}, ${sendMemberId}, ${sendMemberNickname}, 
 	 ${messageTitle}, ${messageContent}, ${messageDateCreated}, ${messageSave}
 	 from (
@@ -30,14 +30,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	and ${messageSave} = 'N' order by ${receiveMessageId} desc)a
 	 ) where rn between #{start} and #{end}
 	 </select>
-	 
-	 <!-- <select id="select_to_paging" resultType="MessageVO">
-	 select ${receiveMessageId}, ${receiveMemberId}, ${sendMemberId}, ${sendMemberNickname}, ${messageTitle}, ${messageContent}, ${messageDateCreated}
-	 from (
-	 select rownum rn, a.* 
-	 	from (select * from ${message_receive} where ${sendMemberId} = #{sendMemberId} order by ${receiveMessageId} desc)a
-	 ) where rn between #{start} and #{end}
-	 </select> -->
 	 
 	 <update id="update_box">
 	 update ${message_receive}
@@ -53,5 +45,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 delete from ${message_receive} where ${receiveMessageId} = #{receiveMessageId}
 	 </delete>
 	 
+	 <select id="select_save_message" resultType="MessageSaveVO">
+	 	select message_id, member_id, from_to_id, from_to_nickname, from_to, title, content, date_created
+	 	from(select rownum rn, a.* from(
+	 	select * from(select ${sendMessageId} as message_id,
+	 			${sendMemberId} as member_id,
+	 			${receiveMemberId} as from_to_id,
+	 			${receiveMemberNickname} as from_to_nickname,
+	 			'[보낸 편지]' as from_to, 
+	 			${messageTitle} as title,
+	 			${messageContent} as content,
+	 			${messageDateCreated} as date_created
+	 	from ${message_send} where ${sendMemberId}=#{memberId} and ${messageSave}='Y'
+	 	union all
+	 	select ${receiveMessageId} as message_id,
+	 			${receiveMemberId} as member_id,
+	 			${sendMemberId} as from_to_id,
+	 			${sendMemberNickname} as from_to_nickname,
+	 			'[받은 편지]' as from_to,
+	 			${messageTitle} as title,
+	 			${messageContent} as content,
+	 			${messageDateCreated} as date_created
+	 	from ${message_receive} where ${receiveMemberId}=#{memberId} and ${messageSave}='Y')
+	 	order by date_created desc)a )
+	 	where rn between #{start} and #{end}
+	 	
+	 	
+	 </select>
 	 
 </mapper>

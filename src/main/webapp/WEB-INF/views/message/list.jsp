@@ -99,7 +99,7 @@ td {
 	<br>
 	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
 	<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
-	<li><button class="btn btn-light">쪽지 보관함</button></li>
+	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
 <div id="board-top">
@@ -192,29 +192,33 @@ td {
 			console.log(msgArr);
 			var reAlr = confirm("선택한 쪽지를 삭제합니다.");
 			
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			
-			// 쪽지 삭제(ajax)
-			$.ajax({
-				type : 'DELETE',
-				url : '../message/delete/'+sendRecv,
-				contentType: 'application/json',
-				data : JSON.stringify(msgArr),
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(header, token);
-			    },
-				success : function(result){
-					console.log(result);
-					if(result == 1) {
-						alert("삭제가 완료되었습니다.")
-						location.href='list';
-					}else{
-						alert("삭제 실패");
-					}
-				}
+			if(reAlr == true){
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
 				
-			}); //end .ajax(삭제)
+				// 쪽지 삭제(ajax)
+				$.ajax({
+					type : 'DELETE',
+					url : '../message/delete/'+sendRecv,
+					contentType: 'application/json',
+					data : JSON.stringify(msgArr),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(result){
+						console.log(result);
+						if(result == 1) {
+							alert("삭제가 완료되었습니다.")
+							location.href='list';
+						}else{
+							alert("삭제 실패");
+						}
+					}
+				}); //end .ajax(삭제)
+				
+			} else if(reAlr == false){
+				console.log("삭제 취소");
+			}
 		}
 	} //end deleteMsg()
 	
@@ -222,6 +226,7 @@ td {
 	function saveMsg() {
 		var msgArr = [];
 		var msgList = $('input[name="msgIdChk"]:checked');
+		var sendRecv = 'receive';
 		console.log(msgList); // jQuery.fn.init(8)
 		for(var i=0; i<msgList.length; i++) {
 			if(msgList[i].checked){
@@ -234,29 +239,33 @@ td {
 			console.log(msgArr);
 			var reAlr = confirm("선택한 쪽지를 보관합니다.");
 			
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			
-			// 쪽지 저장(ajax)
-			$.ajax({
-				type : 'PUT',
-				url : '../message/box',
-				contentType: 'application/json',
-				data : JSON.stringify(msgArr),
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(header, token);
-			    },
-				success : function(result){
-					console.log(result);
-					if(result == 1) {
-						alert("쪽지가 보관되었습니다.")
-						location.href='list';
-					}else{
-						alert("저장 실패");
-					}
-				}
+			if(reAlr == true){
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
 				
-			}); //end .ajax(저장)
+				// 쪽지 저장(ajax)
+				$.ajax({
+					type : 'PUT',
+					url : '../message/box/'+sendRecv,
+					contentType: 'application/json',
+					data : JSON.stringify(msgArr),
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(result){
+						console.log(result);
+						if(result == 1) {
+							alert("쪽지가 보관되었습니다.")
+							location.href='list';
+						}else{
+							alert("저장 실패");
+						}
+					}
+					
+				}); //end .ajax(저장)
+			} else if(reAlr == false) {
+				console.log("보관 취소");
+			}
 		}
 	} //end saveMsg()
 </script>

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.domain.MessageReceiveVO;
 import project.spring.guteam.domain.MessageSendVO;
+import project.spring.guteam.domain.MessageSaveVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.MemberService;
@@ -123,7 +124,7 @@ public class MessageController {
 		}
 		model.addAttribute("vo", vo);
 		
-		List<MessageSendVO> list = messageService.readSendList(vo.getMemberId(), criteria);
+		List<MessageSaveVO> list = messageService.readSavedList(vo.getMemberId(), criteria);
 		model.addAttribute("list", list);
 		logger.info(list.toString());
 		

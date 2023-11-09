@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import project.spring.guteam.domain.MessageReceiveVO;
+import project.spring.guteam.domain.MessageSaveVO;
 import project.spring.guteam.pageutil.PageCriteria;
 
 @Repository // @Component
@@ -43,7 +44,19 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 		args.put("receiveMemberId", receiveMemberId);
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
-		return sqlSession.selectList(NAMESPACE + ".select_paging", args);
+		return sqlSession.selectList(NAMESPACE + ".select_paging_n", args);
+	}
+	
+	@Override
+	public List<MessageSaveVO> selectSaved(String memberId, PageCriteria criteria) {
+		logger.info("paging-select() 호출");
+		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
+		logger.info("MemberId ? " + memberId); 
+		Map<String, Object> args = new HashMap<>();
+		args.put("memberId", memberId);
+		args.put("start", criteria.getStart());
+		args.put("end", criteria.getEnd());
+		return sqlSession.selectList(NAMESPACE + ".select_save_message", args);
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.MessageReceiveVO;
 import project.spring.guteam.domain.MessageSendVO;
+import project.spring.guteam.domain.MessageSaveVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.MemberDAO;
 import project.spring.guteam.persistence.MessageReceiveDAO;
@@ -75,13 +76,19 @@ public class MessageServiceImple implements MessageService {
 	@Override
 	public List<MessageSendVO> readSendList(String sendMemberId, PageCriteria criteria) {
 		logger.info("page-read() 호출");
-		return msgSendDAO.select(sendMemberId, criteria);
+			return msgSendDAO.select(sendMemberId, criteria);
 	}
 	
 	@Override
 	public List<MessageReceiveVO> readReceiveList(String receiveMemberId, PageCriteria criteria) {
 		logger.info("page-read() 호출");
-		return msgReceiveDAO.select(receiveMemberId, criteria);
+			return msgReceiveDAO.select(receiveMemberId, criteria);
+	}
+	
+	@Override
+	public List<MessageSaveVO> readSavedList(String memberId, PageCriteria criteria) {
+		logger.info("readSaved() 호출");
+		return msgReceiveDAO.selectSaved(memberId, criteria);
 	}
 	
 	@Override
@@ -99,7 +106,6 @@ public class MessageServiceImple implements MessageService {
 			logger.info("msgReceiveDAO.update로");
 			return msgReceiveDAO.update(messageBox, messageId);			
 		}
-		
 	}
 
 	@Override
