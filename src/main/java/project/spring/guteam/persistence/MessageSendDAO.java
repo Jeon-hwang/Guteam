@@ -14,7 +14,10 @@ public interface MessageSendDAO {
 	MessageSendVO select(int sendMessageId);
 	
 	// 보낸 메세지 조회 - 페이징 리스트 데이터
-	List<MessageSendVO> select(String sendMemberId, PageCriteria criteria);
+	List<MessageSendVO> selectN(String sendMemberId, PageCriteria criteria);
+	
+	// 보낸 메시지 조회 (보관)
+	List<MessageSendVO> selectY(String sendMemberId, PageCriteria criteria);
 	
 	// 메시지 보관
 	int update(String messageBox, int sendMessageId);

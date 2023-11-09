@@ -14,7 +14,10 @@ public interface MessageReceiveDAO {
 	MessageReceiveVO select(int receiveMessageId);
 	
 	// 받은 메세지 조회 - 페이징 리스트 데이터
-	List<MessageReceiveVO> select(String receiveMemberId, PageCriteria criteria);
+	List<MessageReceiveVO> selectN(String receiveMemberId, PageCriteria criteria);
+	
+	// 받은 메시지 조회 (보관)
+	List<MessageReceiveVO> selectY(String receiveMemberId, PageCriteria criteria);
 	
 	// 메시지 보관
 	int update(String messageBox, int receiveMessageId);

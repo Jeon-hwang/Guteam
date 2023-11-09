@@ -73,15 +73,27 @@ public class MessageServiceImple implements MessageService {
 	}
 
 	@Override
-	public List<MessageSendVO> readSendList(String sendMemberId, PageCriteria criteria) {
+	public List<MessageSendVO> readSendList(String sendMemberId, String check, PageCriteria criteria) {
 		logger.info("page-read() 호출");
-		return msgSendDAO.select(sendMemberId, criteria);
+		if(check.equals("N")) {
+			return msgSendDAO.selectN(sendMemberId, criteria);
+		} else if(check.equals("Y")) {
+			return msgSendDAO.selectY(sendMemberId, criteria);
+		} else {
+			return null;
+		}
 	}
 	
 	@Override
-	public List<MessageReceiveVO> readReceiveList(String receiveMemberId, PageCriteria criteria) {
+	public List<MessageReceiveVO> readReceiveList(String receiveMemberId, String check, PageCriteria criteria) {
 		logger.info("page-read() 호출");
-		return msgReceiveDAO.select(receiveMemberId, criteria);
+		if(check.equals("N")) {
+			return msgReceiveDAO.selectN(receiveMemberId, criteria);
+		} else if(check.equals("Y")) {
+			return msgReceiveDAO.selectY(receiveMemberId, criteria);
+		} else {
+			return null;
+		}
 	}
 	
 	@Override

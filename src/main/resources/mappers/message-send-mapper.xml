@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 select * from ${message_send} where ${sendMessageId} = #{sendMessageId}
 	 </select>
 	 	 
-	 <select id="select_paging" resultType="MessageSendVO">
+	 <select id="select_paging_n" resultType="MessageSendVO">
 	 select ${sendMessageId}, ${sendMemberId}, ${receiveMemberId}, ${receiveMemberNickname}, 
 	 ${messageTitle}, ${messageContent}, ${messageDateCreated}, ${messageSave}
 	 from (
@@ -31,13 +31,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 ) where rn between #{start} and #{end}
 	 </select>
 	 
-	 <!-- <select id="select_to_paging" resultType="MessageVO">
-	 select ${messageId}, ${receiveMemberId}, ${sendMemberId}, ${sendMemberNickname}, ${messageTitle}, ${messageContent}, ${messageDateCreated}
+	 <select id="select_paging_y" resultType="MessageSendVO">
+	 select ${sendMessageId}, ${sendMemberId}, ${receiveMemberId}, ${receiveMemberNickname}, 
+	 ${messageTitle}, ${messageContent}, ${messageDateCreated}, ${messageSave}
 	 from (
 	 select rownum rn, a.* 
-	 	from (select * from ${message_send} where ${sendMemberId}=#{sendMemberId} order by ${messageId} desc)a
+	 	from (select * from ${message_send} where ${sendMemberId} = #{sendMemberId} 
+	 	and ${messageSave} = 'Y' order by ${sendMessageId} desc)a
 	 ) where rn between #{start} and #{end}
-	 </select> -->
+	 </select>
+	 
+	 
 	 
 	 <update id="update_box">
 	 update ${message_send}
