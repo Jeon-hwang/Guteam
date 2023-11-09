@@ -1,5 +1,6 @@
 package project.spring.guteam.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,12 +60,16 @@ public class GameBoardController {
 	}
 	
 	@GetMapping("/detail")
-	public void detail(Model model, int gameBoardId, Integer page, int gameId) {
+	public void detail(Model model, int gameBoardId, Integer page, int gameId,Principal principal) {
 		if(page==null) {
 			page=1;
 		}
-		GameBoardVO vo = (GameBoardVO) gameBoardService.read(gameBoardId).get("gameBoardVO");
-		String nickname = (String) gameBoardService.read(gameBoardId).get("nickname");
+		String memberId = principal.getName();
+		Map<String, Object> args = gameBoardService.read(gameBoardId, memberId); 
+		GameBoardVO vo = (GameBoardVO) args.get("gameBoardVO");
+		String nickname = (String) args.get("nickname");
+		String memberImageName = (String) args.get("memberImageName");
+		model.addAttribute("memberImageName", memberImageName);
 		model.addAttribute("nickname", nickname);
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
@@ -76,7 +81,7 @@ public class GameBoardController {
 		if(page==null) {
 			page=1;
 		}
-		GameBoardVO vo = (GameBoardVO) gameBoardService.read(gameBoardId).get("gameBoardVO");
+		GameBoardVO vo = (GameBoardVO) gameBoardService.read(gameBoardId,"").get("gameBoardVO");
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
 		model.addAttribute("gameId", gameId);
@@ -102,9 +107,9 @@ public class GameBoardController {
 		int result = gameBoardService.update(gameBoardId);
 		if(result==1) {
 			reAttr.addFlashAttribute("delete_result", "success");
-			return "redirect:/gameBoard/list?gameId="+((GameBoardVO)gameBoardService.read(gameBoardId).get("gameBoardVO")).getGameId();
+			return "redirect:/gameBoard/list?gameId="+((GameBoardVO)gameBoardService.read(gameBoardId,"").get("gameBoardVO")).getGameId();
 		}else {
-			return "redirect:/gameBoard/detail?gameId="+((GameBoardVO)gameBoardService.read(gameBoardId).get("gameBoardVO")).getGameId()+"&gameBoardId="+gameBoardId;
+			return "redirect:/gameBoard/detail?gameId="+((GameBoardVO)gameBoardService.read(gameBoardId,"").get("gameBoardVO")).getGameId()+"&gameBoardId="+gameBoardId;
 		}
 	}
 	

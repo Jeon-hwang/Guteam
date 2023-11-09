@@ -44,7 +44,7 @@
 	</div>
 	<input type="hidden" id="updateResult" value="${update_result }">
 	<div class="commentArea">
-	<i class="bi bi-chat-left-dots-fill"></i> ${vo.commentCnt }
+	<i class="bi bi-chat-left-dots-fill"></i> <span id="commentCnt">${vo.commentCnt }</span>
 	<jsp:include page="../boardComment/comment_and_reply_test.jsp" />
 	</div>
 	</div>

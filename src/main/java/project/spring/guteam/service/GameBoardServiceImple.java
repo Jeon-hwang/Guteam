@@ -96,11 +96,15 @@ public class GameBoardServiceImple implements GameBoardService {
 
 	@Transactional(value = "transactionManager")
 	@Override
-	public Map<String, Object> read(int gameBoardId) {
+	public Map<String, Object> read(int gameBoardId, String memberId) {
 		logger.info("gameBoard read(gameBoardId) 호출 : gameBoardId = " + gameBoardId);
 		GameBoardVO gameBoardVO = gameBoardDAO.selectByBoardId(gameBoardId);
 		String nickname = memberDAO.select(gameBoardVO.getMemberId()).getNickname();
 		Map<String, Object> args = new HashMap<>();
+		if(memberId!=null&&!memberId.equals("")) {
+			String memberImageName= memberDAO.select(memberId).getMemberImageName();
+			args.put("memberImageName", memberImageName);			
+		}
 		args.put("gameBoardVO", gameBoardVO);
 		args.put("nickname", nickname);
 		return args;
