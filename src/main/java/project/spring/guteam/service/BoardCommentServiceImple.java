@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.domain.MemberVO;
-import project.spring.guteam.domain.ReplyVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.persistence.BoardCommentDAO;
