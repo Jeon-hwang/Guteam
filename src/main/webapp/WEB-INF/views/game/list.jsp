@@ -14,6 +14,9 @@
 <section>
 <div id="container">
 	<div class="btnAdmin">
+	<sec:authorize access="hasAnyRole('USER, ADMIN')">
+	<input type="hidden" id="isLogin" value="y">
+	</sec:authorize>
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<a href="register" class="btn btn-light">게임등록</a>
 	<a href="../discount/update" class="btn btn-light">할인율 수정</a>
@@ -111,8 +114,6 @@
 	<input type="hidden" id="discountResult" value="${discount_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){
-			var gameVOList = $('#gameVOList').attr('value');
-			console.log(gameVOList);
 			var selectedItem = $('.selectedItem').html();
 			if(selectedItem=='가격'){
 				$('#keywordCriteria').attr('value','price');
@@ -150,22 +151,23 @@
 				location.href=url;
 			}); // orderBy.onclick()
 			
-			$('.interest').on('click', function(){
-				var url = 'list?interest=interest';
-				location.href=url;
-			}); // interest.onclick()
+			if($('#isLogin').val()=='y'){
+				connect();
+			}
 			
-
-			var memberId = $('#memberId').val();
-			console.log(memberId);
-			var sse = new EventSource("/guteam/sse/connect/"+memberId);
-			sse.addEventListener(memberId, e => {
-				console.log("친구요청이 왔습니다 - from :", e.data);
-				makeNoti(e.data);
-			});
-		
 			
 		}); // end document.ready()
+		function connect(){
+			var memberId = $('#memberId').val();
+			console.log(memberId);
+			if(memberId!='undefined'){
+				var sse = new EventSource("/guteam/sse/connect/"+memberId);
+				sse.addEventListener(memberId, e => {
+					console.log("친구요청이 왔습니다 - from :", e.data);
+					makeNoti(e.data);
+				});
+			}
+		}
 	</script>
 	
 	
