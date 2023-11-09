@@ -75,6 +75,7 @@ public class PurchasedController {
 	    public void downloadFile(@PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
 			
 			logger.info("1.파일 이름:"+fileName);
+			
 			Path sourceFilePath = Paths.get(uploadPath).resolve(fileName); // Paths.get(경로(String)) 파일 절대 경로 
 																		 // resolve(String) String 부분 덧붙이기
 	        File sourceFile = sourceFilePath.toFile(); // toFIle : 해당 경로의 파일화

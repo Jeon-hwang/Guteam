@@ -65,7 +65,9 @@ public class PurchasedRESTController {
 		for(GameVO vo : gameList) {
 			String gameImageName=vo.getGameImageName();
 			try {
-				gameImageName = URLDecoder.decode(vo.getGameImageName(), "utf-8");
+				gameImageName = (URLDecoder.decode(vo.getGameImageName(),"utf-8"));
+				gameImageName = gameImageName.replaceAll("%2F", "/");
+				logger.info(gameImageName);
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			} 
