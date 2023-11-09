@@ -46,7 +46,7 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		gameBoardDAO.updateCommentCnt(vo.getGameBoardId(), 1);
 		logger.info("boardComment update실행");
 		return 1;
-	}
+	}	
 
 	@Transactional(value = "transactionManager")
 	@Override

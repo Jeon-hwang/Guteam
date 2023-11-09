@@ -663,4 +663,12 @@ textarea:focus{
 	display:absolute;
 	margin:auto;	
 }
+
+#commentContent{
+    min-height: 3rem;
+    width : 100%;
+    height:auto;
+    max-height:148px;
+    resize: none;
+}
 </style>

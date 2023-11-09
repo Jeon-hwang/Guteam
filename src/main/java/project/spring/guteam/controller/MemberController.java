@@ -205,7 +205,7 @@ public class MemberController {
         ResponseEntity<byte[]> entity = null;
         InputStream in = null;
         
-        //  / 없을때 넣는 조건
+        // 없을때 넣는 조건
         if(!(fileName.charAt(0) == '/')) {
         	fileName = "/" + fileName;
         }

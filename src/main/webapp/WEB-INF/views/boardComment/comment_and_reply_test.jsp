@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<jsp:include page="/WEB-INF/views/style.jsp"></jsp:include>
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
@@ -23,13 +22,15 @@
 		<input type="hidden" name="gameBoardId" id="gameBoardId" value="${vo.gameBoardId }">
 		<sec:authorize access="isAuthenticated()">
 		<div class="insertComment">
-		댓글 입력 : <input type="text" id="commentContent">
+		<img alt="${principal.username }" id="userProfileImage" src="../member/display?fileName=${memberImageName }" width="50px" height="50px">
+		&nbsp&nbsp<textarea id="commentContent" maxlength="100" placeholder="댓글 입력"></textarea>
 		<button id="commentAddBtn" class="btn btn-secondary"><i class="bi bi-check"></i></button>
 		</div>		
 		</sec:authorize>
 		<sec:authorize access="isAnonymous()">
 			<a href="../member/login">로그인을 하셔야 댓글이 작성 가능합니다.	</a>
 		</sec:authorize>
+		<br>
 		<ul id="comments"></ul>
 	</div>
 	
@@ -83,22 +84,6 @@
 				console.log("아직 시간 안댐");
 				return "방금 전";
 			}
-
-			
-			$("#commentContent").keydown(function(keyNum){
-				//현재의 키보드의 입력값을 keyNum으로 받음
-				if(keyNum.keyCode == 13){ 
-					$('#commentAddBtn').click();	
-				}
-			});// end commentContent.keydown
-			
-			$('#comments').on('keydown','.comment_item .replyContent',function(keyNum){
-				if(keyNum.keyCode == 13){ 
-					$(this).next().click();	
-				}
-			});// end replyContent.keydown
-			
-			
 			
 			$('#commentAddBtn').click(function(){
 				var gameBoardId = $('#gameBoardId').val();
@@ -127,6 +112,7 @@
 						if(result==1){
 							alert('댓글 입력 성공');
 							getAllComments(1);
+							$('#commentCnt').text(parseInt($('#commentCnt').text())+1);
 						}
 					}
 					
@@ -290,7 +276,6 @@
 				
 			});//end delete.comment.on
 			
-			
 			$('#comments').on('click','.comment_item .reply_btn_area .reply_view_btn',function(){
 				var commentId = $(this).parent().prevAll('#commentId').val();
 				var commentRow = $(this).parent().prevAll('#commentRow').val();
@@ -348,15 +333,10 @@
 								+ '<button class="reply_add_btn" >작성</button>';
 							}
 					
-						
-						
 							$(repliesArea).html(list);
 						}//end funtion(data)
 						
-					);//end .getJSON
-				
-				
-								
+					);//end .getJSON				
 			});// replyView.on
 			
 			
@@ -395,19 +375,14 @@
 					success : function(result){
 						//console.log(result);
 						if(result==1){
-							
 							alert('대댓글 입력 성공');
 						//	getAllComments(nowPage);
 							$(replyViewBtnClick).trigger("click");
+							$('#commentCnt').text(parseInt($('#commentCnt').text())+1);
 						}
-					
 					}
-					
 				});// end ajax
-				
 			});//end reply_add_btn
-			
-			
 			
 			$('#comments').on('click','.comment_item .reply_item .update_reply',function(){
 				if($(this).is(":visible")){
@@ -425,7 +400,6 @@
 				var replyContent = $(this).prevAll('.replyContent').val();
 				
 				console.log('대댓글Id 및 내용 : '+replyId+','+replyContent);
-				
 				$.ajax({
 					type : 'PUT',
 					url : '../boardComment/replies/'+replyId,
@@ -477,9 +451,21 @@
 				}
 				
 			});//end fold_replies_area
+			
+			 $('#commentContent').on('keyup keydown', function (){
+				 	console.log(this.scrollHeight);
+				 		
+				    if(this.scrollHeight>149){
+						$(this).height(148);
+						$(this).scrollHeight(this.Height);
+				    }else{
+				    	$(this).css('height', 'auto');
+					    $(this).height(this.scrollHeight);
+					    
+				    }
+			 });
+
 		});//end document
 	</script>
-	
-	
 </body>
 </html>

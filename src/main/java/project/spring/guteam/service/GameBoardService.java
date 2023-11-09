@@ -9,7 +9,7 @@ import project.spring.guteam.pageutil.PageCriteria;
 public interface GameBoardService {
 	int create(GameBoardVO vo);
 	Map<String, Object> read(int gameId, PageCriteria criteria);
-	Map<String, Object> read(int gameBoardId);
+	Map<String, Object> read(int gameBoardId, String memberId);
 	int update(GameBoardVO vo);
 	int update(int gameBoardId);
 	int getTotalCount(int gameId);
