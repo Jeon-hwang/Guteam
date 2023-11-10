@@ -34,6 +34,7 @@
 		</ul>
 	</div>
 	<div class="price_area">
+		<input type="checkbox" id="allCheck" value="전체 선택">
 		<p>선택한 게임 총 가격 : ￦<span id="totalPrice">0</span></p>
 		<form action="../purchased/purchaseWindow" method="get">
 		<sec:csrfInput/>
@@ -104,8 +105,8 @@
 					}
 				});// end ajax
 			});//end removeWishList.click
-			
-			$('.wish_list').on('click','.wish_list_item .listCheck',function(){
+			$('.wish_list').on('change','.wish_list_item .listCheck',function(){
+			//$('.wish_list').on('click','.wish_list_item .listCheck',function(){
 				var price = parseInt($(this).nextAll('.price').val());
 				var totalPrice = parseInt($('#totalPrice').text());
 				var gameId = $(this).prevAll('.gameId').val();
@@ -122,10 +123,8 @@
 				}
 				$(gameIdInput).attr('value',checkGameId);
 				console.log($(gameIdInput).attr('value'));
-				if($(gameIdInput).attr('value')!=''){
-				
+				if($(gameIdInput).attr('value')!=''){				
 					$("#submit").removeAttr("disabled");
-				
 				}else{
 					$('#submit').attr("disabled",'disabled');
 				}
@@ -146,6 +145,21 @@
 				location.href = "../purchased/purchaseWindow?gameIds="+gameId;
 			}); // end oneBuyBtn
 			
+			$('#allCheck').on('click',function(){
+				if($(this).is(":checked")){ // 전체선택을 선택한경우
+				    $('.listCheck').each(function(){
+						if(!$(this).is(":checked")){
+							$(this).click();
+						}
+				    });//end each
+				}else{ // 전체선택을 해제한 경우
+				    $('.listCheck').each(function(){
+						if($(this).is(":checked")){
+							$(this).click();
+						}
+					});
+				}
+			});// end allCheck
 		}); // end document
 	</script>
 </body>

@@ -103,7 +103,6 @@
 	</div>
 </section>
 		<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
-
 	<script type="text/javascript">
 		$(document).ready(function() {
 			var insertResult = $('#insertResult').val();

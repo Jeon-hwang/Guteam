@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.domain.ReplyVO;
 import project.spring.guteam.persistence.MemberDAO;
 import project.spring.guteam.persistence.ReplyDAO;
@@ -50,14 +51,19 @@ public class ReplyServiceImple implements ReplyService {
 		logger.info("read 호출");
 		List<ReplyVO> list = replyDAO.select(commentId);
 		List<String> nicknameList = new ArrayList<String>();
+		List<String> profileImageNameList = new ArrayList<String>();
 		for(int i = 0; i<list.size();i++) {
 			String memberId = list.get(i).getMemberId();
-			String nickname = memberDAO.select(memberId).getNickname();
+			MemberVO memberVO = memberDAO.select(memberId);
+			String nickname = memberVO.getNickname();
+			String profileImageName = memberVO.getMemberImageName();
 			nicknameList.add(nickname);
+			profileImageNameList.add(profileImageName);
 		}
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("list", list);
 		args.put("nicknameList", nicknameList);
+		args.put("profileImageNameList", profileImageNameList);
 		return args;
 	}
 

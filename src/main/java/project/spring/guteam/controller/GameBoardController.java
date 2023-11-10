@@ -64,7 +64,10 @@ public class GameBoardController {
 		if(page==null) {
 			page=1;
 		}
-		String memberId = principal.getName();
+		String memberId = "";
+		if(principal != null) {
+		memberId = principal.getName();
+		}
 		Map<String, Object> args = gameBoardService.read(gameBoardId, memberId); 
 		GameBoardVO vo = (GameBoardVO) args.get("gameBoardVO");
 		String nickname = (String) args.get("nickname");

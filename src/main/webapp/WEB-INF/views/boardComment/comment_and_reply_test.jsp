@@ -113,6 +113,8 @@
 							alert('댓글 입력 성공');
 							getAllComments(1);
 							$('#commentCnt').text(parseInt($('#commentCnt').text())+1);
+							$('#commentContent').val("");
+							$('#commentContent').focus();
 						}
 					}
 					
@@ -127,7 +129,6 @@
 			function getAllComments(nowPage){
 				var gameBoardId= $('#gameBoardId').val();
 				var page = nowPage;
-				
 				var url = '../boardComment/comments/all/'+gameBoardId+'?page='+page;
 				
 				$.getJSON(
@@ -219,7 +220,7 @@
 				$(this).prevAll("#commentContent").prop("type","text");
 				$(this).prevAll("#commentContentView").css("display","none");
 			});
-				
+			
 			$('#comments').on('click','.comment_item .update_comment_check',function(){
 			if($(this).is(":visible")){
 				$(this).next().css("display","block");
@@ -230,7 +231,6 @@
 				var commentContent = $(this).prevAll('#commentContent').val();
 				
 				console.log('댓글Id 및 컨탠츠 이름 : '+commentId+','+commentContent);
-				
 				$.ajax({
 					type : 'PUT',
 					url : '../boardComment/comments/'+commentId,
@@ -299,6 +299,7 @@
 							console.log(this);
 		
 							var nickname = data.nicknameList[varStatus];
+							var memberImageName = data.profileImageNameList[varStatus];
 							varStatus++;
 							var replyDateCreated = new Date(this.replyDateCreated);
 							if(this.replyContent=="삭제된 댓글입니다."){
@@ -309,7 +310,8 @@
 							+ '</li>';
 							}else {
 							list += '<li class="reply_item">'
-							+ '<input type="hidden" id="replyId" value="'+this.replyId+'">'
+							+ '<input type="hidden" id="replyId" value="'+this.replyId+'">└'
+							+ '<img class="replyProfileImg" alt="'+nickname+'" src="../game/display?fileName='+memberImageName+'" width="50px" height="50px" />'
 							+ nickname + ':&nbsp&nbsp'	
 							+ '<input type="hidden" class="replyContent" value="'+this.replyContent+'">&nbsp&nbsp'
 							+ '<span id="replyView">'+this.replyContent + '</span>&nbsp&nbsp'
@@ -322,9 +324,10 @@
 							list += '</li>';
 							}
 						});//end each
+							console.log(principalMemberId);
 							if(commentContent == '삭제된 댓글입니다.'){
 								list += '<span>삭제된 댓글에는 답글을 달 수 없습니다.</span>';
-							}else if(principalMemberId == ''){
+							}else if(principalMemberId == '' || principalMemberId == null){
 								var uri ='/guteam/gameBoard/detail?gameBoardId='+gameBoardId+'&page=${page}&gameId=${gameId}'
 								const encoded = encodeURI(uri);
 								list += '<a href="../member/login?targetURL=">로그인을 하셔야 답글을 달 수 있습니다</a>';
@@ -353,7 +356,7 @@
 				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
 				//var replyViewBtnClick = $(this).parent().parent().parent().nextAll(".reply_btn_area").children(".reply_view_btn").prop('tagName');
 				var replyViewBtnClick = $(this).parent().prevAll(".reply_btn_area").children(".reply_view_btn");
-				console.log('강제클릭태그 이름: '+replyViewBtnClick.prop('tagName'));
+				
 				console.log('대댓글쪽 현재 페이지'+nowPage);
 				console.log("댓글id, 회원id, 대댓내용 :"+ commentId+", "+memberId+", "+replyContent);
 				var obj = {
@@ -414,6 +417,7 @@
 						if(result ==1){
 							alert('수정 되었습니다!');
 							$(replyViewBtnClick).trigger("click");
+							
 						}
 					}
 				})//end ajax

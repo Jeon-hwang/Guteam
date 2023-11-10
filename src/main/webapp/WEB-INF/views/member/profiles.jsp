@@ -9,6 +9,11 @@
 <meta charset="UTF-8">
 <title>GUTEAM : 프로필</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<style type="text/css">
+body{
+	color:white;
+}
+</style>
 </head>
 <body>
 <header>
@@ -128,19 +133,19 @@
 						var startPageNo = data.pageMaker.startPageNo;
 						var endPageNo = data.pageMaker.endPageNo;
 						
-						list += '<div class="comment_paging">';
+						list += '<div class="comment_paging_area">';
 						if(hasPrev){
-							list += '<button class="paging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp'; 
+							list += '<button class="comment_paging" value="'+(startPageNo-1)+'">이전</button>&nbsp&nbsp'; 
 						}
 						for(var i = startPageNo ; i<=endPageNo ; i++ ){
 							if(nowPage==i){
 								list += '<em>'+i+'</em>';									
 							}else{
-								list += '<button class="paging" value="'+i+'">'+i+'</button>';		
+								list += '<button class="comment_paging" value="'+i+'">'+i+'</button>';		
 							}
 						}
 						if(hasNext){
-							list += '&nbsp&nbsp<button class="paging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp';		
+							list += '&nbsp&nbsp<button class="comment_paging" value="'+(endPageNo+1)+'">다음</button>&nbsp&nbsp';		
 						}
 						list +=	'</div>';
 						
@@ -163,7 +168,7 @@
 				
 			});
 			
-			$('#myCommentsList').on('click','.comment_paging .paging',function(){
+			$('#myCommentsList').on('click','.comment_paging_area .comment_paging',function(){
 				var clickPage = $(this).val();
 				console.log("선택한 페이지 :"+clickPage);
 				showMyComments(clickPage);
