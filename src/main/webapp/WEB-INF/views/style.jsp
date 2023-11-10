@@ -162,6 +162,9 @@ body {
 	display:flex;
 	align-items:center;
 }
+.insertComment input, button{
+	margin-left: 5px;
+}
 .comment_item{
 	word-wrap:break-word;
 	white-space:normal;
@@ -171,9 +174,7 @@ body {
 	display:flex;
 	flex-wrap:wrap;
 }
-.insertComment input, button{
-	margin-left: 5px;
-}
+
 #CommentGroup li{
 	list-style: none;
 }

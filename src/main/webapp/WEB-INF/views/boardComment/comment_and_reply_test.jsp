@@ -31,7 +31,7 @@
 			<a href="../member/login">로그인을 하셔야 댓글이 작성 가능합니다.	</a>
 		</sec:authorize>
 		<br>
-		<ul id="comments"></ul>
+		<ul id="allComments"></ul>
 	</div>
 	
 	<script type="text/javascript">
@@ -120,7 +120,7 @@
 					
 				});// end ajax
 			})// commentAddBtn
-			$('#comments').on('click','.comment_paging .btnPaging',function(){
+			$('#allComments').on('click','.comment_paging .btnPaging',function(){
 				var clickPage = $(this).val();
 				console.log("선택한 페이지 :"+clickPage);
 				getAllComments(clickPage);
@@ -206,13 +206,13 @@
 					list +=	'</div>';
 						
 						
-					$('#comments').html(list);
+					$('#allComments').html(list);
 					}//end funtion(data)
 				);//end .getJSON
 				
 				}// end getAllComments()
 		
-			$('#comments').on('click','.comment_item .update_comment',function(){ //댓글 수정창 띄우기
+			$('#allComments').on('click','.comment_item .update_comment',function(){ //댓글 수정창 띄우기
 				if($(this).is(":visible")){
 					$(this).next().css("display","inline");
 					$(this).css("display","none");
@@ -221,12 +221,12 @@
 				$(this).prevAll("#commentContentView").css("display","none");
 			});
 			
-			$('#comments').on('click','.comment_item .update_comment_check',function(){
+			$('#allComments').on('click','.comment_item .update_comment_check',function(){
 			if($(this).is(":visible")){
 				$(this).next().css("display","block");
 				$(this).css("display","none");
 			}
-				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
+				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
 				var commentId = $(this).prevAll('#commentId').val();
 				var commentContent = $(this).prevAll('#commentContent').val();
 				
@@ -250,10 +250,10 @@
 				})//end ajax
 			}); // end btn_update.on 
 			
-			$('#comments').on('click','.comment_item .delete_comment',function(){ // 댓글 삭제
+			$('#allComments').on('click','.comment_item .delete_comment',function(){ // 댓글 삭제
 				var commentId = $(this).prevAll('#commentId').val();
 				var gameBoardId =  $('#gameBoardId').val();
-				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
+				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
 				
 				console.log('댓글Id 및 게시판판 id: '+commentId+','+gameBoardId);
 				$.ajax({
@@ -276,7 +276,7 @@
 				
 			});//end delete.comment.on
 			
-			$('#comments').on('click','.comment_item .reply_btn_area .reply_view_btn',function(){
+			$('#allComments').on('click','.comment_item .reply_btn_area .reply_view_btn',function(){
 				var commentId = $(this).parent().prevAll('#commentId').val();
 				var commentRow = $(this).parent().prevAll('#commentRow').val();
 				var url = '../boardComment/replies/all/'+commentId;
@@ -343,7 +343,7 @@
 			});// replyView.on
 			
 			
-			$('#comments').on('click','.comment_item .reply_add_btn',function(){
+			$('#allComments').on('click','.comment_item .reply_add_btn',function(){
 				//var tagName = $(this).parent().prevAll('#commentId').prop('tagName');
 				//console.log(tagName);
 				
@@ -353,7 +353,7 @@
 				if(replyContent == '삭제된 댓글입니다.'){
 					replyContent = '&nbsp삭제된 댓글입니다.';
 				}
-				var nowPage = parseInt($('#comments').children(".comment_paging").children("em").text());
+				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
 				//var replyViewBtnClick = $(this).parent().parent().parent().nextAll(".reply_btn_area").children(".reply_view_btn").prop('tagName');
 				var replyViewBtnClick = $(this).parent().prevAll(".reply_btn_area").children(".reply_view_btn");
 				
@@ -387,7 +387,7 @@
 				});// end ajax
 			});//end reply_add_btn
 			
-			$('#comments').on('click','.comment_item .reply_item .update_reply',function(){
+			$('#allComments').on('click','.comment_item .reply_item .update_reply',function(){
 				if($(this).is(":visible")){
 				$(this).next().css("display","inline");
 				$(this).css("display","none");
@@ -395,7 +395,7 @@
 				$(this).prevAll(".replyContent").prop("type","text");
 				$(this).prevAll("#replyView").css("display","none");
 			});
-			$('#comments').on('click','.comment_item .reply_item .update_reply_check',function(){
+			$('#allComments').on('click','.comment_item .reply_item .update_reply_check',function(){
 				//var repliesAreaNum = $(this).parent().parent().attr('class');
 				//console.log(repliesAreaNum);
 				var replyViewBtnClick = $(this).parent().parent().prevAll(".reply_btn_area").children(".reply_view_btn");
@@ -423,7 +423,7 @@
 				})//end ajax
 			});// end update_reply
 			
-			$('#comments').on('click','.comment_item .reply_item .delete_reply',function(){
+			$('#allComments').on('click','.comment_item .reply_item .delete_reply',function(){
 				
 				var replyId = $(this).prevAll('#replyId').val();
 				var replyViewBtnClick = $(this).parent().parent().prevAll(".reply_btn_area").children(".reply_view_btn");
@@ -446,7 +446,7 @@
 				});//end ajax
 			});//end delete_reply
 			
-			$('#comments').on('click','.comment_item .fold_replies_area',function(){
+			$('#allComments').on('click','.comment_item .fold_replies_area',function(){
 				console.log('접어버리기');
 				$(this).parent().next().html('');
 				if($(this).is(":visible")){
