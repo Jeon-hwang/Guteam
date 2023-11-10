@@ -25,7 +25,7 @@
 		<img alt="${principal.username }" id="userProfileImage" src="../member/display?fileName=${memberImageName }" width="50px" height="50px">
 		&nbsp&nbsp<textarea id="commentContent" maxlength="100" placeholder="댓글 입력"></textarea>
 		<button id="commentAddBtn" class="btn btn-secondary"><i class="bi bi-check"></i></button>
-		</div>		
+		</div>
 		</sec:authorize>
 		<sec:authorize access="isAnonymous()">
 			<a href="../member/login">로그인을 하셔야 댓글이 작성 가능합니다.	</a>
@@ -329,7 +329,7 @@
 								const encoded = encodeURI(uri);
 								list += '<a href="../member/login?targetURL=">로그인을 하셔야 답글을 달 수 있습니다</a>';
 							}else{
-								list += '내용 : <input type="text" name="replyContent" class="replyContent">' 
+								list += '내용 : <input type="text" name="replyContent" class="replyContent" maxlength="100">' 
 								+ '<button class="reply_add_btn" >작성</button>';
 							}
 					
