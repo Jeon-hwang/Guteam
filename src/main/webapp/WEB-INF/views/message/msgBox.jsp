@@ -120,7 +120,7 @@ td {
 	<c:forEach var="svo" items="${list }">
 	<tr>
 		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${svo.messageId }"></label></td>
-		<td class="title"><a href="../message/detail?receiveMsgId=${svo.messageId}&page=${pageMaker.criteria.page}">${svo.fromTo}${svo.title }</a></td>
+		<td class="title"><a href="../message/detail?receiveMsgId=${svo.messageId}&page=${pageMaker.criteria.page}&box=${svo.fromTo}">${svo.fromTo}${svo.title }</a></td>
 		<td class="cen" >${svo.fromToNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${svo.dateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>

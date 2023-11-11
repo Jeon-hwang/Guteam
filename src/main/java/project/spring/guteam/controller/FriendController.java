@@ -103,7 +103,7 @@ public class FriendController {
     	int result = friendService.read(principal.getName(), vo.getReceiveMemberId());
     	
     	if(result == 1) { // 이미 친구
-    		reAttr.addFlashAttribute("alert", "friend");
+    		reAttr.addFlashAttribute("fnd_alert", "friend");
 	 			return "redirect:/friend/list";
     	}else {
     		// 친추할 아이디가 이미 나한테 요청
@@ -113,7 +113,7 @@ public class FriendController {
     		logger.info("이미 요청 받아 친추시 바로 친구됨 보낸이 = " +  vo.getSendMemberId());
     		if(result == 1) {// id로 부터 받은 요청 조회
     			FriendVO fvo = new FriendVO(vo.getSendMemberId(), vo.getReceiveMemberId());
-    			reAttr.addFlashAttribute("alert", "alreadyFrd");
+    			reAttr.addFlashAttribute("fnd_alert", "alreadyFrd");
         		return acceptPOST(fvo);
     		}else {
     			result = memberService.read(vo.getReceiveMemberId(), "check");
@@ -125,22 +125,34 @@ public class FriendController {
     				if(result != 1) {
     					result = friendRequestService.create(vo);
     					logger.info("친구 요청 성공");
-    					reAttr.addFlashAttribute("alert", "success");
+    					reAttr.addFlashAttribute("fnd_alert", "success");
     					return "redirect:/friend/list";
     				} else {
     					// 취소로 바꿔 줄 수 있음 (아니면 한번 더 요청하면 친구요청 취소)
     					logger.info("친구 신청 중복? y");
-    					reAttr.addFlashAttribute("alert", "dupl");
+    					reAttr.addFlashAttribute("fnd_alert", "dupl");
     					return "redirect:/friend/list";
     				}
     			} else {
     				logger.info("없는 아이디 입니다.");
-    				reAttr.addFlashAttribute("alert", "fail");
+    				reAttr.addFlashAttribute("fnd_alert", "fail");
     				return "redirect:/friend/list";
     			}
     		}
     	}
  	} //end addFirend()
+    
+    // 친구 요청 신청 취소
+    @PostMapping("/cancel")
+    public String cancel (FriendVO vo) {
+    	logger.info("친구 요청 취소 vo? " + vo.toString());
+    	int result = friendRequestService.delete(vo.getMemberId(), vo.getFriendId());
+    	if(result == 1) {
+    		return "redirect:/friend/list";
+    	} else {
+    		return "redirect:/friend/list";
+    	}
+    }
     
 	
 	// 받은 요청 수락

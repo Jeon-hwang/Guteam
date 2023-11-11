@@ -5,17 +5,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="../style.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 <meta charset="UTF-8">
 <title>GUTEAM : 프로필</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-<header>
-<div class="logo">
-	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
-	</div>
-</header>
 <section>
 <div id="wrap">
 <div class="detail-box">
@@ -74,7 +69,9 @@
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 	function popUp(){
-		window.open('../message/list', '쪽지함', 'width=715px,height=425px,scrollbars=yes');
+		var leftPosition = (window.screen.width / 2) - (715 / 2);
+	    var topPosition = (window.screen.height / 2) - (425 / 2);
+	    window.open('../message/list', '쪽지함', 'width=715px,height=425px,scrollbars=yes,resizable=no,menubar=no,toolbar=no,left=' + leftPosition + ',top=' + topPosition);		
 	};
 	
 	$(document).ready(function(){
