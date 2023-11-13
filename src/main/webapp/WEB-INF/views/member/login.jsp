@@ -5,48 +5,51 @@
 <!DOCTYPE html>
 <html>
 <head>
+<jsp:include page="../style.jsp"></jsp:include>
 <meta charset="UTF-8" >
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <title>GUTEAM : 로그인</title>
-<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
+
 </head>
 <body>
-<section>
+<header>
+<div class="logo">
+	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+</div>
+</header>
 
+<section>
 <div id="wrap">
 	<c:if test="${param.error==1 }">아이디와 비밀번호를 확인해주세요 </c:if>
 	<br>
 	<div class="titleArea">
 		<h1>Log in</h1>
 	</div>
-	<div id="container">
-	<div class="formArea">
+
+<div class="formArea">
+<div class="info">
+	<div class="caption">
+		<p style="color:#fff; font-weight:bolder ">ID</p>
+		<p style="color:#fff; font-weight:bolder ">PW</p>
+	</div>	
+	
+<div class="inputArea">
 	<form action="login" method="post">
-		<div class="info">
-			<h5 style="color:#fff; font-weight:bolder ">ID &nbsp;&nbsp;&nbsp;&nbsp;</h5>
-			<div class="inputArea">
-				<input type="text" name="memberId" required />
-			</div>
-		</div>
-		<div class="info">
-			<h5 style="color:#fff; font-weight:bolder ">PW &nbsp;</h5>
-			<div class="inputArea">
-				<input type="password" name="password" required />
-			</div>
-		</div>
-		
+		<input type="text" name="memberId" required /><br>
+		<input type="password" name="password" required /><br>
 		<input type="hidden" name="referer" value="${referer }">
 		<input type="hidden" name="targetURL" value="${param.targetURL }">
 		<sec:csrfInput/>
 		<br>
-		<div style="display:inline-flex; flex-direction:row;">
+		<div style="width:300px; display:flex; justify-content: flex-end;">
 			<a href="register"><button type="button" class="btn btn-light"> 회원 가입</button></a>
 			<input class="btn btn-light" type="submit" value="로그인">
 		</div>
 	</form>
-	</div>
-	</div>
+</div>
+</div>
+</div>
 	<input type="hidden" id="alert" value="${alert }">
 </div>
 </section>	

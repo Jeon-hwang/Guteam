@@ -19,7 +19,7 @@ span {
 <header>
 <div class="logo">
 	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
-	</div>
+</div>
 </header>
 <section>
 <div id="wrap">
