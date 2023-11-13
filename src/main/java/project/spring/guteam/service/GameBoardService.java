@@ -11,7 +11,7 @@ public interface GameBoardService {
 	Map<String, Object> read(int gameId, PageCriteria criteria);
 	Map<String, Object> read(int gameBoardId, String memberId);
 	int update(GameBoardVO vo);
-	int update(int gameBoardId);
+	int updateToDeleted(int gameBoardId);
 	int getTotalCount(int gameId);
 	int getTotalCount(int gameId, PageCriteria criteria, String keywordCriteria, String keyword);
 	Map<String, Object> read(int gameId, PageCriteria criteria, String keywordCriteria, String keyword);

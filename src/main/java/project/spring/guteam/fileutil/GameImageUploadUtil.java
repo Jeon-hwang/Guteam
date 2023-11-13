@@ -18,15 +18,14 @@ public class GameImageUploadUtil {
 	public static String saveUploadedFile(String uploadPath, 
 			String fileName, byte[] data) throws IOException {
 				
-		String saveName = fileName;
-		
+		String saveName = fileName;		
 		
 		File target = new File(uploadPath + File.separator ,
 				saveName);
 		
-		FileCopyUtils.copy(data, target);
+		FileCopyUtils.copy(data, target); // data 를 uploadPath 에 fileName 으로 저장
 		
-		String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+		String extension = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자
 		
 		String result = null;
 		if (MediaUtil.getMediaType(extension) != null) {
@@ -36,7 +35,7 @@ public class GameImageUploadUtil {
 		}
 		
 		return result;
-	}
+	} // end saveUploadedFile()
 	
 	
 	private static String createThumbnail(String uploadPath
@@ -73,5 +72,4 @@ public class GameImageUploadUtil {
 		
 	}
 	
-	
-}
+} // end GameImageUploadUtil

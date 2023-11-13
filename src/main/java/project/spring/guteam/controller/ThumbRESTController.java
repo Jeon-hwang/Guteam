@@ -30,26 +30,26 @@ public class ThumbRESTController {
 		logger.info("create 호출 vo : "+vo.toString());
 		int result = thumbService.create(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
-	}
+	} // end create()
 	
 	@GetMapping
 	public ResponseEntity<ThumbVO> read(@RequestBody ThumbVO vo) {
 		logger.info("read 호출 vo : "+vo.toString());
 		ThumbVO result = thumbService.read(vo);
 		return new ResponseEntity<ThumbVO>(result,HttpStatus.OK);
-	}
+	} // end read()
 	
 	@PutMapping
 	public ResponseEntity<Integer> update(@RequestBody ThumbVO vo) throws Exception{
 		logger.info("update 호출 vo : "+vo.toString());
 		int result = thumbService.update(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
-	}
+	} // end update()
 	
 	@DeleteMapping
 	public ResponseEntity<Integer> delete(@RequestBody ThumbVO vo) throws Exception{
 		logger.info("delete 호출 vo : "+vo.toString());
 		int result = thumbService.delete(vo);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
-	}
-}
+	} // end delete()
+} // end ThumbRESTController

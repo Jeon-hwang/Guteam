@@ -14,6 +14,6 @@ public class ChatController {
 	@GetMapping()
 	public String chat() {
 		return "/chat";
-	}
+	} // end chat() - [getMapping = "/chat"]
 
-}
+} // end ChatController

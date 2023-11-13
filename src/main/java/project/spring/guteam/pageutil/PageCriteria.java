@@ -4,6 +4,11 @@ package project.spring.guteam.pageutil;
 // 한 페이지에서 보여질 게시글의 개수를 저장하는 클래스
 // -> paging 처리에 필요한 start와 end 번호를 알 수 있음
 public class PageCriteria {
+	@Override
+	public String toString() {
+		return "PageCriteria [page=" + page + ", numsPerPage=" + numsPerPage + "]";
+	}
+
 	private int page; // 현재 페이지 번호
 	private int numsPerPage; // 한 페이지의 게시글 개수
 	

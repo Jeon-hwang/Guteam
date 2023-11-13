@@ -61,7 +61,7 @@ public class GameBoardServiceImple implements GameBoardService {
 	}
 
 	@Override
-	public int update(int gameBoardId) {
+	public int updateToDeleted(int gameBoardId) {
 		logger.info("gameBoard update(gameBoardId) 호출 : gameBoardId = " + gameBoardId);
 		return gameBoardDAO.updateDeleted(gameBoardId);
 	}
