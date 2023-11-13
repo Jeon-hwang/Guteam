@@ -69,9 +69,11 @@
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 	function popUp(){
-		var leftPosition = (window.screen.width / 2) - (715 / 2);
-	    var topPosition = (window.screen.height / 2) - (425 / 2);
-	    window.open('../message/list', '쪽지함', 'width=715px,height=425px,scrollbars=yes,resizable=no,menubar=no,toolbar=no,left=' + leftPosition + ',top=' + topPosition);		
+	   popupWin =  window.open('../message/list', '쪽지함', 'resizable');		
+	   popupWin.resizeTo(715, 500);
+	   popupWin.onresize = (_=>{
+		   popupWin.resizeTo(715, 500);
+		})
 	};
 	
 	$(document).ready(function(){

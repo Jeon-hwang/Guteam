@@ -91,7 +91,7 @@ td {
 <body>
 <div id="full">
 <div id="leftMenu">
-<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png">
 
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
