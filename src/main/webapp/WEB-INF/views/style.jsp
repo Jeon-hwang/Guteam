@@ -385,6 +385,14 @@ transition: 0.3s;
 	background-color:#2a3f5a;
 	color:#fff;
 }
+.inputArea input[type="password"]{
+	width: 300px;
+	margin-bottom: 1px;
+	border:none;
+	display:flex;
+	background-color:#2a3f5a;
+	color:#fff;
+}
 formArea input:focus{
 	background-color:#a0c5db;
 	color:black;	

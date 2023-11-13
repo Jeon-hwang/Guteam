@@ -14,10 +14,10 @@ public interface FriendRequestDAO {
 	
 	// 친구 요청 내역
 	List<String> selectTo(String sendMemberId);
-	
+
 	// 받은 친구 요청 내역
 	List<String> selectFrom(String receiveMemberId);
 	
-	// 수락/거절 후 삭제
+	// 취소/수락/거절 후 삭제
 	int delete(String sendMemberId, String receiveMemberId);
 }

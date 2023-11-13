@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="../style.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 <meta charset="UTF-8">
 <title>GUTEAM : 프로필</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -16,11 +16,6 @@ body{
 </style>
 </head>
 <body>
-<header>
-<div class="logo">
-	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
-	</div>
-</header>
 <section>
 <div id="wrap">
 <div class="detail-box">
@@ -79,7 +74,11 @@ body{
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 	function popUp(){
-		window.open('../message/list', '쪽지함', 'width=715px,height=425px,scrollbars=yes');
+	   popupWin =  window.open('../message/list', '쪽지함', 'resizable');		
+	   popupWin.resizeTo(715, 500);
+	   popupWin.onresize = (_=>{
+		   popupWin.resizeTo(715, 500);
+		})
 	};
 	
 	$(document).ready(function(){

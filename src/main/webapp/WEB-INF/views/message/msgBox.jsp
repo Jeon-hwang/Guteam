@@ -91,7 +91,7 @@ td {
 <body>
 <div id="full">
 <div id="leftMenu">
-<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
+<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png">
 
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
@@ -120,8 +120,8 @@ td {
 	<c:forEach var="svo" items="${list }">
 	<tr>
 		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${svo.messageId }"></label></td>
-		<td class="title"><a href="../message/detail?receiveMsgId=${svo.messageId}&page=${pageMaker.criteria.page}">${svo.fromTo}${svo.title }</a></td>
-		<td class="cen" >${svo.fromToNickname }</td>
+		<td class="title"><a href="../message/detail?receiveMsgId=${svo.messageId}&page=${pageMaker.criteria.page}&box=${svo.fromTo}">${svo.fromTo}${svo.title }</a></td>
+		<td class="cen" style="white-space: nowrap;">${svo.fromToNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${svo.dateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
 	</c:forEach>

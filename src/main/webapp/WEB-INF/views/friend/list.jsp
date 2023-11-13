@@ -5,8 +5,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="../style.jsp"></jsp:include>
-
+<jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
+<style type="text/css">
+.btn {
+	padding: 3px 3px 3px 3px;
+}
+#toNickname {
+	width:100px;
+}
+</style>
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -14,38 +21,50 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-<header>
-<div class="logo">
-	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
-	</div>
-</header>
+
 <section>
 <div id="wrap">
-<div class="detail-box">
-<div>
-	<h2><input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
-	나의 친구 목록</h2>
+<div class="infoArea">
+<div style="display:flex;">
+	<input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
+	<h2>나의 친구 목록</h2>
+	<form action="../friend/addFriend" method="post" onsubmit="sendRequest();">
+		<sec:csrfInput/>
+		<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }"><br><br>
+		<input type="text" name="receiveMemberId" id="receiveMemberId" placeholder="ID 입력" required>
+		<input class="btn btn-light" type="submit" value="친구 추가">
+	</form>
 </div>
-<form action="../friend/addFriend" method="post" onsubmit="sendRequest();">
-	<sec:csrfInput/>
-	<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
-	<input type="text" name="receiveMemberId" id="receiveMemberId" placeholder="ID 입력" required>
-	<input class="btn btn-light" type="submit" value="친구 추가">
-</form>
-<hr>
+</div>
+<div class="info">
+<div>
+	<div class="hrArea">
+	<hr>
+	</div>
+<div class="infoArea">
 <h3>보낸 요청</h3>
 <table>
 	<tbody>
-		<c:forEach var="vo" items="${sendList }">
-		<div style="width:100px; hieght:140px; display:inline-block;" class="friendReq">
-			<img alt="${vo.memberImageName }" width="100px" height="100px" src="display?fileName=${vo.memberImageName }"> 
-			<input type="text" id="toNickname" value="${vo.nickname }" style="width:92px;" readonly>
+	<c:forEach var="svo" items="${sendList }">
+		<div style="width:110px; hieght:140px; display:inline-block;" class="friendReq">
+		<form action="../friend/accept" method="post">
+		<sec:csrfInput/>
+			<img alt="${svo.memberImageName }" width="100px" height="100px" src="display?fileName=${svo.memberImageName }"> 
+			<input type="text" id="toNickname" value="${svo.nickname }" readonly>
+			<input type="hidden" name="memberId" value="${vo.memberId }">
+			<input type="hidden" name="friendId" value="${svo.memberId }">
+			<button type="submit" class="btn btn-light" formaction="../friend/cancel">요청거절</button>
+		</form>
 		</div>
 			
-		</c:forEach>
+	</c:forEach>
 	</tbody>
 </table>
+</div><br>
+<div class="hrArea">
 <hr>
+</div>
+<div class="infoArea">
 <h3>받은 요청</h3>
 <table>
 	<tbody>
@@ -54,33 +73,42 @@
 		<form action="../friend/accept" method="post">
 		<sec:csrfInput/>
 			<img alt="${rvo.memberImageName }" width="100px" height="100px" src="display?fileName=${rvo.memberImageName }"> 
-			<input type="text" id="toNickname" value="${rvo.nickname }" style="width:92px;" readonly>
+			<input type="text" id="toNickname" value="${rvo.nickname }" readonly>
 			<input type="hidden" name="memberId" value="${vo.memberId }">
 			<input type="hidden" name="friendId" value="${rvo.memberId }">
-			<button type="submit" formaction="../friend/accept">수락</button>
-			<button type="submit" formaction="../friend/reject">거절</button>
+			<button type="submit" class="btn btn-light" formaction="../friend/accept">수락</button>
+			<button type="submit" class="btn btn-light" formaction="../friend/reject">거절</button>
 		</form>
 		</div>
 		
 	</c:forEach>
 	</tbody>
 </table>
+</div>
+<div class="hrArea">
 <hr>
-<h2>친구 목록</h2>
+</div>
+<div class="infoArea">
+<h3>친구 목록</h3>
+<table>
+	<tbody>
 	<c:forEach var="fvo" items="${friendList }">
-		<div class="friend" style="display:flex;">
+		<div style="width:100px; hieght:140px; display:inline-block;" class="friend">
 			<input type="image" class="profileImg" alt="${fvo.memberId }" 
 				src="display?fileName=${fvo.memberImageName }" readonly />
 		<form action="../friend/delete" method="post">
 			<sec:csrfInput/>
-			<input type="text" id="toNickname" value="${fvo.nickname }" style="width:92px;" readonly>
+			<input type="text" id="toNickname" value="${fvo.nickname }" readonly>
 			<input type="hidden" name="friendId" id="friendId" value="${fvo.memberId }">
-			<input type="submit" value="친구삭제">
+			<button type="submit" class="btn btn-light" formaction="../friend/delete">친구삭제</button>
 		</form>
 		</div>
 	</c:forEach>
-
-<input type="hidden" id="alert" value="${alert }">
+	</tbody>
+</table>
+</div>
+</div>
+<input type="hidden" id="fnd_alert" value="${fnd_alert }">
 </div>
 </div>
 </section>
@@ -91,7 +119,7 @@
 	var header = $("meta[name='_csrf_header']").attr("content");
 	
 	$(document).ready(function(){
-		var result = $('#alert').val();
+		var result = $('#fnd_alert').val();
 			if(result == 'friend'){
 				alert('이미 친구인 유저입니다.')
 			}else if(result == 'alreadyFrd'){
