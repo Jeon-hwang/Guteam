@@ -121,7 +121,7 @@ td {
 	<tr>
 		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.sendMessageId }"></label></td>
 		<td class="title"><a href="../message/detail?sendMsgId=${pvo.sendMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
-		<td class="cen" >${pvo.receiveMemberId }</td>
+		<td class="cen" style="white-space: nowrap;">${pvo.receiveMemberId }</td>
 		<fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" var="messageDateCreated"/>
 		<td style="font-size: 10pt;">${messageDateCreated }</td>
 	</tr>

@@ -78,6 +78,14 @@ thead {
 	margin : 5px;
     
 }
+#messageContent {
+	width: 465px;
+	height: 200px;
+	resize:none;
+	maxlength: 333;
+	background-color: #fff;
+	border: 1px solid grey;
+}
 </style>
 <meta charset="UTF-8">
 <title>GUTEAM : ${vo.memberId }님의 쪽지함</title>
@@ -132,7 +140,7 @@ thead {
 			<tr>
 				<td class="tdc">내 용</td>
 				<td>
-				<textarea name="messageContent" id="messageContent" style="width: 465px; height: 200px; resize:none; maxlength: 333;"></textarea><!-- 밑부분 70px -->
+				<textarea name="messageContent" id="messageContent"></textarea><!-- 밑부분 70px -->
 				</td>
 			</tr>
 			
