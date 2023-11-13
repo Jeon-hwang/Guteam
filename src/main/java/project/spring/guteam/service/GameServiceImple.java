@@ -66,8 +66,8 @@ public class GameServiceImple implements GameService {
 		if(principal!=null&&!principal.getName().equals("")) {
 			String memberId = principal.getName();
 			ViewedVO viewedVO = new ViewedVO(0, memberId, gameId, new Date());
-			if(viewedDAO.selectToday(memberId, gameId)!=null&&viewedDAO.selectToday(memberId, gameId).getGameId()==gameId) {
-				viewedDAO.update(viewedDAO.selectToday(memberId, gameId));
+			if(viewedDAO.selectOneToday(memberId, gameId)!=null&&viewedDAO.selectOneToday(memberId, gameId).getGameId()==gameId) {
+				viewedDAO.update(viewedDAO.selectOneToday(memberId, gameId));
 			}else {
 				viewedDAO.insert(viewedVO);
 			}
@@ -149,7 +149,7 @@ public class GameServiceImple implements GameService {
 		for(DiscountVO vo : discountList) {
 			discounts.put(vo.getGenre(), (double) vo.getDiscountRate());
 		}
-		List<ViewedVO> recentlyViewed = viewedDAO.select(memberId);
+		List<ViewedVO> recentlyViewed = viewedDAO.selectToday(memberId);
 		for(int i = 0 ; i < recentlyViewed.size(); i++) {
 			GameVO vo = gameDAO.select(recentlyViewed.get(i).getGameId());
 			if(!recentlyViewedGameVOList.contains(vo)) {
