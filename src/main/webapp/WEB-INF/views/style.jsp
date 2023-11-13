@@ -157,6 +157,8 @@ body {
 }
 .commentArea{
 	color:#fff;
+	width: 100%;
+	margin : auto;
 }
 .insertComment{
 	display:flex;
@@ -168,11 +170,16 @@ body {
 .comment_item{
 	word-wrap:break-word;
 	white-space:normal;
+	width : 100%;
 }
 .comment_item pre{
 	white-space:normal;
 	display:flex;
 	flex-wrap:wrap;
+	
+}
+.comment_item pre .reply_btn_area{
+	margin-left: auto;
 }
 
 #CommentGroup li{
@@ -682,5 +689,13 @@ textarea:focus{
     height:auto;
     max-height:148px;
     resize: none;
+}
+.commentNickname, .replyNickname{
+	font-weight: bold;
+	font-size : 16px;
+}
+.replies_area li{
+	display : flex;
+	width : 100%;
 }
 </style>

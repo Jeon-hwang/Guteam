@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.domain.MemberVO;
-import project.spring.guteam.domain.ReplyVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.persistence.BoardCommentDAO;
@@ -25,9 +24,6 @@ import project.spring.guteam.persistence.ReplyDAO;
 @Service //@Component
 public class BoardCommentServiceImple implements BoardCommentService {
 	private static final Logger logger= LoggerFactory.getLogger(BoardCommentServiceImple.class);
-	
-	@Autowired
-	private ReplyDAO replyDAO;
 	
 	@Autowired
 	private BoardCommentDAO boardCommentDAO;
@@ -78,7 +74,7 @@ public class BoardCommentServiceImple implements BoardCommentService {
 	@Override
 	public int update(int commentId, String CommentContent) {
 		logger.info("comment update() 실행");
-		return boardCommentDAO.update(CommentContent, commentId);
+		return boardCommentDAO.update("(updated)"+CommentContent, commentId);
 	}
 
 	@Override

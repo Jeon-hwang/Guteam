@@ -135,7 +135,6 @@ public class MessageController {
 		model.addAttribute("pageMaker", pageMaker);
 	}
 	
-	
 	// 쪽지 상세 보기
 	@GetMapping("/detail")
 	public void detail(Model model, Integer receiveMsgId, Integer sendMsgId, Integer page) {

@@ -70,7 +70,7 @@ public class ReplyServiceImple implements ReplyService {
 	@Override
 	public int update(int replyId, String replyContent) {
 		logger.info("update 호출");
-		return replyDAO.update(replyContent, replyId);
+		return replyDAO.update("(updated)"+replyContent, replyId);
 	}
 
 	@Override
