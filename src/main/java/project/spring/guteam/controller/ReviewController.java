@@ -46,12 +46,12 @@ public class ReviewController {
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
 		readListsAndSetModel(model, gameId, criteria, pageMaker, principal, keyword, orderBy);
-	}
+	} // end list()
 
 	@GetMapping("/register")
 	public void registerGET(Model model, int gameId) {
 		model.addAttribute("gameId", gameId);
-	}
+	} // end registerGET()
 
 	@PostMapping("/register")
 	public String registerPOST(ReviewVO vo, RedirectAttributes reAttr) {
@@ -62,45 +62,41 @@ public class ReviewController {
 		} else {
 			return "redirect:register?gameId=" + vo.getGameId();
 		}
-	}
+	} // end registerPOST()
 
 	@GetMapping("/detail")
 	public void detail(Model model, int reviewId, Integer page, Principal principal) {
-		if(page==null) {
-			page=1;
-		}
-		Map<String, Object> args = null;
+		Map<String, Object> args = new HashMap<>();
+		// 로그인 정보가 있으면 로그인 정보로 해당 리뷰에 추천을 하였는지 조회
 		if (principal != null) {
 			args = reviewService.read(reviewId, principal.getName());
+			ThumbVO thumbVO = (ThumbVO) args.get("thumbVO");
+			if (thumbVO != null) {
+				// thumbVO = 로그인 한 유저가 해당 리뷰에 대해 thumb up / down 한 정보
+//				logger.info(thumbVO.toString());
+				model.addAttribute("thumbVO", thumbVO);
+			}
 		} else {
 			args = reviewService.read(reviewId, "");
 		}
 		ReviewVO reviewVO = (ReviewVO) args.get("reviewVO");
+		// reviewVO = 리뷰 정보
 		String nickname = (String) args.get("nickname");
+		// nickname = 작성자 닉네임
 		GameVO gameVO = (GameVO) args.get("gameVO");
-		if (principal != null) {
-			ThumbVO thumbVO = (ThumbVO) args.get("thumbVO");
-			if (thumbVO != null) {
-				logger.info(thumbVO.toString());
-				model.addAttribute("thumbVO", thumbVO);
-			}
-		}
-		logger.info(reviewVO.toString());
+//		logger.info(reviewVO.toString());
 		model.addAttribute("nickname", nickname);
 		model.addAttribute("reviewVO", reviewVO);
 		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("page", page);
-	}
+	} // end detail()
 
 	@GetMapping("/update")
 	public void updateGET(Model model, int reviewId, Integer page) {
-		if(page==null) {
-			page=1;
-		}
 		ReviewVO reviewVO = (ReviewVO) reviewService.read(reviewId, "").get("reviewVO");
 		model.addAttribute("reviewVO", reviewVO);
 		model.addAttribute("page", page);
-	}
+	} // end updateGET()
 
 	@PostMapping("/update")
 	public String updatePOST(ReviewVO vo, RedirectAttributes reAttr, Integer page) {
@@ -115,7 +111,7 @@ public class ReviewController {
 			return "redirect:update?reviewId=" + vo.getReviewId() + "&page=" + page;
 		}
 
-	}
+	} // end updatePOST()
 
 	@PostMapping("/delete")
 	public String delete(int reviewId, int gameId, RedirectAttributes reAttr) {
@@ -126,14 +122,14 @@ public class ReviewController {
 		} else {
 			return "redirect:/review/detail?reviewId=" + reviewId + "&gameId=" + gameId;
 		}
-	}
+	} // end delete()
 	
 	@GetMapping("/list-ajax/{memberId}")
 	public ResponseEntity<Map<String, Object>> readMyReview(@PathVariable("memberId") String memberId, Integer page){
 		logger.info("내가 쓴 리뷰 조회하기");
 		Map<String, Object> args = new HashMap<>();
 		PageCriteria criteria = new PageCriteria();
-		logger.info(page+"페이지");
+//		logger.info(page+"페이지");
 		if(page != null) {
 			criteria.setPage(page);	
 		}
@@ -145,26 +141,26 @@ public class ReviewController {
 		args.put("list", list);
 		args.put("pageMaker", pageMaker);
 		return new ResponseEntity<Map<String, Object>>(args, HttpStatus.OK);
-	}
+	} // end readMyReview()
 
 	private void readListsAndSetModel(Model model, int gameId, PageCriteria criteria, PageMaker pageMaker,
 			Principal principal, String keyword, String orderBy) {
 		Map<String, Object> args=null;
-		if(orderBy!=null&&orderBy.equals("thumbUpCnt")) {
-			if (keyword != null && !keyword.equals("")) {
+		if(orderBy!=null&&orderBy.equals("thumbUpCnt")) { // 추천많은 순 정렬일 경우
+			if (keyword != null && !keyword.equals("")) { // 검색 키워드가 있는 경우
 				pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
 				paging(pageMaker, criteria);
 				args = reviewService.read(orderBy, criteria, keyword, gameId);
-			} else {
+			} else { // 검색 키워드가 없는 경우
 				pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
 				paging(pageMaker, criteria);
 				args = reviewService.read(orderBy, gameId, criteria);
 			}
-		}else if (keyword != null && !keyword.equals("")) {
+		}else if (keyword != null && !keyword.equals("")) { // 정렬이 없고 검색 키워드만 있는 경우
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId, keyword));
 			paging(pageMaker, criteria);
 			args = reviewService.read(gameId, criteria, keyword);
-		} else {
+		} else { // 정렬이 없고 검색 키워드도 없는 경우
 			pageMaker.setTotalCount(reviewService.getTotalCount(gameId));
 			paging(pageMaker, criteria);
 			args = reviewService.read(gameId, criteria);
@@ -176,14 +172,16 @@ public class ReviewController {
 		model.addAttribute("nicknameList", nicknameList);
 		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("reviewList", reviewList);
+		// 로그인 정보가 있으면 리뷰를 썼는지 확인하여 리뷰 id 를 리턴(리뷰를 쓴 기록이 없으면 null)
 		int writedReviewId = 0;
-		if (principal != null) {
+		if (principal != null) { 
 			writedReviewId = reviewService.readWrited(gameId, principal.getName());
+			model.addAttribute("writedReviewId", writedReviewId);
 		}
-		model.addAttribute("writedReviewId", writedReviewId);
-	}
+	} // end readListsAndSetModel()
 
 	private void paging(PageMaker pageMaker, PageCriteria criteria) {
+		// 페이지 정보를 바탕으로 페이지의 한계를 벗어날 경우 한계로 페이지를 재설정
 		pageMaker.setPageData();
 		if (criteria.getPage() > pageMaker.getEndPageNo()) {
 			criteria.setPage(pageMaker.getEndPageNo());
@@ -191,5 +189,5 @@ public class ReviewController {
 			criteria.setPage(1);
 		}
 		pageMaker.setPageData();
-	}
-}
+	} // end paging()
+} // end ReviewController

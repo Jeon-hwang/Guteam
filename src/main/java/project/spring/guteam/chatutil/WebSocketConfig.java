@@ -17,6 +17,6 @@ public class WebSocketConfig implements WebSocketConfigurer{
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(ecoHandler, "/guteam/chat");
-	}
+	} // end registerWebSocketHandlers [handlerMapping = "/guteam/chat" => ecoHandler]
 
-}
+} // end WebSocketConfig

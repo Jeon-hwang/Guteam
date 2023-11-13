@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.domain.WishListVO;
 import project.spring.guteam.pageutil.PageCriteria;
+import project.spring.guteam.persistence.DiscountDAO;
 import project.spring.guteam.persistence.GameDAO;
 import project.spring.guteam.persistence.WishListDAO;
 
@@ -24,6 +25,9 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 	
 	@Autowired
 	GameDAO gameDAO;
+	
+	@Autowired
+	DiscountDAO discountDAO;
 	
 	@Override
 	public int create(WishListVO vo) {
@@ -44,6 +48,10 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 		for(int i = 0 ; i<list.size();i++) {
 			int gameId = list.get(i).getGameId();
 			GameVO vo = gameDAO.select(gameId);
+			if(discountDAO.select(vo.getGenre())!=null) {
+				vo.setPrice(vo.getPrice()-(int)(vo.getPrice()*(discountDAO.select(vo.getGenre()).getDiscountRate())));
+				logger.info(vo.getPrice()+"로 할인");
+			}
 			gList.add(vo);
 		}
 		

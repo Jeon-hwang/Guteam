@@ -17,12 +17,12 @@ public class LogoutSuccessHandlerImple implements LogoutSuccessHandler{
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
-		logger.info("로그아웃 성공 핸들러 호출");
-		logger.info("referer = " + request.getHeader("referer"));
+//		logger.info("로그아웃 성공 핸들러 호출");
+//		logger.info("referer = " + request.getHeader("referer"));
 		String referer = request.getHeader("referer");
-		response.sendRedirect(referer);		
+		response.sendRedirect(referer);
+		// 이전 페이지로 redirect
 		
-	}
+	} // end onLogoutSuccess()
 	
-
-}
+} // end LogoutSuccessHandlerImple - 로그아웃 성공시 실행되는 핸들러

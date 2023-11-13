@@ -21,11 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	update ${viewed} set ${viewedDate}=sysdate where ${viewedId}=#{viewedId}
     </update>
     
-    <delete id="delete">
-    	delete ${viewed} where ${viewedId}=#{viewedId}
-    </delete>
-    
-    <select id="select_recently_one" resultType="viewedVO">
+    <select id="select_today_one" resultType="viewedVO">
     	select * from ${viewed} where ${memberId}=#{memberId} 
     	and ${gameId}=#{gameId}
     	and to_char(${viewedDate},'yyyyMMdd')=to_char(sysdate,'yyyyMMdd')

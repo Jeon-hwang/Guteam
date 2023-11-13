@@ -49,7 +49,7 @@
 	</form>
 	<div class="btnOrderGroup">
 	<input type="hidden" class="orderByItem" name="orderBy" value="commentCnt">
-	<input type="submit" class="orderBy" value="댓글수↑">
+	<button type="submit" class="btn btn-secondary orderBy">댓글수 <i class="bi bi-sort-numeric-down-alt"></i></button>
 	</div>
 	<table class="table table-secondary table-hover">
 		<thead>
@@ -103,6 +103,7 @@
 	</div>
 </section>
 		<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 			var insertResult = $('#insertResult').val();

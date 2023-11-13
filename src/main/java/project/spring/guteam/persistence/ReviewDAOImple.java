@@ -93,7 +93,7 @@ public class ReviewDAOImple implements ReviewDAO {
 		}
 		logger.info("rating = " + rating);
 		return rating;
-	}
+	} // end getRatingAvg()
 
 	@Override
 	public int selectWrited(int gameId, String memberId) {

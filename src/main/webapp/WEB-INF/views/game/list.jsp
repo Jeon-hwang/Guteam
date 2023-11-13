@@ -152,6 +152,7 @@
 			}); // orderBy.onclick()
 			
 			if($('#isLogin').val()=='y'){
+				
 				connect();
 			}
 			

@@ -24,17 +24,21 @@ public class EchoHandler extends TextWebSocketHandler{
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		// 소켓 접속시
 		sessionList.add(session);
+		// 리스트에 추가하고
 		String memberId = session.getPrincipal().getName();
 		String nickname = memberService.read(memberId).getNickname();
-		for(WebSocketSession sess: sessionList) {
-		sess.sendMessage(new TextMessage(nickname + " 님이 입장하셨습니다"));
+		logger.info(session.getLocalAddress().getAddress()+" : nickname = " + nickname);
+		for(WebSocketSession sess: sessionList) { // 입장 안내 문구를 채팅창에 보여줌
+			sess.sendMessage(new TextMessage(nickname + " 님이 입장하셨습니다"));
 		}
-	}
+	} // end afterConnectionEstablished() 
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		for(WebSocketSession sess: sessionList) {
+		// 메시지 전송시
+		for(WebSocketSession sess: sessionList) { // 메시지를 채팅창에 보여줌
 			String memberId = session.getPrincipal().getName();
 			String nickname = memberService.read(memberId).getNickname();
 			if(sess.equals(session)) {
@@ -43,16 +47,19 @@ public class EchoHandler extends TextWebSocketHandler{
 				sess.sendMessage(new TextMessage("<span class='yourChat'><div class='chatInfo'><div class='nickname'>"+nickname+"</div><div class='message'>"+message.getPayload()+"</div>"));
 			}
 		}
-	}
+	} // end handleTextMessage
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		// 접속 해제시 
 		String memberId = session.getPrincipal().getName();
 		String nickname = memberService.read(memberId).getNickname();
 		sessionList.remove(session);
+		// 접속을 해제시키고
 		for(WebSocketSession sess: sessionList) {
+			// 퇴장 안내 문구를 나머지 채팅창에 보여줌
 			sess.sendMessage(new TextMessage(nickname + " 님이 퇴장하셨습니다"));
 		}
-	}
+	} // end afterConnectionClosed
 
-}
+} // end EchoHandler

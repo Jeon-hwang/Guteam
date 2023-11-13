@@ -35,7 +35,7 @@ public class GameBoardServiceImple implements GameBoardService {
 	public int create(GameBoardVO vo) {
 		logger.info("gameBoard create() 호출 : vo = " + vo);
 		return gameBoardDAO.insert(vo);
-	}
+	} // end create()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -52,25 +52,25 @@ public class GameBoardServiceImple implements GameBoardService {
 		args.put("nicknameList",nicknameList);
 		args.put("gameVO", gameVO);
 		return args;
-	}
+	} // end read()
 
 	@Override
 	public int update(GameBoardVO vo) {
 		logger.info("gameBoard update() 호출 : vo = " + vo );
 		return gameBoardDAO.update(vo);
-	}
+	} // end update()
 
 	@Override
-	public int update(int gameBoardId) {
+	public int updateToDeleted(int gameBoardId) {
 		logger.info("gameBoard update(gameBoardId) 호출 : gameBoardId = " + gameBoardId);
 		return gameBoardDAO.updateDeleted(gameBoardId);
-	}
+	} // end updateToDeleted()
 
 	@Override
 	public int getTotalCount(int gameId) {
 		logger.info("gameBoard getTotalCount() 호출 ");
 		return gameBoardDAO.getTotalCounts(gameId);
-	}
+	} // end getTotalCount()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -92,7 +92,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		args.put("nicknameList",nicknameList);
 		args.put("gameVO", gameVO);
 		return args;
-	}
+	} // end read()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -108,19 +108,19 @@ public class GameBoardServiceImple implements GameBoardService {
 		args.put("gameBoardVO", gameBoardVO);
 		args.put("nickname", nickname);
 		return args;
-	}
+	} // end read()
 
 	@Override
 	public int update(int gameBoardId, int amount) {
 		logger.info("gameBoard updateCommentCnt() 호출");
 		return gameBoardDAO.updateCommentCnt(gameBoardId, amount);
-	}
+	} // end update()
 
 	@Override
 	public int getTotalCount(int gameId, PageCriteria criteria, String keywordCriteria, String keyword) {
 		logger.info("getTotalCount(keyword) 호출 : keyword = " + keyword);
 		return gameBoardDAO.getTotalCounts(gameId, criteria, keywordCriteria, keyword);
-	}
+	} // end getTotalCount()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -137,7 +137,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		args.put("nicknameList",nicknameList);
 		args.put("gameVO", gameVO);
 		return args;
-	}
+	} // end read
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -160,19 +160,19 @@ public class GameBoardServiceImple implements GameBoardService {
 		args.put("nicknameList",nicknameList);
 		args.put("gameVO", gameVO);
 		return args;
-	}
+	} // end read()
 
 	@Override
 	public List<GameBoardVO> readMyBoard(String memberId, PageCriteria criteria) {
 		logger.info("gameBoard readMyBoard() 호출 : memberId = "+ memberId);
 		List<GameBoardVO> myBoardList = gameBoardDAO.selectByMemberId(memberId, criteria);
 		return myBoardList;
-	}
+	} // end readMyBoard()
 
 	@Override
 	public int getCntMyBoard(String memberId) {
 		return gameBoardDAO.getCntMyBoard(memberId);
-	}
+	} // end getCntMyBoard()
 	
 	
-}
+} // end GameBoardServiceImple

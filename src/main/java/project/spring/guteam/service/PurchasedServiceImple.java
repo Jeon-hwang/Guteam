@@ -1,6 +1,5 @@
 package project.spring.guteam.service;
 
-import java.lang.ProcessHandle.Info;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,7 @@ import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.domain.PurchasedVO;
 import project.spring.guteam.domain.WishListVO;
+import project.spring.guteam.persistence.DiscountDAO;
 import project.spring.guteam.persistence.GameDAO;
 import project.spring.guteam.persistence.MemberDAO;
 import project.spring.guteam.persistence.PurchasedDAO;
@@ -37,6 +37,8 @@ public class PurchasedServiceImple implements PurchasedService {
 	@Autowired
 	private GameDAO gameDAO;
 	
+	@Autowired
+	private DiscountDAO discountDAO;
 	
 	@Override
 	@Transactional(value = "transactionManager")
@@ -69,6 +71,10 @@ public class PurchasedServiceImple implements PurchasedService {
 		for(String x : StrArr) {
 			logger.info(x);
 			GameVO vo = (GameVO) gameDAO.select(Integer.parseInt(x));
+			if(discountDAO.select(vo.getGenre())!=null) {
+				vo.setPrice(vo.getPrice()-(int)(vo.getPrice()*(discountDAO.select(vo.getGenre()).getDiscountRate())));
+				logger.info(vo.getPrice()+"로 할인");
+			}
 			list.add(vo);
 		}
 		MemberVO vo = memberDAO.select(memberId);

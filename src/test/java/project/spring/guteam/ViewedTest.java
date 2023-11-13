@@ -34,21 +34,15 @@ public class ViewedTest {
 	}
 
 	private void selectOne() {
-		ViewedVO vo = viewedDAO.selectToday("test",80);
+		ViewedVO vo = viewedDAO.selectOneToday("test",80);
 		logger.info(vo.toString());
 		
 	}
 
-	private void delete() {
-		for(int i = 1; i<10; i++) {
-			logger.info(viewedDAO.delete(i)+"삭제");
-		}
-		
-	}
 
 	private void select() {
 		String memberId="test";
-		List<ViewedVO> list = viewedDAO.select(memberId);
+		List<ViewedVO> list = viewedDAO.selectToday(memberId);
 		for(ViewedVO vo : list) {
 			logger.info(vo.toString());
 		}

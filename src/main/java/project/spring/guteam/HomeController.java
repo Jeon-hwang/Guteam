@@ -19,6 +19,6 @@ public class HomeController {
 	public String home(Locale locale, Model model) {
 		logger.info("구팀 프로젝트에 오신 여러분 환영합니다.");
 		return "redirect:/game/list";
-	}
+	} // end home() [mapping = "/" => "/game/list"]
 	
-}
+} // end HomeController
