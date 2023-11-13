@@ -27,31 +27,31 @@ public class GameDAOImple implements GameDAO {
 	public int insert(GameVO vo) {
 		logger.info("Game insert() 호출 : vo = " + vo.toString());
 		return sqlSession.insert(NAMESPACE+".insert",vo);
-	}
+	} // end insert()
 
 	@Override
 	public GameVO select(int gameId) {
 		logger.info("Game select_by_game_id() 호출 : gameId = " + gameId);
 		return sqlSession.selectOne(NAMESPACE + ".select_by_game_id", gameId);
-	}
+	} // end select()
 
 	@Override
 	public int update(GameVO vo) {
 		logger.info("Game update() 호출 : vo = " + vo.toString());
 		return sqlSession.update(NAMESPACE+".update", vo);
-	}
+	} // end update()
 
 	@Override
 	public List<GameVO> selectAll(PageCriteria criteria) {
 		logger.info("Game select(criteria) 호출 : criteria = " + criteria);
 		return sqlSession.selectList(NAMESPACE + ".paging", criteria);
-	}
+	} // end selectAll()
 
 	@Override
 	public int getTotalCounts() {
 		logger.info("Game getTotalCounts() 호출");
 		return sqlSession.selectOne(NAMESPACE + ".total_count");
-	}
+	} // end getTotalCounts()
 
 	
 	@Override
@@ -62,7 +62,7 @@ public class GameDAOImple implements GameDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE+ ".select_by_price", args);
-	}
+	} // end selectByPrice()
 
 	@Override
 	public List<GameVO> selectByNameOrGenre(String keyword, PageCriteria criteria) {
@@ -72,25 +72,25 @@ public class GameDAOImple implements GameDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_by_keyword", args);
-	}
+	} // end selectByNameOrGenre()
 
 	@Override
 	public int getTotalCounts(String keyword) {
 		logger.info("Game getTotalCounts(keyword) 호출 : keyword = " + keyword);
 		return sqlSession.selectOne(NAMESPACE + ".total_count_by_keyword", keyword);
-	}
+	} // end getTotalCounts()
 
 	@Override
 	public int getTotalCounts(int price) {
 		logger.info("Game getTotalCounts(price)호출 : price = " + price);
 		return sqlSession.selectOne(NAMESPACE+ ".total_count_by_price", price);
-	}
+	} // end getTotalCounts()
 
 	@Override
 	public int getSequenceNo() {
 		logger.info("Game getSeqNo()호출");
 		return sqlSession.selectOne(NAMESPACE+".get_seq_no");
-	}
+	} // end getSequenceNo()
 
 	@Override
 	public List<GameVO> selectOrderBy(String keyword, String keywordCriteria, String orderBy, PageCriteria criteria) {
@@ -127,7 +127,7 @@ public class GameDAOImple implements GameDAO {
 			}
 		}
 		return sqlSession.selectList(NAMESPACE + ".paging", criteria);
-	}
+	} // end selectOrderBy()
 
 	@Override
 	public List<GameVO> selectInterestGames(String memberId) {
@@ -138,7 +138,7 @@ public class GameDAOImple implements GameDAO {
 			interestList.add(select(vo.getGameId()));
 		}
 		return interestList;
-	}
+	} // end selectInterestGames()
 
 	@Override
 	public List<GameVO> selectByInterest(List<String> keywords, PageCriteria criteria) {
@@ -154,7 +154,7 @@ public class GameDAOImple implements GameDAO {
 		args.put("end", criteria.getEnd());
 		List<GameVO> list = sqlSession.selectList(NAMESPACE+".select_by_interest_keyword", args);
 		return list;
-	}
+	} // end selectByInterest()
 
 
-}
+} // end GameDAOImple

@@ -71,7 +71,7 @@ public class GameController {
 		logger.info("registerPOST 호출 file = " + file);
 		if (vo.getGameImageName().equals("basic.png") 
 				&& file != null && !file.getOriginalFilename().equals("")) { // ajax 가 아닌 input[type="file"]을 통해 등록 한 경우
-			int gameId = gameService.getSeqNo();
+			int gameId = gameService.getSeqNo(); // 등록될 게임의 id 를 sequence 조회를 통해 먼저 가져와서 imageName 에 이용
 			String extension = "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
 			String gameImageName = gameId+extension;
 			saveImage(file, vo, gameImageName); // 이미지 파일을 저장

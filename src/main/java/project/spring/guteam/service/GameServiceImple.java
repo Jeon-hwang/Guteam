@@ -42,13 +42,13 @@ public class GameServiceImple implements GameService {
 	public int create(GameVO vo) {
 		logger.info("game create() 호출 : vo = " + vo);
 		return gameDAO.insert(vo);
-	}
+	} // end create()
 
 	@Override
 	public int getTotalCount() {
 		logger.info("game getTotalCount() 호출");
 		return gameDAO.getTotalCounts();
-	}
+	} // end getTotalCount()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -58,7 +58,7 @@ public class GameServiceImple implements GameService {
 		Map<String, Object> args = new HashMap<>();
 		setRatingAndPrice(gameVOList, args);
 		return args;
-	}
+	} // end readAll()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -67,12 +67,14 @@ public class GameServiceImple implements GameService {
 			String memberId = principal.getName();
 			ViewedVO viewedVO = new ViewedVO(0, memberId, gameId, new Date());
 			if(viewedDAO.selectOneToday(memberId, gameId)!=null&&viewedDAO.selectOneToday(memberId, gameId).getGameId()==gameId) {
+				// 오늘 조회한 정보가 있으면 조회정보를 수정
 				viewedDAO.update(viewedDAO.selectOneToday(memberId, gameId));
 			}else {
+				// 오늘 조회한 정보가 없으면 조회정보를 입력
 				viewedDAO.insert(viewedVO);
 			}
 		}
-		logger.info("game read(gameId) 호출 : gameId = " + gameId);
+//		logger.info("game read(gameId) 호출 : gameId = " + gameId);
 		GameVO vo = gameDAO.select(gameId);
 		List<DiscountVO> discountList = discountDAO.selectAll();
 		Map<String, Double> discounts = new HashMap<>();
@@ -80,26 +82,28 @@ public class GameServiceImple implements GameService {
 			discounts.put(discountVO.getGenre(), (double) discountVO.getDiscountRate());
 		}
 		if(discounts.containsKey(vo.getGenre())) {
+			// 할인 정보에 있는 장르이면 가격을 할인 가격으로 재설정
 			vo.setPrice(vo.getPrice() - (int) (vo.getPrice()*discounts.get(vo.getGenre())));
 		}
 		int rating = reviewDAO.getRatingAvg(gameId);
+		 // 게임의 평균 평점을 조회
 		Map<String, Object> args = new HashMap<>();
 		args.put("vo", vo);
 		args.put("rating", rating);
 		return args;
-	}
+	} // end readGame()
 
 	@Override
 	public int update(GameVO vo) {
 		logger.info("game update() 호출 : vo = " + vo);
 		return gameDAO.update(vo);
-	}
+	} // end update()
 
 	@Override
 	public int getTotalCountByKeyword(String keyword) {
 		logger.info("getTotalCount(keyword) 호출 : keyword = " + keyword);
 		return gameDAO.getTotalCounts(keyword);
-	}
+	} // end getTotalCountByKeyword()
 	
 	@Transactional(value = "transactionManager")
 	@Override
@@ -109,13 +113,13 @@ public class GameServiceImple implements GameService {
 		Map<String, Object> args = new HashMap<>();
 		setRatingAndPrice(gameVOList, args);
 		return args;
-	}
+	} // end readByKeyword()
 
 	@Override
 	public int getTotalCountByPrice(int price) {
 		logger.info("getTotalCount(price) 호출 : price = " + price);
 		return gameDAO.getTotalCounts(price);
-	}
+	} // end getTotalCountByPrice()
 	
 	@Transactional(value = "transactionManager")
 	@Override
@@ -125,7 +129,7 @@ public class GameServiceImple implements GameService {
 		Map<String, Object> args = new HashMap<>();
 		setRatingAndPrice(gameVOList, args);
 		return args;
-	}
+	} // end readByPrice()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -135,7 +139,7 @@ public class GameServiceImple implements GameService {
 		List<GameVO> gameVOList = gameDAO.selectOrderBy(keyword, keywordCriteria, orderBy, criteria);
 		setRatingAndPrice(gameVOList, args);
 		return args;
-	}
+	} // end readOrderBy()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -151,9 +155,11 @@ public class GameServiceImple implements GameService {
 		}
 		List<ViewedVO> recentlyViewed = viewedDAO.selectToday(memberId);
 		for(int i = 0 ; i < recentlyViewed.size(); i++) {
+			// 오늘 조회한 게임 id 값으로 게임 정보들을 조회
 			GameVO vo = gameDAO.select(recentlyViewed.get(i).getGameId());
 			if(!recentlyViewedGameVOList.contains(vo)) {
 				if(discounts.containsKey(vo.getGenre())) {
+					// 할인 정보에 있는 장르이면 가격을 할인 가격으로 재설정
 					vo.setPrice(vo.getPrice() - (int) (vo.getPrice()*discounts.get(vo.getGenre())));
 				}
 			recentlyViewedGameVOList.add(vo);
@@ -163,7 +169,7 @@ public class GameServiceImple implements GameService {
 		args.put("recentlyViewedGameVOList", recentlyViewedGameVOList);
 		args.put("recentlyViewedRatingList", recentlyViewedRatingList);
 		return args;
-	}
+	} // end recentlyViewedGames()
 
 	@Override
 	public Map<String, Object> readInterestGames(String memberId, PageCriteria criteria) {
@@ -177,19 +183,19 @@ public class GameServiceImple implements GameService {
 		List<GameVO> gameVOList = gameDAO.selectByInterest(keywords, criteria);
 		setRatingAndPrice(gameVOList, args);
 		return args;
-	}
+	} // end readInterestGames()
 
 	@Override
 	public int getSeqNo() {
 		int sequence = gameDAO.getSequenceNo();
 		return sequence;
-	}
+	} // end getSeqNo()
 
 	@Override
 	public int getInterestKeywordCnt(String memberId) {
 		int keywordCnt = gameDAO.selectInterestGames(memberId).size();
 		return keywordCnt;
-	}
+	} // end getInterestKeywordCnt()
 	
 	private void setRatingAndPrice(List<GameVO> gameVOList, Map<String, Object> args) {
 		List<DiscountVO> discountList = discountDAO.selectAll();
@@ -200,7 +206,8 @@ public class GameServiceImple implements GameService {
 		List<Integer> ratingList = new ArrayList<>();
 		for(int i = 0 ; i < gameVOList.size(); i++) {
 			ratingList.add(reviewDAO.getRatingAvg(gameVOList.get(i).getGameId()));
-			if(discounts.containsKey(gameVOList.get(i).getGenre())) {
+			if(discounts.containsKey(gameVOList.get(i).getGenre())) { 
+				// 할인 테이블에 장르가 있다면 해당 할인 정보로 가격을 재설정
 				gameVOList.get(i).setPrice(gameVOList.get(i).getPrice() - (int) (gameVOList.get(i).getPrice()*discounts.get(gameVOList.get(i).getGenre())));
 			}
 		}
@@ -208,6 +215,6 @@ public class GameServiceImple implements GameService {
 		args.put("gameVOList", gameVOList);
 		args.put("ratingList", ratingList);
 		
-	}
+	} // end setRatingAndPrice()
 
-}
+} // end GameServiceImple

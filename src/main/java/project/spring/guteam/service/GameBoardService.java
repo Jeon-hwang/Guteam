@@ -8,8 +8,10 @@ import project.spring.guteam.pageutil.PageCriteria;
 
 public interface GameBoardService {
 	int create(GameBoardVO vo);
+	// 게시판 정보 입력
 	Map<String, Object> read(int gameId, PageCriteria criteria);
 	Map<String, Object> read(int gameBoardId, String memberId);
+	// 
 	int update(GameBoardVO vo);
 	int updateToDeleted(int gameBoardId);
 	int getTotalCount(int gameId);

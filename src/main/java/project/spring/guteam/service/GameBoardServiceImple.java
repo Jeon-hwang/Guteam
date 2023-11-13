@@ -35,7 +35,7 @@ public class GameBoardServiceImple implements GameBoardService {
 	public int create(GameBoardVO vo) {
 		logger.info("gameBoard create() 호출 : vo = " + vo);
 		return gameBoardDAO.insert(vo);
-	}
+	} // end create()
 
 	@Transactional(value = "transactionManager")
 	@Override
@@ -108,7 +108,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		args.put("gameBoardVO", gameBoardVO);
 		args.put("nickname", nickname);
 		return args;
-	}
+	} // end read()
 
 	@Override
 	public int update(int gameBoardId, int amount) {
