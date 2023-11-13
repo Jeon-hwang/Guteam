@@ -42,5 +42,17 @@ public class SseEmitters {
 		}); // end emitters.forEach()
 		
 	} // end friendRequest()
+	
+	public void message(String memberId, String sendMemberId) {
+		emitters.forEach((key,emitter)->{
+			if(key.equals(memberId)&&emitter!=null) {
+				try {
+					emitter.send(SseEmitter.event().name(memberId).data(sendMemberId));
+				}catch(IOException e){
+					throw new RuntimeException(e);
+				}
+			}
+		});
+	}
 
 } // end SseEmitters

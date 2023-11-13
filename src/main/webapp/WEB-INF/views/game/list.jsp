@@ -164,8 +164,8 @@
 			if(memberId!='undefined'){
 				var sse = new EventSource("/guteam/sse/connect/"+memberId);
 				sse.addEventListener(memberId, e => {
-					console.log("친구요청이 왔습니다 - from :", e.data);
-					makeNoti(e.data);
+					console.log("from :", e.data);
+					makeNoti(e.data, body);
 				});
 			}
 		}

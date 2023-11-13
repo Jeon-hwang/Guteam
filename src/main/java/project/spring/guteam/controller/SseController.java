@@ -42,5 +42,13 @@ public class SseController {
 		sseEmitters.friendRequest(memberId, sendMemberId); // 친구 요청을 memberId 를 기준으로 알림
 		return ResponseEntity.ok().build();
 	} // end friendRequest()
+	
+	@Async
+	@PostMapping("/message/{memberId}")
+	public ResponseEntity<Void> message(@PathVariable("memberId") String memberId, @RequestParam String sendMemberId){
+		logger.info("memberId : " + memberId + ", sendMemberId : " + sendMemberId);
+		sseEmitters.message(memberId, sendMemberId); // 메시지를 memberId 를 기준으로 알림
+		return ResponseEntity.ok().build();
+	}
 
 } // end SseController
