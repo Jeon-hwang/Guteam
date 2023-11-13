@@ -24,7 +24,7 @@ public class EchoHandler extends TextWebSocketHandler{
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		logger.info(session.getLocalAddress()+": "+session.getPrincipal().getName());
+		logger.info(session.getLocalAddress().getAddress()+": "+session.getPrincipal().getName());
 		sessionList.add(session);
 		String memberId = session.getPrincipal().getName();
 		String nickname = memberService.read(memberId).getNickname();
