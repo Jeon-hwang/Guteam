@@ -172,7 +172,7 @@ public class ReviewController {
 		model.addAttribute("nicknameList", nicknameList);
 		model.addAttribute("gameVO", gameVO);
 		model.addAttribute("reviewList", reviewList);
-		// 로그인 정보가 있으면 리뷰를 썼는지 확인하여 리뷰 id 를 리턴(리뷰를 쓴 기록이 없으면 null)
+		// 로그인 정보가 있으면 리뷰를 썼는지 확인하여 리뷰 id 를 리턴(리뷰를 쓴 기록이 없으면 0)
 		int writedReviewId = 0;
 		if (principal != null) { 
 			writedReviewId = reviewService.readWrited(gameId, principal.getName());
