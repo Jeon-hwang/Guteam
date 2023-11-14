@@ -14,9 +14,7 @@
 <section>
 <div id="container">
 	<div class="btnAdmin">
-	<sec:authorize access="hasAnyRole('USER, ADMIN')">
-	<input type="hidden" id="isLogin" value="y">
-	</sec:authorize>
+	
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<a href="register" class="btn btn-light">게임등록</a>
 	<a href="../discount/update" class="btn btn-light">할인율 수정</a>
@@ -151,24 +149,11 @@
 				location.href=url;
 			}); // orderBy.onclick()
 			
-			if($('#isLogin').val()=='y'){
-				
-				connect();
-			}
+			
 			
 			
 		}); // end document.ready()
-		function connect(){
-			var memberId = $('#memberId').val();
-			console.log(memberId);
-			if(memberId!='undefined'){
-				var sse = new EventSource("/guteam/sse/connect/"+memberId);
-				sse.addEventListener(memberId, e => {
-					console.log("from :", e.data);
-					makeNoti(e.data, body);
-				});
-			}
-		}
+		
 	</script>
 	
 	

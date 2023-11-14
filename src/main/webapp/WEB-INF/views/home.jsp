@@ -31,6 +31,7 @@
 			<form action="/guteam/member/logout" method="post" style="display:flex;">
 			<sec:csrfInput/>
 			<input type="submit" class="btn btn-light" value="로그아웃"></form>
+			<input type="hidden" id="isLogin" value="y">
 			<br><br>
 	<sec:authentication property="principal" var="principal"/>
 	<input type="hidden" id="memberId" value="${principal.username }">
@@ -126,22 +127,48 @@
 		var gameId = $(obj).find('.gameId').attr('value');
 		location.href='/guteam/game/detail?gameId='+gameId;
 	}
-	
+	function connect(){
+		var memberId = $('#memberId').val();
+		console.log(memberId);
+		if(memberId!='undefined'){
+			var sse = new EventSource("/guteam/sse/connect/"+memberId);
+			sse.addEventListener(memberId, e => {
+				makeNoti(e.data);
+			});
+		}
+	}
+	if($('#isLogin').val()=='y'){
+		connect();
+	}
 	
 </script>
 <sec:authorize access="isAuthenticated()">
 	<script type="text/javascript">
-	function makeNoti(sendMemberId, body){
+	function makeNoti(sendMemberId){
 		if(Notification.permission == 'denied' || Notification.permission ==='default'){
 			alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
 		}else{
+			var noti = sendMemberId.substr(sendMemberId.lastIndexOf('\n')+1);
+			sendMemberId = sendMemberId.substr(0,sendMemberId.lastIndexOf('\n'));
+			console.log(noti);
+			var notify = '';
+			if(noti=='friendRequest'){
+				notify = '친구 요청이 왔습니다.';				
+			}else if(noti=='message'){
+				notify = '메시지가 도착했습니다.';
+			}
+			console.log(notify);
 			var notification = new Notification(sendMemberId, {
-				body: body,
+				body: notify,
 				icon: '/guteam/image/logo80.png'
 			});
 			
 			notification.addEventListener("click", () => {
-				window.open('/guteam/friend/list');
+				if(noti=='friendRequest'){
+					window.open('/guteam/friend/list');				
+				}else if(noti=='message'){
+					window.open('/guteam/message/list', '쪽지함', 'width=720, height=500, location=no, toolbars=no, status=no');
+				}
 			});
 		}
 	}

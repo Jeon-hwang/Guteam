@@ -34,11 +34,11 @@ public class SseEmitters {
 			if(key.equals(memberId)&&emitter!=null) { 
 				// map 에서 memberId 와 일치하는 키가 있으면 emitter로 event 발신
 				try {
-					emitter.send(SseEmitter.event().name(memberId).data(sendMemberId));
+					emitter.send(SseEmitter.event().name(memberId).data(sendMemberId).data("friendRequest"));
 				}catch(IOException e){
 					throw new RuntimeException(e);
 				}
-			}
+			}	
 		}); // end emitters.forEach()
 		
 	} // end friendRequest()
@@ -47,7 +47,7 @@ public class SseEmitters {
 		emitters.forEach((key,emitter)->{
 			if(key.equals(memberId)&&emitter!=null) {
 				try {
-					emitter.send(SseEmitter.event().name(memberId).data(sendMemberId));
+					emitter.send(SseEmitter.event().name(memberId).data(sendMemberId).data("message"));
 				}catch(IOException e){
 					throw new RuntimeException(e);
 				}

@@ -37,4 +37,6 @@ public interface ReviewService {
 	// 로그인 정보로 내가 쓴 리뷰 정보들을 조회
 	int getCntMyReview(String memberId);
 	// 로그인 정보로 내가 쓴 리뷰의 수를 리턴
+	int isPurchased(int gameId, String name);
+	// 로그인 정보로 구매한 게임인지 확인하여 리턴(구매하였으면 1 아니면 0 )
 }

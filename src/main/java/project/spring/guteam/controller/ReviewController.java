@@ -174,9 +174,12 @@ public class ReviewController {
 		model.addAttribute("reviewList", reviewList);
 		// 로그인 정보가 있으면 리뷰를 썼는지 확인하여 리뷰 id 를 리턴(리뷰를 쓴 기록이 없으면 0)
 		int writedReviewId = 0;
+		int purchased = 0;
 		if (principal != null) { 
 			writedReviewId = reviewService.readWrited(gameId, principal.getName());
 			model.addAttribute("writedReviewId", writedReviewId);
+			purchased = reviewService.isPurchased(gameId, principal.getName());
+			model.addAttribute("purchased", purchased);
 		}
 	} // end readListsAndSetModel()
 

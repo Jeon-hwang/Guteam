@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import project.spring.guteam.domain.GameVO;
+import project.spring.guteam.domain.PurchasedVO;
 import project.spring.guteam.domain.ReviewVO;
 import project.spring.guteam.domain.ThumbVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.GameDAO;
 import project.spring.guteam.persistence.MemberDAO;
+import project.spring.guteam.persistence.PurchasedDAO;
 import project.spring.guteam.persistence.ReviewDAO;
 import project.spring.guteam.persistence.ThumbDAO;
 
@@ -35,6 +37,9 @@ public class ReviewServiceImple implements ReviewService {
 	
 	@Autowired
 	private ThumbDAO thumbDAO;
+	
+	@Autowired
+	private PurchasedDAO purchasedDAO;
 	
 	@Override
 	public int create(ReviewVO vo) {
@@ -179,5 +184,14 @@ public class ReviewServiceImple implements ReviewService {
 	public int getCntMyReview(String memberId) {
 		return reviewDAO.getTotalCntMyReview(memberId);
 	} // end getCntMyReview()
+
+	@Override
+	public int isPurchased(int gameId, String memberId) {
+		PurchasedVO vo = purchasedDAO.find(memberId, gameId);
+		if(vo==null) {
+			return 0;
+		}
+		return 1;
+	}
 
 } // end ReviewServiceImple
