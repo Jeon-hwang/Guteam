@@ -217,4 +217,9 @@ public class GameServiceImple implements GameService {
 		
 	} // end setRatingAndPrice()
 
+	@Override
+	public List<String> findKeywords(String keyword) {
+		return gameDAO.selectKeywords(keyword);
+	}
+
 } // end GameServiceImple

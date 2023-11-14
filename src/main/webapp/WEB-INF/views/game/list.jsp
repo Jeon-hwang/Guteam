@@ -148,6 +148,22 @@
 				location.href=url;
 			}); // orderBy.onclick()
 			
+			$('#keyword').on('keyup', function(){
+				var keyword = $(this).val();
+				var pattern = /([^0-9a-zA-Z가-힣\x20])/i;		
+				if(pattern.test(keyword)||keyword==''){
+				}else{
+				var url = '/guteam/game/'+keyword;
+				$.getJSON(
+					url,
+					function(data){
+						if(data!=''){
+							console.log(data);
+						}
+					}
+				);
+				}
+			});
 		}); // end document.ready()
 	</script>
 	

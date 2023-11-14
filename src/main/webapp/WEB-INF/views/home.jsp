@@ -27,6 +27,7 @@
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">
 			<!-- 여기에 프로필 사진과 닉네임 캐시 표현하시면 됩니다. -->
+			<button id="btnNotification" class="btn btn-light" onclick="connect();">알림받기</button>
 			<a href="/guteam/chat" type="button" class="btn btn-light">채팅방 입장</a>
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
 			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">나의 위시리스트</button></a>
@@ -128,16 +129,16 @@
 	
 </script>
 <sec:authorize access="isAuthenticated()">
-	<script type="text/javascript">
-	connect();
+	<script type="text/javascript">	
 	function connect(){
 		var memberId = $('#memberId').val();
 		console.log(memberId);
 		var sse = new EventSource("/guteam/sse/connect/"+memberId);
+		alert('알림 받기를 동의하였습니다.\npage 이동시 해제됩니다.');
 		sse.addEventListener(memberId, e => {
 			makeNoti(e.data);
 		});
-	
+		$('#btnNotification').attr('style','display:none;');
 	}
 	function makeNoti(sendMemberId){
 		if(Notification.permission == 'denied' || Notification.permission ==='default'){

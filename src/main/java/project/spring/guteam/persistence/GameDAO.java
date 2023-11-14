@@ -32,4 +32,6 @@ public interface GameDAO {
 	// 게임 정보들을 로그인 정보를 기반으로 조회
 	List<GameVO> selectByInterest(List<String> keywords, PageCriteria criteria);
 	// 게임 정보들을 로그인 정보로 조회한 데이터를 기반으로 정렬하여 페이지 정보를 기반으로 조회
+	List<String> selectKeywords(String keyword);
+	// 키워드 정보로 키워드를 찾기
 }

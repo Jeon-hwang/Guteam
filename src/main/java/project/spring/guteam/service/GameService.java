@@ -1,6 +1,7 @@
 package project.spring.guteam.service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 import project.spring.guteam.domain.GameVO;
@@ -27,4 +28,6 @@ public interface GameService {
 	// 여러 정보들을 기준으로 게임들을 정렬하여 가져옴
 	int getInterestKeywordCnt(String memberId);
 	// 로그인 정보를 기반으로 하는 데이터가 얼마나 있는지 리턴
+	List<String> findKeywords(String keyword);
+	// 키워드 입력시 키워드추천
 }
