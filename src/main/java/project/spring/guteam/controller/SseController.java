@@ -18,8 +18,8 @@ import project.spring.guteam.notiutil.SseEmitters;
 @RestController
 @RequestMapping(value="/sse")
 public class SseController {
-	private static final Logger logger = LoggerFactory.getLogger(SseController.class);
-	
+	private static final Logger logger = LoggerFactory.getLogger(SseController.class);	
+
 	private final SseEmitters sseEmitters;
 	
 	public SseController(SseEmitters sseEmitters) {
@@ -29,10 +29,10 @@ public class SseController {
 	@GetMapping(value="/connect/{memberId}", produces=MediaType.TEXT_EVENT_STREAM_VALUE)
 	public ResponseEntity<SseEmitter> connect(@PathVariable("memberId") String memberId){
 		logger.info("connect! :" + memberId);
-		SseEmitter emitter = new SseEmitter(60 * 1000L * 10); 
-		// 10분으로 설정(10분이 지나면 자동으로 클라이언트가 다시 요청하도록 함)
-		sseEmitters.add(memberId, emitter); // sseEmitters 에 추가
-		return ResponseEntity.ok(emitter);
+			SseEmitter emitter = new SseEmitter(60 * 1000L * 3);
+			// 10분으로 설정(10분이 지나면 자동으로 클라이언트가 다시 요청하도록 함)
+			sseEmitters.add(memberId, emitter); // sseEmitters 에 추가
+			return ResponseEntity.ok(emitter);		
 	} // end connect()
 	
 	@Async

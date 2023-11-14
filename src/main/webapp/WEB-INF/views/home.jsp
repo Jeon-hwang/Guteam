@@ -12,6 +12,10 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
+<sec:authorize access="isAuthenticated()">
+<sec:authentication property="principal" var="principal"/>
+<input type="hidden" id="memberId" value="${principal.username }">
+</sec:authorize>
 <header>
 	<div class="logo">
 	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
@@ -32,8 +36,6 @@
 			<sec:csrfInput/>
 			<input type="submit" class="btn btn-light" value="로그아웃"></form>
 			<br><br>
-	<sec:authentication property="principal" var="principal"/>
-	<input type="hidden" id="memberId" value="${principal.username }">
 	</sec:authorize>
 	</div>
 </header>	
@@ -42,7 +44,6 @@
 	
 <script type="text/javascript">
 	$(document).ready(function(){
-		
 		console.log(location.href);
 		var btnLogin = $('#btnLogin').attr('href');
 		$('#btnLogin').attr('href', btnLogin+location.href);
@@ -132,12 +133,11 @@
 	function connect(){
 		var memberId = $('#memberId').val();
 		console.log(memberId);
-		if(memberId!='undefined'){
-			var sse = new EventSource("/guteam/sse/connect/"+memberId);
-			sse.addEventListener(memberId, e => {
-				makeNoti(e.data);
-			});
-		}
+		var sse = new EventSource("/guteam/sse/connect/"+memberId);
+		sse.addEventListener(memberId, e => {
+			makeNoti(e.data);
+		});
+	
 	}
 	function makeNoti(sendMemberId){
 		if(Notification.permission == 'denied' || Notification.permission ==='default'){
