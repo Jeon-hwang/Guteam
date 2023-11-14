@@ -75,9 +75,9 @@ body{
 <script type="text/javascript">
 	function popUp(){
 	   popupWin =  window.open('../message/list', '쪽지함', 'resizable');		
-	   popupWin.resizeTo(715, 500);
+	   popupWin.resizeTo(750, 600);
 	   popupWin.onresize = (_=>{
-		   popupWin.resizeTo(715, 500);
+		   popupWin.resizeTo(750, 600);
 		})
 	};
 	

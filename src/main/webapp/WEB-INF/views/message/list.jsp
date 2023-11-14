@@ -10,10 +10,28 @@
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <jsp:include page="../style.jsp"></jsp:include>
 <style type="text/css">
-.profileImg {
-	width : 40px;
-	height : 40px;
-	border : 1px solid grey;
+.logoImg {
+	display:flex;
+	width: 70px;
+	height: 70px;
+	margin: 25px;
+}
+#leftMenu {
+	display:flex;
+	flex-wrap: wrap;
+	width : 120px;
+	height : 400px;
+}
+ul {
+	margin: 0px;
+    padding-left : 10px;
+    padding-right : 10px;
+    padding-bottom : 0px;
+   	list-style : none;
+   	text-align : center;
+}
+li {
+	display : inline-block;
 }
 .cen {
 	text-align : center;
@@ -33,40 +51,23 @@ body {
     padding: 0;
 }
 #full {
-	width : 703px;
-	height : 410px;
-}
-#leftMenu {
-	width : 110px;
-	height : 400px;
-	float : left;
+	width : 750px;
+	height : 420px;
 }
 #board-top {
+	display: flex;
 	padding-top : 5px;
 	padding-left : 5px;
 	padding-right : 5px;
     padding-bottom : 5px;
 	width : 580px;
 	height : 50px;
-	float : left;
 }
 #main {
 	background-color : lightgray;
 	width : 580px;
 	height : 350px;
 	float : left;
-}
-ul {
-	margin: 0px;
-    padding-top : 20px;
-    padding-left : 10px;
-    padding-right : 10px;
-    padding-bottom : 0px;
-   	list-style : none;
-   	text-align : center;
-}
-li {
-	display : inline-block;
 }
 thead {
 	background-color : darkgrey;
@@ -91,7 +92,7 @@ td {
 <body>
 <div id="full">
 <div id="leftMenu">
-<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png">
+<img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
 
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
