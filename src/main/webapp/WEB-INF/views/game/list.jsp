@@ -43,16 +43,11 @@
 	</form>
 	</div>
 	<div class="btnOrderGroup">
-		<input type="hidden" class="orderByItem" name="orderBy" value="priceDesc">
-		<button type="submit" class="btn btn-secondary orderBy">가격 <i class="bi bi-sort-numeric-down-alt"></i></button>
-		<input type="hidden" class="orderByItem" name="orderBy" value="price">
-		<button type="submit" class="btn btn-secondary orderBy">가격 <i class="bi bi-sort-numeric-down"></i></button>
-		<input type="hidden" class="orderByItem" name="orderBy" value="purchased">
-		<button type="submit" class="btn btn-secondary orderBy">구매 <i class="bi bi-sort-numeric-down-alt"></i></button>
-		<input type="hidden" class="orderByItem" name="orderBy" value="wishlist">
-		<button type="submit" class="btn btn-secondary orderBy">위시리스트 <i class="bi bi-sort-numeric-down-alt"></i></button>
-		<input type="hidden" class="orderByItem" name="orderBy" value="rating">
-		<button type="submit" class="btn btn-secondary orderBy">평점 <i class="bi bi-sort-numeric-down-alt"></i></button>
+		<a href="list?keyword=${keyword }&keywordCriteria=${keywordCriteria}&orderBy=priceDesc" class="btn btn-secondary orderBy">가격 <i class="bi bi-sort-numeric-down-alt"></i></a>
+		<a href="list?keyword=${keyword }&keywordCriteria=${keywordCriteria}&orderBy=price" class="btn btn-secondary orderBy">가격 <i class="bi bi-sort-numeric-down"></i></a>
+		<a href="list?keyword=${keyword }&keywordCriteria=${keywordCriteria}&orderBy=purchased" class="btn btn-secondary orderBy">구매 <i class="bi bi-sort-numeric-down-alt"></i></a>
+		<a href="list?keyword=${keyword }&keywordCriteria=${keywordCriteria}&orderBy=wishlist" class="btn btn-secondary orderBy">위시리스트 <i class="bi bi-sort-numeric-down-alt"></i></a>
+		<a href="list?keyword=${keyword }&keywordCriteria=${keywordCriteria}&orderBy=rating" class="btn btn-secondary orderBy">평점 <i class="bi bi-sort-numeric-down-alt"></i></a>
 	</div>
 	
 	<div class="listArea">
@@ -138,18 +133,6 @@
 				var url = "detail?gameId="+gameId+"&prevListUrl="+prevListUrl;
 				location.href=url;
 			}); // end gameInfo.onclick()
-			
-			$('.orderBy').on('click', function(){
-				var orderBy = $(this).prev('.orderByItem').attr('value');
-				var keyword = $('#keyword').attr('value');
-				var keywordCriteria = $('#keywordCriteria').attr('value');
-				var queryString = 'keyword='+keyword+'&keywordCriteria='+keywordCriteria+'&orderBy='+orderBy;
-				console.log(queryString);	
-				var url = 'list?'+queryString;
-				location.href=url;
-			}); // orderBy.onclick()
-			
-			
 			
 			
 		}); // end document.ready()

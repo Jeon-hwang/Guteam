@@ -31,7 +31,6 @@
 			<form action="/guteam/member/logout" method="post" style="display:flex;">
 			<sec:csrfInput/>
 			<input type="submit" class="btn btn-light" value="로그아웃"></form>
-			<input type="hidden" id="isLogin" value="y">
 			<br><br>
 	<sec:authentication property="principal" var="principal"/>
 	<input type="hidden" id="memberId" value="${principal.username }">
@@ -108,8 +107,6 @@
 
 		});  // end recentlyViewedbtn.onclick()
 
-				
-		
 	}); // end document.ready()
 
 	
@@ -127,6 +124,11 @@
 		var gameId = $(obj).find('.gameId').attr('value');
 		location.href='/guteam/game/detail?gameId='+gameId;
 	}
+	
+</script>
+<sec:authorize access="isAuthenticated()">
+	<script type="text/javascript">
+	connect();
 	function connect(){
 		var memberId = $('#memberId').val();
 		console.log(memberId);
@@ -137,13 +139,6 @@
 			});
 		}
 	}
-	if($('#isLogin').val()=='y'){
-		connect();
-	}
-	
-</script>
-<sec:authorize access="isAuthenticated()">
-	<script type="text/javascript">
 	function makeNoti(sendMemberId){
 		if(Notification.permission == 'denied' || Notification.permission ==='default'){
 			alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
@@ -206,7 +201,6 @@
 		}
 		return true;
 	}
-	
 	</script>
 </sec:authorize>
 </body>

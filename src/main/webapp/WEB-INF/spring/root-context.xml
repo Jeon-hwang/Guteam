@@ -41,6 +41,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 		destroy-method="clearCache">
 		<constructor-arg name="sqlSessionFactory"
 			ref="sqlSessionFactory" />
+			
 	</bean>
 </beans>
 
