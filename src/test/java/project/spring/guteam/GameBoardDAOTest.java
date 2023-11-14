@@ -31,7 +31,6 @@ public class GameBoardDAOTest {
 //		selectTest();
 //		selectByBoardIdTest();
 //		updateTest();
-//		deleteTest();
 //		getTotalTest();
 //		selectByMemberIdTest();
 //		selectByKeywordTest();
@@ -60,11 +59,6 @@ public class GameBoardDAOTest {
 
 	private void getTotalTest() {
 		logger.info(dao.getTotalCounts(5)+"");
-		
-	}
-
-	private void deleteTest() {
-		dao.delete(3);
 		
 	}
 

@@ -13,11 +13,13 @@
 <body>
 <section>
 <div id="wrap">
+<c:if test="${purchased==1 }">
 <c:if test="${writedReviewId==0 }">
 <a href="register?gameId=${gameVO.gameId }"><button class="btn btn-light">리뷰 쓰기</button></a>
 </c:if>
 <c:if test="${writedReviewId!=0 }">
 <a href="update?reviewId=${writedReviewId }&page=${pageMaker.criteria.page}"><button class="btn btn-light">리뷰 수정하기</button></a>
+</c:if>
 </c:if>
 <a href="../game/detail?gameId=${gameVO.gameId }&page=1"><button class="btn btn-light">게임 정보로 돌아가기</button></a>
 <br>

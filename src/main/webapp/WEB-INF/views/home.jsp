@@ -12,6 +12,10 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
+<sec:authorize access="isAuthenticated()">
+<sec:authentication property="principal" var="principal"/>
+<input type="hidden" id="memberId" value="${principal.username }">
+</sec:authorize>
 <header>
 	<div class="logo">
 	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" onclick="location.href='/guteam/game/list'">
@@ -23,6 +27,7 @@
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">
 			<!-- 여기에 프로필 사진과 닉네임 캐시 표현하시면 됩니다. -->
+			<button id="btnNotification" class="btn btn-light" onclick="connect();">알림받기</button>
 			<a href="/guteam/chat" type="button" class="btn btn-light">채팅방 입장</a>
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
 			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">나의 위시리스트</button></a>
@@ -32,8 +37,6 @@
 			<sec:csrfInput/>
 			<input type="submit" class="btn btn-light" value="로그아웃"></form>
 			<br><br>
-	<sec:authentication property="principal" var="principal"/>
-	<input type="hidden" id="memberId" value="${principal.username }">
 	</sec:authorize>
 	</div>
 </header>	
@@ -42,7 +45,6 @@
 	
 <script type="text/javascript">
 	$(document).ready(function(){
-		
 		console.log(location.href);
 		var btnLogin = $('#btnLogin').attr('href');
 		$('#btnLogin').attr('href', btnLogin+location.href);
@@ -107,8 +109,6 @@
 
 		});  // end recentlyViewedbtn.onclick()
 
-				
-		
 	}); // end document.ready()
 
 	
@@ -127,21 +127,44 @@
 		location.href='/guteam/game/detail?gameId='+gameId;
 	}
 	
-	
 </script>
 <sec:authorize access="isAuthenticated()">
-	<script type="text/javascript">
+	<script type="text/javascript">	
+	function connect(){
+		var memberId = $('#memberId').val();
+		console.log(memberId);
+		var sse = new EventSource("/guteam/sse/connect/"+memberId);
+		alert('알림 받기를 동의하였습니다.\npage 이동시 해제됩니다.');
+		sse.addEventListener(memberId, e => {
+			makeNoti(e.data);
+		});
+		$('#btnNotification').attr('style','display:none;');
+	}
 	function makeNoti(sendMemberId){
 		if(Notification.permission == 'denied' || Notification.permission ==='default'){
 			alert("알림이 차단된 상태입니다. 알림 권한을 허용해주세요.");
 		}else{
+			var noti = sendMemberId.substr(sendMemberId.lastIndexOf('\n')+1);
+			sendMemberId = sendMemberId.substr(0,sendMemberId.lastIndexOf('\n'));
+			console.log(noti);
+			var notify = '';
+			if(noti=='friendRequest'){
+				notify = '친구 요청이 왔습니다.';				
+			}else if(noti=='message'){
+				notify = '메시지가 도착했습니다.';
+			}
+			console.log(notify);
 			var notification = new Notification(sendMemberId, {
-				body: '친구 요청이 왔습니다.',
+				body: notify,
 				icon: '/guteam/image/logo80.png'
 			});
 			
 			notification.addEventListener("click", () => {
-				window.open('/guteam/friend/list');
+				if(noti=='friendRequest'){
+					window.open('/guteam/friend/list');				
+				}else if(noti=='message'){
+					window.open('/guteam/message/list', '쪽지함', 'width=720, height=500, location=no, toolbars=no, status=no');
+				}
 			});
 		}
 	}
@@ -179,7 +202,6 @@
 		}
 		return true;
 	}
-	
 	</script>
 </sec:authorize>
 </body>

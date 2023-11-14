@@ -26,7 +26,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 	public int insert(GameBoardVO vo) {
 		logger.info("GameBoard insert() 호출 : vo = " + vo.toString());
 		return sqlSession.insert(NAMESPACE+ ".insert", vo);
-	}
+	} // end insert()
 
 	@Override
 	public List<GameBoardVO> select(int gameId, PageCriteria criteria) {
@@ -36,7 +36,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".paging", args);
-	}
+	} // end select()
 
 	@Override
 	public GameBoardVO selectByBoardId(int gameBoardId) {
@@ -48,19 +48,13 @@ public class GameBoardDAOImple implements GameBoardDAO {
 	public int update(GameBoardVO vo) {
 		logger.info("GameBoard update() 호출 : vo = " + vo.toString());
 		return sqlSession.update(NAMESPACE + ".update", vo);
-	}
+	} // end update()
 
-	@Override
-	public int delete(int gameBoardId) {
-		logger.info("GameBoard delete() 호출 : gameBoardId = " + gameBoardId);
-		return sqlSession.delete(NAMESPACE + ".delete", gameBoardId);
-	}
-	
 	@Override
 	public int getTotalCounts(int gameId) {
 		logger.info("GameBoard getTotal() 호출 " );
 		return sqlSession.selectOne(NAMESPACE + ".total_count", gameId);
-	}
+	} // end getTotalCounts()
 
 	@Override
 	public List<GameBoardVO> selectByNickname(int gameId, String keyword, PageCriteria criteria) {
@@ -71,7 +65,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_by_member_id", args);
-	}
+	} // end selectByNickname()
 
 	@Override
 	public List<GameBoardVO> selectByKeyword(int gameId, String keyword, PageCriteria criteria) {
@@ -82,7 +76,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_by_keyword", args);
-	}
+	} // end selectByKeyword()
 
 	@Override
 	public int updateCommentCnt(int gameBoardId, int amount) {
@@ -91,13 +85,13 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("gameBoardId", gameBoardId);
 		args.put("amount", amount);
 		return sqlSession.update(NAMESPACE + ".update_comment_cnt", args);
-	}
+	} // end updateCommentCnt()
 
 	@Override
 	public int updateDeleted(int gameBoardId) {
 		logger.info("GameBoard updateDeleted() 호출 : gameBoardId = " + gameBoardId);
 		return sqlSession.update(NAMESPACE + ".update_deleted", gameBoardId);
-	}
+	} // end updateDeleted()
 
 	@Override
 	public int getTotalCounts(int gameId, PageCriteria criteria,String keywordCriteria, String keyword) {
@@ -114,7 +108,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 			result = sqlSession.selectOne(NAMESPACE+".total_count_by_keyword",args);
 		}
 		return result;
-	}
+	} // end getTotalCounts()
 
 	@Override
 	public List<GameBoardVO> select(int gameId, PageCriteria criteria, String orderBy) {
@@ -124,7 +118,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE+".select_all_order_by_comment_cnt",args);
-	}
+	} // end select()
 
 	@Override
 	public List<GameBoardVO> selectByNickname(int gameId, String keyword, PageCriteria criteria, String orderBy) {
@@ -135,7 +129,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE+".select_by_member_id_order_by_comment_cnt", args);
-	}
+	} // end selectByNickname()
 
 	@Override
 	public List<GameBoardVO> selectByKeyword(int gameId, String keyword, PageCriteria criteria, String orderBy) {
@@ -146,7 +140,7 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE+".select_by_keyword_order_by_comment_cnt", args);
-	}
+	} // end selectByKeyword()
 
 	@Override
 	public List<GameBoardVO> selectByMemberId(String memberId, PageCriteria criteria) {
@@ -156,12 +150,12 @@ public class GameBoardDAOImple implements GameBoardDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE+".select_my_board",args);
-	}
+	} // end selectByMemberId()
 
 	@Override
 	public int getCntMyBoard(String memberId) {
 		logger.info("GameBoard getCntMyBoard() 호출");
 		return sqlSession.selectOne(NAMESPACE+".total_cnt_my_board", memberId);
-	}
+	} // end getCntMyBoard()
 
 }

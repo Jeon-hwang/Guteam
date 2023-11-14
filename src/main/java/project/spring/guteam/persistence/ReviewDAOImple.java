@@ -36,31 +36,31 @@ public class ReviewDAOImple implements ReviewDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".paging", args);
-	}
+	} // end select()
 
 	@Override
 	public ReviewVO select(int reviewId) {
 		logger.info("Review select() 호출 : reviewId = " + reviewId);
 		return sqlSession.selectOne(NAMESPACE + ".select_by_review_id", reviewId);
-	}
+	} // end select()
 
 	@Override
 	public int update(ReviewVO vo) {
 		logger.info("Review update() 호출 : vo = " + vo);
 		return sqlSession.update(NAMESPACE + ".update", vo);
-	}
+	} // end update()
 
 	@Override
 	public int delete(int reviewId) {
 		logger.info("Review delete() 호출 : reviewId = " + reviewId);
 		return sqlSession.delete(NAMESPACE + ".delete", reviewId);
-	}
+	} // end delete()
 
 	@Override
 	public int getTotalCount(int gameId) {
 		logger.info("Reveiw getTotal() 호출 ");
 		return sqlSession.selectOne(NAMESPACE + ".total_count", gameId);
-	}
+	} // end getTotalCount()
 
 	
 	@Override
@@ -72,7 +72,7 @@ public class ReviewDAOImple implements ReviewDAO {
 		args.put("end", criteria.getEnd());
 		args.put("keyword", keyword);
 		return sqlSession.selectList(NAMESPACE + ".select_by_keyword", args);
-	}
+	} // end selectByKeyword()
 
 	@Override
 	public int update(int reviewId, int amount) {
@@ -82,7 +82,7 @@ public class ReviewDAOImple implements ReviewDAO {
 		args.put("amount", amount);
 		return sqlSession.update(NAMESPACE + ".update_thumb_up_count", args);
 		
-	}
+	} // end update()
 
 	@Override
 	public int getRatingAvg(int gameId) {
@@ -101,12 +101,12 @@ public class ReviewDAOImple implements ReviewDAO {
 		Map<String, Object> args = new HashMap<>();
 		args.put("gameId", gameId);
 		args.put("memberId", memberId);
-		int result = 0 ;
-		if(sqlSession.selectOne(NAMESPACE + ".reveiw_writed", args)!=null) {
-			result = sqlSession.selectOne(NAMESPACE + ".reveiw_writed", args);
+		Integer result = sqlSession.selectOne(NAMESPACE + ".reveiw_writed", args);
+		if(result == null) {
+			return 0;
 		}
 		return result;
-	}
+	} // end selectWrited()
 
 	@Override
 	public int getTotalCount(int gameId, String keyword) {
@@ -115,7 +115,7 @@ public class ReviewDAOImple implements ReviewDAO {
 		args.put("gameId", gameId);
 		args.put("keyword", keyword);
 		return sqlSession.selectOne(NAMESPACE+".total_count_by_keyword", args);
-	}
+	} // end getTotalCount()
 
 	@Override
 	public List<ReviewVO> selectOrderBy(int gameId, PageCriteria criteria) {
@@ -125,7 +125,7 @@ public class ReviewDAOImple implements ReviewDAO {
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".order_by_thumbUpCnt", args);
-	}
+	} // end selectOrderBy()
 
 	@Override
 	public List<ReviewVO> selectByKeywordOrderBy(int gameId, PageCriteria criteria, String keyword) {
@@ -136,7 +136,7 @@ public class ReviewDAOImple implements ReviewDAO {
 		args.put("end", criteria.getEnd());
 		args.put("keyword", keyword);
 		return sqlSession.selectList(NAMESPACE + ".select_by_keyword_order_by_thumbUpCnt", args);
-	}
+	} // end selectByKeywordOrderBy()
 
 	@Override
 	public List<ReviewVO> selectByMemberId(String memberId, PageCriteria criteria) {
@@ -146,12 +146,12 @@ public class ReviewDAOImple implements ReviewDAO {
 		args.put("end", criteria.getEnd());
 		args.put("memberId", memberId);
 		return sqlSession.selectList(NAMESPACE+".select_my_review",args);
-	}
+	} // end selectByMemberId()
 
 	@Override
 	public int getTotalCntMyReview(String memberId) {
 		logger.info("Review getTotalCountMyReview() 호출");
 		return sqlSession.selectOne(NAMESPACE+".total_cnt_my_review", memberId);
-	}
+	} // end getTotalCntMyReview()
 
-}
+} // end ReviewDAOImple

@@ -269,6 +269,12 @@ public class GameController {
 		Map<String, Object> args = gameService.recentlyViewedGames(memberId);
 		return new ResponseEntity<Map<String, Object>>(args, HttpStatus.OK);
 	} // end recentlyViewed()
+	
+	@GetMapping("/{keyword}")
+	public ResponseEntity<List<String>> keywords(@PathVariable("keyword") String keyword){
+		List<String> keywords = gameService.findKeywords(keyword);
+		return new ResponseEntity<List<String>>(keywords, HttpStatus.OK);
+	}
 
 	@PostMapping("/upload-ajax")
 	public ResponseEntity<String> uploadAjaxPOST(MultipartFile[] files, String gameId) {

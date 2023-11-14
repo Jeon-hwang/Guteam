@@ -37,7 +37,7 @@ public class MemberDAOImple implements MemberDAO {
 	public MemberVO select(String memberId) {
 		logger.info("select() 호출 memberId = " + memberId); 
 		return sqlSession.selectOne(NAMESPACE + ".select_by_member_id", memberId);
-	}
+	} // end select()
 	
 	@Override
 	public int checkId(String memberId) {

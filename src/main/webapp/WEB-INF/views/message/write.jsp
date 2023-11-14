@@ -5,6 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <jsp:include page="../style.jsp"></jsp:include>
 <style type="text/css">
 .profileImg {
@@ -109,7 +111,7 @@ thead {
 	
 </div>
 <div id="main">
-	<form action="write" method="post">
+	<form action="write" method="post" onsubmit="sendRequest();">
 	<sec:csrfInput/>
 	<h2>${vo.memberId }님의 쪽지 쓰기</h2>
 	<div id="msg-title">
@@ -157,5 +159,26 @@ thead {
 </div>
 
 </div>
+
+<script type="text/javascript">
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	function sendRequest(){
+		var memberId = $('#receiverNickname').val();
+		var sendMemberId = $('#sendMemberId').val();
+		console.log('ajax요청');
+		$.ajax({
+			type:'post',
+			url:'/guteam/sse/message/'+memberId,
+			beforeSend : function(xhr) {
+		        xhr.setRequestHeader(header, token);
+		    },
+			data:{'sendMemberId':sendMemberId},
+			success:function(result){
+				console.log('메시지를 보냈습니다.');
+			}
+		});
+	}
+</script>
 </body>
 </html>

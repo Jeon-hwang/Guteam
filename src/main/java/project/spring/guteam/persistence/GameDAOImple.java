@@ -156,5 +156,10 @@ public class GameDAOImple implements GameDAO {
 		return list;
 	} // end selectByInterest()
 
+	@Override
+	public List<String> selectKeywords(String keyword) {
+		return sqlSession.selectList(NAMESPACE+".select_keyword", keyword);
+	}
+
 
 } // end GameDAOImple

@@ -206,5 +206,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	where rn between #{start} and #{end}
     </select>
     
+    <select id="select_keyword" resultType="String">
+    	select ${gameName} as keyword from ${game} where lower(${gameName}) like '%'||lower(#{keyword})||'%'
+    	union
+    	select ${genre} as keyword from ${game} where lower(${genre}) like '%'||lower(#{keyword})||'%'
+    </select>
    
 </mapper>
