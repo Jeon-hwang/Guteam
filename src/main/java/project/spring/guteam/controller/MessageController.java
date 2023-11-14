@@ -155,11 +155,11 @@ public class MessageController {
 	
 	// 쪽지 보내기 화면
 	@GetMapping("/write")
-	public void writeGET(Model model, Principal principal, String sendMemberId) {
+	public void writeGET(Model model, Principal principal, String receiveMemberId) {
 		logger.info("msg-writeGET() 호출");
 		MemberVO vo = memberService.read(principal.getName());
 		model.addAttribute("vo", vo);
-		model.addAttribute("sendMemberId", sendMemberId);
+		model.addAttribute("receiveMemberId", receiveMemberId);
 		logger.info("vo? " + vo.toString());
 	}
 	

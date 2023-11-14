@@ -124,12 +124,12 @@ thead {
 			<tr>
 				<td class="tdc">보낼 닉네임</td>
 				<td>
-				<c:if test="${empty sendMemberId }">
+				<c:if test="${empty receiveMemberId }">
 					<input type="text" name="receiveMemberNickname" id="receiverNickname" required>				
 				</c:if>
-				<c:if test="${not empty sendMemberId }">
-					<input type="hidden" name="receiveMemberId" id="receiverNickname" value="${sendMemberId }">
-					${sendMemberId }
+				<c:if test="${not empty receiveMemberId }">
+					<input type="hidden" name="receiveMemberId" id="receiverId" value="${receiveMemberId }">
+					${receiveMemberId }
 				</c:if>
 				</td>
 			</tr>

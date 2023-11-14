@@ -43,8 +43,9 @@ span {
 			</div>
 			<br>
 			<div>
-				<span>비번확인 :&nbsp;<input type="password" id="pwdChk" name="password" placeholder="PW 확인" required /></span>
-				<span id="checkPwdNo" style="display:none; color:#fff">비밀 번호가 일치합니다.</span>
+				<span>비번확인 :&nbsp;<input type="password" id="pwdCheck" name="password" placeholder="PW 확인" required /></span>
+				<span id="checkPwdYes" style="display:none; color:#10af85">비밀 번호가 일치합니다.</span>
+				<span id="checkPwdNo" style="display:none; color:#fff">비밀 번호가 일치하지 않습니다.</span>
 			</div>
 			<br>
 			<div>
@@ -53,11 +54,23 @@ span {
 			</div>
 			<br>
 			<div>
-				<span>이메일 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="email" required /></span> 
+				<span>이메일 :&nbsp;
+					<input type="text" name="emailId" id="emailId" style="width:120px;" required />@</span>
+					<input type="text" name="emailTxt" id="emailTxt" style="width:120px;" required />
+					<select name="emailAddress" id="emailAddress">
+						<option value="">직접입력</option>
+						<option value="naver.com">naver.com</option>
+						<option value="gamail.com">gamail.com</option>
+						<option value="nate.com">nate.com</option>
+						<option value="hanmail.com">hanmail.com</option>
+						<option value="guteam.com">guteam.com</option>
+					</select>
+					<input type="hidden" name="email" id="email" value="test@test.com">
 			</div>
 			<br>
 			<div>
 				<span> 연락처 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="phone" required /></span>
+				<span>('-'를 제외한 번호만 입력해주세요 .)</span>
 			</div>
 			<br>
 			<input type="hidden" name="memberImageName" value="/default.jpeg">
@@ -74,8 +87,9 @@ span {
 <script type="text/javascript">
 	$(document).ready(function(){
 		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-		// ID 중복 검사
+		var header = $("meta[name='_csrf_header']").attr("content");;
+		
+		/* // ID 중복 검사
 		// 검사 후 id 변경시, 재검사
 		$('#memberId').blur(function(){
 			// id 미입력
@@ -85,8 +99,7 @@ span {
 				$('#checkOk').hide();
 				return;
 			}
-			
-		}); //end memberId.blur()
+		}); //end memberId.blur() */
 		
 		// 닉네임 중복 체크
 		$('#nickname').blur(function(){
@@ -186,6 +199,13 @@ span {
 				// 메시지 가리기
 				$('#failKor').hide();
 				$('#failLength').hide();
+				
+				if($('#memberId').val() == '') {
+					alert('아이디를 입력해 주세요.')
+					$('#checkNo').hide();
+					$('#checkOk').hide();
+					return;
+				}
 			}
 		}); //end #memberId.keyup()
 		
@@ -221,10 +241,40 @@ span {
 		}); //end #password.keyup()
 		
 		// pw 확인
-		/* $('#pwdChk').keyup(function( {
+		$('#pwdCheck').keyup(function(){
+			if($('#pwdCheck').val().length != 0) {
+				if(pwdChk($('#pwd').val(), $('#pwdCheck').val())) {
+					$('#checkPwdNo').hide();
+					$('#checkPwdYes').show();
+				} else {
+					$('#checkPwdYes').hide();
+					$('#checkPwdNo').show();
+				}
+			} else {
+				$('#checkPwdYes').hide();
+				$('#checkPwdNo').show();
+			}
+		}); //end #pwdChk.keyup()
 		
-		})); //end #pwdChk.keyup() */
+		// email 선택옵션
+		$('#emailAddress').on('change', function(){
+			var val = $(this).val();
+			var front = $('#emailId').val();
+			$("option:selected", this);
+			
+			$("option:selected", this).attr("value");
+			console.log("val = " + val);
+			$('#emailTxt').val(val);
+			$('#email').val(front + "@" + val);
+		}); //end 
 		
+		/* // 폰번호 유효성
+		$('#phone').on("change keyup", function(){
+			var regExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
+			var val = $('#phone').val();
+			
+			if()
+		}); //end #phone.on()
 		
 	}); //end document
 	
