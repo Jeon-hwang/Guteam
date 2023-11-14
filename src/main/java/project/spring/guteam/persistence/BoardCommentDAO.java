@@ -10,7 +10,7 @@ public interface BoardCommentDAO {
 	public int insert(BoardCommentVO vo);
 	public List<BoardCommentVO> select(int gameBoardId);
 	public int update(String commentContent,int commentId);
-	public int delete(int commentId);
+	public int updateDelete(int commentId);
 	
 	public List<BoardCommentVO> select(int gameBoardId, PageCriteria criteria);
 	public int getTotalCount(int gameBoardId);
@@ -19,4 +19,6 @@ public interface BoardCommentDAO {
 	
 	public List<BoardAndReplyVO> select(String memberId,PageCriteria criteria);
 	public int getTotalCount(String memberId);
+	
+	public int delete(int commentId);
 }

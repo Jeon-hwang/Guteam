@@ -45,9 +45,9 @@ public class BoardCommentDAOImple implements BoardCommentDAO {
 	}
 
 	@Override
-	public int delete(int commentId) {
+	public int updateDelete(int commentId) {
 		logger.info("B.Comment delete 수행");
-		return sqlSession.update(NAMESPACE+".delete",commentId);
+		return sqlSession.update(NAMESPACE+".update_delete",commentId);
 	}
 
 	@Override
@@ -95,6 +95,12 @@ public class BoardCommentDAOImple implements BoardCommentDAO {
 	public int getTotalCount(String memberId) {
 		logger.info("totalcount 실행");
 		return sqlSession.selectOne(NAMESPACE+".select_all_comment_count",memberId);
+	}
+
+	@Override
+	public int delete(int commentId) {
+		logger.info("delete실행");
+		return sqlSession.delete(NAMESPACE+".delete",commentId);
 	}
 	
 	

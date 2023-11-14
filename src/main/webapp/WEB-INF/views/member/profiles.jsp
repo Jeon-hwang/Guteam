@@ -122,7 +122,13 @@ body{
 						var createdDate = new Date(this.createdDate);
 						
 						list += '<li class="comment_reply_item">'
-							 +  '<span><a href="/guteam/gameBoard/detail?gameBoardId='+this.boardId+'&page=1&gameId='+this.gameId+'">'+this.content+'</a></span>'
+							 +  '<span><a href="/guteam/gameBoard/detail?gameBoardId='+this.boardId+'&page=1&gameId='+this.gameId+'">';
+							if(this.content.substring(0,9)=='(updated)'){
+						list += this.content.replace('(updated)','');		
+							}else{
+						list +=	this.content;
+							}
+						list +=	'</a></span>'
 							 +	'<span>'+dateFormat(createdDate)+'</span>'
 							 +  '</li>';
 						

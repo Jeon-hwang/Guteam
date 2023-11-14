@@ -43,15 +43,21 @@ public class ReplyDAOImple implements ReplyDAO {
 	}
 
 	@Override
-	public int delete(int replyId) {
-		logger.info("Reply delete 실행!");
-		return sqlSession.delete(NAMESPACE+".delete",replyId);
+	public int updateDelete(int replyId) {
+		logger.info("Reply Updatedelete 실행!");
+		return sqlSession.delete(NAMESPACE+".update_delete",replyId);
 	}
 
 	@Override
 	public List<ReplyVO> select(String memberId) {
 		logger.info("reply select by memberId 실행");
 		return sqlSession.selectList(NAMESPACE+".select_all_by_member_id",memberId);
+	}
+
+	@Override
+	public int delete(int replyId) {
+		logger.info("reply delete 실행");
+		return sqlSession.delete(NAMESPACE+".delete",replyId);
 	}
 
 }

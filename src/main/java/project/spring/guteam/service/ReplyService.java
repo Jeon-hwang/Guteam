@@ -9,4 +9,5 @@ public interface ReplyService {
 	Map<String,Object> read(int commentId);
 	int update(int replyId,String replyContent);
 	int delete(int replyId);
+	int delete(int commentId, String commentContent,int replyId);
 }

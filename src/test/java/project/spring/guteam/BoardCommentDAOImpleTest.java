@@ -42,7 +42,7 @@ public class BoardCommentDAOImpleTest {
 	}
 
 	private void delete() {
-		int result = dao.delete(2);
+		int result = dao.updateDelete(2);
 		if(result==1) {
 			logger.info("delete 성공!");
 		}

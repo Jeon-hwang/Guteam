@@ -9,8 +9,9 @@ public interface BoardCommentService {
 	int create(BoardCommentVO vo) throws Exception;
 	Map<String, Object> read(int gameBoardId,PageCriteria criteria);
 	int update(int commentId,String CommentContent);
-	int delete(int commentId, int gameBoardId);
+	int updateDelete(int commentId, int gameBoardId);
 	int getBoardId(int commentId);
 	int updateReplyCnt(int commentId, int amount);
-	public Map<String, Object> getAllCommentsAndReplies(String memberId,PageCriteria criteria);
+	Map<String, Object> getAllCommentsAndReplies(String memberId,PageCriteria criteria);
+	int delete(int commentId,int gameBoardId);
 }

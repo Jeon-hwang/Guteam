@@ -155,10 +155,10 @@
 								+ '<pre>'
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
-								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'">'
+								+ '<div class="comment_info"><input type="hidden" id="commentContent" value="'+this.commentContent+'"></div>'
 								+ '<p>삭제된 댓글입니다.</p>'
 								+ '<div class="reply_btn_area">'
-								+ '<button class="reply_view_btn" style="display:block"><i class="bi bi-chat-left-dots-fill"></i>'+this.replyCnt+'</button>'
+								+ '<button class="reply_view_btn" style="display:block"><i class="bi bi-chat-left-dots-fill">'+this.replyCnt+'</i></button>'
 								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
 								+ '</pre><ul class="replies_area" id="repliesArea'+commentRow+'"></ul></li>';
 						}else{
@@ -168,12 +168,12 @@
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
 								+ '<img class="commentProfileImg" alt="'+nickname+'" src="../game/display?fileName='+memberImageName+'" width="50px" height="50px" />'
 								if(this.commentContent.substring(0,9)=='(updated)'){
-						list += '&nbsp&nbsp<div><span class="commentNickname">'+nickname+'</span>&nbsp&nbsp'
+						list += '&nbsp&nbsp<div class="comment_info"><span class="commentNickname">'+nickname+'</span>&nbsp&nbsp'
 								+ '<span>'+elapsedTime(commentDateCreated)+'(수정 됨)</span>&nbsp&nbsp<br>'
 								+ '<span id="commentContentView">'+this.commentContent.replace("(updated)","")+'</span>'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent.replace("(updated)","")+'" maxlength="33"></div>'
 								}else{
-						list += '&nbsp&nbsp<div><span class="commentNickname">'+nickname+'</span>&nbsp&nbsp'
+						list += '&nbsp&nbsp<div class="comment_info"><span class="commentNickname">'+nickname+'</span>&nbsp&nbsp'
 								+ '<span>'+elapsedTime(commentDateCreated)+'</span>&nbsp&nbsp<br>'
 								+ '<span id="commentContentView">'+this.commentContent+'</span>'
 								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'" maxlength="33"></div>'
@@ -266,7 +266,8 @@
 				var commentId = $(this).parent().prevAll('#commentId').val();
 				var gameBoardId =  $('#gameBoardId').val();
 				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
-				
+				var commentCnt = parseInt($(this).prevAll('.reply_view_btn').children().text());
+				console.log(commentCnt);
 				console.log('댓글Id 및 게시판판 id: '+commentId+','+gameBoardId);
 				$.ajax({
 					type : 'DELETE',
@@ -281,6 +282,10 @@
 					success : function(result){
 						if(result==1){
 							alert('삭제 되었습니다!');
+							getAllComments(nowPage);
+						}else if(result==2){
+							alert('완전 삭제');
+							$('#commentCnt').text(parseInt($('#commentCnt').text())-1-commentCnt);
 							getAllComments(nowPage);
 						}
 					}	
@@ -298,7 +303,7 @@
 					$(this).next().css("display","inline");
 					$(this).css("display","none");
 				}
-				var commentContent = $(this).parent().prevAll('#commentContent').val();
+				var commentContent = $(this).parent().prevAll('.comment_info').children('#commentContent').val();
 				$.getJSON(
 						url,
 						function(data){
@@ -403,8 +408,7 @@
 						//	getAllComments(nowPage);
 							$(replyViewBtn).trigger("click");
 							$(replyViewBtn).children().text(parseInt($(replyViewBtn).text())+1);
-							$('#commentCnt').children().text(parseInt($('#commentCnt').text())+1);
-							
+							$('#commentCnt').text(parseInt($('#commentCnt').text())+1);
 						}
 					}
 				});// end ajax
@@ -439,25 +443,29 @@
 					success : function(result){
 						if(result ==1){
 							alert('수정 되었습니다!');
-							$(replyViewBtnClick).trigger("click");
-							
-							
+							$(replyViewBtnClick).trigger("click");							
 						}
 					}
 				})//end ajax
 			});// end update_reply
 			
 			$('#allComments').on('click','.comment_item .reply_item .delete_reply',function(){
-				
+				var commentContent = $(this).parent().parent().prev().children('.comment_info').children("#commentContent").val();
+				console.log("삭제 내용?"+commentContent);
+				var commentId = $(this).parent().parent().prev().children("#commentId").val();
+				var commentCnt = parseInt($(this).parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn").children().text());
+				console.log("댓글 갯수?"+commentCnt);
 				var replyId = $(this).prevAll('div').children('#replyId').val();
 				var replyViewBtnClick = $(this).parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn");
-				console.log('대댓글Id 및 게시판판 id: '+replyId);
+				console.log('대댓글Id : '+replyId);
+				
 				$.ajax({
 					type : 'DELETE',
-					url : '../boardComment/replies/'+replyId,
+					url : '../boardComment/replies/'+replyId+'?commentId='+commentId,
 					headers : {
 						'Content-Type' : 'application/json'
 					},
+					data : commentContent,
 					beforeSend : function(xhr) {
 				        xhr.setRequestHeader(header, token);
 				    },
@@ -465,6 +473,14 @@
 						if(result==1){
 							alert('삭제 되었습니다!');
 							$(replyViewBtnClick).trigger("click");
+						}else if(result==2){
+							alert('완전 삭제');
+							commentCnt = ($('#commentCnt').text()-commentCnt)-1;
+							console.log($('#commentCnt').text());
+							console.log(commentCnt);
+							$('#commentCnt').text(commentCnt);
+							getAllComments(1);
+							
 						}
 					}	
 				});//end ajax

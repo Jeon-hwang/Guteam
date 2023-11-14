@@ -54,9 +54,10 @@ public class ReplyRESTController {
 	}
 	
 	@DeleteMapping("/{replyId}")
-	public ResponseEntity<Integer> deleteReply(@PathVariable("replyId") int replyId){
+	public ResponseEntity<Integer> deleteReply(@PathVariable("replyId") int replyId
+			,@RequestBody(required = false) String commentContent, int commentId){
 		int result;
-		result = replyService.delete(replyId);
+		result = replyService.delete(commentId, commentContent, replyId);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 }

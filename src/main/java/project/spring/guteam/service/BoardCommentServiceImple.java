@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.domain.MemberVO;
+import project.spring.guteam.domain.ReplyVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.persistence.BoardCommentDAO;
@@ -30,6 +31,9 @@ public class BoardCommentServiceImple implements BoardCommentService {
 	
 	@Autowired
 	private GameBoardDAO gameBoardDAO;
+	
+	@Autowired
+	private ReplyDAO replyDAO;
 	
 	@Autowired
 	private MemberDAO memberDAO;
@@ -78,9 +82,9 @@ public class BoardCommentServiceImple implements BoardCommentService {
 	}
 
 	@Override
-	public int delete(int commentId, int gameBoardId) {
+	public int updateDelete(int commentId, int gameBoardId) {
 		logger.info("comment delete 실행");
-		return boardCommentDAO.delete(commentId);
+		return boardCommentDAO.updateDelete(commentId);
 	}
 
 
@@ -108,6 +112,31 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		args.put("list", list);
 		return args;
 	}
+
+	@Transactional(value = "transactionManager")
+	@Override
+	public int delete(int commentId,int boardId) {
+		List<ReplyVO> replies = replyDAO.select(commentId);
+		if(replies != null) { // 답글이 있을경우
+			for(int i=0;i<replies.size();i++) {
+				if(!replies.get(i).getReplyContent().equals("삭제된 댓글입니다.")) {
+					return boardCommentDAO.updateDelete(commentId);
+				}
+			}
+			for(int i=0;i<replies.size();i++) {
+				replyDAO.delete(replies.get(i).getReplyId());
+				gameBoardDAO.updateCommentCnt(boardId, -1);
+			}
+			gameBoardDAO.updateCommentCnt(boardId, -1);
+			boardCommentDAO.delete(commentId);
+			return 2;
+		}else { // 답글이 없을경우
+			gameBoardDAO.updateCommentCnt(boardId, -1);
+			return boardCommentDAO.delete(commentId);
+		}
+	
+	}
+	
 	
 	
 

@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	set ${commentContent} = #{commentContent}
 	 	where ${commentId} = #{commentId}
 	 </update>
-	 <update id="delete">
+	 <update id="update_delete">
 	 	update ${board_comment}
 	 	set ${commentContent} = '삭제된 댓글입니다.'
 	 	where ${commentId} = #{commentId}
@@ -69,4 +69,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		union all
 		select c.${gameBoardId} as ${boardId},c.${replyContent} as content ,c.${replyDateCreated} as ${createdDate},d.${gameId} from (select a.*,b.${gameBoardId} from (select * from ${reply} where ${memberId}=#{memberId})a, (select * from ${board_comment})b where a.${commentId}=b.${commentId})c, (select * from ${game_board})d where c.${gameBoardId}=d.${gameBoardId} order by ${createdDate} desc)
 	</select>	 
+	
+	<delete id="delete">
+		delete from ${board_comment} where ${commentId} = #{commentId}
+	</delete>
 </mapper>

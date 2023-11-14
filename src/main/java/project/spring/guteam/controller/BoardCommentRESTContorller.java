@@ -66,7 +66,7 @@ public class BoardCommentRESTContorller {
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<Integer> deleteComment(@PathVariable("commentId") int commentId,@RequestBody int gameBoardId){
 		logger.info("comment delete 호출");
-		int result = service.delete(commentId, gameBoardId);
+		int result = service.delete(commentId,gameBoardId);
 		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 	}
 	
