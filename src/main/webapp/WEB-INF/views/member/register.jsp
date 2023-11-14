@@ -65,7 +65,7 @@ span {
 						<option value="hanmail.com">hanmail.com</option>
 						<option value="guteam.com">guteam.com</option>
 					</select>
-					<input type="hidden" name="email" id="email">
+					<input type="hidden" name="email" id="email" value="test@test.com">
 			</div>
 			<br>
 			<div>
@@ -87,11 +87,9 @@ span {
 <script type="text/javascript">
 	$(document).ready(function(){
 		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");;
 		
-		var email = $('#email').val();
-		
-		// ID 중복 검사
+		/* // ID 중복 검사
 		// 검사 후 id 변경시, 재검사
 		$('#memberId').blur(function(){
 			// id 미입력
@@ -101,8 +99,7 @@ span {
 				$('#checkOk').hide();
 				return;
 			}
-			
-		}); //end memberId.blur()
+		}); //end memberId.blur() */
 		
 		// 닉네임 중복 체크
 		$('#nickname').blur(function(){
@@ -202,6 +199,13 @@ span {
 				// 메시지 가리기
 				$('#failKor').hide();
 				$('#failLength').hide();
+				
+				if($('#memberId').val() == '') {
+					alert('아이디를 입력해 주세요.')
+					$('#checkNo').hide();
+					$('#checkOk').hide();
+					return;
+				}
 			}
 		}); //end #memberId.keyup()
 		
@@ -264,7 +268,13 @@ span {
 			$('#email').val(front + "@" + val);
 		}); //end 
 		
-		
+		/* // 폰번호 유효성
+		$('#phone').on("change keyup", function(){
+			var regExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
+			var val = $('#phone').val();
+			
+			if()
+		}); //end #phone.on()
 		
 	}); //end document
 	
