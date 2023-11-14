@@ -40,6 +40,7 @@
 		<button class="btn btn-light" id="btnSearch" type="submit"><i class="bi bi-search"></i></button>
 		</div>
 	</form>
+	<div id="keywords" style="width:100%;"></div>
 	</div>
 	<div class="btnOrderGroup">
 		<input type="hidden" class="orderByItem" name="orderBy" value="priceDesc">
@@ -157,14 +158,24 @@
 				$.getJSON(
 					url,
 					function(data){
-						if(data!=''){
-							console.log(data);
+						if(data!=''){							
+							$('#keywords').html('<span style="color:#fff;">추천 검색어 : </span> &nbsp;&nbsp;');
+							$(data).each(function(){
+								var keywords = $('#keywords').html();
+								keywords += '<span style="color:#fff;cursor:pointer;" class="keywords" onclick="changeKeyword('+this+');">'+this+'</span> &nbsp;&nbsp;';
+								$('#keywords').html(keywords);
+							});
 						}
 					}
 				);
 				}
 			});
 		}); // end document.ready()
+		function changeKeyword(keyword){
+			console.log(keyword);
+			console.log($('#keyword'));
+			$('#keyword').attr('value',keyword);
+		}
 	</script>
 	
 	
