@@ -53,7 +53,7 @@
 			<input type="text" id="toNickname" value="${svo.nickname }" readonly>
 			<input type="hidden" name="memberId" value="${vo.memberId }">
 			<input type="hidden" name="friendId" value="${svo.memberId }">
-			<button type="submit" class="btn btn-light" formaction="../friend/cancel">요청거절</button>
+			<button type="submit" class="btn btn-light" formaction="../friend/cancel">요청취소</button>
 		</form>
 		</div>
 			

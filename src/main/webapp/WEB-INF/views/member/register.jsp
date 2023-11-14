@@ -43,8 +43,9 @@ span {
 			</div>
 			<br>
 			<div>
-				<span>비번확인 :&nbsp;<input type="password" id="pwdChk" name="password" placeholder="PW 확인" required /></span>
-				<span id="checkPwdNo" style="display:none; color:#fff">비밀 번호가 일치합니다.</span>
+				<span>비번확인 :&nbsp;<input type="password" id="pwdCheck" name="password" placeholder="PW 확인" required /></span>
+				<span id="checkPwdYes" style="display:none; color:#10af85">비밀 번호가 일치합니다.</span>
+				<span id="checkPwdNo" style="display:none; color:#fff">비밀 번호가 일치하지 않습니다.</span>
 			</div>
 			<br>
 			<div>
@@ -53,11 +54,23 @@ span {
 			</div>
 			<br>
 			<div>
-				<span>이메일 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="email" required /></span> 
+				<span>이메일 :&nbsp;
+					<input type="text" name="emailId" id="emailId" style="width:120px;" required />@</span>
+					<input type="text" name="emailTxt" id="emailTxt" style="width:120px;" required />
+					<select name="emailAddress" id="emailAddress">
+						<option value="">직접입력</option>
+						<option value="naver.com">naver.com</option>
+						<option value="gamail.com">gamail.com</option>
+						<option value="nate.com">nate.com</option>
+						<option value="hanmail.com">hanmail.com</option>
+						<option value="guteam.com">guteam.com</option>
+					</select>
+					<input type="hidden" name="email" id="email">
 			</div>
 			<br>
 			<div>
 				<span> 연락처 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="phone" required /></span>
+				<span>('-'를 제외한 번호만 입력해주세요.)</span>
 			</div>
 			<br>
 			<input type="hidden" name="memberImageName" value="/default.jpeg">
@@ -75,6 +88,9 @@ span {
 	$(document).ready(function(){
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		var email = $('#email').val();
+		
 		// ID 중복 검사
 		// 검사 후 id 변경시, 재검사
 		$('#memberId').blur(function(){
@@ -221,9 +237,33 @@ span {
 		}); //end #password.keyup()
 		
 		// pw 확인
-		/* $('#pwdChk').keyup(function( {
+		$('#pwdCheck').keyup(function(){
+			if($('#pwdCheck').val().length != 0) {
+				if(pwdChk($('#pwd').val(), $('#pwdCheck').val())) {
+					$('#checkPwdNo').hide();
+					$('#checkPwdYes').show();
+				} else {
+					$('#checkPwdYes').hide();
+					$('#checkPwdNo').show();
+				}
+			} else {
+				$('#checkPwdYes').hide();
+				$('#checkPwdNo').show();
+			}
+		}); //end #pwdChk.keyup()
 		
-		})); //end #pwdChk.keyup() */
+		// email 선택옵션
+		$('#emailAddress').on('change', function(){
+			var val = $(this).val();
+			var front = $('#emailId').val();
+			$("option:selected", this);
+			
+			$("option:selected", this).attr("value");
+			console.log("val = " + val);
+			$('#emailTxt').val(val);
+			$('#email').val(front + "@" + val);
+		}); //end 
+		
 		
 		
 	}); //end document
