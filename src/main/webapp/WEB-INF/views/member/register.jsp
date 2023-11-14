@@ -70,7 +70,7 @@ span {
 			<br>
 			<div>
 				<span> 연락처 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="phone" required /></span>
-				<span>('-'를 제외한 번호만 입력해주세요.)</span>
+				<span>('-'를 제외한 번호만 입력해주세요 .)</span>
 			</div>
 			<br>
 			<input type="hidden" name="memberImageName" value="/default.jpeg">
