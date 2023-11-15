@@ -14,9 +14,11 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.tomcat.util.buf.UriUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.URIEditor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,16 +89,13 @@ public class GameController {
 	} // end registerPOST()
 
 	@GetMapping("/detail")
-	public void detail(Model model, int gameId, String prevListUrl, Principal principal) {
+	public void detail(Model model, int gameId, Principal principal, String prevListUrl) {
 		Map<String, Object> args = gameService.readGame(gameId, principal); 
 		// 게임 id 로 게임정보를 조회하고 로그인된 아이디가 있다면 viewed 테이블에 정보를 update
 		GameVO vo = (GameVO) args.get("vo");
 		model.addAttribute("vo", vo);
 		int rating = (int) args.get("rating");
 		model.addAttribute("rating", rating);
-		if (prevListUrl == null||prevListUrl.equals("")) {
-			prevListUrl = "list";
-		}
 		model.addAttribute("prevListUrl", prevListUrl);
 	} // end detail()
 
@@ -124,8 +123,11 @@ public class GameController {
 			String gameImageName = gameId+extension;
 			// 확장자와 게임 id 를 통해 파일 명을 지정
 			saveImage(file, vo, gameImageName); // 파일을 저장
+			encodeName(vo); // 이름을 변환
 		}
-		encodeName(vo); // 이름을 변환
+		if(!vo.getGameImageName().contains("%")) {
+			encodeName(vo);
+		}
 		int result = gameService.update(vo); // 게임 정보를 update
 		if (result == 1) {
 			reAttr.addFlashAttribute("update_result", "success");
@@ -290,7 +292,6 @@ public class GameController {
 				}else { // register에서 등록하는 경우
 					fileName = gameService.getSeqNo()+"";
 				}
-				logger.info(fileName);
 				result = GameImageUploadUtil.saveUploadedFile(uploadPath, fileName+"."+files[i].getOriginalFilename().substring(files[i].getOriginalFilename().lastIndexOf(".")+1),
 						files[i].getBytes());
 				result = URLEncoder.encode(result, "utf-8");

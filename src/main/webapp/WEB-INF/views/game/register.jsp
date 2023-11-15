@@ -34,7 +34,7 @@
 </div>
 <div class="inputArea">
 <input type="text" autofocus="autofocus" name="gameName" required="required"><br> 
-<input type="number" name="price" required="required"><br>
+<input type="number" name="price" min="0" required="required"><br>
  <input type="text" name="genre" required><br>
 <img class="file-drop" width="300px" height="300px" src="display?fileName=basic.png"><br>
 <div class="input-group mb-3">

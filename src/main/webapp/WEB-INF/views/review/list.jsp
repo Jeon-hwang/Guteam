@@ -33,7 +33,7 @@
 </form>
 <div class="btnOrderGroup">
 <input type="hidden" class="orderByItem" name="orderBy" value="thumbUpCnt">
-<input type="submit" class="orderBy" value="추천수↑">
+<button type="submit" class="btn btn-secondary orderBy">추천수<i class="bi bi-sort-numeric-down-alt"></i></button>
 </div>
 <table class="table table-secondary table-hover">
 	<thead>

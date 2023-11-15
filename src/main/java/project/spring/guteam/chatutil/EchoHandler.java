@@ -11,6 +11,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.service.MemberService;
 
 public class EchoHandler extends TextWebSocketHandler{
@@ -40,11 +41,16 @@ public class EchoHandler extends TextWebSocketHandler{
 		// 메시지 전송시
 		for(WebSocketSession sess: sessionList) { // 메시지를 채팅창에 보여줌
 			String memberId = session.getPrincipal().getName();
-			String nickname = memberService.read(memberId).getNickname();
-			if(sess.equals(session)) {
-				sess.sendMessage(new TextMessage("<span class='myChat'><div class='chatInfo'><div class='nickname'>"+nickname+"</div><div class='message'>"+message.getPayload()+"</div>"));
+			MemberVO vo = memberService.read(memberId);
+			String nickname = vo.getNickname();
+			if(vo.getIsAdmin().equals("Y")) {
+				sess.sendMessage(new TextMessage("<span class='adminChat'><div class='chatInfo'><div class='nickname'>"+nickname+"</div><div class='message'>"+message.getPayload()+"</div>"));
 			}else {
-				sess.sendMessage(new TextMessage("<span class='yourChat'><div class='chatInfo'><div class='nickname'>"+nickname+"</div><div class='message'>"+message.getPayload()+"</div>"));
+				if(sess.equals(session)) {
+					sess.sendMessage(new TextMessage("<span class='myChat'><div class='chatInfo'><div class='nickname'>"+nickname+"</div><div class='message'>"+message.getPayload()+"</div>"));
+				}else {
+					sess.sendMessage(new TextMessage("<span class='yourChat'><div class='chatInfo'><div class='nickname'>"+nickname+"</div><div class='message'>"+message.getPayload()+"</div>"));
+				}
 			}
 		}
 	} // end handleTextMessage

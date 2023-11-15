@@ -37,8 +37,8 @@ body{
 			<input type="submit" class="btn btn-light" value="회원 탈퇴">	
 		</form>
 	</div>
-		<hr>
 </div>
+		<hr>
 		<div id="boardsAndReviewsArea" style="display:flex;">
 		<div id="boardsArea" style="display:inline-block;margin-right:40px;">
 			<button id="showMyBoards" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 게시글 보기</button>
@@ -61,7 +61,7 @@ body{
 		<hr>
 		<div id="commentsArea">
 			<button id="showMyComments" class="btn btn-light">내가 쓴 댓글 보기</button>
-			<button id="closeMyComments" style="display : none">접기</button>
+			<button id="closeMyComments" class="btn btn-light" style="display : none">접기</button>
 			<div id="myComments">
 				<ul id="myCommentsList"></ul>
 			</div>

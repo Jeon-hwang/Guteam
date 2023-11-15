@@ -73,7 +73,7 @@
 	</div>
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<div class="btn_group_detail">
-	<a href="update?gameId=${vo.gameId }&prevListUrl=${prevListUrl}"><button class="btn btn-light">수정하기</button></a>
+	<a href="update?gameId=${vo.gameId }&prevListUrl=" id="btnUpdate"><button class="btn btn-light">수정하기</button></a>
 	</div>
 	</sec:authorize>
 	<div class="btn_group_detail">
@@ -81,7 +81,7 @@
 	<a href="../review/list?gameId=${vo.gameId }"><button class="btn btn-light">리뷰보기</button></a>
 	</div>
 	<div class="btn_group_detail">
-	<a href="${prevListUrl}"><button class="btn btn-light">리스트로 돌아가기</button></a>
+	<a id="prevListUrl" href="${prevListUrl}"><button class="btn btn-light">리스트로 돌아가기</button></a>
 	
 	<input type="hidden" id="updateResult" value="${update_result }">
 	
@@ -235,6 +235,14 @@
             .css("top",(e.pageY - xOffset) + "px")
             .css("left",(e.pageX + yOffset) + "px");
         });
+		
+		var prevListUrl = $('#prevListUrl').attr('href');
+		prevListUrl = decodeURIComponent(prevListUrl);
+		$('#prevListUrl').attr('href', prevListUrl);
+		var updateUrl = $('#btnUpdate').attr('href');
+		prevListUrl = encodeURIComponent(prevListUrl);
+		$('#btnUpdate').attr('href', updateUrl+prevListUrl);
+		
 	});// document
 	</script>
 	  </body>

@@ -132,9 +132,8 @@
 			
 			$('.gameInfo').on('click', function(){
 				var gameId = $(this).find("input").val();
-				console.log(gameId);
-				var prevListUrl = window.location.href;
-				var keyword = $('#keyword').val();
+				var prevListUrl = window.location.href.substr(window.location.href.lastIndexOf('/')+1);
+				prevListUrl = encodeURIComponent(prevListUrl);
 				var url = "detail?gameId="+gameId+"&prevListUrl="+prevListUrl;
 				location.href=url;
 			}); // end gameInfo.onclick()
@@ -153,28 +152,28 @@
 				var keyword = $(this).val();
 				var pattern = /([^0-9a-zA-Z가-힣\x20])/i;		
 				if(pattern.test(keyword)||keyword==''){
+					$('#keywords').html('');
 				}else{
-				var url = '/guteam/game/'+keyword;
-				$.getJSON(
-					url,
-					function(data){
-						if(data!=''){							
-							$('#keywords').html('<span style="color:#fff;">추천 검색어 : </span> &nbsp;&nbsp;');
-							$(data).each(function(){
-								var keywords = $('#keywords').html();
-								keywords += '<span style="color:#fff;cursor:pointer;" class="keywords" onclick="changeKeyword('+this+');">'+this+'</span> &nbsp;&nbsp;';
-								$('#keywords').html(keywords);
-							});
+					var url = '/guteam/game/'+keyword;
+					$.getJSON(
+						url,
+						function(data){
+							if(data!=''){							
+								$('#keywords').html('<span style="color:#fff;">추천 검색어 : </span> &nbsp;&nbsp;');
+								$(data).each(function(){
+									var keywords = $('#keywords').html();
+									keywords += '<span style="color:#fff;cursor:pointer;" class="keywords" onclick="changeKeyword(this);">'+this+'</span> &nbsp;&nbsp;';
+									$('#keywords').html(keywords);
+								});
+							}
 						}
-					}
-				);
+					);
 				}
 			});
 		}); // end document.ready()
 		function changeKeyword(keyword){
-			console.log(keyword);
-			console.log($('#keyword'));
-			$('#keyword').attr('value',keyword);
+			var keyword = $(keyword).text();
+			$('#keyword').val(keyword);
 		}
 	</script>
 	

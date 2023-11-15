@@ -620,8 +620,12 @@ textarea{
 .chatArea::-webkit-scrollbar{
 	width: 1px;
 }
-.chatArea .nickname{
-
+.chatArea .adminChat{
+	text-align:center;
+}
+.chatArea .adminChat .nickname{
+	color:#f38c22;
+	font-weight:bolder;
 }
 .chatArea .myChat .message{
 	word-break:break-all;
@@ -642,6 +646,17 @@ textarea{
 	color:#fff;
 	width:100%;
 	text-align:right;
+}
+.chatArea .adminChat .message{
+	word-break:break-all;
+	margin:5px 20px;
+	border:1px solid #fff;
+	padding:5px 2px;
+	border-radius:5px;
+	background-color:#f38c22;
+	color:#c70205;
+	width:95%;
+	text-align:center;
 }
 .chatArea .time{
 	color:#1b2838;
