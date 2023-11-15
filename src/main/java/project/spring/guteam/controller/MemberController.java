@@ -169,7 +169,7 @@ public class MemberController {
 		int result = memberService.update(vo, "N");
 		
 		if(result == 1) {
-			reAttr.addFlashAttribute("alert", "success");
+			reAttr.addFlashAttribute("udp_alert", "success");
 			logger.info("수정 완료");
 			return "redirect:/member/profiles";
 		} else {

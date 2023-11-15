@@ -38,7 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 </update>
 	 
 	 <select id="total_count" resultType="Integer">
-	 select count(*) total_cnt from ${message_receive} 
+	 select count(*) total_cnt from ${message_receive} where ${receiveMemberId}=#{receiveMemberId}
+	 </select>
+	 
+	 <select id="box_count" resultType="Integer">
+	 select sum(total_cnt) from 
+	 (select count(*) total_cnt, ${receiveMemberId} memberId from ${message_receive} where ${receiveMemberId}=#{memberId} and ${messageSave}='Y'
+	 union all
+	 select count(*) total_cnt, ${sendMemberId} memberId from ${message_send} where ${sendMemberId}=#{memberId} and ${messageSave}='Y')
 	 </select>
 	 
 	 <delete id="delete">

@@ -8,68 +8,48 @@
 <head>
 <jsp:include page="../style.jsp"></jsp:include>
 <style type="text/css">
-.profileImg {
-	width : 40px;
-	height : 40px;
-	border : 1px solid grey;
-}
-.btn {
-	margin : 1px;
-	padding-top : 5px;
-	padding-left : 5px;
-	padding-right : 5px;
-    padding-bottom : 5px;
-}
-.lbl {
-	width : 150px;
-	height : 300px;
-	border-top : solid 1px darkgray;
-	border-right : solid 1px darkgray;	
-	border-bottom : solid 1px darkgray;
-}
-.val {
-	width : 480px;
-	height : 300px;
-	border-top : solid 1px darkgray;
-	border-right : solid 1px darkgray;	
-	border-bottom : solid 1px darkgray;
-}
-.hdl {
-	margin-left : 20px;
-	margin-right : 20px;
-	text-align: center;
-}
-body {
-    margin: 0;
-    padding: 0;
+.logoImg {
+	display:flex;
+	width: 70px;
+	height: 70px;
+	margin: 25px;
 }
 #full {
-	width : 703px;
-	height : 410px;
+	display:flex;
+	width : 750px;
+	height : 420px;
 }
 #leftMenu {
-	width : 110px;
+	display:flex;
+	flex-wrap: wrap;
+	width : 120px;
 	height : 400px;
-	float : left;
+}
+#m-board {
+	display:flex
+	flex-wrap: wrap;
 }
 #board-top {
+	display:flex;
+	flex-wrap: wrap;
 	padding-top : 5px;
 	padding-left : 5px;
 	padding-right : 5px;
     padding-bottom : 5px;
 	width : 580px;
 	height : 50px;
-	float : left;
 }
 #main {
-	background-color : lightgray;
+	display:flex;
+	flex-wrap: wrap;
+	background-color : #666666;
 	width : 580px;
 	height : 350px;
 	float : left;
 }
-ul{
+ul {
+	
 	margin: 0px;
-    padding-top : 20px;
     padding-left : 10px;
     padding-right : 10px;
     padding-bottom : 0px;
@@ -79,9 +59,35 @@ ul{
 li {
 	display : inline-block;
 }
-thead {
-	background-color : darkgrey;
+.cen {
 	text-align : center;
+}
+.title {
+	padding-left : 10px;
+}
+.btn {
+	margin : 1px;
+	padding-top : 5px;
+	padding-left : 5px;
+	padding-right : 5px;
+    padding-bottom : 5px;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+thead {
+	background-color : #bcc2e5;
+	text-align : center;
+}
+th {
+	border-left : solid 1px gray;
+}
+td {
+	color: #e5e5dc;
+	border-left : solid 1px #bcc2e5;	
+	border-bottom : solid 1px #bcc2e5;
 }
 #board-head {
 	margin : 5px;
@@ -95,9 +101,9 @@ thead {
 <body>
 <div id="full">
 <div id="leftMenu">
-	<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png">
+<img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
 	<ul>
-	<li><a href="../message/register"><button class="btn btn-light">쪽지 쓰기</button></a></li>
+	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
 	<br>
 	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
@@ -105,9 +111,9 @@ thead {
 	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
+<div id="m-board">
 <div id="board-top">
-	
-	
+
 </div>
 <div id="main">
 	<ul>
@@ -154,7 +160,7 @@ thead {
 	</form>
 	</div>
 </div>
-
+</div>
 </div>
 </body>
 </html>

@@ -17,9 +17,9 @@ import project.spring.guteam.pageutil.PageCriteria;
 @Repository // @Component
 public class MessageReceiveDAOImple implements MessageReceiveDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MessageReceiveDAOImple.class);
-	
+
 	public static final String NAMESPACE = "project.spring.guteam.MessageReceiveMapper";
-	
+
 	@Autowired
 	public SqlSession sqlSession;
 
@@ -28,7 +28,7 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 		logger.info("insert() 호출");
 		return sqlSession.insert(NAMESPACE + ".insert", vo);
 	}
-	
+
 	@Override
 	public MessageReceiveVO select(int receiveMessageId) {
 		logger.info("select() 호출 receiveMessageId? " + receiveMessageId);
@@ -39,26 +39,26 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 	public List<MessageReceiveVO> select(String receiveMemberId, PageCriteria criteria) {
 		logger.info("paging-select() 호출");
 		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
-		logger.info("receiveMemberId ? " + receiveMemberId); 
+		logger.info("receiveMemberId ? " + receiveMemberId);
 		Map<String, Object> args = new HashMap<>();
 		args.put("receiveMemberId", receiveMemberId);
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_paging_n", args);
 	}
-	
+
 	@Override
 	public List<MessageSaveVO> selectSaved(String memberId, PageCriteria criteria) {
 		logger.info("paging-select() 호출");
 		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
-		logger.info("MemberId ? " + memberId); 
+		logger.info("MemberId ? " + memberId);
 		Map<String, Object> args = new HashMap<>();
 		args.put("memberId", memberId);
 		args.put("start", criteria.getStart());
 		args.put("end", criteria.getEnd());
 		return sqlSession.selectList(NAMESPACE + ".select_save_message", args);
 	}
-	
+
 	@Override
 	public int update(String messageBox, int receiveMessageId) {
 		logger.info("update(받은쪽지보관) 호출");
@@ -67,7 +67,7 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 		args.put("receiveMessageId", receiveMessageId);
 		return sqlSession.update(NAMESPACE + ".update_box", args);
 	}
-	
+
 	@Override
 	public int delete(int messageId) {
 		logger.info("delete() 호출");
@@ -75,9 +75,15 @@ public class MessageReceiveDAOImple implements MessageReceiveDAO {
 	}
 
 	@Override
-	public int getTotalCounts() {
+	public int getReceiveCounts(String receiveMemberId) {
 		logger.info("getTotalCount() 호출");
-		return sqlSession.selectOne(NAMESPACE + ".total_count");
+		return sqlSession.selectOne(NAMESPACE + ".total_count", receiveMemberId);
+	}
+
+	@Override
+	public int getBoxCounts(String memberId) {
+		logger.info("getBoxCounts() 호출");
+		return sqlSession.selectOne(NAMESPACE + ".box_count", memberId);
 	}
 
 }

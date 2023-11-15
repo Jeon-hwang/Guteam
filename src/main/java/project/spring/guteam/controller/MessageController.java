@@ -65,7 +65,7 @@ public class MessageController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(messageService.getTotalCounts());
+		pageMaker.setTotalCount(messageService.getReceiveCounts(principal.getName()));
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker", pageMaker);
 		
@@ -98,7 +98,7 @@ public class MessageController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(messageService.getTotalCounts());
+		pageMaker.setTotalCount(messageService.getSentCounts(principal.getName()));
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker", pageMaker);
 	}
@@ -130,7 +130,7 @@ public class MessageController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(messageService.getTotalCounts());
+		pageMaker.setTotalCount(messageService.getBoxCounts(principal.getName()));
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker", pageMaker);
 	}

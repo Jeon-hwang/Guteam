@@ -16,11 +16,40 @@
 	height: 70px;
 	margin: 25px;
 }
+#full {
+	display:flex;
+	width : 750px;
+	height : 420px;
+}
 #leftMenu {
 	display:flex;
-	flex-wrap: wrap;
+	flex-direction: column;
 	width : 120px;
 	height : 400px;
+}
+#m-board {
+	display:flex
+	flex-wrap: wrap;
+}
+#board-top {
+	display:flex;
+	flex-wrap: wrap;
+	padding-top : 5px;
+	padding-left : 5px;
+	padding-right : 5px;
+    padding-bottom : 5px;
+	width : 590px;
+	height : 50px;
+}
+#main {
+	display:flex;
+	flex-flow: column wrap;
+	background-color : #666666;
+	width : 590px;
+	height : 350px;
+}
+#board-btm {
+	align : center;
 }
 ul {
 	margin: 0px;
@@ -33,12 +62,6 @@ ul {
 li {
 	display : inline-block;
 }
-.cen {
-	text-align : center;
-}
-.title {
-	padding-left : 10px;
-}
 .btn {
 	margin : 1px;
 	padding-top : 5px;
@@ -50,39 +73,28 @@ body {
     margin: 0;
     padding: 0;
 }
-#full {
-	width : 750px;
-	height : 420px;
-}
-#board-top {
-	display: flex;
-	padding-top : 5px;
-	padding-left : 5px;
-	padding-right : 5px;
-    padding-bottom : 5px;
-	width : 580px;
-	height : 50px;
-}
-#main {
-	background-color : lightgray;
-	width : 580px;
-	height : 350px;
-	float : left;
+table {
+	width: 100%;
 }
 thead {
-	background-color : darkgrey;
+	width: 100%;
+	background-color : #bcc2e5;
 	text-align : center;
 }
 th {
 	border-left : solid 1px gray;
 }
-td {
-	border-left : solid 1px darkgray;	
-	border-bottom : solid 1px darkgray;
+tr {
+	height: 35px;
 }
-#board-head {
-	margin : 5px;
-    
+td {
+	color: #e5e5dc;
+	border-left : solid 1px #bcc2e5;	
+	border-bottom : solid 1px #bcc2e5;
+}
+.td {
+	text-align : center;
+	white-space: nowrap;
 }
 </style>
 <meta charset="UTF-8">
@@ -93,7 +105,6 @@ td {
 <div id="full">
 <div id="leftMenu">
 <img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
-
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
@@ -103,6 +114,7 @@ td {
 	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
+<div id="m-board">
 <div id="board-top">
 	<button class="btn btn-light" onclick="deleteMsg()">삭제</button>
 	<button class="btn btn-light" onclick="saveMsg()">보관</button>
@@ -111,35 +123,38 @@ td {
 <table>
 	<thead>
 	<tr>
-		<th class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="allChk" id="allChk"></label></th>
-		<th style="width: 350px">제목</th>
-		<th style="width: 100px">보낸 사람</th>
-		<th style="width: 100px">보낸 날짜</th>
+		<th style="width:5%"><input type="checkbox" name="allChk" id="allChk"></th>
+		<th style="width: 55%">제목</th>
+		<th style="width: 24%">보낸 사람</th>
+		<th style="width: 16%">보낸 날짜</th>
 	</tr>
 	</thead>
 	
 	<tbody>
 	<c:forEach var="pvo" items="${list }">
 	<tr>
-		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.receiveMessageId }"></label></td>
-		<td class="title"><a href="../message/detail?receiveMsgId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
-		<td class="cen" style="white-space: nowrap;">${pvo.sendMemberNickname }</td>
+		<td class="td" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.receiveMessageId }"></label></td>
+		<td style="padding-left : 10px;"><a href="../message/detail?receiveMsgId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
+		<td class="td" style="white-space: nowrap;">${pvo.sendMemberNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
 	</c:forEach>
 	</tbody>
 </table>
-<ul>
-	<c:if test="${pageMaker.hasPrev }">
-		<li><a href="list?page=${pageMaker.startPageNo - 1}">이전</a></li>
-	</c:if>
-	<c:forEach begin="${pageMaker.startPageNo }" end="${pageMaker.endPageNo }" var="num">
-		<li><a href="list?page=${num }">${num }</a></li>
-	</c:forEach>
-	<c:if test="${pageMaker.hasNext }">
-		<li><a href="list?page=${pageMaker.endPageNo + 1 }">다음</a></li>
-	</c:if>
-</ul>
+<div id="board-btm">
+	<ul>
+		<c:if test="${pageMaker.hasPrev }">
+			<li><a href="list?page=${pageMaker.startPageNo - 1}">이전</a></li>
+		</c:if>
+		<c:forEach begin="${pageMaker.startPageNo }" end="${pageMaker.endPageNo }" var="num">
+			<li><a href="list?page=${num }">${num }</a></li>
+		</c:forEach>
+		<c:if test="${pageMaker.hasNext }">
+			<li><a href="list?page=${pageMaker.endPageNo + 1 }">다음</a></li>
+		</c:if>
+	</ul>
+</div>
+</div>
 </div>
 </div>
 <input type="hidden" id="alert" value="${alert }">
