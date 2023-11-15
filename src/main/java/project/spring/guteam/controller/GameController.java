@@ -61,7 +61,8 @@ public class GameController {
 			criteria.setNumsPerPage(numsPerPage);
 		}
 		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCriteria(criteria);		
+		pageMaker.setCriteria(criteria);
+		model.addAttribute("uploadPath", uploadPath);
 		readListsAndSetModel(keyword, keywordCriteria, pageMaker, criteria, model, orderBy, principal);
 	} // end list()
 

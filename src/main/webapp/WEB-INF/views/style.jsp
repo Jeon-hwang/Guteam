@@ -540,15 +540,16 @@ formArea input:focus{
 	border:none;
 	color:#fff;
 }
-#gameInfos{
+.gameInfos{
 	margin:5px; 
 	width:330px; 
 	height:500px; 
 	display:inline-block;
 	background-color:#2a475e;
+	color:#fff;
 	border:none;
 }
-#gameInfos:hover{
+.gameInfos:hover{
 	background-color:#a0c5db;
 	color:black;
 }

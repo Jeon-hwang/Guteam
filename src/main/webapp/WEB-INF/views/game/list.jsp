@@ -57,12 +57,18 @@
 	
 	<div class="listArea">
 	<c:forEach varStatus="status" var="vo" items="${gameVOList }">
-	<div class="btn btn-secondary" id="gameInfos">
+	<div class="btn gameInfos">
 			<div class="gameInfo">
+				<div class="imgArea">
 				<img class="rounded mx-auto d-block" alt="${vo.gameName }"
-					width="300px" height="300px"
-					src="display?fileName=${vo.gameImageName }"> <input
-					type="hidden" class="gameId" value="${vo.gameId }"> <br>
+					width="300px" height="300px" src="display?fileName=${vo.gameImageName }">
+				</div>
+				<div class="videoArea" style="display:none;">
+				<video class="rounded mx-auto d-block" width="300px" height="300px" autoplay muted loop>
+				<source src="/video/${vo.gameId }.mp4">
+				</video>
+				</div>
+				<input type="hidden" class="gameId" value="${vo.gameId }"><br>
 				<div class="info">
 					<h6>${vo.gameName }</h6> <p>₩ ${vo.price }</p>
 					<p>${vo.genre }</p>
@@ -130,13 +136,26 @@
 				alert('할인 수정 성공!');
 			}
 			
-			$('.gameInfo').on('click', function(){
+			$('.gameInfos').on('click', function(){
 				var gameId = $(this).find("input").val();
 				var prevListUrl = window.location.href.substr(window.location.href.lastIndexOf('/')+1);
 				prevListUrl = encodeURIComponent(prevListUrl);
 				var url = "detail?gameId="+gameId+"&prevListUrl="+prevListUrl;
 				location.href=url;
 			}); // end gameInfo.onclick()
+			
+			$('.gameInfos').on({
+				mouseenter: function(){
+					var gameId = $(this).find('.gameId').val();
+					console.log(gameId);
+					$(this).find('.videoArea').attr('style','display:block;');
+					$(this).find('.imgArea').attr('style','display:none;');
+				},
+				mouseleave: function(){
+					$(this).find('.videoArea').attr('style','display:none;');
+					$(this).find('.imgArea').attr('style','display:block;');
+				}
+			}); // end gameInfo.onhover()
 			
 			$('.orderBy').on('click', function(){
 				var orderBy = $(this).prev('.orderByItem').attr('value');

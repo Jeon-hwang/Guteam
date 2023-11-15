@@ -16,6 +16,7 @@ public class MediaUtil {
 		mediaMap.put("GIF", MediaType.IMAGE_GIF);
 		mediaMap.put("PNG", MediaType.IMAGE_PNG);
 		mediaMap.put("JFIF", MediaType.IMAGE_JPEG);
+		mediaMap.put("MP4", MediaType.ALL);
 	}
 	
 	public static MediaType getMediaType(String type) {
