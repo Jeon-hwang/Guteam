@@ -117,7 +117,7 @@ public class GameController {
 
 	@PostMapping("/update")
 	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file, Principal principal) {
-		logger.info("updatePOST() 호출");
+		logger.info("updatePOST() 호출===================");
 //		logger.info(vo + "");
 		if (file != null && !file.getOriginalFilename().equals("")) { // input [type="file"] 이 있는 경우
 			int gameId = vo.getGameId();
@@ -125,6 +125,7 @@ public class GameController {
 			String gameImageName = gameId+extension;
 			// 확장자와 게임 id 를 통해 파일 명을 지정
 			if((extension).toUpperCase().contains("MP4")) {
+				logger.info(uploadPath);
 				VideoUtil.upload(file,vo.getGameId());
 			}else {
 				saveImage(file, vo, gameImageName); // 파일을 저장

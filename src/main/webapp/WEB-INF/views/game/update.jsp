@@ -44,7 +44,7 @@
 <input type="hidden" class="gameImageName" name="gameImageName" value="${vo.gameImageName }">
 <!-- <img alt="${vo.gameImageName }" src=""> -->
 <br>
-<input type="submit" class="btn btn-secondary" value="수정">
+<input id="submit" type="submit" class="btn btn-secondary" value="수정">
 </div>
 </div>
 </form>
@@ -99,9 +99,15 @@
 		function display(event){
 			var reader = new FileReader();
 			reader.onload = function(event){
-				$('.file-drop').attr('src', event.target.result);
+				if(event.target.result.indexOf('video')==-1){
+					$('.file-drop').attr('src', event.target.result);						
+				}else{
+					$('.file-drop').attr('style','display:none;');
+					$('#submit').attr('value','동영상 업로드');
+				}
 			}
 			reader.readAsDataURL(event.target.files[0]);
+			console.log(event.target);
 			console.log(event.target.result);
 		}; // display
 	</script>
