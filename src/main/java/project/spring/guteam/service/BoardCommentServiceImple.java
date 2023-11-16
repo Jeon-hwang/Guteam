@@ -47,7 +47,7 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		logger.info("boardComment update실행");
 		return 1;
 	}	
-
+	
 	@Transactional(value = "transactionManager")
 	@Override
 	public Map<String, Object> read(int gameBoardId,PageCriteria criteria) {

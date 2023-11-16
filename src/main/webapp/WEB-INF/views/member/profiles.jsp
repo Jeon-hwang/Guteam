@@ -122,14 +122,14 @@ body{
 						var createdDate = new Date(this.createdDate);
 						
 						list += '<li class="comment_reply_item">'
-							 +  '<span><a href="/guteam/gameBoard/detail?gameBoardId='+this.boardId+'&page=1&gameId='+this.gameId+'">';
+							 +  '<span class="commentAndReplyContent"><a href="/guteam/gameBoard/detail?gameBoardId='+this.boardId+'&page=1&gameId='+this.gameId+'">';
 							if(this.content.substring(0,9)=='(updated)'){
 						list += this.content.replace('(updated)','');		
 							}else{
 						list +=	this.content;
 							}
 						list +=	'</a></span>'
-							 +	'<span>'+dateFormat(createdDate)+'</span>'
+							 +	'<span class="commentsDate">'+dateFormat(createdDate)+'</span>'
 							 +  '</li>';
 						
 						}); //end data.each
@@ -253,10 +253,9 @@ body{
 			$('#showMyReviews').on('click', function(){
 				var page = $('#reviewPage').attr('value');
 				var memberId = $('#memberId').val();
-				var url = '../review/list-ajax/'+memberId+'?page='+page;
+				var url = '../review/lis	t-ajax/'+memberId+'?page='+page;
 				var list = '';
 				if($('#showMyReviews').text()=="내가 쓴 리뷰 보기"){
-					
 				$.getJSON(
 					url,
 					function(data){
