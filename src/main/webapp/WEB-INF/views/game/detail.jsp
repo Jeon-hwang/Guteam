@@ -107,6 +107,8 @@
 		var updateResult = $('#updateResult').val();
 		if(updateResult=='success'){
 			alert('게임 정보 수정 성공'); 	
+		}else if(updateResult=='update_video'){
+			alert('비디오 삽입 성공');
 		}
 		var xOffset = 10;
         var yOffset = 30;

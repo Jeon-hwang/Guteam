@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
 
 public class GameImageUploadUtil {
@@ -30,12 +29,7 @@ public class GameImageUploadUtil {
 		
 		String result = null;
 		if (MediaUtil.getMediaType(extension) != null) {
-			if(MediaUtil.getMediaType(extension).equals(MediaType.ALL)) {
-				createVideo(uploadPath, saveName);
-				result=saveName;
-			}else {
-				result = createThumbnail(uploadPath, saveName);
-			}
+			result = createThumbnail(uploadPath, saveName);
 		} else {
 			result = createIcon(uploadPath, saveName);
 		}
@@ -44,32 +38,6 @@ public class GameImageUploadUtil {
 	} // end saveUploadedFile()
 	
 	
-	private static String createVideo(String uploadPath, String fileName) throws IOException {
-	 
-		String parent = uploadPath;
-		BufferedImage source = 
-				ImageIO.read(new File(parent, fileName));
-		// uploadPath 에 생성한 fileName 파일을 source 에 담아 초기화
-		BufferedImage destination = 
-				Scalr.resize(source, Scalr.Method.AUTOMATIC, 
-						Scalr.Mode.FIT_TO_HEIGHT, 300);
-		// source 를 300 높이에 맞게 resize하여 destination 에 담아 초기화
-		
-		String videoName = 
-				uploadPath + File.separator
-				+ fileName;
-		
-		File video = new File(videoName);
-		String formatName = fileName.substring(fileName.lastIndexOf('.') + 1);
-		// 확장자를 가져와서 섬네일 파일을 write
-				boolean result = ImageIO.write(destination, formatName, video);
-				logger.info("create video result: " + result);
-				
-				return videoName.substring(uploadPath.length())
-						.replace(File.separatorChar, '/');
-	}
-
-
 	private static String createThumbnail(String uploadPath
 			, String fileName) throws IOException {
 		

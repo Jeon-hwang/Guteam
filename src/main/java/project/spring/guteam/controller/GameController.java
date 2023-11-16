@@ -34,6 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.fileutil.GameImageUploadUtil;
 import project.spring.guteam.fileutil.MediaUtil;
+import project.spring.guteam.fileutil.VideoUtil;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.pageutil.PageMaker;
 import project.spring.guteam.service.GameService;
@@ -123,17 +124,30 @@ public class GameController {
 			String extension = "."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
 			String gameImageName = gameId+extension;
 			// 확장자와 게임 id 를 통해 파일 명을 지정
-			saveImage(file, vo, gameImageName); // 파일을 저장
-			encodeName(vo); // 이름을 변환
+			if((extension).toUpperCase().contains("MP4")) {
+				VideoUtil.upload(file,vo.getGameId());
+			}else {
+				saveImage(file, vo, gameImageName); // 파일을 저장
+				encodeName(vo); // 이름을 변환
+			}
 		}
 		if(!vo.getGameImageName().contains("%")) {
 			encodeName(vo);
 		}
-		int result = gameService.update(vo); // 게임 정보를 update
-		if (result == 1) {
+		int result = 0 ;
+		if(file.getOriginalFilename().toUpperCase().contains("MP4")) {
+			result = 2;
+		}else {
+			result = gameService.update(vo); // 게임 정보를 update
+		}
+		switch(result) {
+		case 1 :
 			reAttr.addFlashAttribute("update_result", "success");
 			return "redirect:/game/detail?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;
-		} else {
+		case 2 : 
+			reAttr.addFlashAttribute("update_result", "update_video");
+			return "redirect:/game/detail?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;
+		default:
 			return "redirect:/game/update?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;
 		}
 	} // end updatePOST()

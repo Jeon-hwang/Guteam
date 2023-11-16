@@ -505,7 +505,6 @@
 				    }else{
 				    	$(this).css('height', 'auto');
 					    $(this).height(this.scrollHeight);
-					    
 				    }
 			 });
 
