@@ -16,11 +16,6 @@
 		color: white;
 	}
 
-	.wish_list_area li{
-		display : flex;
-		justify-content: space-between;
-	}
-	
 </style>
 <title>위시리스트</title>
 </head>
@@ -64,8 +59,8 @@
 								list +=	'<li class="wish_list_item">'
 									 + '<input type="hidden" class="gameId" value='+this.gameId+'>'
 									 + '<input type="checkbox" class="listCheck">'
-									 + '<img alt="'+this.gameName+'" width="100px" height="100px"'
-									 + 'src="../game/display?fileName='+this.gameImageName+'">'
+									 + '<div class="gameImg"><img alt="'+this.gameName+'" width="100px" height="100px"'
+									 + 'src="../game/display?fileName='+this.gameImageName+'"></div>'
 									 + '<span id="gameName"><a href=../game/detail?gameId='+this.gameId+'>'+this.gameName+'</a></span>'
 									 + '<span class="genre">'+this.genre+'</span>'
 									 + '<span class="showPrice">￦'+this.price+'</span>'

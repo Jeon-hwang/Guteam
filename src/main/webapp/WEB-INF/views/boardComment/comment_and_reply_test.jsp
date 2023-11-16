@@ -23,7 +23,7 @@
 		<sec:authorize access="isAuthenticated()">
 		<div class="insertComment">
 		<img alt="${principal.username }" id="userProfileImage" src="../member/display?fileName=${memberImageName }" width="50px" height="50px">
-		&nbsp&nbsp<textarea id="commentContent" maxlength="33" placeholder="댓글 입력"></textarea>
+		&nbsp&nbsp<textarea id="commentContent" maxlength="165" placeholder="댓글 입력"></textarea>
 		<button id="commentAddBtn" class="btn btn-secondary"><i class="bi bi-check"></i></button>
 		</div>
 		</sec:authorize>
@@ -155,8 +155,8 @@
 								+ '<pre>'
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
-								+ '<div class="comment_info"><input type="hidden" id="commentContent" value="'+this.commentContent+'"></div>'
-								+ '<p>삭제된 댓글입니다.</p>'
+								+ '<div class="comment_info"><input type="hidden" id="commentContent" value="'+this.commentContent+'">'
+								+ '<span>삭제된 댓글입니다.</span></div>'
 								+ '<div class="reply_btn_area">'
 								+ '<button class="reply_view_btn" style="display:block"><i class="bi bi-chat-left-dots-fill">'+this.replyCnt+'</i></button>'
 								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
@@ -170,29 +170,28 @@
 								if(this.commentContent.substring(0,9)=='(updated)'){
 						list += '&nbsp&nbsp<div class="comment_info"><span class="commentNickname">'+nickname+'</span>&nbsp&nbsp'
 								+ '<span>'+elapsedTime(commentDateCreated)+'(수정 됨)</span>&nbsp&nbsp<br>'
-								+ '<span id="commentContentView">'+this.commentContent.replace("(updated)","")+'</span>'
-								+ '<input type="hidden" id="commentContent" value="'+this.commentContent.replace("(updated)","")+'" maxlength="33"></div>'
+								+ '<span class="commentContentView">'+this.commentContent.replace("(updated)","")+'</span>'
+								+ '<textarea class="updateCommentContent" style="display:none" maxlength="165">'+this.commentContent.replace("(updated)","")+'</textarea></div>'
 								}else{
 						list += '&nbsp&nbsp<div class="comment_info"><span class="commentNickname">'+nickname+'</span>&nbsp&nbsp'
 								+ '<span>'+elapsedTime(commentDateCreated)+'</span>&nbsp&nbsp<br>'
-								+ '<span id="commentContentView">'+this.commentContent+'</span>'
-								+ '<input type="hidden" id="commentContent" value="'+this.commentContent+'" maxlength="33"></div>'
+								+ '<span class="commentContentView">'+this.commentContent+'</span>'
+								+ '<textarea class="updateCommentContent" style="display:none" maxlength="165">'+this.commentContent+'</textarea></div>'
 								}
 								if(principalMemberId==this.memberId){
 						list += '<div class="reply_btn_area">'
-								+ '<button class="reply_view_btn" style="display:inline"><i class="bi bi-chat-left-dots-fill">'+this.replyCnt+'</i></button>'
-								+ '<button class="fold_replies_area" style="display:none">접기</button>'
 								+ '<button class="update_comment" >수정</button>'
 								+ '<button class="update_comment_check" style="display:none" >수정확인</button>'
-								+ '<button class="delete_comment" >삭제</button></div>'
-						
+								+ '<button class="delete_comment" >삭제</button>'
+								+ '<button class="reply_view_btn" style="display:inline"><i class="bi bi-chat-left-dots-fill">'+this.replyCnt+'</i></button>'
+								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
 								}else{
 						list += '<div class="reply_btn_area">'
 								+ '<button class="reply_view_btn" style="display:block"><i class="bi bi-chat-left-dots-fill">'+this.replyCnt+'</i></button>'
 								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
 								
 								}
-						list += '</pre><ul class="replies_area" id="repliesArea'+commentRow+'"></ul></li>';
+						list += '</pre><div class="replies_area" id="repliesArea'+commentRow+'"></div></li>';
 						}
 						console.log('해당 행 번호 : '+commentRow);	
 						commentRow++;
@@ -229,8 +228,10 @@
 					$(this).next().css("display","inline");
 					$(this).css("display","none");
 				}
-				$(this).parent().prev().children("#commentContent").prop("type","text");
-				$(this).parent().prev().children("#commentContentView").css("display","none");
+				$(this).parent().prev().children(".updateCommentContent").css("display","block");
+				var e = jQuery.Event( "keydown", { keyCode: 13 } );
+				$(this).parent().prev().children(".updateCommentContent").trigger(e);
+				$(this).parent().prev().children(".commentContentView").css("display","none");
 			});
 			
 			$('#allComments').on('click','.comment_item .update_comment_check',function(){
@@ -240,7 +241,7 @@
 			}
 				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
 				var commentId = $(this).parent().prevAll('#commentId').val();
-				var commentContent = $(this).parent().prevAll('div').children('#commentContent').val();
+				var commentContent = $(this).parent().prevAll('div').children('.updateCommentContent').val();
 				
 				console.log('댓글Id 및 컨탠츠 이름 : '+commentId+','+commentContent);
 				$.ajax({
@@ -266,7 +267,7 @@
 				var commentId = $(this).parent().prevAll('#commentId').val();
 				var gameBoardId =  $('#gameBoardId').val();
 				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
-				var commentCnt = parseInt($(this).prevAll('.reply_view_btn').children().text());
+				var replyCnt = parseInt($(this).nextAll('.reply_view_btn').children().text());
 				console.log(commentCnt);
 				console.log('댓글Id 및 게시판판 id: '+commentId+','+gameBoardId);
 				$.ajax({
@@ -285,7 +286,7 @@
 							getAllComments(nowPage);
 						}else if(result==2){
 							alert('완전 삭제');
-							$('#commentCnt').text(parseInt($('#commentCnt').text())-1-commentCnt);
+							$('#commentCnt').text(parseInt($('#commentCnt').text())-1-replyCnt);
 							getAllComments(nowPage);
 						}
 					}	
@@ -309,9 +310,10 @@
 						function(data){
 						console.log(data);
 						var nick
-						var list = '';
+						var list = '<ul>';
 						var repliesArea = '#repliesArea'+commentRow;
 						var varStatus = 0; 
+						
 						$(data.list).each(function(){
 							console.log(this);
 		
@@ -325,18 +327,18 @@
 							+ '<input type="hidden" id="replyContent" value="'+this.replyContent+'">'
 							+ '<span>삭제된 댓글입니다.</span>'	
 							+ '</li>';
-							}else {
+							}else{
 							list += '<li class="reply_item">'
-							+ '└<img class="replyProfileImg" alt="'+nickname+'" src="../game/display?fileName='+memberImageName+'" width="50px" height="50px" />&nbsp&nbsp'
-							+ '<div><input type="hidden" id="replyId" value="'+this.replyId+'">'
+							+ '└<img class="replyProfileImg" alt="'+nickname+'" src="../game/display?fileName='+memberImageName+'" width="50px" height="50px" />'
+							+ '<div class="reply_info"><input type="hidden" id="replyId" value="'+this.replyId+'">'
 							+ '<span class="replyNickname">'+nickname + '</span>&nbsp&nbsp<span>'
 							if(this.replyContent.substring(0,9)=='(updated)'){
 							list += elapsedTime(replyDateCreated) +' (수정 됨)</span><br>'	
-							+ '<input type="hidden" class="replyContent" value="'+this.replyContent.replace('(updated)','')+'" maxlength="33">'
+							+ '<textarea class="updateReplyContent" style="display:none" maxlength="165">'+this.replyContent.replace('(updated)','')+'</textarea>'
 							+ '<span class="replyView">'+this.replyContent.replace('(updated)','') + '</span></div>'
 							}else{
 							list += elapsedTime(replyDateCreated) +'</span><br>'	
-							+ '<input type="hidden" class="replyContent" value="'+this.replyContent+'" maxlength="33">'
+							+ '<textarea class="updateReplyContent" style="display:none" maxlength="165">'+this.replyContent+'</textarea>'
 							+ '<span class="replyView">'+this.replyContent + '</span></div>'
 							}
 							if(principalMemberId==this.memberId){
@@ -348,6 +350,7 @@
 							}
 						});//end each
 							console.log(principalMemberId);
+							list += '</ul>'
 							if(commentContent == '삭제된 댓글입니다.'){
 								list += '<span>삭제된 댓글에는 답글을 달 수 없습니다.</span>';
 							}else if(principalMemberId == '' || principalMemberId == null){
@@ -355,10 +358,11 @@
 								const encoded = encodeURI(uri);
 								list += '<a href="../member/login?targetURL=">로그인을 하셔야 답글을 달 수 있습니다</a>';
 							}else{
-								list += '내용 : <input type="text" name="replyContent" class="replyContent" maxlength="33">' 
-								+ '<button class="reply_add_btn" >작성</button>';
+								list += '<div class="reply_write_area">' 
+								+ '<textarea type="text" name="replyContent" class="replyContent" maxlength="165" placeholder="답글 입력"></textarea>' 
+								+ '<button class="reply_add_btn" >작성</button></div>';
 							}
-					
+							
 							$(repliesArea).html(list);
 						}//end funtion(data)
 						
@@ -370,7 +374,7 @@
 				//var tagName = $(this).parent().prevAll('#commentId').prop('tagName');
 				//console.log(tagName);
 				
-				var commentId = $(this).parent().prev().children('#commentId').val();	
+				var commentId = $(this).parent().parent().prev().children('#commentId').val();	
 			
 				var replyContent = $(this).prevAll('.replyContent').val();
 				if(replyContent == '삭제된 댓글입니다.'){
@@ -380,7 +384,7 @@
 				}
 				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
 				//var replyViewBtnClick = $(this).parent().parent().parent().nextAll(".reply_btn_area").children(".reply_view_btn").prop('tagName');
-				var replyViewBtn = $(this).parent().prev().children(".reply_btn_area").children(".reply_view_btn");
+				var replyViewBtn = $(this).parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn");
 				
 				
 				console.log('대댓글쪽 현재 페이지'+nowPage);
@@ -419,15 +423,17 @@
 				$(this).next().css("display","inline");
 				$(this).css("display","none");
 				}
-				$(this).prev().children(".replyContent").prop("type","text");
+				$(this).prev().children(".updateReplyContent").css("display","block");
+				var e = jQuery.Event( "keydown", { keyCode: 13 } );
+				$(this).prev().children(".updateReplyContent").trigger(e);
 				$(this).prev().children(".replyView").css("display","none");
 			});
 			$('#allComments').on('click','.comment_item .reply_item .update_reply_check',function(){
 				//var repliesAreaNum = $(this).parent().parent().attr('class');
 				//console.log(repliesAreaNum);
-				var replyViewBtnClick = $(this).parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn");
+				var replyViewBtnClick = $(this).parent().parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn");
 				var replyId = $(this).prevAll('div').children('#replyId').val();
-				var replyContent = $(this).prevAll('div').children('.replyContent').val();
+				var replyContent = $(this).prevAll('div').children('.updateReplyContent').val();
 				
 				console.log('대댓글Id 및 내용 : '+replyId+','+replyContent);
 				$.ajax({
@@ -450,13 +456,13 @@
 			});// end update_reply
 			
 			$('#allComments').on('click','.comment_item .reply_item .delete_reply',function(){
-				var commentContent = $(this).parent().parent().prev().children('.comment_info').children("#commentContent").val();
+				var commentContent = $(this).parent().parent().parent().prev().children('.comment_info').children('span').text();
 				console.log("삭제 내용?"+commentContent);
-				var commentId = $(this).parent().parent().prev().children("#commentId").val();
-				var commentCnt = parseInt($(this).parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn").children().text());
+				var commentId = $(this).parent().parent().parent().prev().children("#commentId").val();
+				var commentCnt = parseInt($(this).parent().parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn").children().text());
 				console.log("댓글 갯수?"+commentCnt);
 				var replyId = $(this).prevAll('div').children('#replyId').val();
-				var replyViewBtnClick = $(this).parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn");
+				var replyViewBtnClick = $(this).parent().parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn");
 				console.log('대댓글Id : '+replyId);
 				
 				$.ajax({
@@ -496,9 +502,19 @@
 				
 			});//end fold_replies_area
 			
-			 $('#commentContent').on('keyup keydown', function (){
+			$('#commentContent').on('keyup keydown', function (){
 				 	console.log(this.scrollHeight);
 				 		
+				    if(this.scrollHeight>149){
+						$(this).height(148);
+						$(this).scrollHeight(this.Height);
+				    }else{
+				    	$(this).css('height', 'auto');
+					    $(this).height(this.scrollHeight);
+				    }
+			 });
+			 $('#allComments').on('keyup keydown','.comment_item .updateCommentContent',function(){
+				 	console.log(this.scrollHeight);
 				    if(this.scrollHeight>149){
 						$(this).height(148);
 						$(this).scrollHeight(this.Height);
@@ -508,7 +524,28 @@
 					    
 				    }
 			 });
-
+			 $('#allComments').on('keyup keydown','.comment_item .replyContent',function(){
+				 	console.log(this.scrollHeight);
+				    if(this.scrollHeight>149){
+						$(this).height(148);
+						$(this).scrollHeight(this.Height);
+				    }else{
+				    	$(this).css('height', 'auto');
+					    $(this).height(this.scrollHeight);
+					    
+				    }
+			 });
+			 $('#allComments').on('keyup keydown','.comment_item .updateReplyContent',function(){
+				 	console.log(this.scrollHeight);
+				    if(this.scrollHeight>149){
+						$(this).height(148);
+						$(this).scrollHeight(this.Height);
+				    }else{
+				    	$(this).css('height', 'auto');
+					    $(this).height(this.scrollHeight);
+					    
+				    }
+			 });
 		});//end document
 	</script>
 </body>

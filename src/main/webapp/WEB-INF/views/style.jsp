@@ -172,14 +172,24 @@ body {
 	white-space:normal;
 	width : 100%;
 }
+
+.comment_info, .reply_btn_area{
+	display : inline;
+}
+.comment_info,.reply_info{
+	width : 70%;
+}
+
 .comment_item pre{
 	white-space:normal;
 	display:flex;
 	flex-wrap:wrap;
-	
 }
+
+
 .comment_item pre .reply_btn_area{
 	margin-left: auto;
+	padding-left: 10px;
 }
 
 #CommentGroup li{
@@ -199,10 +209,10 @@ body {
 	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 .commentArea input[type="text"]{
-	width: 300px;
-	margin-bottom: 1px;
+	width: 90%;
+	height : 56px;
+	margin: 10px 0 10px 0;
 	border:none;
-	display:flex;
 	background-color:#2a3f5a;
 	color:#fff;
 }
@@ -691,13 +701,14 @@ textarea:focus{
 	display:absolute;
 	margin:auto;	
 }
-#commentContent{
+#commentContent, .updateCommentContent,.replyContent,.updateReplyContent{
     min-height: 3rem;
-    width : 100%;
+    width : 90%;
     height:auto;
     max-height:148px;
     resize: none;
-}
+    }
+
 .commentNickname, .replyNickname{
 	font-weight: bold;
 	font-size : 16px;
@@ -706,4 +717,87 @@ textarea:focus{
 	display : flex;
 	width : 100%;
 }
+.reply_add_btn{
+	display : block;
+	margin-top : auto;
+	
+}
+.reply_item div{
+	padding-right: 10%;
+	margin-bottom: 10px;
+}
+#commentsArea{
+	width : 1280px;
+	margin : auto;
+}
+
+#myComments{
+	width : 100%;
+}
+.comment_reply_item{
+	width : 50%;
+	display: flex;	
+	justify-content: space-between;
+	border-bottom: 0.5px dashed;
+	
+}
+.commentAndReplyContent{
+	width: 65%;
+	word-wrap: break-word;
+}
+.commentsDate{
+	width : 30%;
+}
+
+.replyProfileImg{
+	margin-right: 10px;
+}
+
+.reply_write_area{
+	display:flex;
+	margin-bottom: 15px;
+}
+#myGameArea #games .game_item{
+	text-align : center;
+	margin: auto;
+}
+
+#myGameArea #games .game_item img{
+	width : 30%;
+}
+#myGameArea #games .game_item a,#myGameArea #games .game_item div{
+	width : 25%;
+}
+#myGameArea #games .game_item span{
+	width : 20%;
+}
+.wish_list_area li{
+	display : flex;
+	justify-content: space-between;
+	align-items: center;
+	text-align: center;
+	margin : auto;
+}
+
+.wish_list_area li input{
+	width : 5%;
+} 
+
+.wish_list_area li .gameImg{
+	width : 25%;
+}
+.wish_list_area li #gameName{
+	width : 20%;
+}
+.wish_list_area li .genre{
+	width : 20%;
+}
+.wish_list_area li .showPrice{
+	width : 15%;
+}
+.wish_list_area li .buy_or_remove{
+	width : 15%;
+}
+
+
 </style>
