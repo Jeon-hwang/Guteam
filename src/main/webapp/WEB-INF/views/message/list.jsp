@@ -28,7 +28,7 @@
 	height : 400px;
 }
 #m-board {
-	display:flex
+	display:flex;
 	flex-wrap: wrap;
 }
 #board-top {
@@ -50,6 +50,9 @@
 }
 #board-btm {
 	align : center;
+}
+#board-btm li {
+	color: #e5e5dc;
 }
 ul {
 	margin: 0px;
@@ -89,8 +92,8 @@ tr {
 }
 td {
 	color: #e5e5dc;
-	border-left : solid 1px #bcc2e5;	
-	border-bottom : solid 1px #bcc2e5;
+	border: solid 1px #bcc2e5;	
+	
 }
 .td {
 	text-align : center;
@@ -134,7 +137,7 @@ td {
 	<c:forEach var="pvo" items="${list }">
 	<tr>
 		<td class="td" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.receiveMessageId }"></label></td>
-		<td style="padding-left : 10px;"><a href="../message/detail?receiveMsgId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
+		<td style="padding-left : 10px;"><a href="../message/detail?messageId=${pvo.receiveMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
 		<td class="td" style="white-space: nowrap;">${pvo.sendMemberNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
@@ -158,6 +161,7 @@ td {
 </div>
 </div>
 <input type="hidden" id="alert" value="${alert }">
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var result = $('#alert').val();

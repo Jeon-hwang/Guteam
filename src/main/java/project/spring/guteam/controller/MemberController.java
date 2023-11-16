@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -243,6 +244,12 @@ public class MemberController {
     public int updateCash(String memberId,int cash) {
     	int result=0;
     	return result;
+    }
+    
+    @PostMapping("/{memberId}")
+    public ResponseEntity<MemberVO> memberInfo(@PathVariable("memberId") String memberId){
+    	MemberVO vo = memberService.read(memberId);
+    	return new ResponseEntity<MemberVO>(vo,HttpStatus.OK);
     }
 
 } // end MemberController

@@ -8,6 +8,8 @@
 <head>
 <jsp:include page="../style.jsp"></jsp:include>
 <style type="text/css">
+<jsp:include page="../style.jsp"></jsp:include>
+<style type="text/css">
 .logoImg {
 	display:flex;
 	width: 70px;
@@ -21,7 +23,7 @@
 }
 #leftMenu {
 	display:flex;
-	flex-wrap: wrap;
+	flex-direction: column;
 	width : 120px;
 	height : 400px;
 }
@@ -36,19 +38,27 @@
 	padding-left : 5px;
 	padding-right : 5px;
     padding-bottom : 5px;
-	width : 580px;
+	width : 590px;
 	height : 50px;
 }
 #main {
 	display:flex;
-	flex-wrap: wrap;
+	flex-flow: column wrap;
 	background-color : #666666;
-	width : 580px;
+	width : 590px;
 	height : 350px;
-	float : left;
+}
+.msgInfo {
+	display:flex;
+	justify-content: space-around;
+}
+.msgInfo span {
+	color: #e5e5dc;
+}
+#board-btm {
+	align : center;
 }
 ul {
-	
 	margin: 0px;
     padding-left : 10px;
     padding-right : 10px;
@@ -58,12 +68,6 @@ ul {
 }
 li {
 	display : inline-block;
-}
-.cen {
-	text-align : center;
-}
-.title {
-	padding-left : 10px;
 }
 .btn {
 	margin : 1px;
@@ -76,26 +80,33 @@ body {
     margin: 0;
     padding: 0;
 }
-
+table {
+	width: 100%;
+}
 thead {
+	display: flex;
+	width: 100%;
 	background-color : #bcc2e5;
 	text-align : center;
 }
+
 th {
 	border-left : solid 1px gray;
 }
+tr {
+	height: 35px;
+}
 td {
 	color: #e5e5dc;
-	border-left : solid 1px #bcc2e5;	
-	border-bottom : solid 1px #bcc2e5;
+	border: solid 1px #bcc2e5;
 }
-#board-head {
-	margin : 5px;
-    
+.td {
+	text-align : center;
+	white-space: nowrap;
 }
 </style>
 <meta charset="UTF-8">
-<title>${vo.messageTitle }</title>
+<title>GUTEAM : ${vo.memberId }님의 쪽지함</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
@@ -116,47 +127,46 @@ td {
 
 </div>
 <div id="main">
-	<ul>
-		<li class="hdl">
-		<c:if test="${sendOrReceive=='receive' }">
-		보낸 사람 : ${vo.sendMemberNickname }
+<div class="msgInfo">
+	<c:if test="${sendOrReceive=='receive' }">
+		<span> 보낸 사람 : ${vo.sendMemberNickname }</span>
 		</c:if>
 		<c:if test="${sendOrReceive=='send' }">
-		받은 사람 : ${vo.receiveMemberNickname }
+		<span>받은 사람 : ${vo.receiveMemberNickname }</span>
 		</c:if>
-		</li>
-		<li class="hdl">
 		<c:if test="${sendOrReceive=='receive' }">
-		받은 날짜 : <fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/>
+		<span>받은 날짜 : <fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/></span>
 		</c:if>
 		<c:if test="${sendOrReceive=='send' }">
-		보낸 날짜 : <fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/>
-		</c:if>
-		</li>
-	</ul>
-	
-	<div>
-	<table>
-	<colgroup>
-		<col class="lbl">
-		<col class="val">
-	</colgroup>
-		<tbody>
-			<tr style="border-bottom : solid 1px darkgray;">
+		<span>보낸 날짜 : <fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/></span>
+	</c:if>
+</div>
+<table>
+	<tbody>
+		<tr style="border : solid 1px darkgray;">
 			<td><h5>제목</h5></td>
 			<td>${vo.messageTitle }</td>
 			</tr>
 			<tr>
 			<td><h5>내용</h5></td>
 			<td>${vo.messageContent }</td>
-			</tr>
-		</tbody>
-	</table>
+		</tr>
+	</tbody>
+</table>
 	</div>
 	<div>
-	<form action="../message/write">
-		<input type="hidden" name="sendMemberId" value="${vo.sendMemberId }">
+	<sec:authentication property="principal" var="principal"/>
+	<form action="../message/write" method="get">
+	<c:if test="${vo.sendMemberId!=principal.username }">
+		<input type="hidden" name="receiveMemberId" value="${vo.sendMemberId }">
 		<input type="submit" class="btn btn-light" style="float: right; margin-right: 10px;" value="답장하기">
+	</c:if>
+	<c:if test="${vo.sendMemberId==principal.username }">
+		<input type="hidden" name="receiveMemberId" value="${vo.receiveMemberId }">
+		<input type="hidden" name="messageTitle" value="${vo.messageTitle }">
+		<input type="hidden" name="messageContent" value="${vo.messageContent }">
+		<input type="submit" class="btn btn-light" style="float: right; margin-right: 10px;" value="다시보내기">
+	</c:if>
 	</form>
 	</div>
 </div>

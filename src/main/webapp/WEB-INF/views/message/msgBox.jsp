@@ -10,16 +10,60 @@
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <jsp:include page="../style.jsp"></jsp:include>
 <style type="text/css">
-.profileImg {
-	width : 40px;
-	height : 40px;
-	border : 1px solid grey;
+.logoImg {
+	display:flex;
+	width: 70px;
+	height: 70px;
+	margin: 25px;
 }
-.cen {
-	text-align : center;
+#full {
+	display:flex;
+	width : 750px;
+	height : 420px;
 }
-.title {
-	padding-left : 10px;
+#leftMenu {
+	display:flex;
+	flex-direction: column;
+	width : 120px;
+	height : 400px;
+}
+#m-board {
+	display:flex;
+	flex-wrap: wrap;
+}
+#board-top {
+	display:flex;
+	flex-wrap: wrap;
+	padding-top : 5px;
+	padding-left : 5px;
+	padding-right : 5px;
+    padding-bottom : 5px;
+	width : 590px;
+	height : 50px;
+}
+#main {
+	display:flex;
+	flex-flow: column wrap;
+	background-color : #666666;
+	width : 590px;
+	height : 350px;
+}
+#board-btm {
+	align : center;
+}
+#board-btm li {
+	color: #e5e5dc;
+}
+ul {
+	margin: 0px;
+    padding-left : 10px;
+    padding-right : 10px;
+    padding-bottom : 0px;
+   	list-style : none;
+   	text-align : center;
+}
+li {
+	display : inline-block;
 }
 .btn {
 	margin : 1px;
@@ -32,56 +76,28 @@ body {
     margin: 0;
     padding: 0;
 }
-#full {
-	width : 703px;
-	height : 410px;
-}
-#leftMenu {
-	width : 110px;
-	height : 400px;
-	float : left;
-}
-#board-top {
-	padding-top : 5px;
-	padding-left : 5px;
-	padding-right : 5px;
-    padding-bottom : 5px;
-	width : 580px;
-	height : 50px;
-	float : left;
-}
-#main {
-	background-color : lightgray;
-	width : 580px;
-	height : 350px;
-	float : left;
-}
-ul {
-	margin: 0px;
-    padding-top : 20px;
-    padding-left : 10px;
-    padding-right : 10px;
-    padding-bottom : 0px;
-   	list-style : none;
-   	text-align : center;
-}
-li {
-	display : inline-block;
+table {
+	width: 100%;
 }
 thead {
-	background-color : darkgrey;
+	width: 100%;
+	background-color : #bcc2e5;
 	text-align : center;
 }
 th {
 	border-left : solid 1px gray;
 }
-td {
-	border-left : solid 1px darkgray;	
-	border-bottom : solid 1px darkgray;
+tr {
+	height: 35px;
 }
-#board-head {
-	margin : 5px;
-    
+td {
+	color: #e5e5dc;
+	border: solid 1px #bcc2e5;	
+	
+}
+.td {
+	text-align : center;
+	white-space: nowrap;
 }
 </style>
 <meta charset="UTF-8">
@@ -91,8 +107,7 @@ td {
 <body>
 <div id="full">
 <div id="leftMenu">
-<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png">
-
+<img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
@@ -102,6 +117,7 @@ td {
 	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
+<div id="m-board">
 <div id="board-top">
 	<button class="btn btn-light" onclick="deleteMsg()">삭제</button>
 </div>
@@ -109,24 +125,25 @@ td {
 <table>
 	<thead>
 	<tr>
-		<th class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="allChk" id="allChk"></label></th>
-		<th style="width: 350px">제목</th>
-		<th style="width: 100px">보낸/받은 사람</th>
-		<th style="width: 100px">보낸/받은 날짜</th>
+		<th style="width: 5%"><label class="chkbox"><input type="checkbox" name="allChk" id="allChk"></label></th>
+		<th style="width: 55%">제목</th>
+		<th style="width: 24%">보낸/받은 사람</th>
+		<th style="width: 16%; font-size: 10pt">보낸/받은 날짜</th>
 	</tr>
 	</thead>
 	
 	<tbody>
 	<c:forEach var="svo" items="${list }">
 	<tr>
-		<td class="cen" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${svo.messageId }"></label></td>
-		<td class="title"><a href="../message/detail?receiveMsgId=${svo.messageId}&page=${pageMaker.criteria.page}&box=${svo.fromTo}">${svo.fromTo}${svo.title }</a></td>
-		<td class="cen" style="white-space: nowrap;">${svo.fromToNickname }</td>
+		<td class="td" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${svo.messageId }"></label></td>
+		<td style="padding-left : 10px;"><a href="../message/detail?messageId=${svo.messageId}&page=${pageMaker.criteria.page}">${svo.fromTo}${svo.title }</a></td>
+		<td class="td" style="white-space: nowrap;">${svo.fromToNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${svo.dateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
 	</c:forEach>
 	</tbody>
 </table>
+<div id="board-btm">
 <ul>
 	<c:if test="${pageMaker.hasPrev }">
 		<li><a href="list?page=${pageMaker.startPageNo - 1}">이전</a></li>
@@ -140,6 +157,8 @@ td {
 </ul>
 </div>
 </div>
+</div>
+</div>
 <input type="hidden" id="alert" value="${alert }">
 
 <script type="text/javascript">
@@ -148,6 +167,7 @@ td {
 		if(result == 'send'){
 			alert('쪽지를 전송하였습니다.');
 		}
+		
 	}); //end document
 	
 	// 체크박스 전체 선택 (전체 선택 후 체크 하나 해제시 전체박스 체크해제)
@@ -178,6 +198,7 @@ td {
 	// 쪽지 삭제 기능
 	function deleteMsg() {
 		var msgArr = [];
+		var sendRecv = [];
 		var msgList = $('input[name="msgIdChk"]:checked');
 		var sendRecv = 'receive';
 		console.log(msgList); // jQuery.fn.init(8)
