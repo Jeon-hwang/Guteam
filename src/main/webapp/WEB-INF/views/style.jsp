@@ -33,6 +33,7 @@ header{
 	box-shadow: 0 0 7px 0 rgba( 0, 0, 0, 0.75 );
 	padding:10px 10px;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .board-box hr{
 	margin: 1px 1px;
@@ -51,11 +52,13 @@ header .logo{
 	width:30%;
 	color:#fff;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-wrap: wrap;
 	}
 #friendsOwnGame ul {
 	height:90%;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content:flex-start;
 	align-items:flex-start;
 }
@@ -85,6 +88,7 @@ header .auth{
 	justify-content: flex-end;
 	align-items: center;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	margin-right: 50px; 
 }
 .table th, .table td{
@@ -99,6 +103,7 @@ header .auth{
 }
 .detail-box{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	width:100%;
 	height:100%;
 	margin-bottom: 30px;
@@ -131,19 +136,25 @@ header .auth{
 }
 .info h1{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-wrap: wrap;
 	width:70%;
 	color:#fff;
 }
 .titleArea{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	color:#fff;
 	padding:20px 100px;
+}
+#recentlyViewedGames{
+	display:none;
 }
 body {
 	width:100%;
 	height:100%;
 	display:flex;
+	text-overflow:ellipsis;white-space:nowrap;
 	flex-wrap:wrap;
 	background-color:#1b2838;
 }
@@ -218,6 +229,7 @@ body {
 }
 #detailInfo{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	color:#fff;
 	flex-wrap:wrap;
 }
@@ -234,14 +246,17 @@ body {
 }
 .boardTitle{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content: space-between;
 }
 .wrapper{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-direction: column;
 }
 footer{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-wrap:wrap;
 	background-color:#171a21;
 	width:100%;
@@ -251,6 +266,7 @@ footer{
 }
 footer .hrArea{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	width:100%;
 	justify-content: center;
 }
@@ -261,6 +277,7 @@ footer .hrArea{
 }
 footer .content{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content: center;
 	align-items: center;
 }
@@ -276,6 +293,7 @@ text-decoration:none;
 	width:100%;
 	color:#fff;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .category a{
 	color:#fff;
@@ -309,28 +327,33 @@ transition: 0.3s;
 }
 #container {
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-wrap: wrap;
 }
 .formArea{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	padding:10px 100px;
 	width:100%;
 	flex-wrap: wrap;
 }
 .formArea from{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-wrap: wrap;
 	width:100%;
 }
 .justify-content-center{
 	width:100%;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .justify-content-center .btn{
 	justify-content: center;
 }
 .formArea .info{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	width:800px;
 	flex-wrap:wrap;
 }
@@ -350,6 +373,7 @@ transition: 0.3s;
 	height:40px;
 	border:none;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	background-color:#2a3f5a;
 	color:#fff;
 }
@@ -372,6 +396,7 @@ transition: 0.3s;
 	margin-bottom: 1px;
 	border:none;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	background-color:#2a3f5a;
 	color:#fff;
 }
@@ -392,6 +417,7 @@ transition: 0.3s;
 	margin-bottom: 1px;
 	border:none;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	background-color:#2a3f5a;
 	color:#fff;
 }
@@ -400,6 +426,7 @@ transition: 0.3s;
 	margin-bottom: 1px;
 	border:none;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	background-color:#2a3f5a;
 	color:#fff;
 }
@@ -410,12 +437,14 @@ formArea input:focus{
 }
 .btnAdmin{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content:flex-end;
 	margin:20px 100px;
 	width:100%;
 }
 .btnOrderGroup{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	margin-left:100px;
 	text-align:left;
 	margin-bottom:10px;
@@ -449,6 +478,7 @@ formArea input:focus{
 }
 .btn_group_detail{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .btn_group_detail .btn{
 	margin-bottom: 10px;
@@ -489,10 +519,12 @@ formArea input:focus{
 	width:50%;
 	margin:auto;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .formSearch .input-group{
 	flex-wrap: nowrap;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	align-items: stretch;
 }
 .formSearch .dropdown-toggle{
@@ -512,6 +544,7 @@ formArea input:focus{
 }
 .listArea{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-wrap: wrap;
 	justify-content:center;
 	width:100%;
@@ -519,6 +552,7 @@ formArea input:focus{
 .paging{
 	width:100%;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content: center;
 }
 .show{
@@ -678,17 +712,20 @@ textarea{
 }
 .yourChat .chatInfo{
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content:flex-end;
 	flex-wrap:wrap;
 }
 .chatArea .yourChat{
 	width:100%;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content:flex-end;
 }
 .chatArea .myChat{
 	width:100%;
 	display:flex;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content:flex-start;
 }
 textarea:focus{

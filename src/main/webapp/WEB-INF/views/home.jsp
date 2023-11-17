@@ -98,6 +98,7 @@
 								});// end each
 							}
 								$('#recentlyViewedGames').html(list);
+								$('#recentlyViewedGames').attr('style','display:block;');
 						}
 						
 					);// end getJSON()
@@ -105,6 +106,7 @@
 			}else{
 				$(this).html('최근 조회한 게임');
 				$('#recentlyViewedGames').html('');
+				$('#recentlyViewedGames').attr('style','display:none;');
 			}
 
 		});  // end recentlyViewedbtn.onclick()
