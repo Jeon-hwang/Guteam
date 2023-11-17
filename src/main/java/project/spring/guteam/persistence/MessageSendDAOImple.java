@@ -45,17 +45,6 @@ public class MessageSendDAOImple implements MessageSendDAO {
 		return sqlSession.selectList(NAMESPACE + ".select_paging_n", args);
 	}
 	
-//	@Override
-//	public List<MessageSendVO> selectY(String sendMemberId, PageCriteria criteria) {
-//		logger.info("paging-select() 호출");
-//		logger.info("start = " + criteria.getStart() + " / end = " + criteria.getEnd());
-//		Map<String, Object> args = new HashMap<>();
-//		args.put("sendMemberId", sendMemberId);
-//		args.put("start", criteria.getStart());
-//		args.put("end", criteria.getEnd());
-//		return sqlSession.selectList(NAMESPACE + ".select_paging_y", args);
-//	}
-	
 	@Override
 	public int update(String messageBox, int sendMessageId) {
 		logger.info("update(보낸쪽지보관) 호출");
@@ -72,9 +61,9 @@ public class MessageSendDAOImple implements MessageSendDAO {
 	}
 	
 	@Override
-	public int getTotalCounts() {
-		logger.info("getTotalCount() 호출");
-		return sqlSession.selectOne(NAMESPACE + ".total_count");
+	public int getSentCounts(String sendMemberId) {
+		logger.info("getSendCounts() 호출");
+		return sqlSession.selectOne(NAMESPACE + ".total_count", sendMemberId);
 	}
 
 }

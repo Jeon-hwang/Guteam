@@ -26,7 +26,11 @@ public interface MessageReceiveDAO {
 	// 메세지 삭제
 	int delete(int receiveMessageId);
 	
-	int getTotalCounts();
+	// 받은 메세지 총 갯수
+	int getReceiveCounts(String receiveMemberId);
+	
+	// 보관 메세지 총 갯수
+	int getBoxCounts(String memberId);
 	
 	
 }

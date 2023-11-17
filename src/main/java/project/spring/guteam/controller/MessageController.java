@@ -65,7 +65,7 @@ public class MessageController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(messageService.getTotalCounts());
+		pageMaker.setTotalCount(messageService.getReceiveCounts(principal.getName()));
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker", pageMaker);
 		
@@ -98,7 +98,7 @@ public class MessageController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(messageService.getTotalCounts());
+		pageMaker.setTotalCount(messageService.getSentCounts(principal.getName()));
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker", pageMaker);
 	}
@@ -130,36 +130,41 @@ public class MessageController {
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalCount(messageService.getTotalCounts());
+		pageMaker.setTotalCount(messageService.getBoxCounts(principal.getName()));
 		pageMaker.setPageData();
 		model.addAttribute("pageMaker", pageMaker);
 	}
 	
 	// 쪽지 상세 보기
 	@GetMapping("/detail")
-	public void detail(Model model, Integer receiveMsgId, Integer sendMsgId, Integer page) {
-		logger.info("msg-detail() 호출 receiveMessageId = " + receiveMsgId + " sendMessageId " + sendMsgId);
-		if(receiveMsgId != null) { // 매개변수를 int로 사용하면 null 값 처리를 할 수 없음
-			MessageReceiveVO rvo = messageService.readByReceive(receiveMsgId);
+	public String detail(Model model, int messageId, Integer page, Principal principal) {
+		logger.info("msg-detail() 호출 messageId = " + messageId );
+		MessageSendVO svo = messageService.readBySend(messageId);
+		MessageReceiveVO rvo = messageService.readByReceive(messageId);
+		if(rvo != null && rvo.getReceiveMemberId().equals(principal.getName())) { // 매개변수를 int로 사용하면 null 값 처리를 할 수 없음
 			logger.info("받은 쪽지의 상세 rvo = " + rvo.toString());
 			model.addAttribute("vo", rvo);
 			model.addAttribute("sendOrReceive","receive");
-		}else if(sendMsgId != null){	
-			MessageSendVO svo = messageService.readBySend(sendMsgId);
+		}else if(svo != null && svo.getSendMemberId().equals(principal.getName())){	
 			logger.info("보낸 쪽지의 상세 rvo = " + svo.toString());
 			model.addAttribute("vo", svo);
 			model.addAttribute("sendOrReceive","send");
+		}else {
+			return "/404";
 		}
 		model.addAttribute("page", page);
+		return "message/detail";
 	}
 	
 	// 쪽지 보내기 화면
 	@GetMapping("/write")
-	public void writeGET(Model model, Principal principal, String receiveMemberId) {
+	public void writeGET(Model model, Principal principal, String receiveMemberId, String messageTitle, String messageContent) {
 		logger.info("msg-writeGET() 호출");
 		MemberVO vo = memberService.read(principal.getName());
 		model.addAttribute("vo", vo);
 		model.addAttribute("receiveMemberId", receiveMemberId);
+		model.addAttribute("messageContent", messageContent);
+		model.addAttribute("messageTitle",messageTitle);
 		logger.info("vo? " + vo.toString());
 	}
 	

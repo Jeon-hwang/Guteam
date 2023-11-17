@@ -9,60 +9,76 @@
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <jsp:include page="../style.jsp"></jsp:include>
 <style type="text/css">
-.profileImg {
-	width : 40px;
-	height : 40px;
-	border : 1px solid grey;
-}
-.btn {
-	margin : 1px;
-	padding-top : 5px;
-	padding-left : 5px;
-	padding-right : 5px;
-    padding-bottom : 5px;
-}
-.th {
-	width : 100px;
-	height : 250px;
-}
-.td {
-	width : 480px;
-	height : 250px;
-}
-.tdc {
-	text-align: center;
-}
-body {
-    margin: 0;
-    padding: 0;
+.logoImg {
+	display:flex;
+	width: 70px;
+	height: 70px;
+	margin: 25px;
 }
 #full {
-	width : 703px;
-	height : 410px;
+	display:flex;
+	width : 750px;
+	height : 420px;
 }
 #leftMenu {
-	width : 110px;
+	display:flex;
+	flex-direction: column;
+	width : 120px;
 	height : 400px;
-	float : left;
+}
+#m-board {
+	display:flex;
+	flex-wrap: wrap;
+}
+#m-board h2{
+	margin: 0px;
+	padding-top:8px;
+	color: #e5e5dc;
 }
 #board-top {
+	display:flex;
+	flex-wrap: wrap;
 	padding-top : 5px;
 	padding-left : 5px;
 	padding-right : 5px;
     padding-bottom : 5px;
-	width : 580px;
+	width : 590px;
 	height : 50px;
-	float : left;
 }
 #main {
-	background-color : lightgray;
-	width : 580px;
+	display:flex;
+	flex-flow: column wrap;
+	background-color : #666666;
+	width : 590px;
 	height : 350px;
-	float : left;
 }
-ul{
+#board-btm {
+	display:flex;
+	justify-content: flex-end;
+	padding-right: 5px;
+}
+#messageTitle {
+	width: 495px;
+}
+#messageContent {
+	display:flex;
+	justify-content: center;
+	align-item: center;
+	width: 495px;
+	height: 227px;
 	margin: 0px;
-    padding-top : 20px;
+	padding: 0px;
+	resize:none;
+	
+	background-color: #FFFFFFFF;
+	color: #000;
+	border: 1px solid grey;
+}
+.sendInfo {
+	text-align : center;
+}
+ul {
+	margin: 0px;
     padding-left : 10px;
     padding-right : 10px;
     padding-bottom : 0px;
@@ -72,21 +88,35 @@ ul{
 li {
 	display : inline-block;
 }
+.btn {
+	margin : 1px;
+	padding-top : 5px;
+	padding-left : 5px;
+	padding-right : 5px;
+    padding-bottom : 5px;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+table {
+	width: 100%;
+}
 thead {
-	background-color : darkgrey;
+	width: 100%;
+	background-color : #bcc2e5;
 	text-align : center;
 }
-#board-head {
-	margin : 5px;
-    
+th {
+	border-left : solid 1px gray;
 }
-#messageContent {
-	width: 465px;
-	height: 200px;
-	resize:none;
-	maxlength: 333;
-	background-color: #fff;
-	border: 1px solid grey;
+tr {
+	height: 35px;
+}
+td {
+	color: #e5e5dc;
+	border: solid 1px #bcc2e5;	
+	
 }
 </style>
 <meta charset="UTF-8">
@@ -96,7 +126,7 @@ thead {
 <body>
 <div id="full">
 <div id="leftMenu">
-<img alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png">
+<img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
 	<ul>
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
@@ -106,24 +136,17 @@ thead {
 	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
-<div id="board-top">
-	
-	
-</div>
-<div id="main">
-	<form action="write" method="post" onsubmit="sendRequest();">
-	<sec:csrfInput/>
+<div id="m-board">
 	<h2>${vo.memberId }님의 쪽지 쓰기</h2>
-	<div id="msg-title">
-		<table>
-		<colgroup>
-			<col class="th">
-			<col class="td">
-		</colgroup>
-		<tbody>
-			<tr>
-				<td class="tdc">보낼 닉네임</td>
-				<td>
+
+<div id="main">
+<form action="write" method="post" onsubmit="sendRequest();">
+<sec:csrfInput/>
+<table>
+	<tbody>
+		<tr>
+			<td class="sendInfo">보낼 닉네임</td>
+			<td>
 				<c:if test="${empty receiveMemberId }">
 					<input type="text" name="receiveMemberNickname" id="receiverNickname" required>				
 				</c:if>
@@ -131,33 +154,32 @@ thead {
 					<input type="hidden" name="receiveMemberId" id="receiverId" value="${receiveMemberId }">
 					${receiveMemberId }
 				</c:if>
-				</td>
-			</tr>
-			<tr>
-				<td class="tdc">제 목</td>
-				<td>
-				<input type="text" name="messageTitle" id="messageTitle" style="width: 465px;">
-				</td>
-			</tr>
-			<tr>
-				<td class="tdc">내 용</td>
-				<td>
-				<textarea name="messageContent" id="messageContent"></textarea><!-- 밑부분 70px -->
-				</td>
-			</tr>
-			
-		</tbody>
-		</table>
-	</div>		
-	<div style="text-align: right; padding-right: 5px;">
+			</td>
+		</tr>
+		<tr>
+			<td class="sendInfo">제 목</td>
+			<td>
+			<input type="text" name="messageTitle" id="messageTitle" value="${messageTitle }">
+			</td>
+		</tr>
+		<tr>
+			<td class="sendInfo">내 용</td>
+			<td>
+			<textarea name="messageContent" id="messageContent" >${messageContent }</textarea><!-- 밑부분 70px -->				</td>
+		</tr>
+		
+	</tbody>
+</table>
+		
+	<div id="board-btm">
 		<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
 		<input type="hidden" name="sendMemberNickname" id="sendMemberNickname" value="${vo.nickname }">
 		<input class="btn btn-light" type="submit" value="보내기">
 	</div>
-	</form>
+</form>
 	
 </div>
-
+</div>
 </div>
 
 <script type="text/javascript">

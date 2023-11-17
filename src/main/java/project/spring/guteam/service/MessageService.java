@@ -19,5 +19,7 @@ public interface MessageService {
 	int deleteBySend(int sendMessageId);
 	int deleteByReceive(int receiveMessageId);
 	
-	int getTotalCounts();
+	int getReceiveCounts(String receiveMemberId);
+	int getSentCounts(String name);
+	int getBoxCounts(String name);
 }

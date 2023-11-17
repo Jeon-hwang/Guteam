@@ -67,17 +67,18 @@ body{
 			</div>
 		</div>
 	</div>
-<input type="hidden" id="alert" value="${alert }">
+<input type="hidden" id="udp_alert" value="${udp_alert }">
 </div>
 </div>
+
 </section>
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 	function popUp(){
 	   popupWin =  window.open('../message/list', '쪽지함', 'resizable');		
-	   popupWin.resizeTo(715, 500);
+	   popupWin.resizeTo(750, 500);
 	   popupWin.onresize = (_=>{
-		   popupWin.resizeTo(715, 500);
+		   popupWin.resizeTo(750, 500);
 		})
 	};
 	
@@ -98,7 +99,7 @@ body{
 	        return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 		}
 		
-		var result = $('#alert').val();
+		var result = $('#udp_alert').val();
 			if(result == 'success'){
 				alert('회원정보가 수정되었습니다!');
 			}

@@ -63,43 +63,43 @@ public class MessageServiceImple implements MessageService {
 	
 	@Override
 	public MessageSendVO readBySend(int sendMessageId) {
-		logger.info("read() 호출 msgId? " + sendMessageId);
+		logger.info("readBySend() 호출 msgId? " + sendMessageId);
 		return msgSendDAO.select(sendMessageId);
 	}
 	
 	@Override
 	public MessageReceiveVO readByReceive(int receiveMessageId) {
-		logger.info("read() 호출 msgId? " + receiveMessageId);
+		logger.info("readByReceive() 호출 msgId? " + receiveMessageId);
 		return msgReceiveDAO.select(receiveMessageId);
 	}
 
 	@Override
 	public List<MessageSendVO> readSendList(String sendMemberId, PageCriteria criteria) {
-		logger.info("page-read() 호출");
+		logger.info("readSendList() 호출");
 			return msgSendDAO.select(sendMemberId, criteria);
 	}
 	
 	@Override
 	public List<MessageReceiveVO> readReceiveList(String receiveMemberId, PageCriteria criteria) {
-		logger.info("page-read() 호출");
+		logger.info("readReceiveList() 호출");
 			return msgReceiveDAO.select(receiveMemberId, criteria);
 	}
 	
 	@Override
 	public List<MessageSaveVO> readSavedList(String memberId, PageCriteria criteria) {
-		logger.info("readSaved() 호출");
+		logger.info("readSavedList() 호출");
 		return msgReceiveDAO.selectSaved(memberId, criteria);
 	}
 	
 	@Override
-	public int getTotalCounts() {
-		logger.info("getTotalCount() 호출");
-		return msgSendDAO.getTotalCounts();
+	public int getReceiveCounts(String receiveMemberId) {
+		logger.info("getReceiveCounts() 호출");
+		return msgReceiveDAO.getReceiveCounts(receiveMemberId);
 	}
 	
 	@Override
 	public int updateBox(String messageBox, int messageId, String check) {
-		logger.info("update(보관) 호출");
+		logger.info("updateBox(보관) 호출");
 		if(check == "send") {
 			return msgSendDAO.update(messageBox, messageId);
 		} else  {
@@ -110,14 +110,26 @@ public class MessageServiceImple implements MessageService {
 
 	@Override
 	public int deleteBySend(int sendMessageId) {
-		logger.info("delete() 호출");
+		logger.info("deleteBySend() 호출");
 		return msgSendDAO.delete(sendMessageId);
 	}
 	
 	@Override
 	public int deleteByReceive(int receiveMessageId) {
-		logger.info("delete() 호출");
+		logger.info("deleteByReceive() 호출");
 		return msgReceiveDAO.delete(receiveMessageId);
+	}
+
+	@Override
+	public int getSentCounts(String SendMemberId) {
+		logger.info("getSentCounts() 호출");
+		return msgSendDAO.getSentCounts(SendMemberId);
+	}
+
+	@Override
+	public int getBoxCounts(String memberId) {
+		logger.info("getBoxCounts() 호출");
+		return msgReceiveDAO.getBoxCounts(memberId);
 	}
 
 

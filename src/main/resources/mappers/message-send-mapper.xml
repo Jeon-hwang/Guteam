@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 </update>
 	 
 	 <select id="total_count" resultType="Integer">
-	 select count(*) total_cnt from ${message_send} 
+	 select count(*) total_cnt from ${message_send} where ${sendMemberId}=#{sendMemberId}
 	 </select>
 	 
 	 <delete id="delete">
