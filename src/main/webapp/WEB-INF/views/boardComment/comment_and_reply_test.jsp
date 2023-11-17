@@ -28,7 +28,7 @@
 		</div>
 		</sec:authorize>
 		<sec:authorize access="isAnonymous()">
-			<a href="../member/login">로그인을 하셔야 댓글이 작성 가능합니다.	</a>
+			<a href="../member/login">로그인을 하셔야 댓글이 작성 가능합니다.</a>
 		</sec:authorize>
 		<br>
 		<ul id="allComments"></ul>

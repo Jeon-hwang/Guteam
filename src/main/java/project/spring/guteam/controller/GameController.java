@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import project.spring.guteam.domain.DiscountVO;
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.fileutil.GameImageUploadUtil;
 import project.spring.guteam.fileutil.MediaUtil;
@@ -207,6 +208,8 @@ public class GameController {
 		}
 		List<GameVO> gameVOList = (List<GameVO>) args.get("gameVOList");
 		List<Integer> ratingList = (List<Integer>) args.get("ratingList");
+		List<DiscountVO> discountList = (List<DiscountVO>) args.get("discountList");
+		model.addAttribute("discountList",discountList);
 		model.addAttribute("gameVOList", gameVOList);
 		model.addAttribute("ratingList", ratingList);
 		model.addAttribute("orderBy", orderBy);

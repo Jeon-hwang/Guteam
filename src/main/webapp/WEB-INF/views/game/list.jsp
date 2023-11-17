@@ -18,9 +18,13 @@
 	<a href="register" class="btn btn-light">게임등록</a>
 	<a href="../discount/update" class="btn btn-light">할인율 수정</a>
 	</sec:authorize>
+	<c:forEach var="discountVO" items="${discountList }">
+	<input type="hidden" value="${discountVO.genre }" id="${discountVO.genre }">
+	<input type="hidden" value="${discountVO.discountRate }" class="discountRate">
+	</c:forEach>
 	</div>
 	<div class="formArea">
-	<form class="justify-content-center formSearch" action="/guteam/game/list" method="get">
+	<form id="searchGame" class="justify-content-center formSearch" action="/guteam/game/list" method="get">
 		<div class="input-group mb-3 ">
 		<c:if test="${empty keywordCriteria}">
 		<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">이름/장르</span></button>
@@ -70,7 +74,7 @@
 				</div>
 				<input type="hidden" class="gameId" value="${vo.gameId }"><br>
 				<div class="info">
-					<h6>${vo.gameName }</h6> <p>₩ ${vo.price }</p>
+					<h6>${vo.gameName }</h6> <p class="${vo.genre }">₩ ${vo.price }</p>
 					<p>${vo.genre }</p>
 					<p>
 					<c:if test="${ratingList[status.index]!=0 }">
@@ -189,10 +193,23 @@
 					);
 				}
 			});
+			function checkDiscountGenre(){
+				var discountRateList = $('html').find('.discountRate');
+				var discountGenreList = $('html').find('.discountRate').prev();
+				$(discountGenreList).each(function(index){
+					var discountGenre = $(this).val();
+					var discountRate = $(discountRateList[index]).val();
+					console.log(discountGenre+','+discountRate);
+					$('.'+discountGenre+'').attr('style','color:#b9ee1a;margin-bottom:5px;');
+					$('.'+discountGenre+'').append('<p style="background:#4c6b22;width:50px;text-align:center;margin:auto;margin-bottom:5px;">-'+discountRate*100+'%</p>');
+				});
+			}
+			checkDiscountGenre();
 		}); // end document.ready()
 		function changeKeyword(keyword){
 			var keyword = $(keyword).text();
 			$('#keyword').val(keyword);
+			$('#searchGame').submit();
 		}
 	</script>
 	

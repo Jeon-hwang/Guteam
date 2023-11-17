@@ -19,7 +19,7 @@
 	<div class="detail-box">
 	<div class="info">
 	<div class="category">
-	<a href="list">All Games</a> &nbsp; <i class="bi bi-caret-right-fill"></i> &nbsp; <a href="list?keyword=${vo.genre }">${vo.genre }</a>
+	<a href="list">All Games</a> &nbsp; <i class="bi bi-caret-right-fill"></i> &nbsp; <a href="list?keyword=${vo.genre }&keywordCriteria=keyword">${vo.genre }</a>
 	</div>
 	<div id="detailInfo">
 	<sec:authorize access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
@@ -244,7 +244,9 @@
 		var updateUrl = $('#btnUpdate').attr('href');
 		prevListUrl = encodeURIComponent(prevListUrl);
 		$('#btnUpdate').attr('href', updateUrl+prevListUrl);
-		
+		if(prevListUrl==''){
+			$('#prevListUrl').attr('href', 'list');
+		}
 	});// document
 	</script>
 	  </body>
