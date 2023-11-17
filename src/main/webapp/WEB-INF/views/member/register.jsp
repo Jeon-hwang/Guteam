@@ -67,6 +67,7 @@ span {
 						<option value="guteam.com">guteam.com</option>
 					</select>
 					<div id="emailChk"></div>
+					<input type="hidden" id="email">
 			</div>
 			<br>
 			<div>
@@ -250,16 +251,26 @@ span {
 		$('#emailAddress').on("change keyup keydown", function(){
 			var val = $(this).val();
 			var front = $('#emailId').val();
-			$("option:selected", this);
-			
-			$("option:selected", this).attr("value");
-			console.log("val = " + val);
-			$('#emailTxt').val(val);
+			console.log(val);
+			if(!val == '') {
+				$('#emailTxt').val(val);
+				$('#emailTxt').attr('readonly','readonly');
+			}else{
+				$('#emailTxt').removeAttr('readonly');
+			}
+			var domain = $('#emailTxt').val().substr(($('#emailTxt').val().lastIndexOf('.'))+1);
+			if($('#emailTxt').val().indexOf('.')==-1|| $('#emailTxt').val().indexOf('.')==0 || domain.length<2){
+				$('#emailChk').html('<span>올바른 이메일 형식이 아닙니다.</span>');
+			}else{
+				$('#emailChk').html('');
+			}
 			$('#email').val(front + "@" + val);
-		}); //end 
+		}); //end #emailAddress.on()
+		
+		// email 검증
 		$('#emailTxt').on('change keyup keydown blur', function(){
 			var domain = $('#emailTxt').val().substr(($('#emailTxt').val().lastIndexOf('.'))+1);
-			if($('#emailTxt').val().indexOf('.')==-1 || domain.length<2){
+			if($('#emailTxt').val().indexOf('.')==-1|| $('#emailTxt').val().indexOf('.')==0 || domain.length<2){
 				$('#emailChk').html('<span>올바른 이메일 형식이 아닙니다.</span>');
 			}else{
 				$('#emailChk').html('');
