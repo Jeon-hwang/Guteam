@@ -36,6 +36,7 @@
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var openedReplyAreaRow = 0;
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			var principalMemberId = $('#memberId').val();
@@ -72,12 +73,12 @@
 				
 				for(var i =0 ; i<times.length;i++){
 					var betweenTime = Math.floor(diff/times[i].milliSeconds);
-					console.log(betweenTime);
+					// console.log(betweenTime);
 					if(betweenTime > 0 && i == 0){
-						console.log("날짜로 출력");
+						//console.log("날짜로 출력");
 						return times[i].name;
 					}else if(betweenTime > 0 && i>0){
-						console.log("시간으로 출력");
+						//console.log("시간으로 출력");
 						return betweenTime+times[i].name+'전';
 					}
 				}
@@ -88,6 +89,7 @@
 			$('#commentAddBtn').click(function(){
 				var gameBoardId = $('#gameBoardId').val();
 				var commentContent = $('#commentContent').val();
+				
 				if(commentContent == '삭제된 댓글입니다.'){
 					commentContent = '&nbsp삭제된 댓글입니다.';
 				}else if(commentContent.substring(0,9)=='(updated)'){
@@ -149,7 +151,7 @@
 						var memberImageName = data.memberImageNameList[varStatus];
 						varStatus++;
 						var commentDateCreated = new Date(this.commentDateCreated);
-						console.log(this.commentContent.replace("(updated)",""));
+						//console.log(this.commentContent.replace("(updated)",""));
 						if(this.commentContent=="삭제된 댓글입니다."){
 						list += '<li class="comment_item">'
 								+ '<pre>'
@@ -218,9 +220,18 @@
 					list +=	'</div>';
 						
 					$('#allComments').html(list);
+					 console.log('getAllcomments Json 끝남'); 
+					 if(openedReplyAreaRow != 0){
+							console.log('열려있는창 확인');
+							var repliesArea = '#repliesArea'+openedReplyAreaRow;
+							console.log(repliesArea);
+							$(repliesArea).prev().children('.reply_btn_area').children('.reply_view_btn').click();
+							openedReplyAreaRow = 0 ;
+						}
 					}//end funtion(data)
+					
 				);//end .getJSON
-				
+					console.log('getAllcomments 끝남');
 				}// end getAllComments()
 		
 			$('#allComments').on('click','.comment_item .update_comment',function(){ //댓글 수정창 띄우기
@@ -229,16 +240,23 @@
 					$(this).css("display","none");
 				}
 				$(this).parent().prev().children(".updateCommentContent").css("display","block");
-				var e = jQuery.Event( "keydown", { keyCode: 13 } );
+				var e = jQuery.Event( "keydown", { keyCode: 13 } ); // 수정창 css크기를 맞추기위해 enter키를 입력 해야함
 				$(this).parent().prev().children(".updateCommentContent").trigger(e);
 				$(this).parent().prev().children(".commentContentView").css("display","none");
 			});
 			
 			$('#allComments').on('click','.comment_item .update_comment_check',function(){
-			if($(this).is(":visible")){
-				$(this).prev().css("display","inline");
-				$(this).css("display","none");
-			}
+				$('.fold_replies_area').each(function(){
+					if($(this).is(":visible")){
+						console.log('코멘트 줄 확인');
+						console.log($(this).parent().prevAll('#commentRow').val());
+						openedReplyAreaRow = $(this).parent().prevAll('#commentRow').val();
+					}	
+				}); //end each
+				if($(this).is(":visible")){
+					$(this).prev().css("display","inline");
+					$(this).css("display","none");
+				}
 				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
 				var commentId = $(this).parent().prevAll('#commentId').val();
 				var commentContent = $(this).parent().prevAll('div').children('.updateCommentContent').val();
@@ -257,10 +275,14 @@
 					success : function(result){
 						if(result ==1){
 							alert('수정 되었습니다!');
-							getAllComments(nowPage);
 						}
+						getAllComments(nowPage);
+						console.log('btn_update ajax 끝남');
 					}
-				})//end ajax
+				    
+				});//end ajax
+				
+				console.log('btn_update 끝남');
 			}); // end btn_update.on 
 			
 			$('#allComments').on('click','.comment_item .delete_comment',function(){ // 댓글 삭제
@@ -300,11 +322,19 @@
 				var url = '../boardComment/replies/all/'+commentId;
 				console.log('댓글 ID?'+commentId);
 				console.log('몇번째 댓글?'+commentRow);
-				if($(this).is(":visible")){
-					$(this).next().css("display","inline");
-					$(this).css("display","none");
-				}
+				$('.fold_replies_area').each(function(){
+					if($(this).is(":visible")){ // fold_replies_area(접는버튼임)
+						$(this).click(); // 다른곳 답글 오픈시 기존에 보이는곳은 닫음
+						console.log($(this).attr('class'));
+						console.log("버튼 변경");
+					}
+				}); //end each
+				
+				$(this).next().css("display","inline");
+				$(this).css("display","none");
+			
 				var commentContent = $(this).parent().prevAll('.comment_info').children('#commentContent').val();
+				console.log('replies_Json 실행전');
 				$.getJSON(
 						url,
 						function(data){
@@ -313,10 +343,9 @@
 						var list = '<ul>';
 						var repliesArea = '#repliesArea'+commentRow;
 						var varStatus = 0; 
-						
 						$(data.list).each(function(){
 							console.log(this);
-		
+							console.log('답글 보이기');
 							var nickname = data.nicknameList[varStatus];
 							var memberImageName = data.profileImageNameList[varStatus];
 							varStatus++;
@@ -364,16 +393,18 @@
 							}
 							
 							$(repliesArea).html(list);
+							console.log('reply_view Json 끝남');
 						}//end funtion(data)
-						
-					);//end .getJSON				
+						 
+					);//end .getJSON	
+				 console.log('reply_view 끝남');   
 			});// replyView.on
 			
 			
 			$('#allComments').on('click','.comment_item .reply_add_btn',function(){
 				//var tagName = $(this).parent().prevAll('#commentId').prop('tagName');
 				//console.log(tagName);
-				
+			
 				var commentId = $(this).parent().parent().prev().children('#commentId').val();	
 			
 				var replyContent = $(this).prevAll('.replyContent').val();
@@ -419,6 +450,7 @@
 			});//end reply_add_btn
 			
 			$('#allComments').on('click','.comment_item .reply_item .update_reply',function(){
+				
 				if($(this).is(":visible")){
 				$(this).next().css("display","inline");
 				$(this).css("display","none");
