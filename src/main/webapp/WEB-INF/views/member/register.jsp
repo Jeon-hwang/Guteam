@@ -24,7 +24,7 @@ span {
 	<div class="titleArea">
 		<h2>회원 가입</h2>
 	</div>
-	<form action="register" method="post">
+	<form action="register" method="post" id="register">
 	<sec:csrfInput/>
 		<div class="info">
 			<div>
@@ -50,7 +50,8 @@ span {
 			<br>
 			<div>
 				<span>닉네임 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="nickname" name="nickname" placeholder="닉네임" required /></span>
-				<span id="checkNick" style="display:none; color:#e2252b;">사용 중인 닉네임입니다.</span>
+				<span id="checkNickNo" style="display:none; color:#e2252b;">사용 중인 닉네임입니다.</span>
+				<span id="checkNickY" style="display:none; color:#10af85;">사용 가능한 닉네임입니다.</span>
 			</div>
 			<br>
 			<div>
@@ -65,12 +66,12 @@ span {
 						<option value="hanmail.com">hanmail.com</option>
 						<option value="guteam.com">guteam.com</option>
 					</select>
-					<input type="hidden" name="email" id="email" value="test@test.com">
+					<div id="emailChk"></div>
 			</div>
 			<br>
 			<div>
-				<span> 연락처 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="phone" required /></span>
-				<span>('-'를 제외한 번호만 입력해주세요 .)</span>
+				<span> 연락처 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="tel" name="phone" id="phone" required /></span>
+				<span id="checkPh" style="display:none;" >연락처를 정확히 입력해 주세요.</span>
 			</div>
 			<br>
 			<input type="hidden" name="memberImageName" value="/default.jpeg">
@@ -87,65 +88,20 @@ span {
 <script type="text/javascript">
 	$(document).ready(function(){
 		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");;
-		
-		/* // ID 중복 검사
-		// 검사 후 id 변경시, 재검사
-		$('#memberId').blur(function(){
-			// id 미입력
-			if($('#memberId').val() == '') {
-				alert('아이디를 입력해 주세요.')
-				$('#checkNo').hide();
-				$('#checkOk').hide();
-				return;
-			}
-		}); //end memberId.blur() */
-		
-		// 닉네임 중복 체크
-		$('#nickname').blur(function(){
-			console.log("nickname중복 검사 체크")
-			// id 미입력
-			if($('#nickname').val() == '') {
-				alert('닉네임을 입력해 주세요.')
-				$('#checkNick').hide();
-				return;
-			}
-			
-			var nickname = $('#nickname').val();
-			console.log('nickname = ' + nickname);
-			
-			$.ajax({
-				type : 'POST',
-				url : "../member/checkNickname",
-				data : {nickname : nickname},
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(header, token);
-			    },
-				success : function(result) {
-					console.log("중복? " + result);
-					if(result == 'dupl'){
-						$('#checkNick').show(); // 닉넴 중복
-					} else {
-						$('#checkNick').hide();
-					}
-				}
-			}); //end ajax
-			
-		}); //end nickname.blur()
-		  
+		var header = $("meta[name='_csrf_header']").attr("content");
 		
 		// ------ 유효성 검사 ------
 		
 		// id 길이
 		function idLength(str) {
-			  return str.length >= 4 && str.length <= 12
+			  return (str.length >= 4 && str.length <= 12);
 			}
 		// id 영어 숫자만
 		function idOnly(str) {
 			  return /^[A-Za-z0-9][A-Za-z0-9]*$/.test(str);
 			}
 		// -- id 유효성 --
-		$('#memberId').keyup(function() {
+		$('#memberId').on("change keyup keydown", function() {
 			console.log(".onkeyup");
 			// 입력시
 			if($('#memberId').val().length != 0) {
@@ -165,7 +121,7 @@ span {
 				else if(idOnly($('#memberId').val()) === true && idLength($('#memberId').val()) === true) {
 					$('#failKor').hide();
 					$('#failLength').hide();
-					console.log("id중복 검사 체크")
+					console.log("id중복 검사 체크");
 					
 					var memberId = $('#memberId').val();
 					console.log('memberId = ' + memberId);
@@ -201,7 +157,6 @@ span {
 				$('#failLength').hide();
 				
 				if($('#memberId').val() == '') {
-					alert('아이디를 입력해 주세요.')
 					$('#checkNo').hide();
 					$('#checkOk').hide();
 					return;
@@ -219,7 +174,7 @@ span {
 		}
 		
 		// pw 유효성
-		$('#pwd').keyup(function() {
+		$('#pwd').on("change keyup keydown", function() {
 			if($('#pwd').val().length != 0) {
 				// 비번 검증
 				if(pwdOnly($('#pwd').val()) === false) {
@@ -241,7 +196,7 @@ span {
 		}); //end #password.keyup()
 		
 		// pw 확인
-		$('#pwdCheck').keyup(function(){
+		$('#pwdCheck').on("change keyup keydown", function(){
 			if($('#pwdCheck').val().length != 0) {
 				if(pwdChk($('#pwd').val(), $('#pwdCheck').val())) {
 					$('#checkPwdNo').hide();
@@ -256,8 +211,43 @@ span {
 			}
 		}); //end #pwdChk.keyup()
 		
+		// 닉네임 중복 체크
+		$('#nickname').blur(function(){
+			console.log("nickname중복 검사 체크")
+			// id 미입력
+			if($('#nickname').val() == '') {
+				alert('닉네임을 입력해 주세요.');
+				$('#checkNickNo').hide();
+				$('#checkNickY').hide();
+				return;
+			}
+			
+			var nickname = $('#nickname').val();
+			console.log('nickname = ' + nickname);
+			
+			$.ajax({
+				type : 'POST',
+				url : "../member/checkNickname",
+				data : {nickname : nickname},
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				success : function(result) {
+					console.log("중복? " + result);
+					if(result == 'dupl'){
+						$('#checkNickNo').show();
+						$('#checkNickY').hide();// 닉넴 중복
+					} else {
+						$('#checkNickNo').hide();
+						$('#checkNickY').show();
+					}
+				}
+			}); //end ajax
+			
+		}); //end nickname.blur()
+		
 		// email 선택옵션
-		$('#emailAddress').on('change', function(){
+		$('#emailAddress').on("change keyup keydown", function(){
 			var val = $(this).val();
 			var front = $('#emailId').val();
 			$("option:selected", this);
@@ -267,15 +257,90 @@ span {
 			$('#emailTxt').val(val);
 			$('#email').val(front + "@" + val);
 		}); //end 
+		$('#emailTxt').on('change keyup keydown blur', function(){
+			var domain = $('#emailTxt').val().substr(($('#emailTxt').val().lastIndexOf('.'))+1);
+			if($('#emailTxt').val().indexOf('.')==-1 || domain.length<2){
+				$('#emailChk').html('<span>올바른 이메일 형식이 아닙니다.</span>');
+			}else{
+				$('#emailChk').html('');
+			}
+		});
 		
-		/* // 폰번호 유효성
-		$('#phone').on("change keyup", function(){
-			var regExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
-			var val = $('#phone').val();
-			
-			if()
+		
+		// 폰번호 유효성
+		function phoneOnly(val){
+			return /^(?=.*[0-9])[0-9]{11,11}$/.test(val);				
+		} 
+		$('#phone').on("change keyup keydown", function(){
+			var regExp = /^010-([0-9]{4})-([0-9]{4})$/;
+			var phone = $('#phone').val().replaceAll('-','');
+			if(phone.length>3&&phone.length<=7){
+				console.log(phone);
+				var firstNum = phone.substr(0,3);
+				var midNum = phone.substr(3);
+				console.log('first:'+firstNum+', mid:'+midNum);
+				$('#phone').val(firstNum+'-'+midNum);
+			}else if(phone.length>7){
+				console.log(phone);
+				var firstNum = phone.substr(0,3);
+				var midNum = phone.substr(3,4);
+				var lastNum = phone.substr(7,4);
+				console.log('first:'+firstNum+', mid:'+midNum+', last:'+lastNum);
+				$('#phone').val(firstNum+'-'+midNum+'-'+lastNum);
+			}
+			if(!phoneOnly(phone)){
+				console.log('번호아님');
+				$('#checkPh').show();
+			}
+			phone = $('#phone').val();
+			if(regExp.test(phone)){
+				$('#checkPh').hide();
+			} else {
+				$('#checkPh').show();
+				console.log('why');
+			}
+			var pattern = /[^0-9-]/g;		
+			if(pattern.test(phone)){
+				phone=phone.replaceAll(pattern,'');
+				$('#phone').val(phone);
+			}
 		}); //end #phone.on()
 		
+		// 유효성 미검증시, submit 막기
+		$('#register').submit(function(e){
+			var autofocusAt = '';
+			var checkOk = $('#checkOk').is(':visible');
+			if(checkOk==false){
+				autofocusAt='#memberId';
+			}
+			var checkPwd = $('#checkPwd').is(':visible'); // hide
+			if(checkPwd==true){
+				autofocusAt='#pwd';
+			}
+			var checkPwdYes = $('#checkPwdYes').is(':visible');
+			if(checkPwdYes==false){
+				autofocusAt='#pwdCheck';
+			}
+			var checkNickY = $('#checkNickY').is(':visible');
+			if(checkNickY==false){
+				autofocusAt='#nickname';
+			}
+			var checkEmail = $('#emailChk').html();
+			if(checkEmail!=''){
+				autofocusAt='#emailTxt';
+			}
+			var checkPh = $('#checkPh').is(':visible'); // hide
+			if(checkPh==true){
+				autofocusAt='#phone';
+			}
+			if(autofocusAt==''){				
+				return true;
+			}else{
+				console.log(autofocusAt);
+				$(autofocusAt).focus();
+				return false;
+			}
+		});
 	}); //end document
 	
 </script>

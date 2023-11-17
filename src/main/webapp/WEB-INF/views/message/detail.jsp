@@ -106,7 +106,8 @@ td {
 }
 </style>
 <meta charset="UTF-8">
-<title>GUTEAM : ${vo.memberId }님의 쪽지함</title>
+<sec:authentication property="principal" var="principal"/>
+<title>GUTEAM : ${principal.username }님의 쪽지함</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
@@ -155,7 +156,6 @@ td {
 </table>
 	</div>
 	<div>
-	<sec:authentication property="principal" var="principal"/>
 	<form action="../message/write" method="get">
 	<c:if test="${vo.sendMemberId!=principal.username }">
 		<input type="hidden" name="receiveMemberId" value="${vo.sendMemberId }">
