@@ -74,6 +74,7 @@
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<div class="btn_group_detail">
 	<a href="update?gameId=${vo.gameId }&prevListUrl=" id="btnUpdate"><button class="btn btn-light">수정하기</button></a>
+	<a href="updateVideo?gameId=${vo.gameId }&prevListUrl=" id="btnUpdateVideo"><button class="btn btn-light">영상업로드</button></a>
 	</div>
 	</sec:authorize>
 	<div class="btn_group_detail">
@@ -82,9 +83,8 @@
 	</div>
 	<div class="btn_group_detail">
 	<a id="prevListUrl" href="${prevListUrl}"><button class="btn btn-light">리스트로 돌아가기</button></a>
-	
 	<input type="hidden" id="updateResult" value="${update_result }">
-	
+	<input type="hidden" id="updateVideoResult" value="${update_video_result }">
 	<br>
 	<sec:authorize access="isAuthenticated()">
 	<div class="wish_list_btn_area">
@@ -105,10 +105,18 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		var updateResult = $('#updateResult').val();
+		var updateVideoResult = $('#updateVideoResult').val();
 		if(updateResult=='success'){
 			alert('게임 정보 수정 성공'); 	
-		}else if(updateResult=='update_video'){
+		}
+		if(updateVideoResult=='success'){
 			alert('비디오 삽입 성공');
+		}
+		if(updateVideoResult=='wrong_ext'){
+			alert('비디오 형식이 잘못되었습니다.(현재 mp4만 업로드 가능합니다.)');
+		}
+		if(updateVideoResult=='not_changed'){
+			alert('업로드하기 버튼을 눌렀지만, 파일을 선택하지 않았습니다.');
 		}
 		var xOffset = 10;
         var yOffset = 30;
@@ -244,6 +252,8 @@
 		var updateUrl = $('#btnUpdate').attr('href');
 		prevListUrl = encodeURIComponent(prevListUrl);
 		$('#btnUpdate').attr('href', updateUrl+prevListUrl);
+		var updateVideoUrl = $('#btnUpdateVideo').attr('href');
+		$('#btnUpdateVideo').attr('href', updateVideoUrl + prevListUrl);
 		if(prevListUrl==''){
 			$('#prevListUrl').attr('href', 'list');
 		}

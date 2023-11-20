@@ -118,41 +118,64 @@ public class GameController {
 
 	@PostMapping("/update")
 	public String updatePOST(GameVO vo, RedirectAttributes reAttr, String prevListUrl, MultipartFile file, Principal principal) {
-		logger.info("updatePOST() 호출===================");
+//		logger.info("updatePOST() 호출===================");
 //		logger.info(vo + "");
 		if (file != null && !file.getOriginalFilename().equals("")) { // input [type="file"] 이 있는 경우
 			int gameId = vo.getGameId();
 			String extension = "."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
 			String gameImageName = gameId+extension;
 			// 확장자와 게임 id 를 통해 파일 명을 지정
-			if((extension).toUpperCase().contains("MP4")) {
-				logger.info(uploadPath);
-				VideoUtil.upload(file,vo.getGameId());
-			}else {
-				saveImage(file, vo, gameImageName); // 파일을 저장
-				encodeName(vo); // 이름을 변환
-			}
+			saveImage(file, vo, gameImageName); // 파일을 저장
+			encodeName(vo); // 이름을 변환
 		}
 		if(!vo.getGameImageName().contains("%")) {
 			encodeName(vo);
 		}
 		int result = 0 ;
-		if(file.getOriginalFilename().toUpperCase().contains("MP4")) {
-			result = 2;
-		}else {
-			result = gameService.update(vo); // 게임 정보를 update
-		}
-		switch(result) {
-		case 1 :
+		result = gameService.update(vo); // 게임 정보를 update
+		if(result==1) {
 			reAttr.addFlashAttribute("update_result", "success");
-			return "redirect:/game/detail?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;
-		case 2 : 
-			reAttr.addFlashAttribute("update_result", "update_video");
-			return "redirect:/game/detail?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;
-		default:
-			return "redirect:/game/update?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;
-		}
+			return "redirect:/game/detail?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;			
+		}else {
+			return "redirect:/game/update?gameId=" + vo.getGameId() + "&prevListUrl=" + prevListUrl;			
+		}	
+		
 	} // end updatePOST()
+	
+	@GetMapping("/updateVideo")
+	public void updateVideoGET(Model model, int gameId, String prevListUrl, Principal principal) {
+		Map<String, Object> args = gameService.readGame(gameId, principal);
+		GameVO vo = (GameVO) args.get("vo");
+		model.addAttribute("vo", vo);
+		try {
+			prevListUrl = URLEncoder.encode(prevListUrl, "UTF-8"); // 페이지 정보를 인코딩
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally {
+			model.addAttribute("prevListUrl", prevListUrl);
+		}
+	}
+	
+	@PostMapping("/updateVideo")
+	public String updateVideoPOST(Integer gameId, RedirectAttributes reAttr, String prevListUrl, MultipartFile file, Principal principal) {
+		logger.info("updatePost 호출 : file =" +file);
+		if (file != null && !file.getOriginalFilename().equals("")) {
+			String extension = "."+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+			logger.info(extension);
+			if(extension.toUpperCase().equals(".MP4")) {
+				VideoUtil.upload(file,gameId);
+				reAttr.addFlashAttribute("update_video_result", "success");
+				return "redirect:/game/detail?gameId=" + gameId + "&prevListUrl=" + prevListUrl;
+			}else {
+				reAttr.addFlashAttribute("update_video_result", "wrong_ext");
+				return "redirect:/game/detail?gameId=" + gameId + "&prevListUrl=" + prevListUrl;
+			}
+		}else {
+			logger.info("notChanged");
+			reAttr.addFlashAttribute("update_video_result", "not_changed");
+			return "redirect:/game/detail?gameId=" + gameId + "&prevListUrl=" + prevListUrl;
+		}
+	}	
 
 	private void readListsAndSetModel(String keyword, String keywordCriteria, PageMaker pageMaker, PageCriteria criteria,
 			Model model, String orderBy, Principal principal) {

@@ -67,6 +67,7 @@ span {
 						<option value="guteam.com">guteam.com</option>
 					</select>
 					<div id="emailChk"></div>
+					<input type="hidden" name="email" id="email">
 			</div>
 			<br>
 			<div>
@@ -249,12 +250,16 @@ span {
 		// email 선택옵션
 		$('#emailAddress').on("change keyup keydown", function(){
 			var val = $(this).val();
-			var front = $('#emailId').val();
-			$("option:selected", this);
-			
-			$("option:selected", this).attr("value");
-			console.log("val = " + val);
-			$('#emailTxt').val(val);
+			if(val!=''){
+				var front = $('#emailId').val();
+				$('#emailTxt').val(val);
+				var domain = $('#emailTxt').val().substr(($('#emailTxt').val().lastIndexOf('.'))+1);
+				if($('#emailTxt').val().indexOf('.')==-1 || domain.length<2){
+					$('#emailChk').html('<span>올바른 이메일 형식이 아닙니다.</span>');
+				}else{
+					$('#emailChk').html('');
+				}
+			}
 			$('#email').val(front + "@" + val);
 		}); //end 
 		$('#emailTxt').on('change keyup keydown blur', function(){

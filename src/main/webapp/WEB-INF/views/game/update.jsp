@@ -38,10 +38,12 @@
 <input type="text" id="gameName" name="gameName" value="${vo.gameName }" required><br>
 <input type="number" name="price" value="${vo.price }" required><br>
 <input type="text" name="genre" value="${vo.genre }" required><br>
+<span id="beforeFileChanged">
 <img class="file-drop" width="300px" height="300px" alt="${vo.gameName }" src="display?fileName=${vo.gameImageName }"><br>
 <input type="file" name="file" id="file" accept="image/*" onchange="display(event)">
-<label for="file" class="btn btn-secondary"><i class="bi bi-file-earmark-arrow-up-fill"></i></label>
+<label for="file" class="btn btn-secondary">파일 찾기<i class="bi bi-file-earmark-arrow-up-fill"></i></label>
 <input type="hidden" class="gameImageName" name="gameImageName" value="${vo.gameImageName }">
+</span>
 <!-- <img alt="${vo.gameImageName }" src=""> -->
 <br>
 <input id="submit" type="submit" class="btn btn-secondary" value="수정">
@@ -96,14 +98,15 @@
 			}); // file-drop.drop
 			
 		});// document.ready
+		var beforeFileChanged = $('#beforeFileChanged').html();
 		function display(event){
 			var reader = new FileReader();
 			reader.onload = function(event){
 				if(event.target.result.indexOf('video')==-1){
-					$('.file-drop').attr('src', event.target.result);						
+					$('.file-drop').attr('src', event.target.result);				
 				}else{
-					$('.file-drop').attr('style','display:none;');
-					$('#submit').attr('value','동영상 업로드');
+					alert('사진 파일만 업로드가 가능합니다.');
+					$('#beforeFileChanged').html(beforeFileChanged);
 				}
 			}
 			reader.readAsDataURL(event.target.files[0]);
