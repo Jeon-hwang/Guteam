@@ -13,6 +13,12 @@
 body{
 	color:white;
 }
+.totalCash {
+	display: flex;
+}
+.titleP {
+	display: flex;
+}
 </style>
 </head>
 <body>
@@ -22,11 +28,12 @@ body{
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 <div class="info">
 <div id="detailInfo">
-
-<h2>${vo.memberId }님의 프로필</h2>
+<div class="titleP">
+	<h2>${vo.memberId }님의 프로필</h2>
+</div>
 	<div class="btn_group_detail">
 		<button class="btn btn-light" onclick ="popUp();">쪽지함</button>
-		<a href="addCash"><button class="btn btn-light">캐쉬 충전</button></a>
+		<button id="payMe"class="btn btn-light">캐쉬 충전</button></a>
 		<a href="../friend/list"><button class="btn btn-light">친구 목록</button></a>
 	</div>
 	<div class="btn_group_detail">
@@ -36,6 +43,9 @@ body{
 			<input type="hidden" name="memberId" id="memberId" value="${vo.memberId }">
 			<input type="submit" class="btn btn-light" value="회원 탈퇴">	
 		</form>
+	</div>
+	<div class="totalCash">
+		<span>나의 지갑 : ₩&nbsp;${vo.cash }</span>
 	</div>
 </div>
 		<hr>
@@ -68,6 +78,7 @@ body{
 		</div>
 	</div>
 <input type="hidden" id="udp_alert" value="${udp_alert }">
+<input type="hidden" id="charge_result" value="${charge_result}">
 </div>
 </div>
 
@@ -83,6 +94,10 @@ body{
 	};
 	
 	$(document).ready(function(){
+		var chargeResult = $('#charge_result').val();
+		if(chargeResult=='success'){
+			alert(' 충전 성공 ');
+		}
 		function dateFormat(date) {
 	        var month = date.getMonth() + 1;
 	        var day = date.getDate();
@@ -332,7 +347,23 @@ body{
 					$('#reviewPaging').html('');
 				}
 			}); // end showMyBoards.onclick()
-	});
+			
+			$('#payMe').click(function(){
+				$.ajax({
+					url:'../payment/kakaoPay?cash=10000',
+					dataType: 'json',
+					success: function(data){
+						console.log("성공");
+						window.open(data.next_redirect_pc_url, '_blank');
+												
+					},
+					error: function(error){
+						console.log("실패");
+						alert(error);
+					}
+				}); //end ajax
+			}); //end #payMe.click()
+	}); //end document.ready()
 	
 	function boardInfoClick(gameBoardId,gameId){
 		location.href="/guteam/gameBoard/detail?gameBoardId=" + gameBoardId + "&page=1&gameId=" + gameId;

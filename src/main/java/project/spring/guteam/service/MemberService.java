@@ -13,7 +13,7 @@ public interface MemberService {
 	int read(String memberId, String checking);
 	int read(String nickname, int checking);
 	int update(MemberVO vo, String isCash);
-	int update(String memberId, int cash);
+	int update(String memberId, int amount);
 	int delete(String memberId);
 	
 }

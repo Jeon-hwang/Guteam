@@ -71,9 +71,9 @@ public class MemberServiceImple implements MemberService {
 	}
 
 	@Override
-	public int update(String memberId, int cash) {
-		logger.info("update() 호출 cash = "+cash+" memberId= "+memberId);
-		return dao.updateCash(cash, memberId);
+	public int update(String memberId, int amount) {
+		logger.info("update() 호출 amount = "+amount+" memberId= "+memberId);
+		return dao.updateCash(amount, memberId);
 	}
 
 	

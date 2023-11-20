@@ -58,9 +58,10 @@ public class MemberDAOImple implements MemberDAO {
 	}
 	
 	@Override
-	public int updateCash(int cash,String memberId) {
-		logger.info("updateCash() 호출 cash, memberId = " + cash + "," + memberId );
+	public int updateCash(int amount,String memberId) {
+		logger.info("updateCash() 호출 cash, memberId = " + amount + "," + memberId );
 		Map<String, Object> args = new HashMap<String, Object>();
+		int cash = select(memberId).getCash()+amount; 
 		args.put("cash", cash);
 		args.put("memberId", memberId);
 		return sqlSession.update(NAMESPACE + ".update_cash", args);
