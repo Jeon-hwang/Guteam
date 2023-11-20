@@ -67,6 +67,7 @@
 						url,
 						function(data){
 							console.log(data);
+							
 							if(data.recentlyViewedGameVOList.length==0){
 								list = '<button class="btn btn-light close" onclick="doclick()">최근 조회한 게임이 없습니다</button>';
 							}else{
@@ -74,11 +75,11 @@
 									list += '<div class="btn btn-secondary" onclick="gameDetail(this)" style="margin:5px; width:330px; height:500px;">'
 											+'<div class="gameInfo">'
 											+'<img class="rounded mx-auto d-block" alt="'+this['gameImageName']+'" width="300px" height="300px"'
-											+'	src="/guteam/game/display?fileName='+this['gameImageName']+'"> <input type="hidden" class="gameId" value="'+this['gameId']+'"> <br>'
-											+'<div style="font-size: 1em;">	name : '+this['gameName']+'<br> price : '+this['price']+'<br>'
-											+'genre : '+this['genre']
-											+'<br> releaseDate : '+ dateformat(new Date(this['releaseDate']))
-											+'<br> rating : ';
+											+'	src="/guteam/game/display?fileName='+this['gameImageName']+'" style="margin-bottom:5px;"> <input type="hidden" class="gameId" value="'+this['gameId']+'"> '
+											+'<div style="font-size: 1em;">	<p>'+this['gameName']+'</p><p class='+this['genre']+'> ￦'+this['price']+'</p>'
+											+'<p>'+this['genre']
+											+'</p> <p>'+ dateformat(new Date(this['releaseDate']))
+											+'</p> <p>';
 											var rating = $(data.recentlyViewedRatingList[index]);
 											rating = rating[0];
 												if(rating!=0){
@@ -94,10 +95,14 @@
 														list+='<i class="bi bi-star"></i>';
 													}
 												}
-											list += '</div><br></div></div>';
+											list += '</p></div></div></div>';
 								});// end each
 							}
 								$('#recentlyViewedGames').html(list);
+								$(data.discountList).each(function(index,vo){
+									$('#recentlyViewedGames .'+vo.genre+'').attr('style','color:#b9ee1a;margin-bottom:5px;');
+									$('#recentlyViewedGames .'+vo.genre+'').append('<p style="background:#4c6b22;width:50px;text-align:center;margin:auto;margin-bottom:5px;">-'+vo.discountRate*100+'%</p>');
+								});// discountList.each()
 								$('#recentlyViewedGames').attr('style','display:block;');
 						}
 						

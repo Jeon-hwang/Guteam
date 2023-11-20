@@ -98,6 +98,8 @@ public class GameController {
 		GameVO vo = (GameVO) args.get("vo");
 		model.addAttribute("vo", vo);
 		int rating = (int) args.get("rating");
+		List<DiscountVO> discountList = (List<DiscountVO>)args.get("discountList");
+		model.addAttribute("discountList", discountList);
 		model.addAttribute("rating", rating);
 		model.addAttribute("prevListUrl", prevListUrl);
 	} // end detail()

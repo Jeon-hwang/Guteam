@@ -90,6 +90,7 @@ public class GameServiceImple implements GameService {
 		Map<String, Object> args = new HashMap<>();
 		args.put("vo", vo);
 		args.put("rating", rating);
+		args.put("discountList", discountList);
 		return args;
 	} // end readGame()
 
@@ -166,6 +167,7 @@ public class GameServiceImple implements GameService {
 			recentlyViewedRatingList.add(reviewDAO.getRatingAvg(vo.getGameId()));
 			}
 		}
+		args.put("discountList", discountList);
 		args.put("recentlyViewedGameVOList", recentlyViewedGameVOList);
 		args.put("recentlyViewedRatingList", recentlyViewedRatingList);
 		return args;

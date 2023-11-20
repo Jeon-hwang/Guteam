@@ -14,6 +14,10 @@
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
 <body>
+	<c:forEach var="discountVO" items="${discountList }">
+	<input type="hidden" value="${discountVO.genre }" id="${discountVO.genre }">
+	<input type="hidden" value="${discountVO.discountRate }" class="discountRate">
+	</c:forEach>
 	<section>
 	<div id="wrap">
 	<div class="detail-box">
@@ -33,13 +37,13 @@
 	<br>
 	게임 이름 : ${vo.gameName }
 	<br>
-	가격 : ${vo.price }
+	가격 : <span class="${vo.genre }">${vo.price }</span>
 	<br>
 	장르 : ${vo.genre }
 	<br>
 	출시일 : <fmt:formatDate value="${vo.releaseDate }" pattern="yyyy년 MM월 dd일" />
 	<br>
-	마지막 업데이트일 :<fmt:formatDate value="${vo.updateDate }" pattern="yyyy년 MM월 dd일" /> 
+	마지막 업데이트일 : <fmt:formatDate value="${vo.updateDate }" pattern="yyyy년 MM월 dd일" /> 
 	<br>
 	평점 : <c:if test="${rating==0 }">
 		<i class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i><i class="bi bi-star"></i>
@@ -257,6 +261,19 @@
 		if(prevListUrl==''){
 			$('#prevListUrl').attr('href', 'list');
 		}
+		
+		function checkDiscountGenre(){
+			var discountRateList = $('html').find('.discountRate');
+			var discountGenreList = $('html').find('.discountRate').prev();
+			$(discountGenreList).each(function(index){
+				var discountGenre = $(this).val();
+				var discountRate = $(discountRateList[index]).val();
+				console.log(discountGenre+','+discountRate);
+				$('.'+discountGenre+'').attr('style','color:#b9ee1a;margin-bottom:5px;');
+				$('.'+discountGenre+'').append(' <span style="background:#4c6b22;width:50px;text-align:center;margin:auto;margin-bottom:5px;margin-left:50px;">-'+discountRate*100+'%</span>');
+			});
+		}
+		checkDiscountGenre();
 	});// document
 	</script>
 	  </body>

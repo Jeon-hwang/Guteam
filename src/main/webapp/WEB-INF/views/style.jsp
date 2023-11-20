@@ -150,11 +150,13 @@ header .auth{
 #recentlyViewedGames{
 	display:none;
 }
+#recentlyViewedGames p{
+	margin-bottom:10px;
+}
 body {
 	width:100%;
 	height:100%;
 	display:flex;
-	text-overflow:ellipsis;white-space:nowrap;
 	flex-wrap:wrap;
 	background-color:#1b2838;
 }
@@ -324,29 +326,27 @@ transition: 0.3s;
 }
 .dropdown-item:hover{
 	cursor:pointer;
+	background-color:#a0c5db;
+	color:#000;
 }
 #container {
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-wrap: wrap;
 }
 .formArea{
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	padding:10px 100px;
 	width:100%;
 	flex-wrap: wrap;
 }
 .formArea from{
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	flex-wrap: wrap;
 	width:100%;
 }
 .justify-content-center{
 	width:100%;
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .justify-content-center .btn{
 	justify-content: center;
@@ -519,12 +519,10 @@ formArea input:focus{
 	width:50%;
 	margin:auto;
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .formSearch .input-group{
 	flex-wrap: nowrap;
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	align-items: stretch;
 }
 .formSearch .dropdown-toggle{
