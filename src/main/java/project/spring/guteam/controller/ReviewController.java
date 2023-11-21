@@ -54,12 +54,14 @@ public class ReviewController {
 	} // end registerGET()
 
 	@PostMapping("/register")
-	public String registerPOST(ReviewVO vo, RedirectAttributes reAttr) {
-		int result = reviewService.create(vo);
+	public String registerPOST(ReviewVO vo, RedirectAttributes reAttr, Principal principal) {
+		vo.setMemberId(principal.getName());
+		int result = reviewService.create(vo, principal);
 		if (result == 1) {
 			reAttr.addFlashAttribute("insert_result", "success");
 			return "redirect:list?gameId=" + vo.getGameId();
 		} else {
+			reAttr.addFlashAttribute("insert_result", "fail");
 			return "redirect:register?gameId=" + vo.getGameId();
 		}
 	} // end registerPOST()
@@ -99,23 +101,25 @@ public class ReviewController {
 	} // end updateGET()
 
 	@PostMapping("/update")
-	public String updatePOST(ReviewVO vo, RedirectAttributes reAttr, Integer page) {
+	public String updatePOST(ReviewVO vo, RedirectAttributes reAttr, Integer page, Principal principal) {
 		if(page==null) {
 			page=1;
 		}
-		int result = reviewService.update(vo);
+		vo.setMemberId(principal.getName());
+		int result = reviewService.update(vo, principal);
 		if (result == 1) {
 			reAttr.addFlashAttribute("update_result", "success");
 			return "redirect:detail?reviewId=" + vo.getReviewId() + "&page=" + page;
 		} else {
+			reAttr.addFlashAttribute("update_result", "fail");
 			return "redirect:update?reviewId=" + vo.getReviewId() + "&page=" + page;
 		}
 
 	} // end updatePOST()
 
 	@PostMapping("/delete")
-	public String delete(int reviewId, int gameId, RedirectAttributes reAttr) {
-		int result = reviewService.delete(reviewId);
+	public String delete(int reviewId, int gameId, RedirectAttributes reAttr, Principal principal) {
+		int result = reviewService.delete(reviewId, principal);
 		if (result == 1) {
 			reAttr.addFlashAttribute("delete_result", "success");
 			return "redirect:/review/list?gameId=" + gameId;

@@ -1,5 +1,6 @@
 package project.spring.guteam.service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +33,13 @@ public class GameBoardServiceImple implements GameBoardService {
 	private MemberDAO memberDAO;
 	
 	@Override
-	public int create(GameBoardVO vo) {
+	public int create(GameBoardVO vo, Principal principal) {
 		logger.info("gameBoard create() 호출 : vo = " + vo);
-		return gameBoardDAO.insert(vo);
+		if(gameDAO.select(vo.getGameId())!=null) {
+			return gameBoardDAO.insert(vo);					
+		}
+		logger.info("gameId 존재하지 않음");
+		return 0;
 	} // end create()
 
 	@Transactional(value = "transactionManager")
@@ -55,15 +60,36 @@ public class GameBoardServiceImple implements GameBoardService {
 	} // end read()
 
 	@Override
-	public int update(GameBoardVO vo) {
+	public int update(GameBoardVO vo, Principal principal) {
 		logger.info("gameBoard update() 호출 : vo = " + vo );
-		return gameBoardDAO.update(vo);
+		if(gameDAO.select(vo.getGameId())!=null) {
+			if(gameBoardDAO.selectByBoardId(vo.getGameBoardId())!=null) {
+				return gameBoardDAO.update(vo);					
+			}
+			logger.info("gameBoardId 없음");
+			return 0;
+		}
+		logger.info("gameId 없음");
+		return 0;
 	} // end update()
 
 	@Override
-	public int updateToDeleted(int gameBoardId) {
+	public int updateToDeleted(int gameBoardId, Principal principal) {
 		logger.info("gameBoard update(gameBoardId) 호출 : gameBoardId = " + gameBoardId);
-		return gameBoardDAO.updateDeleted(gameBoardId);
+		GameBoardVO vo = gameBoardDAO.selectByBoardId(gameBoardId);
+		if(vo.getMemberId().equals(principal.getName())) {
+			if(gameDAO.select(vo.getGameId())!=null) {
+				if(gameBoardDAO.selectByBoardId(vo.getGameBoardId())!=null) {
+					return gameBoardDAO.updateDeleted(gameBoardId);
+				}
+				logger.info("gameBoardId 없음");
+				return 0;
+			}
+			logger.info("gameId 없음");
+			return 0;
+		}
+		logger.info("user정보 불일치");
+		return 0;
 	} // end updateToDeleted()
 
 	@Override

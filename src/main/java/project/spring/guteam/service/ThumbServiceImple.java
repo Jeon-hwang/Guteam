@@ -34,6 +34,14 @@ public class ThumbServiceImple implements ThumbService {
 			if (result == 1) {
 				thumbDAO.insert(vo);
 			}
+		}else if(vo.getUpDown()!=read(vo).getUpDown()){
+			logger.info("thumb update() 호출");
+			result = reviewDAO.update(vo.getReviewId(), vo.getUpDown());
+			if(result==1) {
+				thumbDAO.update(vo);
+			}
+		}else if(vo.getUpDown()==read(vo).getUpDown()) {
+			result=thumbDAO.update(vo);
 		}
 		return result;
 	}
@@ -49,10 +57,24 @@ public class ThumbServiceImple implements ThumbService {
 	public int update(ThumbVO vo) throws Exception{
 		int result = 0;
 		if (read(vo)!=null) {
-			logger.info("thumb update() 호출 ");
-			result = thumbDAO.update(vo);
-			if(result==1) {
-				reviewDAO.update(vo.getReviewId(), vo.getUpDown());
+			if(vo.getUpDown()!=read(vo).getUpDown()) {
+				logger.info("thumb update() 호출 ");
+				result = thumbDAO.update(vo);
+				if(result==1) {
+					reviewDAO.update(vo.getReviewId(), vo.getUpDown());
+				}				
+			}else {
+				result = thumbDAO.update(vo);
+			}
+		}else {
+			logger.info("thumb create() 호출 ");
+			int amount = vo.getUpDown();
+			if(amount<0) {
+				amount=0;
+			}
+			result = reviewDAO.update(vo.getReviewId(), amount);
+			if (result == 1) {
+				thumbDAO.insert(vo);
 			}
 		}
 		return result;
@@ -64,10 +86,12 @@ public class ThumbServiceImple implements ThumbService {
 		int result = 0;
 		if (read(vo)!=null) {
 			logger.info("thumb delete() 호출 ");
-			result = thumbDAO.delete(vo);
-			if(vo.getUpDown()==1) {
+			if(read(vo).getUpDown()==1) {
 				reviewDAO.update(vo.getReviewId(), -1);
 			}
+			result = thumbDAO.delete(vo);
+		}else {
+			result = 1;
 		}
 		return result;
 	}

@@ -104,7 +104,6 @@
 		if(deleteResult=='success'){
 			alert('리뷰 삭제 성공');
 		}
-		
 		$('.reviewInfo').on('click',function(){
 			var url = $(this).prev('.url').attr('value');
 			console.log(url);

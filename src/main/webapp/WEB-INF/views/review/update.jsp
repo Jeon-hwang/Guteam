@@ -30,9 +30,12 @@
 <div class="inputArea">
 <form action="update" method="post">
 	<sec:csrfInput/>
+	<sec:authentication property="principal" var="principal"/>
 		<input type="hidden" name="reviewId" value="${reviewVO.reviewId }">
 		<input type="hidden" name="gameId" value="${reviewVO.gameId }">
-		<input type="text" name="memberId" value="${sessionScope.memberId }test" readonly><br>
+		<div class="caption">
+		<p>${principal.username }</p>
+		</div>
 		<input type="text" name="reviewTitle" value="${reviewVO.reviewTitle }" required><br>
 		<input type="number" min="0" max="10" name="rating" value="${reviewVO.rating }" required><br>
 		<textarea name="reviewContent" rows="20" cols="100" required>${reviewVO.reviewContent }</textarea>

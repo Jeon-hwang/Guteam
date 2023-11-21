@@ -1,10 +1,12 @@
 package project.spring.guteam.service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +44,17 @@ public class ReviewServiceImple implements ReviewService {
 	private PurchasedDAO purchasedDAO;
 	
 	@Override
-	public int create(ReviewVO vo) {
+	public int create(ReviewVO vo, Principal principal) {
 		logger.info("review create() 호출");
-		return reviewDAO.insert(vo);
+		if(vo.getMemberId().equals(principal.getName())) {
+			if(purchasedDAO.find(principal.getName(),vo.getGameId())!=null) {
+				return reviewDAO.insert(vo);							
+			}
+			logger.info("구매하지 않음");
+			return 0;
+		}
+		logger.info("user 정보 불일치");
+		return 0;
 	} // end create()
 
 	@Transactional(value = "transactionManager")
@@ -82,15 +92,40 @@ public class ReviewServiceImple implements ReviewService {
 	} // end read()
 
 	@Override
-	public int update(ReviewVO vo) {
+	public int update(ReviewVO vo, Principal principal) {
 		logger.info("review update() 호출 : vo = " + vo);
-		return reviewDAO.update(vo);
+		if(vo.getMemberId().equals(principal.getName())) {
+			if(purchasedDAO.find(principal.getName(),vo.getGameId())!=null) {
+				if(readWrited(vo.getGameId(), principal.getName())>0) {
+					return reviewDAO.update(vo);									
+				}
+				logger.info("리뷰없음");
+				return 0;
+			}
+			logger.info("구매하지 않음");
+			return 0;
+		}
+		logger.info("user정보 불일치");
+		return 0;
 	} // end update()
 
 	@Override
-	public int delete(int reviewId) {
+	public int delete(int reviewId, Principal principal) {
 		logger.info("review delete() 호출 : reviewId = " + reviewId);
-		return reviewDAO.delete(reviewId);
+		ReviewVO vo = reviewDAO.select(reviewId);
+		if(vo.getMemberId().equals(principal.getName())) {
+			if(purchasedDAO.find(principal.getName(),vo.getGameId())!=null) {
+				if(readWrited(vo.getGameId(), principal.getName())>0) {
+					return reviewDAO.delete(reviewId);					
+				}
+				logger.info("리뷰없음");
+				return 0;
+			}
+			logger.info("구매하지 않음");
+			return 0;
+		}
+		logger.info("user정보 불일치");
+		return 0;
 	} // end delete()
 
 	@Override

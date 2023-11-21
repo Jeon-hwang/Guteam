@@ -1,5 +1,6 @@
 package project.spring.guteam.service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -7,15 +8,15 @@ import project.spring.guteam.domain.GameBoardVO;
 import project.spring.guteam.pageutil.PageCriteria;
 
 public interface GameBoardService {
-	int create(GameBoardVO vo);
+	int create(GameBoardVO vo, Principal principal);
 	// 게시글 정보 입력
 	Map<String, Object> read(int gameId, PageCriteria criteria);
 	// gameId로 해당 게임의 게시글들을 페이지 정보를 기준으로 조회
 	Map<String, Object> read(int gameBoardId, String memberId);
 	// gameBoardId 로 글 정보를 가져오고, memberId 로 댓글에 사용될 회원 정보를 가져옴
-	int update(GameBoardVO vo);
+	int update(GameBoardVO vo, Principal principal);
 	// 게시글 정보 수정
-	int updateToDeleted(int gameBoardId);
+	int updateToDeleted(int gameBoardId, Principal principal);
 	// 게시글 정보 수정(삭제처리)
 	int getTotalCount(int gameId);
 	// 게시글 총 수를 리턴(gameId)

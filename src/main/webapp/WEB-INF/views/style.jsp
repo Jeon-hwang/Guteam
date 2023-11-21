@@ -103,7 +103,6 @@ header .auth{
 }
 .detail-box{
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	width:100%;
 	height:100%;
 	margin-bottom: 30px;

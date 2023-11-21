@@ -1,13 +1,10 @@
 package project.spring.guteam.controller;
 
-import java.net.http.HttpHeaders;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,8 +46,9 @@ public class GameBoardController {
 	} // end registerGET() - [getMapping "/gameBoard/register"]
 	
 	@PostMapping("/register")
-	public String registerPOST(GameBoardVO vo, RedirectAttributes reAttr) {
-		int result = gameBoardService.create(vo);
+	public String registerPOST(GameBoardVO vo, RedirectAttributes reAttr, Principal principal) {
+		vo.setMemberId(principal.getName());
+		int result = gameBoardService.create(vo, principal);
 		if(result == 1) {
 			reAttr.addFlashAttribute("insert_result","success");
 			return "redirect:/gameBoard/list?gameId="+vo.getGameId();
@@ -91,8 +89,9 @@ public class GameBoardController {
 	} // end updateGET() - [getMapping "/gameBoard/update"]
 	
 	@PostMapping("/update")
-	public String updatePOST(GameBoardVO vo, RedirectAttributes reAttr, Integer page, int gameId) {
-		int result = gameBoardService.update(vo);
+	public String updatePOST(GameBoardVO vo, RedirectAttributes reAttr, Integer page, int gameId, Principal principal) {
+		vo.setMemberId(principal.getName());
+		int result = gameBoardService.update(vo, principal);
 		if(page==null) {
 			page=1;
 		}
@@ -105,9 +104,9 @@ public class GameBoardController {
 	} // end updatePOST() - [postMapping "/gameBoard/update" => "/gameBoard/detail" or "/gameBoard/update"]
 	
 	@PostMapping("/updateDeleted")
-	public String updateToDeleted(int gameBoardId, RedirectAttributes reAttr) {
+	public String updateToDeleted(int gameBoardId, RedirectAttributes reAttr, Principal principal) {
 //		logger.info("gameBoard updateDeleted() 호출 : gameBoardId = " + gameBoardId);
-		int result = gameBoardService.updateToDeleted(gameBoardId);
+		int result = gameBoardService.updateToDeleted(gameBoardId, principal);
 		if(result==1) {
 			reAttr.addFlashAttribute("delete_result", "success");
 			return "redirect:/gameBoard/list?gameId="+((GameBoardVO)gameBoardService.read(gameBoardId,"").get("gameBoardVO")).getGameId();

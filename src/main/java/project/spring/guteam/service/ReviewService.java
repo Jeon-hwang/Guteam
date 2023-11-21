@@ -1,5 +1,6 @@
 package project.spring.guteam.service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -7,15 +8,15 @@ import project.spring.guteam.domain.ReviewVO;
 import project.spring.guteam.pageutil.PageCriteria;
 
 public interface ReviewService {
-	int create(ReviewVO vo);
+	int create(ReviewVO vo, Principal principal);
 	// 리뷰 생성
 	Map<String, Object> read(int gameId, PageCriteria criteria);
 	// 페이지 정보를 기준으로 리뷰 정보들을 조회(gameId)
 	Map<String, Object> read(int reviewId, String memberId);
 	// 리뷰 정보를 조회(로그인 정보가 있으면 추천했는지 여부도 함께 조회)
-	int update(ReviewVO vo);
+	int update(ReviewVO vo, Principal principal);
 	// 리뷰 정보 수정
-	int delete(int reviewId);
+	int delete(int reviewId, Principal principal);
 	// 리뷰 삭제
 	int update(int riviewId, int amount);
 	// 리뷰의 추천 수를 수정

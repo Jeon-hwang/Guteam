@@ -31,7 +31,9 @@
 <div class="inputArea">
 <form action="register" method="post">
 <input type="hidden" name="gameId" value="${gameId }">
-<input type="text" name="memberId" value="${principal.username }" readonly><br>
+<div class="caption">
+<p>${principal.username }</p>
+</div>
 <input type="text" class="banedDeleted" name="gameBoardTitle" autofocus required ><br>
 <textarea name="gameBoardContent" class="banedDeleted" rows="20" cols="100" required></textarea><br>
 <sec:csrfInput/>

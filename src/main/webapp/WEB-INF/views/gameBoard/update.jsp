@@ -35,7 +35,9 @@
 <input type="hidden" name="gameId" value="${gameId }">
 <input type="hidden" name="gameBoardId" value="${vo.gameBoardId }">
 <input type="text" class="banedDeleted" name="gameBoardTitle" value="${vo.gameBoardTitle }" required><br>
-<input type="text" value="${principal.username }" readonly> <br>
+<div class="caption">
+<p>${principal.username }</p>
+</div>
 <textarea name="gameBoardContent" class="banedDeleted" rows="20" cols="100" required>${vo.gameBoardContent }</textarea>
 <br>
 <input class="btn btn-secondary" type="submit" value="수정하기">
