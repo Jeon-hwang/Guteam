@@ -28,25 +28,32 @@
 	height : 400px;
 }
 #m-board {
-	display:flex
-	flex-wrap: wrap;
+	display:flex;
+	flex-direction: column;
 }
 #board-top {
 	display:flex;
 	flex-wrap: wrap;
+	display:flex;
+	justify-content: space-around;
 	padding-top : 5px;
 	padding-left : 5px;
 	padding-right : 5px;
     padding-bottom : 5px;
 	width : 590px;
 	height : 50px;
+	color: #e5e5dc;
+	font-size: 20px;
 }
 #main {
-	display:flex;
-	flex-flow: column wrap;
-	background-color : #666666;
-	width : 590px;
-	height : 350px;
+	display: flex;
+    flex-flow: column wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: flex-start;
+    background-color: #666666;
+    width: 590px;
+    height: 350px;
 }
 .msgInfo {
 	display:flex;
@@ -56,15 +63,17 @@
 	color: #e5e5dc;
 }
 #board-btm {
-	align : center;
+	display: flex;
 }
-ul {
+ul.left{
 	margin: 0px;
     padding-left : 10px;
     padding-right : 10px;
     padding-bottom : 0px;
    	list-style : none;
    	text-align : center;
+   	display: flex;
+   	flex-direction: column;
 }
 li {
 	display : inline-block;
@@ -81,7 +90,7 @@ body {
     padding: 0;
 }
 table {
-	width: 100%;
+	width: 590px;
 }
 thead {
 	display: flex;
@@ -99,6 +108,15 @@ tr {
 td {
 	color: #e5e5dc;
 	border: solid 1px #bcc2e5;
+	word-break: break-all;
+}
+.msgTitle {
+	width: 10%;
+	text-align: center;
+}
+.msgContent {
+	word-wrap: break-word;
+	white-space: normal;
 }
 .td {
 	text-align : center;
@@ -114,7 +132,7 @@ td {
 <div id="full">
 <div id="leftMenu">
 <img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
-	<ul>
+	<ul class="left">
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
 	<br>
@@ -125,11 +143,7 @@ td {
 </div>
 <div id="m-board">
 <div id="board-top">
-
-</div>
-<div id="main">
-<div class="msgInfo">
-	<c:if test="${sendOrReceive=='receive' }">
+<c:if test="${sendOrReceive=='receive' }">
 		<span> 보낸 사람 : ${vo.sendMemberNickname }</span>
 		</c:if>
 		<c:if test="${sendOrReceive=='send' }">
@@ -142,20 +156,20 @@ td {
 		<span>보낸 날짜 : <fmt:formatDate value="${vo.messageDateCreated }" pattern="MM-dd HH:mm:ss"/></span>
 	</c:if>
 </div>
+<div id="main">
 <table>
 	<tbody>
 		<tr style="border : solid 1px darkgray;">
-			<td><h5>제목</h5></td>
+			<td class="msgTitle"><h5>제목</h5></td>
 			<td>${vo.messageTitle }</td>
 			</tr>
 			<tr>
-			<td><h5>내용</h5></td>
-			<td>${vo.messageContent }</td>
+			<td class="msgTitle"><h5>내용</h5></td>
+			<td class="msgContent">${vo.messageContent }</td>
 		</tr>
 	</tbody>
 </table>
-	</div>
-	<div>
+<div class="btn_send">
 	<form action="../message/write" method="get">
 	<c:if test="${vo.sendMemberId!=principal.username }">
 		<input type="hidden" name="receiveMemberId" value="${vo.sendMemberId }">
@@ -168,9 +182,12 @@ td {
 		<input type="submit" class="btn btn-light" style="float: right; margin-right: 10px;" value="다시보내기">
 	</c:if>
 	</form>
-	</div>
+</div>
+
+</div>
+
 </div>
 </div>
-</div>
+
 </body>
 </html>

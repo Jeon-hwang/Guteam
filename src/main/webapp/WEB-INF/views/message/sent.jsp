@@ -29,7 +29,7 @@
 }
 #m-board {
 	display:flex;
-	flex-wrap: wrap;
+	flex-direction: column;
 }
 #board-top {
 	display:flex;
@@ -42,25 +42,30 @@
 	height : 50px;
 }
 #main {
-	display:flex;
-	flex-flow: column wrap;
-	background-color : #666666;
-	width : 590px;
-	height : 350px;
+	display: flex;
+    flex-flow: column wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: flex-start;
+    background-color: #666666;
+    width: 590px;
+    height: 350px;
 }
 #board-btm {
-	align : center;
+	display: flex;
 }
 #board-btm li {
 	color: #e5e5dc;
 }
-ul {
+ul.left{
 	margin: 0px;
     padding-left : 10px;
     padding-right : 10px;
     padding-bottom : 0px;
    	list-style : none;
    	text-align : center;
+   	display: flex;
+   	flex-direction: column;
 }
 li {
 	display : inline-block;
@@ -107,13 +112,13 @@ td {
 <div id="full">
 <div id="leftMenu">
 <img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
-	<ul>
-	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
-	<br>
-	<br>
-	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
-	<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
-	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
+	<ul class="left">
+		<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
+		<br>
+		<br>
+		<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
+		<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
+		<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
 <div id="m-board">
@@ -131,12 +136,13 @@ td {
 		<th style="width: 16%">보낸 날짜</th>
 	</tr>
 	</thead>
+	
 	<tbody>
 	<c:forEach var="pvo" items="${list }">
 	<tr>
 		<td class="td" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${pvo.sendMessageId }"></label></td>
 		<td style="padding-left : 10px;"><a href="../message/detail?messageId=${pvo.sendMessageId}&page=${pageMaker.criteria.page}">${pvo.messageTitle }</a></td>
-		<td class="td" style="white-space: nowrap;">${pvo.receiveMemberId }</td>
+		<td class="td" style="white-space: nowrap;">${pvo.receiveMemberNickname }</td>
 		<fmt:formatDate value="${pvo.messageDateCreated }" pattern="MM-dd HH:mm:ss" var="messageDateCreated"/>
 		<td style="font-size: 10pt;">${messageDateCreated }</td>
 	</tr>
@@ -144,17 +150,17 @@ td {
 	</tbody>
 </table>
 <div id="board-btm">
-<ul>
-	<c:if test="${pageMaker.hasPrev }">
-		<li><a href="sent?page=${pageMaker.startPageNo - 1}">이전</a></li>
-	</c:if>
-	<c:forEach begin="${pageMaker.startPageNo }" end="${pageMaker.endPageNo }" var="num">
-		<li><a href="sent?page=${num }">${num }</a></li>
-	</c:forEach>
-	<c:if test="${pageMaker.hasNext }">
-		<li><a href="sent?page=${pageMaker.endPageNo + 1 }">다음</a></li>
-	</c:if>
-</ul>
+	<ul>
+		<c:if test="${pageMaker.hasPrev }">
+			<li><a href="sent?page=${pageMaker.startPageNo - 1}">이전</a></li>
+		</c:if>
+		<c:forEach begin="${pageMaker.startPageNo }" end="${pageMaker.endPageNo }" var="num">
+			<li><a href="sent?page=${num }">${num }</a></li>
+		</c:forEach>
+		<c:if test="${pageMaker.hasNext }">
+			<li><a href="sent?page=${pageMaker.endPageNo + 1 }">다음</a></li>
+		</c:if>
+	</ul>
 </div>
 </div>
 </div>

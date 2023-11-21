@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
@@ -33,7 +34,11 @@ body{
 </div>
 	<div class="btn_group_detail">
 		<button class="btn btn-light" onclick ="popUp();">쪽지함</button>
-		<button id="payMe"class="btn btn-light">캐쉬 충전</button></a>
+		<form action="../payment/kakaoPay" method="post">
+		<sec:csrfInput/>
+		<input type="number" name="cash" placeholder="cash" required="required">
+		<button id="payMe"class="btn btn-light">캐쉬 충전</button>
+		</form>
 		<a href="../friend/list"><button class="btn btn-light">친구 목록</button></a>
 	</div>
 	<div class="btn_group_detail">
@@ -79,6 +84,12 @@ body{
 	</div>
 <input type="hidden" id="udp_alert" value="${udp_alert }">
 <input type="hidden" id="charge_result" value="${charge_result}">
+<input type="hidden" id="amount" value="${info.amount.total }">
+<input type="hidden" id="tid" value="${info.tid }">
+<input type="hidden" id="approvedAt" value="${info.approved_at }">
+<span>
+<fmt:formatDate value="${info.approved_at }" pattern="MM-dd HH:mm:ss" />
+</span>
 </div>
 </div>
 
@@ -96,7 +107,11 @@ body{
 	$(document).ready(function(){
 		var chargeResult = $('#charge_result').val();
 		if(chargeResult=='success'){
-			alert(' 충전 성공 ');
+			var amount = $('#amount').val()+'원';
+			var tid = $('#tid').val();
+			var approvedAt = $('#approvedAt').nextAll('span').text();
+			console.log(approvedAt);
+			alert(' 충전 성공 \n'+'일시 : '+approvedAt+'\n 충전 캐쉬 : ' + amount + '\n tid : ' + tid);
 		}
 		function dateFormat(date) {
 	        var month = date.getMonth() + 1;
@@ -348,21 +363,7 @@ body{
 				}
 			}); // end showMyBoards.onclick()
 			
-			$('#payMe').click(function(){
-				$.ajax({
-					url:'../payment/kakaoPay?cash=10000',
-					dataType: 'json',
-					success: function(data){
-						console.log("성공");
-						window.open(data.next_redirect_pc_url, '_blank');
-												
-					},
-					error: function(error){
-						console.log("실패");
-						alert(error);
-					}
-				}); //end ajax
-			}); //end #payMe.click()
+			
 	}); //end document.ready()
 	
 	function boardInfoClick(gameBoardId,gameId){
