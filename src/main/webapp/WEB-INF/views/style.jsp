@@ -710,20 +710,17 @@ textarea{
 }
 .yourChat .chatInfo{
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content:flex-end;
 	flex-wrap:wrap;
 }
 .chatArea .yourChat{
 	width:100%;
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content:flex-end;
 }
 .chatArea .myChat{
 	width:100%;
 	display:flex;
-	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 	justify-content:flex-start;
 }
 textarea:focus{

@@ -1,10 +1,13 @@
 package project.spring.guteam.controller;
 
+import java.net.http.HttpHeaders;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +53,7 @@ public class GameBoardController {
 		int result = gameBoardService.create(vo);
 		if(result == 1) {
 			reAttr.addFlashAttribute("insert_result","success");
-			return "redirect:/gameBoard/list?gameId="+vo.getGameId();   
+			return "redirect:/gameBoard/list?gameId="+vo.getGameId();
 		}else {
 			return "redirect:/gameBoard/register?gameId="+vo.getGameId();
 		}

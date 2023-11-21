@@ -43,7 +43,7 @@ span {
 			</div>
 			<br>
 			<div>
-				<span>비번확인 :&nbsp;<input type="password" id="pwdCheck" name="password" placeholder="PW 확인" required /></span>
+				<span>비번확인 :&nbsp;<input type="password" id="pwdCheck" placeholder="PW 확인" required /></span>
 				<span id="checkPwdYes" style="display:none; color:#10af85">비밀 번호가 일치합니다.</span>
 				<span id="checkPwdNo" style="display:none; color:#fff">비밀 번호가 일치하지 않습니다.</span>
 			</div>

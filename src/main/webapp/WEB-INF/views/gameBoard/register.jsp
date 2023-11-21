@@ -53,7 +53,7 @@
 				if(text.match(deleted)){
 					text = text.replace(deleted,"");
 				}
-				this.val(text);
+				$(this).val(text);
 			}
 		}).on('keyup',function(){
 			$(this).val($(this).val().replace(deleted,""));
