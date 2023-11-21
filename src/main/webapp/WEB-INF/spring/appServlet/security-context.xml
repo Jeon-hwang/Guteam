@@ -21,7 +21,7 @@
 		<s:intercept-url pattern="/purchased/*" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/review/register" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/review/update" access="hasAnyRole('USER, ADMIN')" />
-		<s:intercept-url pattern="/wishList/myWishList" access="hasAnyRole('USER, ADMIN')" />
+		<s:intercept-url pattern="/wishList/myWishList" access="permitAll" />
 		<s:intercept-url pattern="/game/register" access="hasRole('ROLE_ADMIN')" />
 		<s:intercept-url pattern="/game/update" access="hasRole('ROLE_ADMIN')" />
 		<s:intercept-url pattern="/purchased/check" access="permitAll" />

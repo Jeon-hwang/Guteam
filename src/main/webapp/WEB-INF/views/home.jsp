@@ -23,6 +23,7 @@
 	<input type="hidden" id="alert" value="${alert }">
 	<div class="auth">
 	<sec:authorize access="isAnonymous()">
+			<a href="/guteam/wishList/myWishList"><button class="btn btn-light">임시 버튼</button></a>
 			<a href="/guteam/member/login?targetURL=" id="btnLogin"><button type="button" class="btn btn-light">로그인</button></a>
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">

@@ -20,10 +20,13 @@
 <title>위시리스트</title>
 </head>
 <body>
+<main class="wishListBody">
+<sec:authorize access="isAuthenticated()">
 <sec:authentication property="principal" var="principal"/>
-	<main class="wishListBody">
+	
 	<h2>${principal.username}님의 위시리스트</h2>
 	<input type="hidden" id="memberId" value=${principal.username }>
+</sec:authorize>
 	<div class="wish_list_area">
 		<ul class="wish_list">
 		</ul>

@@ -14,11 +14,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.tomcat.util.buf.UriUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.URIEditor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
