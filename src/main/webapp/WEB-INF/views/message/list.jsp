@@ -29,7 +29,7 @@
 }
 #m-board {
 	display:flex;
-	flex-wrap: wrap;
+	flex-direction: column;
 }
 #board-top {
 	display:flex;
@@ -42,25 +42,30 @@
 	height : 50px;
 }
 #main {
-	display:flex;
-	flex-flow: column wrap;
-	background-color : #666666;
-	width : 590px;
-	height : 350px;
+	display: flex;
+    flex-flow: column wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: flex-start;
+    background-color: #666666;
+    width: 590px;
+    height: 350px;
 }
 #board-btm {
-	align : center;
+	display: flex;
 }
 #board-btm li {
 	color: #e5e5dc;
 }
-ul {
+ul.left{
 	margin: 0px;
     padding-left : 10px;
     padding-right : 10px;
     padding-bottom : 0px;
    	list-style : none;
    	text-align : center;
+   	display: flex;
+   	flex-direction: column;
 }
 li {
 	display : inline-block;
@@ -108,13 +113,13 @@ td {
 <div id="full">
 <div id="leftMenu">
 <img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
-	<ul>
-	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
-	<br>
-	<br>
-	<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
-	<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
-	<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
+	<ul class="left">
+		<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
+		<br>
+		<br>
+		<li><a href="../message/list"><button class="btn btn-light">받은 쪽지함</button></a></li>
+		<li><a href="../message/sent"><button class="btn btn-light">보낸 쪽지함</button></a></li>
+		<li><a href="../message/msgBox"><button class="btn btn-light">쪽지 보관함</button></a></li>
 	</ul>
 </div>
 <div id="m-board">

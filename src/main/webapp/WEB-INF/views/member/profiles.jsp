@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html>
@@ -13,6 +14,12 @@
 body{
 	color:white;
 }
+.totalCash {
+	display: flex;
+}
+.titleP {
+	display: flex;
+}
 </style>
 </head>
 <body>
@@ -22,11 +29,16 @@ body{
 <input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
 <div class="info">
 <div id="detailInfo">
-
-<h2>${vo.memberId }님의 프로필</h2>
+<div class="titleP">
+	<h2>${vo.memberId }님의 프로필</h2>
+</div>
 	<div class="btn_group_detail">
 		<button class="btn btn-light" onclick ="popUp();">쪽지함</button>
-		<a href="addCash"><button class="btn btn-light">캐쉬 충전</button></a>
+		<form action="../payment/kakaoPay" method="post">
+		<sec:csrfInput/>
+		<input type="number" name="cash" placeholder="cash" required="required">
+		<button id="payMe"class="btn btn-light">캐쉬 충전</button>
+		</form>
 		<a href="../friend/list"><button class="btn btn-light">친구 목록</button></a>
 	</div>
 	<div class="btn_group_detail">
@@ -36,6 +48,9 @@ body{
 			<input type="hidden" name="memberId" id="memberId" value="${vo.memberId }">
 			<input type="submit" class="btn btn-light" value="회원 탈퇴">	
 		</form>
+	</div>
+	<div class="totalCash">
+		<span>나의 지갑 : ₩&nbsp;${vo.cash }</span>
 	</div>
 </div>
 		<hr>
@@ -68,6 +83,13 @@ body{
 		</div>
 	</div>
 <input type="hidden" id="udp_alert" value="${udp_alert }">
+<input type="hidden" id="charge_result" value="${charge_result}">
+<input type="hidden" id="amount" value="${info.amount.total }">
+<input type="hidden" id="tid" value="${info.tid }">
+<input type="hidden" id="approvedAt" value="${info.approved_at }">
+<span>
+<fmt:formatDate value="${info.approved_at }" pattern="MM-dd HH:mm:ss" />
+</span>
 </div>
 </div>
 
@@ -83,6 +105,14 @@ body{
 	};
 	
 	$(document).ready(function(){
+		var chargeResult = $('#charge_result').val();
+		if(chargeResult=='success'){
+			var amount = $('#amount').val()+'원';
+			var tid = $('#tid').val();
+			var approvedAt = $('#approvedAt').nextAll('span').text();
+			console.log(approvedAt);
+			alert(' 충전 성공 \n'+'일시 : '+approvedAt+'\n 충전 캐쉬 : ' + amount + '\n tid : ' + tid);
+		}
 		function dateFormat(date) {
 	        var month = date.getMonth() + 1;
 	        var day = date.getDate();
@@ -332,7 +362,9 @@ body{
 					$('#reviewPaging').html('');
 				}
 			}); // end showMyBoards.onclick()
-	});
+			
+			
+	}); //end document.ready()
 	
 	function boardInfoClick(gameBoardId,gameId){
 		location.href="/guteam/gameBoard/detail?gameBoardId=" + gameBoardId + "&page=1&gameId=" + gameId;

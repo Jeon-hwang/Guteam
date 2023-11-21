@@ -107,7 +107,9 @@
 .friendReq{
 	width: 110px; 
 	hieght: 140px; 
-	display: block;
+	display: flex;
+	flex-direction: row;
+    flex-wrap: wrap;
 }
 .nameList {
 	background-color: rgb(103, 112, 123);

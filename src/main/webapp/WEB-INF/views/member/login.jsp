@@ -56,8 +56,11 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		var result = $('#alert').val();
-			if(result == 'success'){
+		if(result == 'success'){
 			alert('가입 성공!');
+		}
+		else if(result == 'loginFail') {
+			alert('로그인에 실패하였습니다. 아이디와 비밀번호를 확인해 주세요.');
 		}
 
 	});

@@ -25,7 +25,7 @@ public interface MemberDAO {
 	int updateMem(MemberVO vo);
 	
 	// 캐쉬 충전
-	int updateCash(int cash,String memberId);
+	int updateCash(int amount,String memberId);
 	
 	// 회원 정보 삭제
 	int delete(String memberId);

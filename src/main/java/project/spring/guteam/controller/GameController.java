@@ -188,7 +188,7 @@ public class GameController {
 			pageMaker.setTotalCount(gameService.getTotalCount());
 			paging(pageMaker, criteria);
 			int interestingCount = gameService.getInterestKeywordCnt(memberId);
-			if(interestingCount>=3) { // 로그인 정보를 바탕으로 수집한 게임 데이터가 3 이상이면 해당 정렬을 실행 
+			if(interestingCount>=6) { // 로그인 정보를 바탕으로 수집한 게임 데이터가 3 이상이면 해당 정렬을 실행 
 				args = gameService.readInterestGames(memberId, criteria);
 			}else { // 정보가 부족하면 
 				if(orderBy==null||orderBy.equals("")) { // 게임 아이디 순서로 내림차순

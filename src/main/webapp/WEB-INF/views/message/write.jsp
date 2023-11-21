@@ -28,7 +28,7 @@
 }
 #m-board {
 	display:flex;
-	flex-wrap: wrap;
+	flex-direction: column;
 }
 #m-board h2{
 	margin: 0px;
@@ -46,11 +46,14 @@
 	height : 50px;
 }
 #main {
-	display:flex;
-	flex-flow: column wrap;
-	background-color : #666666;
-	width : 590px;
-	height : 350px;
+	display: flex;
+    flex-flow: column wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: flex-start;
+    background-color: #666666;
+    width: 590px;
+    height: 350px;
 }
 #board-btm {
 	display:flex;
@@ -77,13 +80,15 @@
 .sendInfo {
 	text-align : center;
 }
-ul {
+ul.left{
 	margin: 0px;
     padding-left : 10px;
     padding-right : 10px;
     padding-bottom : 0px;
    	list-style : none;
    	text-align : center;
+   	display: flex;
+   	flex-direction: column;
 }
 li {
 	display : inline-block;
@@ -127,7 +132,7 @@ td {
 <div id="full">
 <div id="leftMenu">
 <img class="logoImg" alt="guteam" src="${pageContext.request.contextPath}/image/logo80.png" >
-	<ul>
+	<ul class="left">
 	<li><a href="../message/write"><button class="btn btn-light">쪽지 쓰기</button></a></li>
 	<br>
 	<br>

@@ -63,11 +63,12 @@ public class MemberController {
 
 	// 로그인
 	@PostMapping("/login")
-	public String loginPOST(String memberId, String password, String targetURL, HttpServletRequest request) {
+	public String loginPOST(String memberId, String password, String targetURL, HttpServletRequest request, RedirectAttributes reAttr) {
 		logger.info("loginPOST() 호출");
 		if(memberService.read(memberId, "checking")==1) {
 			if(!passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {		
 				logger.info("로그인 실패 targetURL = " + targetURL);
+				reAttr.addFlashAttribute("alert", "loginFail");
 			}
 		}
 		return "redirect:/member/login?error=1&targetURL=" + targetURL ;

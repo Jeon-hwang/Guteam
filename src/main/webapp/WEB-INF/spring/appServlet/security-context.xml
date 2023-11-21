@@ -10,6 +10,7 @@
 		<s:intercept-url pattern="/sse/friendRequest/*" access="hasAnyRole('USER, ADMIN')"/>
 		<s:intercept-url pattern="/sse/connect/*" access="hasAnyRole('USER, ADMIN')"/>
 		<s:intercept-url pattern="/chat" access="hasAnyRole('USER, ADMIN')"/>
+		<s:intercept-url pattern="/payment/*" access="hasAnyRole('USER, ADMIN')"/>
 		<s:intercept-url pattern="/message/*" access="hasAnyRole('USER, ADMIN')" />
 		<s:intercept-url pattern="/friend/list" access="hasAnyRole('USER, ADMIN')"/>
 		<s:intercept-url pattern="/gameBoard/register" access="hasAnyRole('USER, ADMIN')" />
