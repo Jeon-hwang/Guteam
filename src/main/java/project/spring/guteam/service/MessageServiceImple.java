@@ -82,6 +82,7 @@ public class MessageServiceImple implements MessageService {
 	@Override
 	public List<MessageReceiveVO> readReceiveList(String receiveMemberId, PageCriteria criteria) {
 		logger.info("readReceiveList() 호출");
+		List<MessageReceiveVO> list = msgReceiveDAO.select(receiveMemberId, criteria);
 			return msgReceiveDAO.select(receiveMemberId, criteria);
 	}
 	

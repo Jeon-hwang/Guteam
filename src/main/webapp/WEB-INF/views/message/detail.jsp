@@ -177,9 +177,13 @@ td {
 	</c:if>
 	<c:if test="${vo.sendMemberId==principal.username }">
 		<input type="hidden" name="receiveMemberId" value="${vo.receiveMemberId }">
+		<input type="hidden" name="receiveMemberNickname" value="${vo.receiveMemberNickname }">		
 		<input type="hidden" name="messageTitle" value="${vo.messageTitle }">
 		<input type="hidden" name="messageContent" value="${vo.messageContent }">
 		<input type="submit" class="btn btn-light" style="float: right; margin-right: 10px;" value="다시보내기">
+	</c:if>
+	<c:if test="${vo.sendMemberId==principal.username && vo.receiveMemberId == sendMemberId}">
+		<input type="submit" class="btn btn-light" style="display:none; float: right; margin-right: 10px;" value="다시보내기">
 	</c:if>
 	</form>
 </div>

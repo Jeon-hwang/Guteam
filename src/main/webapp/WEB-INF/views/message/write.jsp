@@ -158,6 +158,7 @@ td {
 				<c:if test="${not empty receiveMemberId }">
 					<input type="hidden" name="receiveMemberId" id="receiverId" value="${receiveMemberId }">
 					${receiveMemberId }
+					<input type="hidden" name="receiveMemberNickname" id="receiveNickname" value="${receiveMemberNickname }">
 				</c:if>
 			</td>
 		</tr>

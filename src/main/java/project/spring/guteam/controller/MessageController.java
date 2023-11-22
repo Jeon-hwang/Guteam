@@ -55,6 +55,7 @@ public class MessageController {
 		
 		if(principal != null) {
 			vo = memberService.read(principal.getName());
+			
 			logger.info("vo? " + vo.toString());
 		}
 		model.addAttribute("vo", vo);
@@ -146,7 +147,7 @@ public class MessageController {
 			model.addAttribute("vo", rvo);
 			model.addAttribute("sendOrReceive","receive");
 		}else if(svo != null && svo.getSendMemberId().equals(principal.getName())){	
-			logger.info("보낸 쪽지의 상세 rvo = " + svo.toString());
+			logger.info("보낸 쪽지의 상세 svo = " + svo.toString());
 			model.addAttribute("vo", svo);
 			model.addAttribute("sendOrReceive","send");
 		}else {
@@ -158,11 +159,13 @@ public class MessageController {
 	
 	// 쪽지 보내기 화면
 	@GetMapping("/write")
-	public void writeGET(Model model, Principal principal, String receiveMemberId, String messageTitle, String messageContent) {
+	public void writeGET(Model model, Principal principal, String receiveMemberId, String receiveMemberNickname,
+						String messageTitle, String messageContent) {
 		logger.info("msg-writeGET() 호출");
 		MemberVO vo = memberService.read(principal.getName());
 		model.addAttribute("vo", vo);
 		model.addAttribute("receiveMemberId", receiveMemberId);
+		model.addAttribute("receiveMemberNickname", receiveMemberNickname);
 		model.addAttribute("messageContent", messageContent);
 		model.addAttribute("messageTitle",messageTitle);
 		logger.info("vo? " + vo.toString());
