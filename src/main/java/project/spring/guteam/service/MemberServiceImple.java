@@ -27,7 +27,7 @@ public class MemberServiceImple implements MemberService {
 		logger.info("create() 호출 성공 : vo = " + vo.toString());
 		return dao.insert(vo);
 	}
-
+	
 	@Override
 	public List<MemberVO> read() {
 		logger.info("read() 호출");

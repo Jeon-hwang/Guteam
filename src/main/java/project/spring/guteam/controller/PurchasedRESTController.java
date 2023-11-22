@@ -77,15 +77,15 @@ public class PurchasedRESTController {
 	}
 	
 	@GetMapping("/find/{memberId}")
-	public ResponseEntity<PurchasedVO> findPurchaseㅇ(@PathVariable("memberId") String memberId, int gameId){
+	public ResponseEntity<Integer> findPurchaseㅇ(@PathVariable("memberId") String memberId, int gameId){
 		logger.info("findPurchased 실행");
+		int result = 0;
 		PurchasedVO vo = service.find(memberId, gameId);
-		if(vo!=null) {
+		if(vo!=null) { // 해당 게임이 존재한다면?
 		logger.info("vo : "+vo.toString());
-		return new ResponseEntity<PurchasedVO>(vo, HttpStatus.OK);
-		}else {
-		return null;
-		}	
+			result=1;
+		}
+		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("findFriends/{memberId}")

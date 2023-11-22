@@ -86,6 +86,29 @@
 			var header = $("meta[name='_csrf_header']").attr("content");
 			totalPrice();
 			
+			function checkPurchasedGame(gameId){
+				var memberId = $('#memberId').val();
+				var result = 0;
+				$.ajax({
+					type : 'GET',
+					async: false, 
+					url :"../purchased/find/"+memberId+'?gameId='+gameId,
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(data){
+						console.log("게임 존재 판단 ");
+						console.log(data);
+						result=data;
+					}
+				    
+				}); //end ajax
+				return result;
+			}//end checkPurchasedGame
+			
 			$('#buyNow').click(function(){
 				var gameIdArr = $('.gameId');
 				var gameIds = [];
@@ -109,7 +132,7 @@
 					totalPrice = totalPrice-cash; // 일단은 보유금에서 깎지만 나중에 선택할 수 있게 한다.
 					alert('보유한 금액이 모자랍니다.');
 					requestPay(totalPrice);
-				}else{
+				}else{ 
 		
 				gameIdArr.each(function(){
 					gameIds.push($(this).val());
@@ -141,7 +164,23 @@
 								location.href = "myPurchased";
 							}else{
 								alert("잘못된 구매경로입니다.");
-								location.href = "myPurchased";
+								$.ajax({
+			    					type : 'PUT',
+			    					url : 'cashUpdate/'+memberId,
+			    					data : JSON.stringify(cash),
+			    					headers : {
+			    						'Content-Type' : 'application/json'
+			    					},
+			    					beforeSend : function(xhr) {
+			    				        xhr.setRequestHeader(header, token);
+			    				    },
+			    					success : function(result){
+			    						if(result==1){
+			    							location.href = "myPurchased"
+			    						}
+			    					}	
+			    				});//end ajax
+								;
 							}
 						}
 						
@@ -168,13 +207,14 @@
 	        function requestPay(totalPrice) {
 	        	var gameNameArr = $('.gameName');
 	        	var gameName = '';
-	        	
+	        
 	        	if(gameNameArr.length>1){
 	        		gameName = gameNameArr.first().text()+"외 "+(gameNameArr.length-1)+'개';
 	        	}else{
 	        		gameName = gameNameArr.text();
 	        	}
 	        	var price = 0;
+	        	
 	            IMP.request_pay({
 	                pg : 'kakaopay', // 결제수단은 카카오 페이만 
 	                merchant_uid: "GT"+makeMerchantUid, // 고유 결제 번호 중복되면 결제 안됨 

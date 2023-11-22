@@ -20,10 +20,13 @@
 <title>위시리스트</title>
 </head>
 <body>
+<main class="wishListBody">
+<sec:authorize access="isAuthenticated()">
 <sec:authentication property="principal" var="principal"/>
-	<main class="wishListBody">
+	
 	<h2>${principal.username}님의 위시리스트</h2>
 	<input type="hidden" id="memberId" value=${principal.username }>
+</sec:authorize>
 	<div class="wish_list_area">
 		<ul class="wish_list">
 		</ul>
@@ -44,10 +47,36 @@
 			var checkGameId = [];
 			var gameIdInput = $('#gameIdInput');
 			var totalPriceInput = $('#totalPriceInput');
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			
+			function checkPurchasedGame(gameId){
+				var memberId = $('#memberId').val();
+				var result = 0;
+				$.ajax({
+					type : 'GET',
+					async: false, 
+					url :"../purchased/find/"+memberId+'?gameId='+gameId,
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(data){
+						console.log("게임 존재 판단 ");
+						console.log(data);
+						result=data;
+					}
+				    
+				}); //end ajax
+				return result;
+			}//end checkPurchasedGame
+			
 			
 			function showWishList(){
 				var memberId = $('#memberId').val();
-				console.log(memberId);
+				console.log(memberId);	
 				var list = '';
 				var url = 'all/'+memberId;
 				$.getJSON(
@@ -56,6 +85,8 @@
 							console.log(data);
 							$(data).each(function(){
 								console.log(this);
+								console.log(checkPurchasedGame(this.gameId));
+								if(checkPurchasedGame(this.gameId)==0){
 								list +=	'<li class="wish_list_item">'
 									 + '<input type="hidden" class="gameId" value='+this.gameId+'>'
 									 + '<input type="checkbox" class="listCheck">'
@@ -70,6 +101,19 @@
 									 + '<button class="removeWishList">X</button></div>'
 									 + '</li>'
 									 + '<hr>';
+								}else{
+								list += '<li class="wish_list_item">'
+									 + '<input type="hidden" class="gameId" value='+this.gameId+'>'
+									 + '<input type="checkbox" class="listCheck" disabled>'
+									 + '<div class="gameImg"><img alt="'+this.gameName+'" width="100px" height="100px"'
+									 + 'src="../game/display?fileName='+this.gameImageName+'"></div>'
+									 + '<span id="gameName"><a href=../game/detail?gameId='+this.gameId+'>'+this.gameName+'</a></span>'
+									 + '<span class="ownGame">이미 소유한 게임입니다</span>'
+									 + '<div class="buy_or_remove">'
+									 + '<button class="removeWishList">X</button></div>'
+									 + '</li>'
+									 + '<hr>';
+								}
 							});//end data.each
 							
 							$('.wish_list').html(list);
@@ -79,11 +123,12 @@
 			$('.wish_list').on('click','.wish_list_item .buy_or_remove .removeWishList',function(){
 				var gameId = $(this).parent().prevAll('.gameId').val();
 				var memberId = $('#memberId').val();
-				var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
+				console.log('누구십니까');
+				console.log(memberId);
+				
 				$.ajax({
 					type : 'DELETE',
-					url : memberId,
+					url :'/guteam/wishList/'+memberId,
 					headers : {
 						'Content-Type' : 'application/json'
 					},

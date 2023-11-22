@@ -272,11 +272,11 @@
 				        xhr.setRequestHeader(header, token);
 				    },
 					data : commentContent,
-					success : function(result){
+					success : async function(result){
 						if(result ==1){
 							alert('수정 되었습니다!');
 						}
-						getAllComments(nowPage);
+						await getAllComments(nowPage);
 						console.log('btn_update ajax 끝남');
 					}
 				    

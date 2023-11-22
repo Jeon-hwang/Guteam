@@ -7,8 +7,9 @@ import project.spring.guteam.pageutil.PageCriteria;
 
 public interface WishListDAO {
 	int insert(WishListVO vo);
-	List<WishListVO> select(String memberId, PageCriteria criteria);
+	List<WishListVO> select(String memberId);
 	List<String> select(int gameId);
 	WishListVO select(String memberId, int gameId);
 	int delete(WishListVO vo);
+	int deleteAll(String memberId);
 }

@@ -23,6 +23,7 @@
 	<input type="hidden" id="alert" value="${alert }">
 	<div class="auth">
 	<sec:authorize access="isAnonymous()">
+			<a href="/guteam/wishList/myWishList"><button class="btn btn-light">위시리스트</button></a>
 			<a href="/guteam/member/login?targetURL=" id="btnLogin"><button type="button" class="btn btn-light">로그인</button></a>
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">
@@ -30,7 +31,7 @@
 			<button id="btnNotification" class="btn btn-light" onclick="connect();">알림받기</button>
 			<a href="/guteam/chat"><button type="button" class="btn btn-light">채팅방 입장</button></a>
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
-			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">나의 위시리스트</button></a>
+			<a href="/guteam/wishList/myWishList"><button type="button" class="btn btn-light">위시리스트</button></a>
 			<a href="/guteam/purchased/myPurchased"><button type="button" class="btn btn-light">나의 보유 게임</button></a>
 			<button id="recentlyViewed" type="button" class="btn btn-light">최근 조회한 게임</button>
 			<form action="/guteam/member/logout" method="post" style="display:flex;">

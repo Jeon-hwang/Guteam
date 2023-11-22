@@ -845,6 +845,10 @@ textarea:focus{
 .wish_list_area li .buy_or_remove{
 	width : 15%;
 }
-
-
+#alreadyOwnGame{
+	color : white;
+}
+.ownGame{
+	width : 35%;
+}
 </style>
