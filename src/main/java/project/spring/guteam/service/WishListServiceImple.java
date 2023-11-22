@@ -14,6 +14,7 @@ import project.spring.guteam.domain.WishListVO;
 import project.spring.guteam.pageutil.PageCriteria;
 import project.spring.guteam.persistence.DiscountDAO;
 import project.spring.guteam.persistence.GameDAO;
+import project.spring.guteam.persistence.PurchasedDAO;
 import project.spring.guteam.persistence.WishListDAO;
 
 @Service
@@ -29,6 +30,9 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 	@Autowired
 	DiscountDAO discountDAO;
 	
+	@Autowired
+	PurchasedDAO purchasedDAO;
+	
 	@Override
 	public int create(WishListVO vo) {
 		logger.info("create() 실행");
@@ -39,11 +43,21 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 		return result;
 	}
 	
+	@Override
+	public List<GameVO> read(List<Integer> gameIds) {
+		List<GameVO> list = new ArrayList<GameVO>();
+		for(int i=0;i<gameIds.size();i++) {
+			GameVO vo = gameDAO.select(gameIds.get(i));
+			list.add(vo);
+		}
+		return list;
+	}
+	
 	@Transactional(value= "transactionManager")
 	@Override
-	public List<GameVO> read(String memberId, PageCriteria criteria) {
+	public List<GameVO> read(String memberId) {
 		logger.info("read() 실행");
-		List<WishListVO> list = wishListDAO.select(memberId,criteria);
+		List<WishListVO> list = wishListDAO.select(memberId);
 		List<GameVO> gList = new ArrayList<GameVO>();
 		for(int i = 0 ; i<list.size();i++) {
 			int gameId = list.get(i).getGameId();
@@ -54,7 +68,6 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 			}
 			gList.add(vo);
 		}
-		
 		return gList; 
 	}
 
@@ -80,5 +93,14 @@ private static final Logger logger = LoggerFactory.getLogger(WishListServiceImpl
 		}
 		return vo;
 	}
+
+	@Override
+	public int delete(String memberId) {
+		logger.info("delete service 실행");
+		return wishListDAO.deleteAll(memberId);
+	}
+
+
+
 
 }

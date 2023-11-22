@@ -86,6 +86,29 @@
 			var header = $("meta[name='_csrf_header']").attr("content");
 			totalPrice();
 			
+			function checkPurchasedGame(gameId){
+				var memberId = $('#memberId').val();
+				var result = 0;
+				$.ajax({
+					type : 'GET',
+					async: false, 
+					url :"../purchased/find/"+memberId+'?gameId='+gameId,
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(data){
+						console.log("게임 존재 판단 ");
+						console.log(data);
+						result=data;
+					}
+				    
+				}); //end ajax
+				return result;
+			}//end checkPurchasedGame
+			
 			$('#buyNow').click(function(){
 				var gameIdArr = $('.gameId');
 				var gameIds = [];

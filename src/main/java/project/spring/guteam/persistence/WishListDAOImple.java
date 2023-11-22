@@ -28,13 +28,9 @@ public class WishListDAOImple implements WishListDAO {
 	}
 
 	@Override
-	public List<WishListVO> select(String memberId,PageCriteria criteria) {
-		logger.info("select 수행(memberId)");
-		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("memberId", memberId);
-		args.put("start", criteria.getStart());
-		args.put("end", criteria.getEnd());
-		return sqlSession.selectList(NAMESPACE+".select_by_memberId_paging",args);
+	public List<WishListVO> select(String memberId) {
+		logger.info("select 수행(memberId)");		
+		return sqlSession.selectList(NAMESPACE+".select_by_memberId",memberId);
 	}
 
 	@Override
@@ -56,6 +52,12 @@ public class WishListDAOImple implements WishListDAO {
 		args.put("memberId", memberId);
 		args.put("gameId", gameId);		
 		return sqlSession.selectOne(NAMESPACE+".find",args);
+	}
+
+	@Override
+	public int deleteAll(String memberId) {
+		logger.info("deleteAll 수행");
+		return sqlSession.delete(NAMESPACE+".delete_all_by_memberId",memberId);
 	}
 
 }

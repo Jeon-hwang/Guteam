@@ -86,7 +86,7 @@
 	<input type="hidden" id="updateResult" value="${update_result }">
 	
 	<br>
-	<sec:authorize access="isAuthenticated()">
+	
 	<div class="wish_list_btn_area">
 		<button  class="btn btn-light" id="addWishList">위시리스트에 추가</button>
 		<button  class="btn btn-light" id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
@@ -97,7 +97,7 @@
 			<input type="submit" class="btn btn-light" id="submit" value="게임 구매">
 		</form>
 	</div>
-	</sec:authorize>
+	
 	</div>
 	</div>
 	</section>
@@ -153,9 +153,7 @@
 					firstUrl,
 					function(data){
 						console.log(data);
-						if(data == null){
-					
-						 }else{ // 게임을 보유하고 있을경우
+						if(data == 1){ // 게임을 보유하고 있을경우
 						$('#alreadyOwnGame').css("display","inline");
 						$('#addWishList').css("display","none");
 						$('#buyown').css("display","none");
@@ -166,7 +164,7 @@
 					secondUrl,
 					function(gameData){
 						console.log(gameData);
-						if(gameData != null){
+						if(gameData == 1){
 							$('#addWishList').css("display","none");
 							$('#removeWishList').css("display","inline");
 						}
@@ -247,7 +245,10 @@
 		if(prevListUrl==''){
 			$('#prevListUrl').attr('href', 'list');
 		}
-	});// document
+		
+	
+		
+	});// end document
 	</script>
 	  </body>
 	  </html>

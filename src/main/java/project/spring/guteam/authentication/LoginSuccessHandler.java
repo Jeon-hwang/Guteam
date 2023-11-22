@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -17,6 +18,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+
+import project.spring.guteam.service.WishListService;
 
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	private static final Logger logger = LoggerFactory.getLogger(LoginSuccessHandler.class);
@@ -37,8 +40,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			Authentication authentication) throws IOException, ServletException {
 //		logger.info("로그인 성공 핸들러 호출");
 		// 로그인 성공시
+		
 		SavedRequest savedRequest = requestCache.getRequest(request, response); // 캐시를 가져옴
 		HttpSession session = request.getSession(false); // false => request에 세션이 없으면 null을 반환
+		
+		
         if(session!=null) {
 //        	logger.info("로그인 실패 기록 삭제");
         	session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);

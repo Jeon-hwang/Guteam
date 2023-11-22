@@ -10,12 +10,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{memberId},#{gameId})
 	</insert>
 	
-	<select id="select_by_memberId_paging" resultType="WishListVO">
-		select ${memberId},${gameId}
-		from (select rownum rn, a.* from(
-				select * from ${wish_list} where ${memberId}=#{memberId} order by ${gameId}
-				)a
-			 )b	where rn between #{start} and #{end}
+	<select id="select_by_memberId" resultType="WishListVO">
+		select * from ${wish_list} where ${memberId}=#{memberId}		
 	</select>
 	
 	<select id="select_by_gameId" resultType="String">
@@ -31,5 +27,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="delete">
 		delete from ${wish_list}
 		where ${memberId}=#{memberId} and ${gameId}=#{gameId}
+	</delete>
+	
+	<delete id="delete_all_by_memberId">
+		delete from ${wish_list}
+		where ${memberId}=#{memberId}
 	</delete>
 </mapper>
