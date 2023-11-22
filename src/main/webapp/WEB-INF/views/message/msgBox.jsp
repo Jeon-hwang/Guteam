@@ -140,8 +140,8 @@ td {
 	<tbody>
 	<c:forEach var="svo" items="${list }">
 	<tr>
-		<td class="td" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${svo.messageId }"></label></td>
-		<td style="padding-left : 10px;"><a href="../message/detail?messageId=${svo.messageId}&page=${pageMaker.criteria.page}">${svo.fromTo}${svo.title }</a></td>
+		<td class="td" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" class="here" id="msgIdChk" value="${svo.messageId }"></label></td>
+		<td style="padding-left : 10px;" ><a href="../message/detail?messageId=${svo.messageId}&page=${pageMaker.criteria.page}"  class="wtf" >${svo.fromTo}${svo.title }</a></td>
 		<td class="td" style="white-space: nowrap;">${svo.fromToNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${svo.dateCreated }" pattern="MM-dd HH:mm:ss" /></td>
 	</tr>
@@ -178,7 +178,7 @@ td {
 	// 체크박스 전체 선택 (전체 선택 후 체크 하나 해제시 전체박스 체크해제)
 	$(function(){
 		var rowCnt = $('input[name="msgIdChk"]').length;
-		console.log(rowCnt);
+		console.log("게시물 수 : " +rowCnt);
 		
 		$('#allChk').click(function(){
 			var chkArr = $('input[name="msgIdChk"]');
@@ -190,34 +190,66 @@ td {
 		});
 		
 		$('input[name="msgIdChk"]').click(function(){
+			var sndRcv = $(this).closest('tr').find('.wtf').text();
+			    console.log(sndRcv);
 			if($('input[name="msgIdChk"]:checked').length == rowCnt) {
 				$('input[name="allChk"]')[0].checked = true;
-				console.log($('input[name="allChk"]')[0].checked);
+				console.log("전부체크" + $('input[name="allChk"]')[0].checked);
 			} else {
 				$('input[name="allChk"]')[0].checked = false;
-				console.log($('input[name="allChk"]')[0].checked);
+				console.log("체크" + $('input[name="allChk"]')[0].checked);
 			}
 		});
 	});
 	
+	
+	
 	// 쪽지 삭제 기능
-	function deleteMsg() {
+	function deleteMsg() { 
 		var msgArr = [];
-		var sendRecv = [];
-		var msgList = $('input[name="msgIdChk"]:checked');
-		var sendRecv = 'receive';
-		console.log(msgList); // jQuery.fn.init(8)
+		var sendRecv= "";
+		var msgList = $('input[name="msgIdChk"]:checked'); // 체크한 게시물
+		var sndRcv = msgList.closest('tr').find('.wtf').text();
+	    console.log(sndRcv);
+		var str = sndRcv.substr(1,3);
+		console.log(str);
+		
+		if(str === '보낸'){
+			console.log("보낸 아님?");
+			sendRecv='send';
+		}else if(str === '받은') {
+			console.log("받은 아님?");
+			sendRecv='receive';
+		}else {
+			console.log("왜 못 받는거야 ㅡㅡ");
+		}
+		console.log(sendRecv);
+		/* var links = document.querySelectorAll('a.wtf');
+		console.log(links);
+		
+		links.forEach(link => {
+			  var fromToValue = link.getAttribute('data-from-to');
+			  console.log("fromToValue = " + fromToValue);
+			  
+			}); */
+			
+		console.log(msgList.val());// jQuery.fn.init(8)
 		for(var i=0; i<msgList.length; i++) {
 			if(msgList[i].checked){
+				console.log("msgList[i].value="+msgList[i].value);
 				msgArr.push(msgList[i].value);
 			}
 		}
 		if(msgArr.length == 0) {
 			alert("삭제할 쪽지를 선택해 주세요.");
 		} else {
-			console.log(msgArr);
+			console.log("msgArr="+msgArr);
 			var reAlr = confirm("선택한 쪽지를 삭제합니다.");
-			
+			if (reAlr) {
+			    console.log("삭제되었습니다.");
+			} else {
+			    console.log("삭제가 취소되었습니다.");
+			}
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			
