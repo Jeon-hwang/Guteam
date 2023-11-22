@@ -211,7 +211,7 @@ td {
 		var msgList = $('input[name="msgIdChk"]:checked'); // 체크한 게시물
 		var sndRcv = msgList.closest('tr').find('.wtf').text();
 	    console.log(sndRcv);
-		var str = sndRcv.substr(1,3);
+		var str = sndRcv.substr(1,2); // *substring과 substr의 인덱스 조건 차이 분명히 알기
 		console.log(str);
 		
 		if(str === '보낸'){
@@ -266,7 +266,7 @@ td {
 					console.log(result);
 					if(result == 1) {
 						alert("삭제가 완료되었습니다.")
-						location.href='list';
+						location.href='msgBox';
 					}else{
 						alert("삭제 실패");
 					}
