@@ -49,7 +49,7 @@
 	display: flex;
     flex-flow: column wrap;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: flex-end;
     align-content: flex-start;
     background-color: #666666;
     width: 590px;

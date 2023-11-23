@@ -157,7 +157,7 @@ td {
 				</c:if>
 				<c:if test="${not empty receiveMemberId }">
 					<input type="hidden" name="receiveMemberId" id="receiverId" value="${receiveMemberId }">
-					${receiveMemberId }
+					${receiveMemberNickname }
 					<input type="hidden" name="receiveMemberNickname" id="receiveNickname" value="${receiveMemberNickname }">
 				</c:if>
 			</td>
@@ -171,7 +171,8 @@ td {
 		<tr>
 			<td class="sendInfo">내 용</td>
 			<td>
-			<textarea name="messageContent" id="messageContent" >${messageContent }</textarea><!-- 밑부분 70px -->				</td>
+			<textarea name="messageContent" id="messageContent" >${messageContent }</textarea><!-- 밑부분 70px -->
+			</td>
 		</tr>
 		
 	</tbody>
@@ -192,20 +193,34 @@ td {
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	function sendRequest(){
-		var memberId = $('#receiverNickname').val();
-		var sendMemberId = $('#sendMemberId').val();
-		console.log('ajax요청');
-		$.ajax({
-			type:'post',
-			url:'/guteam/sse/message/'+memberId,
-			beforeSend : function(xhr) {
-		        xhr.setRequestHeader(header, token);
-		    },
-			data:{'sendMemberId':sendMemberId},
-			success:function(result){
-				console.log('메시지를 보냈습니다.');
-			}
-		});
+		
+		var msgContent = $('#messageContent').val();
+		var length = new Blob([msgContent]).size;
+		console.log(length);
+		
+		if(length > 1000) {
+			alert("보낼 쪽지 글자수가 초과되었습니다.");
+			return false;
+		} else {
+			var memberId = $('#receiverNickname').val();
+			var sendMemberId = $('#sendMemberId').val();
+			
+			console.log('ajax요청');
+			$.ajax({
+				type:'post',
+				url:'/guteam/sse/message/'+memberId,
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				data:{'sendMemberId':sendMemberId},
+				success:function(result){
+					console.log('메시지를 보냈습니다.');
+				}
+			}); //end ajax()
+			return true;
+		}
+		
+		
 	}
 </script>
 </body>
