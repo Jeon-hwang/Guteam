@@ -254,10 +254,10 @@ input::-webkit-inner-spin-button {
 						console.log(data);
 						if(data.list.length!=0){
 							list = '<thead>'
-							+'<tr><th whidth="60px">no</th>'
-							+'<th width="150px">제목</th>'
-							+'<th width="150px">내용</th>'
-							+'<th width="200px">작성일</th></thead><tbody>';
+							+'<tr><th whidth="10.7%">no</th>'
+							+'<th width="26.78%">제목</th>'
+							+'<th width="26.78%">내용</th>'
+							+'<th width="35.7%">작성일</th></thead><tbody>';
 						}
 						$(data.list).each(function(){
 							console.log(this);
@@ -324,11 +324,11 @@ input::-webkit-inner-spin-button {
 						console.log(data);
 						if(data.list.length!=0){
 							list = '<thead>'
-							+'<tr><th whidth="60px">no</th>'
-							+'<th width="150px">제목</th>'
-							+'<th width="150px">내용</th>'
-							+'<th width="150px">평점</th>'
-							+'<th width="200px">작성일</th></thead><tbody>';
+							+'<tr><th whidth="8.45%">no</th>'
+							+'<th width="21.12%">제목</th>'
+							+'<th width="21.12%">내용</th>'
+							+'<th width="21.12%">평점</th>'
+							+'<th width="28.169%">작성일</th></thead><tbody>';
 						}
 						$(data.list).each(function(){
 							console.log(this);
@@ -341,7 +341,6 @@ input::-webkit-inner-spin-button {
 							if(content.length>20){
 								content = content.substr(0, 20) + '…';
 							}
-							
 							list += '<tr class="reviewInfo" onclick="reviewInfoClick('+this.reviewId+','+this.gameId+')">'
 								 +  '<td>' + this.reviewId+'</td>'
 								 +  '<td>'+title+'</td>'
