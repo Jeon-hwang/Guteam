@@ -31,7 +31,7 @@
 	<c:if test="${principal.username==vo.memberId }">
 	<a href="update?gameBoardId=${vo.gameBoardId }&page=${page}&gameId=${gameId}">
 	<button class="btn btn-light" >게시글 수정하기</button></a>
-	<form class="inline-form" id="updateDeleted" action="updateDeleted" method="post">
+	<form class="inline-form" onsubmit="return confirm('정말로 삭제하시겠습니까?');" action="updateDeleted" method="post">
 		<input type="hidden" name="gameBoardId" value="${vo.gameBoardId }">
 		<sec:csrfInput/>
 		<input type="submit" class="btn btn-light"  value="게시글 삭제하기">
@@ -57,14 +57,6 @@
 			if (updateResult == 'success') {
 				alert('게시글 정보 수정 성공');
 			}
-			$('#updateDeleted').on('submit',function(e){
-				if(confirm('정말로 삭제하시겠습니까?')){
-					return true;
-				}else{
-					alert('취소하였습니다.');
-					return false;
-				}
-			});
 		});// document
 	</script>
 </body>

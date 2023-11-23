@@ -297,14 +297,15 @@
 						}
 					}
 				});
+				$('#dialog').parent().on('mouseleave',function(e){
+					$('#dialog').parent().attr('style','display:none;');
+				});
 				mpY = mpY - $('#dialog').parent().height();
 				$('.ui-widget-header').attr('style','background:#6c757d;');
 				$('.ui-widget-content').attr('style','background:#d0e0f9;');
 				$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
-					}
-				});
-				$('#dialog').parent().on('mouseleave',function(e){
-					$('#dialog').parent().attr('style','display:none;');
+
+				}
 				});
 				
 			});
@@ -312,7 +313,6 @@
 				var mpX = event.pageX;
 				var mpY = event.pageY;
 				var friendId = $(this).nextAll('.friendId').val();
-				console.log(friendId);
 				$.ajax({
 					type : 'post',
 					url : '/guteam/member/'+friendId,
@@ -334,17 +334,17 @@
 						}
 					}
 				});
+				$('#dialog').parent().on('mouseleave',function(e){
+					$('#dialog').parent().attr('style','display:none;');
+				});
 				mpY = mpY - $('#dialog').parent().height();
 				$('.ui-widget-header').attr('style','background:#6c757d;');
 				$('.ui-widget-content').attr('style','background:#d0e0f9;');
 				$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
-					}
+				}
 				});
-				$('#dialog').parent().on('mouseleave',function(e){
-					$('#dialog').parent().attr('style','display:none;');
-				});
+				
 			}); //end .nameList.click()\
-			
 
 		});
 		function sendRequest() {
