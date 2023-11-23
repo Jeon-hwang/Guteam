@@ -57,7 +57,7 @@
 					<td class="order"><input type="hidden" class="gameId" value="${vo.gameId }">${status.count }</td>
 					<td><img alt="${vo.gameName}" width="100px" height="100px"
 						src = "../game/display?fileName=${vo.gameImageName }"></td>
-					<td class="gameName">${vo.gameName }</td>
+					<td class="gameName">${vo.gameName }<span class="gameOwn"></span></td>
 					<td class="price">${vo.price }</td>
 					<td>${vo.genre }</td>
 				</tr>
@@ -70,8 +70,8 @@
 		전체 가격 : <span id="totalPrice">0</span>
 	</div>
 	<div id='btnArea'>
-	<button id="buyNow">구매 확정</button>
-	<button id="cancle">취소</button>
+	<button id="buyNow" class="btn btn-light">구매 확정</button>
+	<button id="cancle" class="btn btn-light">취소</button>
 	</div>
 	<input type="hidden" id="memberId" value=${principal.username }>
 	<input type="hidden" id="memberEmail" value=${memberVO.email }>
@@ -85,28 +85,36 @@
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			totalPrice();
-			
-			function checkPurchasedGame(gameId){
-				var memberId = $('#memberId').val();
-				var result = 0;
-				$.ajax({
-					type : 'GET',
-					async: false, 
-					url :"../purchased/find/"+memberId+'?gameId='+gameId,
-					headers : {
-						'Content-Type' : 'application/json'
-					},
-					beforeSend : function(xhr) {
-				        xhr.setRequestHeader(header, token);
-				    },
-					success : function(data){
-						console.log("게임 존재 판단 ");
-						console.log(data);
-						result=data;
-					}
-				    
-				}); //end ajax
-				return result;
+			checkPurchasedGame();
+			function checkPurchasedGame(){
+				var gameIds = $('.gameId');
+				var list= '';
+				$(gameIds).each(function(){
+					console.log($(this).val());
+					var gameOwnSpan = $(this).parent().nextAll('.gameName').children('.gameOwn');
+					console.log($(gameOwnSpan).prop('tagName'));
+					gameId = $(this).val();
+
+					$.ajax({
+						type : 'GET',
+						url :"find/"+memberId+'?gameId='+gameId,
+						headers : {
+							'Content-Type' : 'application/json'
+						},
+						beforeSend : function(xhr) {
+					        xhr.setRequestHeader(header, token);
+					    },
+						success : function(data){
+							if(data == 1){
+								console.log(data);
+								console.log('됐나여');
+								list = '<div style="font-size: 70%; color:red ;word-break:break-all;">이미 가지고 있는 게임입니다</div>';
+								$(gameOwnSpan).html(list);
+								$('#buyNow').attr('disabled',true);
+							}
+						} 
+					}); //end ajax
+				});// end each;
 			}//end checkPurchasedGame
 			
 			$('#buyNow').click(function(){
@@ -116,9 +124,7 @@
 				
 				 // 현재 보유금이지만 나중에는 내가 직접 정할수 있게끔
 				var totalPrice = parseInt($('#totalPrice').text());
-				
-				var testEmail = $('#memberEmail').val();
-				console.log(testEmail);
+			
 				/*var gameNameArr = $('.gameName');
 	        	var gameName = '';
 	        	if(gameNameArr.length>1){
@@ -195,7 +201,7 @@
 			// --------------------------------- 결제시스템 -------------------------------
 	        var IMP = window.IMP; 
 	        IMP.init("imp54014882");  // 스토어 id 입력
-	      
+	      	
 	        var today = new Date();   
 	        var hours = today.getHours(); // 시
 	        var minutes = today.getMinutes();  // 분

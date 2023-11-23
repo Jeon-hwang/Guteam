@@ -114,7 +114,6 @@
 					success : function(result){
 						console.log(result);
 						if(result==1){
-							alert('댓글 입력 성공');
 							getAllComments(1);
 							$('#commentCnt').text(parseInt($('#commentCnt').text())+1);
 							$('#commentContent').val("");
@@ -273,11 +272,7 @@
 				    },
 					data : commentContent,
 					success : async function(result){
-						if(result ==1){
-							alert('수정 되었습니다!');
-						}
 						await getAllComments(nowPage);
-						console.log('btn_update ajax 끝남');
 					}
 				    
 				});//end ajax
@@ -286,34 +281,34 @@
 			}); // end btn_update.on 
 			
 			$('#allComments').on('click','.comment_item .delete_comment',function(){ // 댓글 삭제
+				var deleteConfirm = confirm('댓글을 삭제하시겠습니까?');
 				var commentId = $(this).parent().prevAll('#commentId').val();
 				var gameBoardId =  $('#gameBoardId').val();
 				var nowPage = parseInt($('#allComments').children(".comment_paging").children("em").text());
 				var replyCnt = parseInt($(this).nextAll('.reply_view_btn').children().text());
 				console.log(commentCnt);
 				console.log('댓글Id 및 게시판판 id: '+commentId+','+gameBoardId);
-				$.ajax({
-					type : 'DELETE',
-					url : '../boardComment/comments/'+commentId,
-					headers : {
-						'Content-Type' : 'application/json'
-					},
-					data : gameBoardId,
-					beforeSend : function(xhr) {
-				        xhr.setRequestHeader(header, token);
-				    },
-					success : function(result){
-						if(result==1){
-							alert('삭제 되었습니다!');
-							getAllComments(nowPage);
-						}else if(result==2){
-							alert('완전 삭제');
-							$('#commentCnt').text(parseInt($('#commentCnt').text())-1-replyCnt);
-							getAllComments(nowPage);
-						}
-					}	
-				});//end ajax
-				
+				if(deleteConfirm){
+					$.ajax({
+						type : 'DELETE',
+						url : '../boardComment/comments/'+commentId,
+						headers : {
+							'Content-Type' : 'application/json'
+						},
+						data : gameBoardId,
+						beforeSend : function(xhr) {
+					        xhr.setRequestHeader(header, token);
+					    },
+						success : function(result){
+							if(result==1){
+								getAllComments(nowPage);
+							}else if(result==2){
+								$('#commentCnt').text(parseInt($('#commentCnt').text())-1-replyCnt);
+								getAllComments(nowPage);
+							}
+						}	
+					});//end ajax
+				}
 			});//end delete.comment.on
 			
 			$('#allComments').on('click','.comment_item .reply_btn_area .reply_view_btn',function(){
@@ -488,6 +483,7 @@
 			});// end update_reply
 			
 			$('#allComments').on('click','.comment_item .reply_item .delete_reply',function(){
+				var deleteConfirm = confirm('댓글을 삭제하시겠습니까?');
 				var commentContent = $(this).parent().parent().parent().prev().children('.comment_info').children('span').text();
 				console.log("삭제 내용?"+commentContent);
 				var commentId = $(this).parent().parent().parent().prev().children("#commentId").val();
@@ -496,32 +492,31 @@
 				var replyId = $(this).prevAll('div').children('#replyId').val();
 				var replyViewBtnClick = $(this).parent().parent().parent().prev().children(".reply_btn_area").children(".reply_view_btn");
 				console.log('대댓글Id : '+replyId);
-				
-				$.ajax({
-					type : 'DELETE',
-					url : '../boardComment/replies/'+replyId+'?commentId='+commentId,
-					headers : {
-						'Content-Type' : 'application/json'
-					},
-					data : commentContent,
-					beforeSend : function(xhr) {
-				        xhr.setRequestHeader(header, token);
-				    },
-					success : function(result){
-						if(result==1){
-							alert('삭제 되었습니다!');
-							$(replyViewBtnClick).trigger("click");
-						}else if(result==2){
-							alert('완전 삭제');
-							commentCnt = ($('#commentCnt').text()-commentCnt)-1;
-							console.log($('#commentCnt').text());
-							console.log(commentCnt);
-							$('#commentCnt').text(commentCnt);
-							getAllComments(1);
-							
-						}
-					}	
-				});//end ajax
+				if(deleteConfirm){
+					$.ajax({
+						type : 'DELETE',
+						url : '../boardComment/replies/'+replyId+'?commentId='+commentId,
+						headers : {
+							'Content-Type' : 'application/json'
+						},
+						data : commentContent,
+						beforeSend : function(xhr) {
+					        xhr.setRequestHeader(header, token);
+					    },
+						success : function(result){
+							if(result==1){
+								$(replyViewBtnClick).trigger("click");
+							}else if(result==2){
+								commentCnt = ($('#commentCnt').text()-commentCnt)-1;
+								console.log($('#commentCnt').text());
+								console.log(commentCnt);
+								$('#commentCnt').text(commentCnt);
+								getAllComments(1);
+								
+							}
+						}	
+					});//end ajax
+				}
 			});//end delete_reply
 			
 			$('#allComments').on('click','.comment_item .fold_replies_area',function(){
