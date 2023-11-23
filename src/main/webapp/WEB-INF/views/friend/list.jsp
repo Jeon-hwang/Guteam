@@ -60,7 +60,6 @@
 	padding: 3px 3px 3px 3px;
 }
 .subTitle{
-	margin-left: 40px; 
 	color: #fff;
 }
 .hrArea hr {
@@ -80,29 +79,24 @@
 }
 .div_flex{
 	display: flex;
+	flex-direction: row-reverse;
 }
 .frdListArea {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	width: 100%;
-	margin-left:40px;
 	color: #fff;
 }
-
 .friend {
 	margin: 5px;
 	margin-right: 15px;
 	display: flex;
-	flex-flow: column wrap;
-	align-content: flex-start;
-	justify-content: space-between;
-	align-items: flex-end;
-	height: 100px;
+	
 }
-
-.profileImg {
-	display: flex;
+.friend .frdImg {
+	width: 80px; 
+	hieght: 80px; 
 }
 .friendReq{
 	width: 110px; 
@@ -116,6 +110,7 @@
 	border-color: rgba(103, 112, 123, 0.2);
 	color: lightgray;
 	width: 150px;
+	height: 25px;
 	max-width: 148px; 
 	border-radius: 6px;
 	margin: 5px 5px; 
@@ -123,14 +118,27 @@
 	flex-wrap: wrap;
 	cursor:pointer;
 }
-.margin_left{
-	
-}
 #toNickname {
 	width: 100px;
 	rows: 5;
 	cols: 3;
 	wrap: soft;
+}
+#wrap {
+    display: flex;
+}
+#myFrdBox {
+	width: 240px;
+	display: flex;
+	flex-direction: column;
+}
+#frdMain {
+	width: 70%;
+	margin-left: 10px;
+}
+.titleP {
+	display: flex;
+	color:white;
 }
 </style>
 <meta charset="UTF-8">
@@ -145,12 +153,43 @@
 <div id="dialog" title="친구 정보창"></div>
 <section>
 <div id="wrap">
-	<div class="infoArea">
-		<div class="div_flex">
-			<input type="image" class="profileImg" alt="${vo.memberId }"
+<div id="myFrdBox">
+	<input type="image" class="profileImg" alt="${vo.memberId }"
 				src="display?fileName=${vo.memberImageName }" readonly />
-			<h2>나의 친구 목록</h2>
-			<form action="../friend/addFriend" method="post"
+	<div class="titleP">
+		<h2>${vo.nickname }의 친구 목록</h2>
+	</div>
+<div class="hrArea">
+<hr>
+</div>
+	<h5 class="subTitle">친구들</h5>
+	<div class="frdListArea" >
+		<table>
+		<tbody>
+		<c:forEach var="fvo" items="${friendList }">
+			<div class="friend">
+				<input type="image" class="frdImg" alt="${fvo.memberId }" src="display?fileName=${fvo.memberImageName }" readonly />
+				<div class="nameList">
+					<span>
+					${fvo.nickname }
+					</span>
+				</div>
+				<form action="../friend/delete" method="post">
+				<sec:csrfInput />
+				<input type="hidden" name="friendId" class="friendId"
+					value="${fvo.memberId }">
+				<button type="submit" class="btn btn-light" id="btnDelete${fvo.memberId }"
+					formaction="../friend/delete" style="display:none;">친구삭제</button>
+				</form>
+			</div>
+		</c:forEach>
+		</tbody>
+		</table>
+	</div><!-- class="frdListArea" -->
+</div>
+<div id="frdMain">
+	<div class="div_flex">
+		<form action="../friend/addFriend" method="post"
 				onsubmit="sendRequest();">
 				<sec:csrfInput />
 				<input type="hidden" name="sendMemberId" id="sendMemberId"
@@ -158,15 +197,12 @@
 				<br> <input type="text" name="receiveMemberId"
 					id="receiveMemberId" placeholder="ID 입력" required> <input
 					class="btn btn-light" type="submit" value="친구 추가">
-			</form>
-		</div>
+		</form>
 	</div>
-<div class="info">
-<div>
-<div class="hrArea">
+	<div class="hrArea">
 	<hr>
-</div>
-<div class="infoArea">
+	</div>
+	<div class="infoArea">
 	<h3>보낸 요청</h3>
 	<table>
 		<tbody>
@@ -188,12 +224,11 @@
 		</c:forEach>
 		</tbody>
 	</table>
-</div>
-<br>
+	</div>
 <div class="hrArea">
-	<hr>
+<hr>
 </div>
-<div class="infoArea">
+	<div class="infoArea">
 	<h3>받은 요청</h3>
 	<table>
 		<tbody>
@@ -218,153 +253,136 @@
 		</tbody>
 	</table>
 </div>
-<div class="hrArea">
-	<hr>
-</div>
-	<h3 class="subTitle">친구 목록</h3>
-	<div class="frdListArea" >
-		<table>
-			<tbody>
-			<c:forEach var="fvo" items="${friendList }">
-				<div class="friend">
-					<input type="image" class="profileImg" alt="${fvo.memberId }"
-					src="display?fileName=${fvo.memberImageName }" readonly />
-						<div class="nameList">
-						<span>
-						${fvo.nickname }
-						</span>
-						</div>
-					<form action="../friend/delete" method="post">
-					<sec:csrfInput />
-					<input type="hidden" name="friendId" class="friendId"
-						value="${fvo.memberId }">
-					<button type="submit" class="btn btn-light" id="btnDelete${fvo.memberId }"
-						formaction="../friend/delete" style="display:none;">친구삭제</button>
-					</form>
-				</div>
-			</c:forEach>
-			</tbody>
-		</table>
-	</div>
-</div>
+</div><!-- id="frdMain" -->
+</div><!-- id="wrap" -->
+
+<div class="info">
 <input type="hidden" id="fnd_alert" value="${fnd_alert }">
-</div>
 </div>
 </section>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 
+<script type="text/javascript">
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
 
-
-	<script type="text/javascript">
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-
-		$(document).ready(function() {
-			var result = $('#fnd_alert').val();
-			if (result == 'friend') {
-				alert('이미 친구인 유저입니다.')
-			} else if (result == 'alreadyFrd') {
-				alert('먼저 친구 요청 받아 친구가 되었습니다.')
-			} else if (result == 'dupl') {
-				alert('이미 친구 요청된 아이디입니다.');
-			} else if (result == 'success') {
-				alert('친구요청이 완료되었습니다.');
-			} else if (result == 'fail') {
-				alert('없는 아이디입니다.');
-			}
-			$('.profileImg').on('click',function(event){
-				var mpX = event.pageX;
-				var mpY = event.pageY;
-				var friendId = $(this).nextAll('.friendId').val();
-				$.ajax({
-					type : 'post',
-					url : '/guteam/member/'+friendId,
-					beforeSend : function(xhr) {
-						xhr.setRequestHeader(header, token);
-					},
-					success : function(data) {
-						var info = '<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
-						+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
-						+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
-				$( "#dialog" ).html(info);
-				$( "#dialog" ).dialog({
-					resizable : false,
-					buttons:{
-						"친구삭제":function(){
-							$('#btnDelete'+data.memberId).click();
-						},"닫기":function(){
-							$(this).dialog("close");
-						}
-					}
-				});
-				mpY = mpY - $('#dialog').parent().height();
-				$('.ui-widget-header').attr('style','background:#6c757d;');
-				$('.ui-widget-content').attr('style','background:#d0e0f9;');
-				$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
-					}
-				});
-				$('#dialog').parent().on('mouseleave',function(e){
-					$('#dialog').parent().attr('style','display:none;');
-				});
-				
-			});
-			$('.nameList').on('click',function(event){
-				var mpX = event.pageX;
-				var mpY = event.pageY;
-				var friendId = $(this).nextAll('.friendId').val();
-				console.log(friendId);
-				$.ajax({
-					type : 'post',
-					url : '/guteam/member/'+friendId,
-					beforeSend : function(xhr) {
-						xhr.setRequestHeader(header, token);
-					},
-					success : function(data) {
-						var info = '<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
-						+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
-						+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
-				$( "#dialog" ).html(info);
-				$( "#dialog" ).dialog({
-					resizable : false,
-					buttons:{
-						"친구삭제":function(){
-							$('#btnDelete'+data.memberId).click();
-						},"닫기":function(){
-							$(this).dialog("close");
-						}
-					}
-				});
-				mpY = mpY - $('#dialog').parent().height();
-				$('.ui-widget-header').attr('style','background:#6c757d;');
-				$('.ui-widget-content').attr('style','background:#d0e0f9;');
-				$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
-					}
-				});
-				$('#dialog').parent().on('mouseleave',function(e){
-					$('#dialog').parent().attr('style','display:none;');
-				});
-			}); //end .nameList.click()\
-			
-
-		});
-		function sendRequest() {
-			var memberId = $('#receiveMemberId').val();
-			var sendMemberId = $('#sendMemberId').val();
-			console.log('ajax요청');
+	$(document).ready(function() {
+		var result = $('#fnd_alert').val();
+		if (result == 'friend') {
+			alert('이미 친구인 유저입니다.')
+		} else if (result == 'alreadyFrd') {
+			alert('먼저 친구 요청 받아 친구가 되었습니다.')
+		} else if (result == 'dupl') {
+			alert('이미 친구 요청된 아이디입니다.');
+		} else if (result == 'success') {
+			alert('친구요청이 완료되었습니다.');
+		} else if (result == 'fail') {
+			alert('없는 아이디입니다.');
+		}
+		$('.frdImg').on('click',function(event){
+			var mpX = event.pageX;
+			var mpY = event.pageY;
+			var friendId = $(this).nextAll('.friendId').val();
 			$.ajax({
 				type : 'post',
-				url : '/guteam/sse/friendRequest/' + memberId,
+				url : '/guteam/member/'+friendId,
 				beforeSend : function(xhr) {
 					xhr.setRequestHeader(header, token);
 				},
-				data : {
-					'sendMemberId' : sendMemberId
-				},
-				success : function(result) {
-					console.log('친구 요청을 보냈습니다.');
+				success : function(data) {
+					var info = '<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
+					+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
+					+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
+					$( "#dialog" ).html(info);
+					$( "#dialog" ).dialog({
+						resizable : false,
+						buttons:{
+							"친구삭제":function(){
+								$('#btnDelete'+data.memberId).click();
+							},"닫기":function(){
+								$(this).dialog("close");
+							}
+						}
+					});
+					$('#dialog').parent().on('mouseleave',function(e){
+						console.log("커서 나갔다~ 창 꺼져야 정상");
+						$('#dialog').parent().attr('style','display:none;');
+					});
+					mpY = mpY - $('#dialog').parent().height();
+					$('.ui-widget-header').attr('style','background:#6c757d;');
+					$('.ui-widget-content').attr('style','background:#d0e0f9;');
+					$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
 				}
-			});
-		}
-	</script>
+			}); //end ajax()
+			
+			
+		}); //end '.frdImg'.on('click')
+		
+		$('.nameList').on('click',function(event){
+			var mpX = event.pageX;
+			var mpY = event.pageY;
+			var friendId = $(this).nextAll('.friendId').val();
+			console.log(friendId);
+			$.ajax({
+				type : 'post',
+				url : '/guteam/member/'+friendId,
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				success : function(data) {
+					var info = '<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
+					+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
+					+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
+					$( "#dialog" ).html(info);
+					$( "#dialog" ).dialog({
+						resizable : false,
+						buttons:{
+							"친구삭제":function(){
+								$('#btnDelete'+data.memberId).click();
+							},"닫기":function(){
+								$(this).dialog("close");
+							}
+						}
+					});
+					mpY = mpY - $('#dialog').parent().height();
+					$('.ui-widget-header').attr('style','background:#6c757d;');
+					$('.ui-widget-content').attr('style','background:#d0e0f9;');
+					$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
+				}
+			}); //end ajax()
+			
+			/* 
+				*** 시점 문제 - ajax 안에 함수가 완료된 후 ajax가 끝나고 난 뒤에 이 함수가 실행
+							그래서 $('#dialog').parent()의 위치는 <body>가 되버려 첫 모달 실행시 body를 나가야 꺼지게 되버림
+				***  해결방안 - ajax 안에 $('#dialog').parent().on('mouseleave',function(e) 함수를 담아 ajax를 완료시켜서
+							$('#dialog').parent()가 모달창이 되게 해야함
+			*/
+			/* $('#dialog').parent().on('mouseleave',function(e){  *** 시점 문제 - ajax 안에 함수가 완료된 후 ajax가 끝나고 난 뒤에 이 함수가 실행
+				$('#dialog').parent().attr('style','display:none;');			그래서 $('#dialog').parent()의 위치는 <body>가 되버려 첫 모달 실행시 body를 나가야
+			}); */
+		}); //end .nameList.click()\
+		
+
+	}); //end document.ready()
+	
+	function sendRequest() {
+		var memberId = $('#receiveMemberId').val();
+		var sendMemberId = $('#sendMemberId').val();
+		console.log('ajax요청');
+		$.ajax({
+			type : 'post',
+			url : '/guteam/sse/friendRequest/' + memberId,
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			data : {
+				'sendMemberId' : sendMemberId
+			},
+			success : function(result) {
+				console.log('친구 요청을 보냈습니다.');
+			}
+		});
+	}
+</script>
 </body>
 </html>

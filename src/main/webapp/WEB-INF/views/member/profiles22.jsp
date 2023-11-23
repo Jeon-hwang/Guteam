@@ -20,94 +20,68 @@ body{
 .titleP {
 	display: flex;
 }
-
-#wrap {
-    display: flex;
-}
-#myPrfBox {
-	width: 240px;
-	display: flex;
-	flex-direction: column;
-}
-.btn_group_detail {
-    flex-direction: column;
-}
-.btn_group_detail .btn {
-    margin-left: 0px;
-}
-#prfMain {
-	width: 70%;
-	margin-left: 10px;
-}
-#boardsAndReviewsArea {
-	flex-direction: column;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
 </style>
 </head>
 <body>
 <section>
 <div id="wrap">
-<div id="myPrfBox">
-	<input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
-	<div class="titleP">
-		<h2>${vo.memberId }님의 프로필</h2>
-	</div>
-	<div class="totalCash">
-		<span>나의 지갑 : ₩&nbsp;${vo.cash }</span>
-	</div>
+<div class="detail-box">
+<input type="image" class="profileImg" alt="${vo.memberId }" src="display?fileName=${vo.memberImageName }" readonly />
+<div class="info">
+<div id="detailInfo">
+<div class="titleP">
+	<h2>${vo.memberId }님의 프로필</h2>
+</div>
 	<div class="btn_group_detail">
+		<button class="btn btn-light" onclick ="popUp();">쪽지함</button>
 		<form action="../payment/kakaoPay" method="post">
 		<sec:csrfInput/>
-		<input type="number" name="cash" style="width:130px;margin-left: 5px; margin-bottom: 10px;" placeholder="cash" required="required">
+		<input type="number" name="cash" placeholder="cash" required="required">
 		<button id="payMe"class="btn btn-light">캐쉬 충전</button>
 		</form>
-		<button class="btn btn-light" onclick="popUp();">쪽지함</button>
-		<button class="btn btn-light" onclick="frdList();">친구 목록</button>
+		<a href="../friend/list"><button class="btn btn-light">친구 목록</button></a>
 	</div>
 	<div class="btn_group_detail">
-			<button class="btn btn-light" onclick="update();">회원 수정</button>
 		<form action="delete" method="post" onsubmit="return confirm('정말로 탈퇴하시겠습니까?');">
 		<sec:csrfInput/>
+			<a href="update"><button type="button" class="btn btn-light">회원 수정</button></a>
 			<input type="hidden" name="memberId" id="memberId" value="${vo.memberId }">
 			<input type="submit" class="btn btn-light" value="회원 탈퇴">	
 		</form>
 	</div>
-</div><!-- id="myPrfBox" -->
-<div id="prfMain">
-	<hr>
-	<div id="boardsAndReviewsArea" style="display:flex;">
-	<div id="boardsArea" style="display:inline-block;">
-		<button id="showMyBoards" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 게시글 보기</button>
-		<input type="hidden" id="boardPage" value="1">
-		<div id="myBoards">
-		<table id="myBoardList" style="width:100%;" class="table table-secondary table-hover"></table>
-		<div id="boardPaging" class="paging" style="display:inline-block; text-align:left;"></div>
+	<div class="totalCash">
+		<span>나의 지갑 : ₩&nbsp;${vo.cash }</span>
+	</div>
+</div>
+		<hr>
+		<div id="boardsAndReviewsArea" style="display:flex;">
+		<div id="boardsArea" style="display:inline-block;margin-right:40px;">
+			<button id="showMyBoards" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 게시글 보기</button>
+			<input type="hidden" id="boardPage" value="1">
+			<div id="myBoards">
+			<table id="myBoardList" style="width:560px;" class="table table-secondary table-hover"></table>
+			<div id="boardPaging" class="paging" style="display:inline-block; text-align:left;"></div>
+			</div>
 		</div>
-	</div>
-	<hr>
-	<div id="reviewsArea" style="display:inline-block;">
-		<button id="showMyReviews" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 리뷰 보기</button>
-		<input type="hidden" id="reviewPage" value="1">
-		<div id="myReviews">
-		<table id="myReviewList" style="width:100%;" class="table table-secondary table-hover"></table>
-		<div id="reviewPaging" class="paging" style="display:inline-block; text-align:left;"></div>
-		</div>
-	</div>
-	</div>
-	<hr>
-	<div id="commentsArea">
-		<button id="showMyComments" class="btn btn-light">내가 쓴 댓글 보기</button>
-		<button id="closeMyComments" class="btn btn-light" style="display : none">접기</button>
-		<div id="myComments">
-			<ul id="myCommentsList"></ul>
-		</div>
-	</div>
-</div><!-- id="prfMain" -->
 
+		<div id="reviewsArea" style="display:inline-block;">
+			<button id="showMyReviews" class="btn btn-light" style="margin-bottom:10px;">내가 쓴 리뷰 보기</button>
+			<input type="hidden" id="reviewPage" value="1">
+			<div id="myReviews">
+			<table id="myReviewList" style="width:600px;" class="table table-secondary table-hover"></table>
+			<div id="reviewPaging" class="paging" style="display:inline-block; text-align:left;"></div>
+			</div>
+		</div>
+		</div>
+		<hr>
+		<div id="commentsArea">
+			<button id="showMyComments" class="btn btn-light">내가 쓴 댓글 보기</button>
+			<button id="closeMyComments" class="btn btn-light" style="display : none">접기</button>
+			<div id="myComments">
+				<ul id="myCommentsList"></ul>
+			</div>
+		</div>
+	</div>
 <input type="hidden" id="udp_alert" value="${udp_alert }">
 <input type="hidden" id="charge_result" value="${charge_result}">
 <input type="hidden" id="amount" value="${info.amount.total }">
@@ -117,9 +91,10 @@ input::-webkit-inner-spin-button {
 <fmt:formatDate value="${info.approved_at }" pattern="MM-dd HH:mm:ss" />
 </span>
 </div>
+</div>
 
 </section>
-<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 	function popUp(){
 	   popupWin =  window.open('../message/list', '쪽지함', 'resizable');		
@@ -128,12 +103,6 @@ input::-webkit-inner-spin-button {
 		   popupWin.resizeTo(750, 500);
 		})
 	};
-	function frdList(){
-		location.href = "../friend/list";
-	}
-	function update(){
-		location.href = "update";
-	}
 	
 	$(document).ready(function(){
 		var chargeResult = $('#charge_result').val();

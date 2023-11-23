@@ -70,6 +70,8 @@ public class MemberController {
 				logger.info("로그인 실패 targetURL = " + targetURL);
 				reAttr.addFlashAttribute("alert", "loginFail");
 			}
+		} else {
+			reAttr.addFlashAttribute("alert", "loginFail");
 		}
 		return "redirect:/member/login?error=1&targetURL=" + targetURL ;
 	} //end loginPOST()

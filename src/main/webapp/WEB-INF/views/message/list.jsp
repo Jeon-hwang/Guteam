@@ -216,8 +216,7 @@ td {
 		} else {
 			console.log(msgArr);
 			var reAlr = confirm("선택한 쪽지를 삭제합니다.");
-			
-			if(reAlr == true){
+			if(reAlr){
 				var token = $("meta[name='_csrf']").attr("content");
 				var header = $("meta[name='_csrf_header']").attr("content");
 				
@@ -240,9 +239,10 @@ td {
 						}
 					}
 				}); //end .ajax(삭제)
-				
-			} else if(reAlr == false){
+				return true;
+			} else {
 				console.log("삭제 취소");
+				return false;
 			}
 		}
 	} //end deleteMsg()
