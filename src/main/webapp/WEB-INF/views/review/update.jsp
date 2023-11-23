@@ -65,6 +65,17 @@
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var rating = $('#rating').val();
+			for(var id = 1; id <= rating/2 ; id ++){
+				$('#'+id+'').attr('class','bi bi-star-fill');
+			}
+			for(var id = 5 ; id> rating/2 ; id--){
+				$('#'+id+'').attr('class','bi bi-star');
+			}
+			if(rating%2==1){
+				var halfStar = (parseInt(rating)+1)/2;
+				$('#'+halfStar+'').attr('class','bi bi-star-half');
+			}
 			$('.bi').on('click',function(e){
 				var x = e.clientX-e.currentTarget.offsetLeft;
 				if(x<8){

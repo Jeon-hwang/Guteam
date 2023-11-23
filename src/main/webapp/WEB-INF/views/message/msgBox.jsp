@@ -211,7 +211,7 @@ td {
 		var msgList = $('input[name="msgIdChk"]:checked'); // 체크한 게시물
 		var sndRcv = msgList.closest('tr').find('.wtf').text();
 	    console.log(sndRcv);
-		var str = sndRcv.substr(1,3);
+		var str = sndRcv.substr(1,2);
 		console.log(str);
 		
 		if(str === '보낸'){

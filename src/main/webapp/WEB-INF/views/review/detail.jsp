@@ -46,7 +46,7 @@
 <div class="btn_group_detail">
 <c:if test="${principal.username==reviewVO.memberId }">
 <a href="update?reviewId=${reviewVO.reviewId }&page=${page}"><button class="btn btn-light" >수정</button></a>
-<form class="inline-form" action="delete" method="post">
+<form class="inline-form" action="delete" id="delete" method="post">
 <sec:csrfInput/>
 <input type="hidden" name="reviewId" value="${reviewVO.reviewId }">
 <input type="hidden" name="gameId" value="${gameVO.gameId }">
@@ -71,6 +71,14 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
+		$('#delete').on('submit',function(){
+			if(confirm('정말로 삭제하시겠습니까?')){
+				return true;
+			}else{
+				alert('취소하였습니다.');
+				return false;
+			}
+		});
 		var updateResult = $('#updateResult').val();
 		if(updateResult=='success'){
 			alert('리뷰 수정 성공');

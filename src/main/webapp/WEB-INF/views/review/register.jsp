@@ -43,7 +43,7 @@
 <p>${principal.username }</p>
 </div>
 <input type="text" name="reviewTitle" autofocus required><br>
-<input id="rating" type="hidden" min="1" max="10" name="rating">
+<input id="rating" type="hidden" min="1" max="10" name="rating" value="1">
 <div class="caption">
 <p><i id="1" class="bi bi-star-half"></i>
 <i id="2" class="bi bi-star"></i>
