@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,9 +23,13 @@ public class WishListController {
 	
 	@Autowired
 	private WishListService wishListService;
-
+	
+	
 	@GetMapping("/myWishList")
-	public void wishListGET(Principal principal,HttpServletRequest request) {
+	public void wishListGET(Principal principal,HttpServletRequest request,Model model) {
+	
+		String referer = request.getHeader("Referer");
+		logger.info(referer);
 		
 		if(principal!=null) {			
 		String memberId = principal.getName();
@@ -44,11 +49,11 @@ public class WishListController {
 						wishListService.create(vo);						
 					}
 				}
-			//	response.addCookie(cookie);
 			}// end cookie(wishListGameId)
 		}
 		}
 		logger.info("호출");
+		model.addAttribute("referer",referer);
 	}
 
 }

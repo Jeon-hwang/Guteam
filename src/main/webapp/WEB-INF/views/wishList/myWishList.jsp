@@ -37,8 +37,9 @@
 		<form action="../purchased/purchaseWindow" method="get">
 		<sec:csrfInput/>
 		<input type="hidden" id="gameIdInput" name="gameIds" value="">
-		<input type="submit" id="submit" value="선택한 게임 구매" disabled>
+		<input type="submit" id="submit" class="btn btn-light" value="선택한 게임 구매" disabled>
 		</form>
+		<a href=${referer }><button id="beforePage" class="btn btn-light">이전</button></a>
 	</div>
 	</main>
 	<script type="text/javascript">
