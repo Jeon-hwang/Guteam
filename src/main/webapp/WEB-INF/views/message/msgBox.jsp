@@ -131,8 +131,8 @@ td {
 	<thead>
 	<tr>
 		<th style="width: 5%"><label class="chkbox"><input type="checkbox" name="allChk" id="allChk"></label></th>
-		<th style="width: 55%">제목</th>
-		<th style="width: 24%">보낸/받은 사람</th>
+		<th style="width: 53%">제목</th>
+		<th style="width: 26%">보낸/받은 사람</th>
 		<th style="width: 16%; font-size: 10pt">보낸/받은 날짜</th>
 	</tr>
 	</thead>
@@ -140,7 +140,7 @@ td {
 	<tbody>
 	<c:forEach var="svo" items="${list }">
 	<tr>
-		<td class="td" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" class="here" id="msgIdChk" value="${svo.messageId }"></label></td>
+		<td class="td" style="width: 30px"><label class="chkbox"><input type="checkbox" name="msgIdChk" id="msgIdChk" value="${svo.messageId }"></label></td>
 		<td style="padding-left : 10px;" ><a href="../message/detail?messageId=${svo.messageId}&page=${pageMaker.criteria.page}"  class="wtf" >${svo.fromTo}${svo.title }</a></td>
 		<td class="td" style="white-space: nowrap;">${svo.fromToNickname }</td>
 		<td style="font-size: 10pt;"><fmt:formatDate value="${svo.dateCreated }" pattern="MM-dd HH:mm:ss" /></td>

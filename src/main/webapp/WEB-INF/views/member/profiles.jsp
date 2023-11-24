@@ -14,13 +14,25 @@
 body{
 	color:white;
 }
+input[type="number"]{
+	background:#d0e0f9;
+}
+input[type="number"]:focus{
+	background:#0dcaf0;
+}
 .totalCash {
 	display: flex;
+	justify-content: flex-end;
+    margin-right: 5px;
 }
 .titleP {
 	display: flex;
 }
-
+#inputCash {
+	width:130px;
+	margin-left: 5px;
+	margin-bottom: 10px;
+}
 #wrap {
     display: flex;
 }
@@ -57,12 +69,13 @@ input::-webkit-inner-spin-button {
 		<h2>${vo.memberId }님의 프로필</h2>
 	</div>
 	<div class="totalCash">
-		<span>나의 지갑 : ₩&nbsp;${vo.cash }</span>
+		<input type="hidden" id="wallet" value="${vo.cash }">
+		나의 지갑 : ₩&nbsp;<span id="myCash"></span>
 	</div>
 	<div class="btn_group_detail">
 		<form action="../payment/kakaoPay" method="post">
 		<sec:csrfInput/>
-		<input type="number" name="cash" style="width:130px;margin-left: 5px; margin-bottom: 10px;" placeholder="cash" required="required">
+		<input type="number" id="inputCash" name="cash" placeholder="cash" required="required">
 		<button id="payMe"class="btn btn-light">캐쉬 충전</button>
 		</form>
 		<button class="btn btn-light" onclick="popUp();">쪽지함</button>
@@ -135,7 +148,12 @@ input::-webkit-inner-spin-button {
 		location.href = "update";
 	}
 	
+	// 원 단위 표시
+	var currency = new Intl.NumberFormat('ko-KR').format($('#wallet').val());
+	$('#myCash').text(currency);
+	
 	$(document).ready(function(){
+		// 충전 완료 알림창
 		var chargeResult = $('#charge_result').val();
 		if(chargeResult=='success'){
 			var amount = $('#amount').val()+'원';
@@ -144,6 +162,7 @@ input::-webkit-inner-spin-button {
 			console.log(approvedAt);
 			alert(' 충전 성공 \n'+'일시 : '+approvedAt+'\n 충전 캐쉬 : ' + amount + '\n tid : ' + tid);
 		}
+		
 		function dateFormat(date) {
 	        var month = date.getMonth() + 1;
 	        var day = date.getDate();

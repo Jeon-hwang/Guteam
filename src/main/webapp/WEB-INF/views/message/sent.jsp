@@ -131,8 +131,8 @@ td {
 	<thead>
 	<tr>
 		<th style="width: 5%"><label class="chkbox"><input type="checkbox" name="allChk" id="allChk"></label></th>
-		<th style="width: 55%">제목</th>
-		<th style="width: 24%">받은 사람</th>
+		<th style="width: 53%">제목</th>
+		<th style="width: 26%">받은 사람</th>
 		<th style="width: 16%">보낸 날짜</th>
 	</tr>
 	</thead>

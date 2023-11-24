@@ -25,12 +25,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 select * from ${member} where ${memberId} = #{memberId}
 	 </select>
 	 
-	 <select id="check_member_id" resultType="Integer">
-	 select count(*) from ${member} where ${memberId} = #{memberId}
+	 <select id="select_by_nickname" resultType="String">
+	 select ${memberId} from ${member} where ${nickname} = #{nickname}
 	 </select>
 	 
-	 <select id="check_nickname" resultType="Integer">
-	 select count(*) from ${member} where ${nickname} = #{nickname}
+	 <select id="select_by_member_id_to_nick" resultType="String">
+	 select ${nickname} from ${member} where ${memberId} = #{memberId}
 	 </select>
 	 
 	 <update id="update_member">
@@ -48,12 +48,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 delete from ${member} where ${memberId} = #{memberId}
 	 </delete>
 	 
-	 <select id="select_by_nickname" resultType="String">
-	 	select ${memberId} from ${member} where ${nickname} = #{nickname}
-	 </select>
-	 
-	 <select id="select_by_member_id_to_nick" resultType="String">
-	 	select ${nickname} from ${member} where ${memberId} = #{memberId}
-	 </select>
 	 
 </mapper>

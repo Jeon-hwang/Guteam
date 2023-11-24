@@ -43,13 +43,19 @@ public class MemberServiceImple implements MemberService {
 	@Override
 	public int read(String memberId, String checking) {
 		logger.info("read -chkId() 호출 memberId = " + memberId);
-		return dao.checkId(memberId);
+		if(dao.selectByMemberId(memberId)==null) {
+			return 0;
+		}
+		return 1;
 	}
 	
 	@Override
 	public int read(String nickname, int checking) {
 		logger.info("read-chkNick() 호출 nickname = " + nickname);
-		return dao.checkNickname(nickname);
+		if(dao.selectByNickname(nickname)==null) {
+			return 0;
+		}
+		return 1;
 	}
 	
 	

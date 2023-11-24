@@ -15,11 +15,11 @@ public interface MemberDAO {
 	// 회원 정보 조회 (ID)
 	MemberVO select(String memberId);
 	
-	// 회원 id 중복 체크
-	int checkId(String memberId);
-	
-	// 회원 닉넴 중복 체크
-	int checkNickname(String nickname);
+	/*
+	 * // 회원 id 중복 체크 int checkId(String memberId);
+	 * 
+	 * // 회원 닉넴 중복 체크 int checkNickname(String nickname);
+	 */
 	
 	// 회원 정보 수정
 	int updateMem(MemberVO vo);
