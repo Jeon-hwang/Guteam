@@ -90,7 +90,7 @@ ul.left{
    	display: flex;
    	flex-direction: column;
 }
-li {
+ul.left li {
 	display : inline-block;
 }
 .btn {
@@ -123,6 +123,20 @@ td {
 	border: solid 1px #bcc2e5;	
 	
 }
+#receiverNickname {
+	width:200px;
+}
+#searchIds {
+	position: absolute;
+  	list-style:none;
+  	z-index: 1000; /* 다른 요소 위에 표시되도록 z-index 설정 */
+  	background-color: white; /* 배경색 설정 */
+  	border: 1px solid #ccc; /* 테두리 설정 */
+  	padding: 5px;
+  	display: none; /* 초기에는 숨김 상태로 설정 */
+  	color: black;
+
+}
 </style>
 <meta charset="UTF-8">
 <title>GUTEAM : ${vo.memberId }님의 쪽지함</title>
@@ -154,6 +168,7 @@ td {
 			<td>
 				<c:if test="${empty receiveMemberId }">
 					<input type="text" name="receiveMemberNickname" id="receiverNickname" required>				
+					<ul id="searchIds"></ul>
 				</c:if>
 				<c:if test="${not empty receiveMemberId }">
 					<input type="hidden" name="receiveMemberId" id="receiverId" value="${receiveMemberId }">
@@ -190,38 +205,90 @@ td {
 </div>
 
 <script type="text/javascript">
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	function sendRequest(){
+	$(document).ready(function(){
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
 		
-		var msgContent = $('#messageContent').val();
-		var length = new Blob([msgContent]).size;
-		console.log(length);
-		
-		if(length > 1000) {
-			alert("보낼 쪽지 글자수가 초과되었습니다.");
-			return false;
-		} else {
-			var memberId = $('#receiverNickname').val();
-			var sendMemberId = $('#sendMemberId').val();
+		function sendRequest(){
+			var msgContent = $('#messageContent').val();
+			var length = new Blob([msgContent]).size;
+			console.log(length);
 			
-			console.log('ajax요청');
-			$.ajax({
-				type:'post',
-				url:'/guteam/sse/message/'+memberId,
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(header, token);
-			    },
-				data:{'sendMemberId':sendMemberId},
-				success:function(result){
-					console.log('메시지를 보냈습니다.');
-				}
-			}); //end ajax()
-			return true;
+			if(length > 1000) {
+				alert("보낼 쪽지 글자수가 초과되었습니다.");
+				return false;
+			} else {
+				var memberId = $('#receiverNickname').val();
+				var sendMemberId = $('#sendMemberId').val();
+				
+				console.log('ajax요청');
+				$.ajax({
+					type:'post',
+					url:'/guteam/sse/message/'+memberId,
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					data:{'sendMemberId':sendMemberId},
+					success:function(result){
+						console.log('메시지를 보냈습니다.');
+					}
+				}); //end ajax()
+				return true;
+			}
+		} //end sendRequest()
+		
+		// debounce(지연) 함수 정의 - 빠른 속도로 닉네임 검색시, 중복값을 출력해서 사용
+		function debounce(func, wait, immediate) {
+		    var timeout;
+		    return function executedFunction() {
+		        var context = this;
+		        var args = arguments;
+		        var later = function() {
+		            timeout = null;
+		            if (!immediate) func.apply(context, args);
+		        };
+		        var callNow = immediate && !timeout;
+		        clearTimeout(timeout);
+		        timeout = setTimeout(later, wait);
+		        if (callNow) func.apply(context, args);
+		    };
 		}
 		
+		// 보낼 ID 검색
+		$('#receiverNickname').on('keyup', debounce(function(){
+			var keyword = $(this).val();
+			console.log("search() keyword="+keyword);
+			
+			$('#searchIds').empty();// 입력시마다 결과값 비움
+			
+			if(keyword == '') {
+				$('#searchIds').html('');
+				$('#searchIds').css('display', 'none');
+			}else {
+				
+				var url = '../message/search/'+keyword;
+				$.getJSON(
+					url,
+					function(data) {
+						console.log(data);
+						if(data=='') {
+							$('#searchIds').css('display', 'none');
+						}else {
+							$(data).each(function(){
+								$('#searchIds').css('display', 'block');
+								var searchIds = $('#searchIds').html();
+								searchIds = '<li class="memNick">'+this+'</li>';
+								$('#searchIds').append(searchIds);
+							}); //end .each()
+						}
+					}
+				); //end getJSON()
+				
+			}
+		}, 200)); //end .on'keyup'
 		
-	}
+		
+	}); //end document
 </script>
 </body>
 </html>

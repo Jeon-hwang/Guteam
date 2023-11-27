@@ -25,6 +25,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 select * from ${member} where ${memberId} = #{memberId}
 	 </select>
 	 
+	 <select id="selectAll_by_nickname" resultType="String">
+	 select ${nickname} ||' ('||${memberId} || ')' as keyword from ${member} where lower(${memberId}) like '%'||lower(#{keyword})||'%'
+	 AND ${isAdmin} not like 'Y'
+	 union
+	 select ${nickname} ||' ('||${memberId} || ')' as keyword from ${member} where lower(${nickname}) like '%'||lower(#{keyword})||'%'
+	 AND ${isAdmin} not like 'Y'
+	 </select>
+	 
 	 <select id="select_by_nickname" resultType="String">
 	 select ${memberId} from ${member} where ${nickname} = #{nickname}
 	 </select>

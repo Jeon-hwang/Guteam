@@ -34,6 +34,12 @@ public class MemberDAOImple implements MemberDAO {
 	}
 
 	@Override
+	public List<String> selectList(String keyword) {
+		logger.info("selectList() 호출");
+		return sqlSession.selectList(NAMESPACE+".selectAll_by_nickname", keyword);
+	}
+	
+	@Override
 	public MemberVO select(String memberId) {
 		logger.info("select() 호출 memberId = " + memberId); 
 		return sqlSession.selectOne(NAMESPACE + ".select_by_member_id", memberId);
@@ -74,6 +80,8 @@ public class MemberDAOImple implements MemberDAO {
 		logger.info("delete() 호출 memberId = " + memberId);
 		return sqlSession.delete(NAMESPACE + ".delete", memberId);
 	}
+
+	
 
 	
 

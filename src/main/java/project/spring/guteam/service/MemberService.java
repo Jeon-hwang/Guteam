@@ -9,6 +9,7 @@ public interface MemberService {
 	
 	int create(MemberVO vo);
 	List<MemberVO> read();
+	List<String> search(String keyword);
 	MemberVO read(String memberId);
 	int read(String memberId, String checking);
 	int read(String nickname, int checking);

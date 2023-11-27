@@ -35,6 +35,12 @@ public class MemberServiceImple implements MemberService {
 	}
 
 	@Override
+	public List<String> search(String keyword) {
+		logger.info("search() 호출");
+		return dao.selectList(keyword);
+	}
+	
+	@Override
 	public MemberVO read(String memberId) {
 		logger.info("read() 호출 memberId = " + memberId);
 		return dao.select(memberId);
@@ -81,6 +87,7 @@ public class MemberServiceImple implements MemberService {
 		logger.info("update() 호출 amount = "+amount+" memberId= "+memberId);
 		return dao.updateCash(amount, memberId);
 	}
+
 
 	
 
