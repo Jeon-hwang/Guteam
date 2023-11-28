@@ -253,6 +253,8 @@ td {
 		        if (callNow) func.apply(context, args);
 		    };
 		}
+
+		
 		
 		// 보낼 ID 검색
 		$('#receiverNickname').on('keyup', debounce(function(){
@@ -265,7 +267,6 @@ td {
 				$('#searchIds').html('');
 				$('#searchIds').css('display', 'none');
 			}else {
-				
 				var url = '../message/search/'+keyword;
 				$.getJSON(
 					url,
@@ -277,8 +278,9 @@ td {
 							$(data).each(function(){
 								$('#searchIds').css('display', 'block');
 								var searchIds = $('#searchIds').html();
-								searchIds = '<li class="memNick">'+this+'</li>';
-								$('#searchIds').append(searchIds);
+								searchIds += '<li class="memNick" onclick="selectNick(this);">'+this+'</li>';
+								console.log(this);
+								$('#searchIds').html(searchIds);
 							}); //end .each()
 						}
 					}
@@ -289,6 +291,14 @@ td {
 		
 		
 	}); //end document
+	
+	function selectNick(clkMe) {
+		var clk = $(clkMe).text();
+		console.log("id 클릭 성공?"+clk);
+		var nick = clk.split(' ')[0];
+		$('#receiverNickname').val(nick);
+		
+	}
 </script>
 </body>
 </html>
