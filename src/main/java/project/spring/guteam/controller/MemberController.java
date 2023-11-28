@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -255,4 +257,10 @@ public class MemberController {
     	return new ResponseEntity<MemberVO>(vo,HttpStatus.OK);
     }
 
+    @GetMapping("/findNickname")
+    public ResponseEntity<List<MemberVO>> findNickName(String keyword){
+    	logger.info("컨트롤러 findNickname 호출 keyword="+keyword);
+    	List<MemberVO> list = memberService.findNickname(keyword);
+    	return new ResponseEntity<List<MemberVO>>(list,HttpStatus.OK);
+    }
 } // end MemberController

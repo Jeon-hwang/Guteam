@@ -810,7 +810,7 @@ textarea:focus{
 }
 
 #myGameArea #games .game_item img{
-	width : 30%;
+	width : 20%;
 }
 #myGameArea #games .game_item a,#myGameArea #games .game_item div{
 	width : 25%;
@@ -850,5 +850,26 @@ textarea:focus{
 }
 .ownGame{
 	width : 35%;
+}
+
+#commentProfileArea{
+	position:absolute;
+	background-color : #1b2838;
+	display : inline-block;
+	width : 200px;
+	height : 150px;
+	bottom : 10px;
+	left : 50px;
+	overflow-y: scroll; 
+}
+.memberList{
+	display : flex;
+	margin-bottom: 1px;
+}
+.memberList div{
+	margin-left : 5px;
+}
+.memberList p{
+	margin : 0px;
 }
 </style>

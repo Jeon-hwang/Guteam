@@ -17,12 +17,13 @@
 	</sec:authorize>
 	<!-- 대충 아래에 댓글 생성 -->
 	<div id="CommentGroup">
+		<div style="position:absolute;"></div>
 		<input type="hidden" name="gameId" id="gameId" value="${gameId }">
 		<input type="hidden" name="page" id="page" value="${page }">
 		<input type="hidden" name="gameBoardId" id="gameBoardId" value="${vo.gameBoardId }">
 		<sec:authorize access="isAuthenticated()">
 		<div class="insertComment">
-		<img alt="${principal.username }" id="userProfileImage" src="../member/display?fileName=${memberImageName }" width="50px" height="50px">
+		<img alt="${principal.username }" id="userProfileImage" src="../member/display?fileName=${memberImageName }" width="40px" height="40px">
 		&nbsp&nbsp<textarea id="commentContent" maxlength="165" placeholder="댓글 입력"></textarea>
 		<button id="commentAddBtn" class="btn btn-secondary"><i class="bi bi-check"></i></button>
 		</div>
@@ -530,8 +531,7 @@
 			});//end fold_replies_area
 			
 			$('#commentContent').on('keyup keydown', function (){
-				 	console.log(this.scrollHeight);
-				 		
+				 	//console.log(this.scrollHeight);
 				    if(this.scrollHeight>149){
 						$(this).height(148);
 						$(this).scrollHeight(this.Height);
@@ -541,7 +541,7 @@
 				    }
 			 });
 			 $('#allComments').on('keyup keydown','.comment_item .updateCommentContent',function(){
-				 	console.log(this.scrollHeight);
+				 	//console.log(this.scrollHeight);
 				    if(this.scrollHeight>149){
 						$(this).height(148);
 						$(this).scrollHeight(this.Height);
@@ -552,7 +552,7 @@
 				    }
 			 });
 			 $('#allComments').on('keyup keydown','.comment_item .replyContent',function(){
-				 	console.log(this.scrollHeight);
+				 	//console.log(this.scrollHeight);
 				    if(this.scrollHeight>149){
 						$(this).height(148);
 						$(this).scrollHeight(this.Height);
@@ -563,7 +563,7 @@
 				    }
 			 });
 			 $('#allComments').on('keyup keydown','.comment_item .updateReplyContent',function(){
-				 	console.log(this.scrollHeight);
+				 	//console.log(this.scrollHeight);
 				    if(this.scrollHeight>149){
 						$(this).height(148);
 						$(this).scrollHeight(this.Height);
@@ -573,6 +573,84 @@
 					    
 				    }
 			 });
+			 
+			 $('#commentContent').on('keydown keyup',function(key){
+				
+				console.log(key.keyCode);
+				var textFocusStart = $('#commentContent')[0].selectionStart;
+			    var textFocusEnd = $('#commentContent')[0].selectionEnd;
+			    //console.log('텍스트 커서 위치?');
+			    console.log(textFocusStart);
+			    
+				//console.log(textFocusEnd);
+				var content = $('#commentContent').val();
+				
+				var oldText = /@(\S+)/g;
+				var match = content.match(oldText);
+				console.log(match);
+				if(content.lastIndexOf('@') >= 0 && content.lastIndexOf('@')>content.lastIndexOf(' ') && key.keyCode != 32){
+					 //console.log('친구 태그 호출!');
+					 //console.log(content.lastIndexOf('@'));
+					 var keyword = content.substring(content.lastIndexOf('@'));
+					 //console.log(keyword);
+					 var url = '../member/findNickname?keyword='+keyword;
+					 var list = '';
+					 $.getJSON(
+						url,
+						function(data){
+							//console.log(data);
+							if(data.length !=0){
+							list += '<div id="commentProfileArea">';
+							$(data).each(function(){
+								list += '<div class="memberList">'
+									 +  '<img alt="'+this.nickname+'" class="findProfileImage" src="../member/display?fileName='+this.memberImageName+'" width="50px" height="50px">'
+									 +  '<div class="commentMemberInfo"><p class="commentNickname">'+this.nickname+'</p><p class="commentMemberId" style="font-size:80%; color : lightgrey;">'+this.memberId+'</p></div>'
+									 +	'</div>';
+							});//end data.each
+							list += '</div>';
+							$('#gameId').prev().html(list);
+							}else{
+							$('#gameId').prev().html("");
+							}
+						}
+					 );//end getJSON
+				 }
+				 if(key.keyCode == 32){ // 띄워쓰기 입력 시 
+					$('#gameId').prev().html("");
+				 }else if(key.keyCode == 8 || key.keyCode == 46) { // 지우기(8)혹은 delete(46)버튼 입력시 그리고 
+					 $('#gameId').prev().html("");
+				 }
+			 });//end commentContent.keyup keydown
+			 
+			 $('#CommentGroup').on('mouseover','#commentProfileArea .memberList',function(){
+				 //console.log('호버링 확인');
+				 $(this).css("background-color","#a0c5db");
+			 });//end commentProfileArea.mouseover
+			 
+			 $('#CommentGroup').on('mouseout','#commentProfileArea .memberList',function(){
+				 //console.log('호버링 확인');
+				 $(this).css("background-color","#1b2838");
+			 });//end commentProfileArea.mouseout
+			 
+			 $('#CommentGroup').on('click','#commentProfileArea .memberList',function(){
+				 //console.log('호버링 확인');
+				var commentContent = $('#commentContent').val();
+				var textFocusStart = $('#commentContent')[0].selectionStart;
+			    var textFocusEnd = $('#commentContent')[0].selectionEnd;
+			    var contentOne = commentContent.substring(0, textFocusStart);
+			    var contentTwo = commentContent.substring(textFocusEnd, commentContent.length);
+				console.log(commentContent);
+			    var addText = $(this).children('.commentMemberInfo').children('.commentNickname').text();
+			    console.log(addText);
+				
+			    $("#commentContent").val(contentOne + addText + contentTwo);
+			    textFocusStart = textFocusStart + addText.length;
+			    $("#commentContent").prop("selectionEnd", textFocusStart).focus();
+			    
+				$('#gameId').prev().html("");
+			 });//end commentProfileArea.mouseout
+			 
+			
 		});//end document
 	</script>
 </body>

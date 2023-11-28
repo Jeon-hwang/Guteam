@@ -76,6 +76,13 @@ public class MemberServiceImple implements MemberService {
 		return dao.updateCash(amount, memberId);
 	}
 
-	
-
+	@Override
+	public List<MemberVO> findNickname(String keyword) {
+		keyword = keyword.replace("@", "");
+		if(keyword.isEmpty()) {
+			return null;
+		}
+		logger.info("findNickname 호출 getKeyword = "+keyword);
+		return dao.findNickname(keyword);
+	}
 }
