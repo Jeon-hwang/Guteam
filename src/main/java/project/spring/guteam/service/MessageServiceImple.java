@@ -35,6 +35,8 @@ public class MessageServiceImple implements MessageService {
 		logger.info("create() 호출 vo? " + svo.toString());
 		svo.setReceiveMemberId((memberDAO.selectByNickname(svo.getReceiveMemberNickname())));
 		logger.info("vo.setReceiveMemberId = " + svo.getReceiveMemberId());
+		logger.info("svo.getMessageTitle()="+svo.getMessageTitle());
+		logger.info("svo.getMessageContent()="+svo.getMessageContent());
 		
 		int result = msgSendDAO.insert(svo);
 		if(result == 1) {
@@ -57,9 +59,9 @@ public class MessageServiceImple implements MessageService {
 		} else {
 			logger.info("send-insert 실패");
 		}
-		
 		return result;
-	}
+	}	
+	
 	
 	@Override
 	public MessageSendVO readBySend(int sendMessageId) {

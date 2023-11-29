@@ -173,6 +173,7 @@ td {
 	<form action="../message/write" method="get">
 	<c:if test="${vo.sendMemberId!=principal.username }">
 		<input type="hidden" name="receiveMemberId" value="${vo.sendMemberId }">
+		<input type="hidden" name="receiveMemberNickname" value="${vo.sendMemberNickname }">
 		<input type="submit" class="btn btn-light" style="float: right; margin-right: 10px;" value="답장하기">
 	</c:if>
 	<c:if test="${vo.sendMemberId==principal.username }">

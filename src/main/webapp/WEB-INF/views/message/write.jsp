@@ -159,83 +159,89 @@ td {
 	<h2>${vo.memberId }님의 쪽지 쓰기</h2>
 
 <div id="main">
-<form action="write" method="post" onsubmit="sendRequest();">
+<form action="write" method="post" onsubmit="return sendRequest();">
 <sec:csrfInput/>
 <table>
 	<tbody>
 		<tr>
 			<td class="sendInfo">보낼 닉네임</td>
 			<td>
-				<c:if test="${empty receiveMemberId }">
-					<input type="text" name="receiveMemberNickname" id="receiverNickname" required>				
-					<ul id="searchIds"></ul>
-				</c:if>
-				<c:if test="${not empty receiveMemberId }">
-					<input type="hidden" name="receiveMemberId" id="receiverId" value="${receiveMemberId }">
-					${receiveMemberNickname }
-					<input type="hidden" name="receiveMemberNickname" id="receiveNickname" value="${receiveMemberNickname }">
-				</c:if>
+			<c:if test="${empty receiveMemberId }">
+				<input type="text" name="receiveMemberNickname" id="receiverNickname" required>				
+				<ul id="searchIds"></ul>
+			</c:if>
+			<c:if test="${not empty receiveMemberId }">
+				<input type="hidden" name="receiveMemberId" id="receiverId" value="${receiveMemberId }">
+				<input type="hidden" name="receiveMemberNickname" id="receiveNickname" value="${receiveMemberNickname }">
+				${receiveMemberNickname }
+			</c:if>
 			</td>
 		</tr>
 		<tr>
 			<td class="sendInfo">제 목</td>
 			<td>
-			<input type="text" name="messageTitle" id="messageTitle" value="${messageTitle }">
+			<input type="text" name="messageTitle" id="messageTitle" value="${messageTitle }" required>
 			</td>
 		</tr>
 		<tr>
 			<td class="sendInfo">내 용</td>
 			<td>
-			<textarea name="messageContent" id="messageContent" >${messageContent }</textarea><!-- 밑부분 70px -->
+			<textarea name="messageContent" id="messageContent" required>${messageContent }</textarea><!-- 밑부분 70px -->
 			</td>
 		</tr>
 		
 	</tbody>
 </table>
 		
-	<div id="board-btm">
-		<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
-		<input type="hidden" name="sendMemberNickname" id="sendMemberNickname" value="${vo.nickname }">
-		<input class="btn btn-light" type="submit" value="보내기">
-	</div>
+<div id="board-btm">
+	<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }">
+	<input type="hidden" name="sendMemberNickname" id="sendMemberNickname" value="${vo.nickname }">
+	<input class="btn btn-light" type="submit" value="보내기">
+</div>
 </form>
 	
 </div>
 </div>
 </div>
+<input type="hidden" id="alert" value="${alert }">
 
 <script type="text/javascript">
-	$(document).ready(function(){
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
+	function sendRequest(){
+		console.log("sendRequest");
+		var msgContent = $('#messageContent').val();
+		var length = new Blob([msgContent]).size;
+		console.log("msgContent 길이="+length);
 		
-		function sendRequest(){
-			var msgContent = $('#messageContent').val();
-			var length = new Blob([msgContent]).size;
-			console.log(length);
+		if(length > 1000) {
+			alert("보낼 쪽지 글자수가 초과되었습니다.");
+			return false;
+		} else {
+			var memberId = $('#receiverNickname').val();
+			var sendMemberId = $('#sendMemberId').val();
 			
-			if(length > 1000) {
-				alert("보낼 쪽지 글자수가 초과되었습니다.");
-				return false;
-			} else {
-				var memberId = $('#receiverNickname').val();
-				var sendMemberId = $('#sendMemberId').val();
-				
-				console.log('ajax요청');
-				$.ajax({
-					type:'post',
-					url:'/guteam/sse/message/'+memberId,
-					beforeSend : function(xhr) {
-				        xhr.setRequestHeader(header, token);
-				    },
-					data:{'sendMemberId':sendMemberId},
-					success:function(result){
-						console.log('메시지를 보냈습니다.');
-					}
-				}); //end ajax()
-				return true;
-			}
-		} //end sendRequest()
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			console.log('ajax요청');
+			$.ajax({
+				type:'post',
+				url:'/guteam/sse/message/'+memberId,
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				data:{'sendMemberId':sendMemberId},
+				success:function(result){
+					console.log('메시지를 보냈습니다.');
+				}
+			}); //end ajax()
+			return true;
+		}
+	} //end sendRequest()
+	
+	$(document).ready(function(){
+		var result = $('#alert').val();
+		if(result == 'sendfail'){
+			alert('쪽지 전송에 실패하였습니다.');
+		}
 		
 		// debounce(지연) 함수 정의 - 빠른 속도로 닉네임 검색시, 중복값을 출력해서 사용
 		function debounce(func, wait, immediate) {
@@ -254,8 +260,6 @@ td {
 		    };
 		}
 
-		
-		
 		// 보낼 ID 검색
 		$('#receiverNickname').on('keyup', debounce(function(){
 			var keyword = $(this).val();
@@ -289,6 +293,7 @@ td {
 			}
 		}, 200)); //end .on'keyup'
 		
+		var srhItem = null;
 		
 	}); //end document
 	
@@ -297,6 +302,7 @@ td {
 		console.log("id 클릭 성공?"+clk);
 		var nick = clk.split(' ')[0];
 		$('#receiverNickname').val(nick);
+		$('#searchIds').css('display', 'none');
 		
 	}
 </script>

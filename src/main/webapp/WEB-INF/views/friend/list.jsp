@@ -189,14 +189,12 @@
 </div>
 <div id="frdMain">
 	<div class="div_flex">
-		<form action="../friend/addFriend" method="post"
-				onsubmit="sendRequest();">
-				<sec:csrfInput />
-				<input type="hidden" name="sendMemberId" id="sendMemberId"
-					value="${vo.memberId }"><br>
-				<br> <input type="text" name="receiveMemberId"
-					id="receiveMemberId" placeholder="ID 입력" required> <input
-					class="btn btn-light" type="submit" value="친구 추가">
+		<form action="../friend/addFriend" method="post" onsubmit="sendRequest();">
+			<sec:csrfInput />
+			<input type="hidden" name="sendMemberId" id="sendMemberId" value="${vo.memberId }"><br>
+			<br> 
+			<input type="text" name="receiveMemberId" id="receiveMemberId" placeholder="ID 입력" required>
+			<input class="btn btn-light" type="submit" value="친구 추가">
 		</form>
 	</div>
 	<div class="hrArea">

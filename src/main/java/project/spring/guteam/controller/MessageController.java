@@ -184,6 +184,7 @@ public class MessageController {
 		} else {
 			// 전송 실패시 작성 내역 유지되게 바꾸기
 			logger.info("쪽지 전송 실패");
+			reAttr.addFlashAttribute("alert", "sendfail");
 			return "redirect:/message/write";
 		}
 	}
