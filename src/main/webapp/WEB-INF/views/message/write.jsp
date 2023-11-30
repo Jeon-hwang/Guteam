@@ -237,6 +237,35 @@ td {
 		}
 	} //end sendRequest()
 	
+	/* var selectItem = null;
+	var itemList = $('#searchIds li');
+	function keyNavi(event) {
+		if(itemList.length) {
+			if(event.keyCode == 38 || event.keyCode == 40) {
+				event.preventDefault();
+				if(selectItem) {
+					selectItem.removeClass('selected');
+				}
+				var nextItem;
+	            if (event.keyCode === 38) {
+	                // 위쪽 화살표 키
+	                nextItem = selectItem ? selectItem.prev() : itemList.last();
+	            } else {
+	                // 아래쪽 화살표 키
+	                nextItem = selectItem ? selectItem.next() : itemList.first();
+	            }
+	            
+	            if (nextItem.length) {
+	            	selectItem = nextItem.addClass('selected');
+	                $('#receiverNickname').val(selectItem.text().split(' ')[0]);
+	            }
+			} else if (event.keyCode === 13 && selectItem) {
+	            // Enter 키가 눌렸을 때, 선택 트리거 실행
+	            selectNick(selectItem);
+			}
+		}
+	} */
+	
 	$(document).ready(function(){
 		var result = $('#alert').val();
 		if(result == 'sendfail'){
@@ -291,9 +320,7 @@ td {
 				); //end getJSON()
 				
 			}
-		}, 200)); //end .on'keyup'
-		
-		var srhItem = null;
+		})); //end .on'keyup'
 		
 	}); //end document
 	
@@ -305,6 +332,7 @@ td {
 		$('#searchIds').css('display', 'none');
 		
 	}
+	
 </script>
 </body>
 </html>
