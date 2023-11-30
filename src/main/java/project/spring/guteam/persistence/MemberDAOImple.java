@@ -85,6 +85,12 @@ public class MemberDAOImple implements MemberDAO {
 		return sqlSession.selectOne(NAMESPACE + ".select_by_member_id_to_nick", memberId);
 	}
 
+	@Override
+	public List<MemberVO> selectLikeNickname(String keyword) {
+		logger.info("keyword 조회");
+		return sqlSession.selectList(NAMESPACE+".select_by_keyword",keyword);
+	}
+
 	
 
 	

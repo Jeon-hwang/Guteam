@@ -3,6 +3,8 @@ package project.spring.guteam.service;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +26,7 @@ public class KakaoPayService {
 	
 	 private static final String HOST = "https://kapi.kakao.com";
 	    
-	    private KakaoPayReadyVO kakaoPayReadyVO;
-	    private KakaoPayApprovalVO kakaoPayApprovalVO;
+	    private Map<String, KakaoPayReadyVO> payMap = new ConcurrentHashMap<String, KakaoPayReadyVO>();
 	    
 	    public String kakaoPayReady(String memberId, Integer cash) {
 	 
@@ -53,8 +54,8 @@ public class KakaoPayService {
 	         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
 	 
 	        try {
-	            kakaoPayReadyVO = restTemplate.postForObject(new URI(HOST + "/v1/payment/ready"), body, KakaoPayReadyVO.class);
-	            
+	            KakaoPayReadyVO kakaoPayReadyVO = restTemplate.postForObject(new URI(HOST + "/v1/payment/ready"), body, KakaoPayReadyVO.class);
+	            payMap.put(memberId, kakaoPayReadyVO);
 	            logger.info("" + kakaoPayReadyVO);
 	            
 	            return kakaoPayReadyVO.getNext_redirect_pc_url();
@@ -76,7 +77,8 @@ public class KakaoPayService {
 	    	 
 	        logger.info("KakaoPayInfoVO............................................");
 	        logger.info("-----------------------------");
-	        
+	        KakaoPayReadyVO kakaoPayReadyVO=payMap.get(memberId);
+	        payMap.remove(memberId);
 	        RestTemplate restTemplate = new RestTemplate();
 	 
 	        // 서버로 요청할 Header
@@ -97,7 +99,7 @@ public class KakaoPayService {
 	        HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
 	        
 	        try {
-	            kakaoPayApprovalVO = restTemplate.postForObject(new URI(HOST + "/v1/payment/approve"), body, KakaoPayApprovalVO.class);
+	        	KakaoPayApprovalVO kakaoPayApprovalVO = restTemplate.postForObject(new URI(HOST + "/v1/payment/approve"), body, KakaoPayApprovalVO.class);
 	            logger.info("" + kakaoPayApprovalVO);
 	          
 	            return kakaoPayApprovalVO;

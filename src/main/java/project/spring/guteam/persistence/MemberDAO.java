@@ -33,5 +33,7 @@ public interface MemberDAO {
 	String selectByNickname(String nickname);
 	
 	String selectByMemberId(String memberId);
+
+	List<MemberVO> selectLikeNickname(String keyword);
 	
 }

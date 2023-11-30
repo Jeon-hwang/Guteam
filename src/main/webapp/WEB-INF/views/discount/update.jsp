@@ -25,7 +25,7 @@
 	<h1>할인율 적용하기</h1>
 	</div>
 	<div class="formArea">
-	<form action="update" method="post">
+	<form action="update" method="post" onsubmit="return check();">
 	<sec:csrfInput/>
 		<div class="input-group mb-3 ">
 			<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="selectedItem">선택</span></button>
@@ -82,6 +82,15 @@
 			});// end deleteDiscount.onclick()
 			
 		}); // end document.ready()
+		function check(){
+			var genre = $('#genre').val();
+			if(genre=='미선택'){
+				alert('장르를 선택해주세요');
+				return false;
+			}else{
+				return true;
+			}
+		}
 	</script>
 </body>
 </html>
