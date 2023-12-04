@@ -95,7 +95,8 @@ header .auth{
 	align-items: center;
 	display:flex;
 	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
-	margin-right: 50px; 
+	margin-right: 50px;
+	flex-wrap:wrap;
 }
 .table th, .table td{
 	background-color: #0d131b;
@@ -626,6 +627,12 @@ formArea input:focus{
 	width : 100px;
 	height : 100px;
 	border : 1px solid grey;
+}
+.auth #homeProfile{
+	width:100%;
+	display:flex;
+	justify-content:end;
+	align-items:center;
 }
 .auth .btn {
 	background-color:rgba(103, 112, 123, 0.2);
