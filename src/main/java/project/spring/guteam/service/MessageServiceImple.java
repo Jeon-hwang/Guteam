@@ -37,29 +37,32 @@ public class MessageServiceImple implements MessageService {
 		logger.info("vo.setReceiveMemberId = " + svo.getReceiveMemberId());
 		logger.info("svo.getMessageTitle()="+svo.getMessageTitle());
 		logger.info("svo.getMessageContent()="+svo.getMessageContent());
-		
-		int result = msgSendDAO.insert(svo);
-		if(result == 1) {
-			logger.info("send-insert 성공");
-			MessageReceiveVO rvo = new MessageReceiveVO();
-			rvo.setReceiveMemberId(svo.getReceiveMemberId());
-			rvo.setSendMemberId(svo.getSendMemberId());
-			rvo.setSendMemberNickname(memberDAO.selectByMemberId(svo.getSendMemberId()));
-			rvo.setMessageTitle(svo.getMessageTitle());
-			rvo.setMessageContent(svo.getMessageContent());
-			logger.info("rvo 잘 들어갔나 " + rvo.toString());
-			
-			result = msgReceiveDAO.insert(rvo);
+		if(svo.getReceiveMemberId() != null) { 
+			int result = msgSendDAO.insert(svo);
 			if(result == 1) {
-				logger.info("receive-insert 성공");
-			} else {
-				logger.info("receive-insert 실패");
+				logger.info("send-insert 성공");
+				MessageReceiveVO rvo = new MessageReceiveVO();
+				rvo.setReceiveMemberId(svo.getReceiveMemberId());
+				rvo.setSendMemberId(svo.getSendMemberId());
+				rvo.setSendMemberNickname(memberDAO.selectByMemberId(svo.getSendMemberId()));
+				rvo.setMessageTitle(svo.getMessageTitle());
+				rvo.setMessageContent(svo.getMessageContent());
+				logger.info("rvo 잘 들어갔나 " + rvo.toString());
+				
+				result = msgReceiveDAO.insert(rvo);
+				if(result == 1) {
+					logger.info("receive-insert 성공");
+				} else {
+					logger.info("receive-insert 실패");
+				}
+				
+			} else { 
+				logger.info("send-insert 실패");
 			}
-			
-		} else {
-			logger.info("send-insert 실패");
+			return result;
+		}else { // 수신인 닉네임이 잘못된 경우
+			return 0;
 		}
-		return result;
 	}	
 	
 	

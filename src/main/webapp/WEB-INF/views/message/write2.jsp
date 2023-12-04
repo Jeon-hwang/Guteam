@@ -167,8 +167,7 @@ td {
 			<td class="sendInfo">보낼 닉네임</td>
 			<td>
 			<c:if test="${empty receiveMemberId }">
-				<input type="text" name="receiveMemberNickname" id="receiverNickname" placeholder="닉네임 또는 아이디 검색" required>
-				<span id="checkNickNo" style="display:none; color:#ff335a; font-weight:bold">닉네임이 일치하지 않습니다.</span>
+				<input type="text" name="receiveMemberNickname" id="receiverNickname" required>				
 				<ul id="searchIds"></ul>
 			</c:if>
 			<c:if test="${not empty receiveMemberId }">
@@ -207,8 +206,6 @@ td {
 <input type="hidden" id="alert" value="${alert }">
 
 <script type="text/javascript">
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
 	function sendRequest(){
 		console.log("sendRequest");
 		var msgContent = $('#messageContent').val();
@@ -222,7 +219,8 @@ td {
 			var memberId = $('#receiverNickname').val();
 			var sendMemberId = $('#sendMemberId').val();
 			
-			
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 			console.log('ajax요청');
 			$.ajax({
 				type:'post',
@@ -285,7 +283,8 @@ td {
 							$(data).each(function(){
 								$('#searchIds').css('display', 'block');
 								var searchIds = $('#searchIds').html();
-								searchIds += '<li class="memNick" onclick="selectNick(this);">'+this+'</li>';
+								searchIds += '<li class="memNick">'+this+'</li>';
+								appendLiEventHandlers();
 								console.log(this);
 								$('#searchIds').html(searchIds);
 							}); //end .each()
@@ -295,37 +294,48 @@ td {
 				
 			}
 		}, 200)); //end .on'keyup'
-		$('#receiverNickname').on('focusout', debounce(function(){
-			$('#searchIds').css('display', 'none');
-		}, 200));
-		
-		// 수신인 체크
-		$('#receiverNickname').blur(function(){
-			console.log("receiverNickname 조회 체크")
-			
-			var nickname = $('#receiverNickname').val();
-			console.log('nickname = ' + nickname);
-			
-			$.ajax({
-				type : 'POST',
-				url : "../member/checkNickname",
-				data : {nickname : nickname},
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(header, token);
-			    },
-				success : function(result) {
-					console.log("중복? " + result);
-					if(result == 'dupl'){
-						$('#checkNickNo').hide();
-					} else {
-						$('#checkNickNo').show();
-					}
-				}
-			}); //end ajax
-			
-		}); //end nickname.blur()
 		
 	}); //end document
+	
+	function appendLiEventHandlers() {
+	    $('#searchIds').on('click', 'li.memNick', function() {
+	        selectNick(this);
+	        console.log("appendLiEventHandlers 사용");
+	    });
+
+	    $('#searchIds').on('keyup', 'li.memNick', function(event) {
+	    	var selectItem = null;
+			var itemList = $('#searchIds li');
+			console.log(itemList);
+			console.log("keyNavi()");
+			if(itemList.length) { // itemList가 있을때
+				console.log("itemList있다.");
+				if(event.keyCode == 38 || event.keyCode == 40) { // 38: 위로, 40: 아래로
+					event.preventDefault(); // 기본 동작 중단
+					if(selectItem) {
+						selectItem.removeClass('selected');
+					}
+					var nextItem;
+		            if (event.keyCode === 38) {
+		                // 위쪽 화살표 키
+		                nextItem = selectItem ? selectItem.prev() : itemList.last();
+		            } else {
+		                // 아래쪽 화살표 키
+		                nextItem = selectItem ? selectItem.next() : itemList.first();
+		            }
+		            
+		            if (nextItem.length) {
+		            	selectItem = nextItem.addClass('selected');
+		                $('#receiverNickname').val(selectItem.text().split(' ')[0]);
+		            }
+				} else if (event.keyCode === 13 && selectItem) {
+		            // Enter 키가 눌렸을 때, 선택 트리거 실행
+		            selectNick(selectItem);
+				}
+			}
+	    });
+	}
+
 	
 	function selectNick(clkMe) {
 		var clk = $(clkMe).text();
@@ -335,37 +345,6 @@ td {
 		$('#searchIds').css('display', 'none');
 	}
 
-	/* function keyNavi(event) {
-		var selectItem = null;
-		var itemList = $('#searchIds li');
-		console.log(itemList);
-		console.log("keyNavi()");
-		if(itemList.length) { // itemList가 있을때
-			console.log("itemList있다.");
-			if(event.keyCode == 38 || event.keyCode == 40) { // 38: 위로, 40: 아래로
-				event.preventDefault(); // 기본 동작 중단
-				if(selectItem) {
-					selectItem.removeClass('selected');
-				}
-				var nextItem;
-	            if (event.keyCode === 38) {
-	                // 위쪽 화살표 키
-	                nextItem = selectItem ? selectItem.prev() : itemList.last();
-	            } else {
-	                // 아래쪽 화살표 키
-	                nextItem = selectItem ? selectItem.next() : itemList.first();
-	            }
-	            
-	            if (nextItem.length) {
-	            	selectItem = nextItem.addClass('selected');
-	                $('#receiverNickname').val(selectItem.text().split(' ')[0]);
-	            }
-			} else if (event.keyCode === 13 && selectItem) {
-	            // Enter 키가 눌렸을 때, 선택 트리거 실행
-	            selectNick(selectItem);
-			}
-		}
-	} //end keyNavi() */
 	
 </script>
 </body>
