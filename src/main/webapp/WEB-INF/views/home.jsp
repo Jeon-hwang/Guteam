@@ -7,6 +7,8 @@
 <head>
 <jsp:include page="style.jsp"></jsp:include>
 <meta charset="UTF-8" >
+<meta name="_csrf" content="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf.headerName}" />
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 <title>Welcome to Guteam</title>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -27,7 +29,7 @@
 			<a href="/guteam/member/login?targetURL=" id="btnLogin"><button type="button" class="btn btn-light">로그인</button></a>
 	</sec:authorize>
 	<sec:authorize access="isAuthenticated()">
-			<!-- 여기에 프로필 사진과 닉네임 캐시 표현하시면 됩니다. -->
+			<div id="homeProfile"></div>
 			<button id="btnNotification" class="btn btn-light" onclick="connect();">알림받기</button>
 			<a href="/guteam/chat"><button type="button" class="btn btn-light">채팅방 입장</button></a>
 			<a href="/guteam/member/profiles"><button type="button" class="btn btn-light">나의 프로필</button></a>
@@ -45,6 +47,8 @@
 	</aside>
 	
 <script type="text/javascript">
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
 	$(document).ready(function(){
 		console.log(location.href);
 		var btnLogin = $('#btnLogin').attr('href');
@@ -138,6 +142,18 @@
 </script>
 <sec:authorize access="isAuthenticated()">
 	<script type="text/javascript">	
+	$.ajax({
+		method:'post',
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		url:'/guteam/member/'+$('#memberId').val(),
+		success:function(data){
+			var addData = '<img alt="'+data.nickname+'" src="/guteam/game/display?fileName='+data.memberImageName+'" width="50px" height="50px"><span style="color:#fff;">'+data.nickname+'</span>' ;
+			$('#homeProfile').html(addData);
+			
+		}
+	})
 	function connect(){
 		var memberId = $('#memberId').val();
 		console.log(memberId);

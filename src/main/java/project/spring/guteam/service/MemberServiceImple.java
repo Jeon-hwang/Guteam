@@ -88,6 +88,18 @@ public class MemberServiceImple implements MemberService {
 		return dao.updateCash(amount, memberId);
 	}
 
+	@Override
+	public List<MemberVO> findLikeNickname(String keyword) {
+		logger.info("findLikeNickname 호출 : keyword = " + keyword);
+		return dao.selectLikeNickname(keyword);
+	}
+
+	@Override
+	public MemberVO findByNickname(String nickname) {
+		logger.info("findByNickname 호출 : nickname = " + nickname);
+		String memberId = dao.selectByNickname(nickname);
+		return dao.select(memberId);
+	}
 
 	
 

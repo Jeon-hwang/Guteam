@@ -81,8 +81,11 @@ public class MemberDAOImple implements MemberDAO {
 		return sqlSession.delete(NAMESPACE + ".delete", memberId);
 	}
 
-	
-
+	@Override
+	public List<MemberVO> selectLikeNickname(String keyword) {
+		logger.info("keyword 조회");
+		return sqlSession.selectList(NAMESPACE+".select_by_keyword",keyword);
+	}
 	
 
 

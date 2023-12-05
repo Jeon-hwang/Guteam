@@ -265,6 +265,7 @@ input::-webkit-inner-spin-button {
 				var memberId = $('#memberId').val();
 				var url = '../gameBoard/list-ajax/'+memberId+'?page='+page;
 				var list = '';
+				var patterns = ['<span class="tag">','<span class="tag" >','</span>','<div class="currentDiv">','<div>','</div>','<div class="">','<br>']
 				if($('#showMyBoards').text()=="내가 쓴 게시글 보기"){
 					
 				$.getJSON(
@@ -282,10 +283,16 @@ input::-webkit-inner-spin-button {
 							console.log(this);
 							var createdDate = new Date(this.gameBoardDateCreated);
 							var title = this.gameBoardTitle;
+							var content = this.gameBoardContent;
+							for(var pattern of patterns){
+								title = title.replaceAll(pattern,'');
+								content = content.replaceAll(pattern,'');
+							}
+							console.log(content);
 							if(title.length>20){
 								title = title.substr(0, 20) + '…';
 							}
-							var content = this.gameBoardContent;
+							
 							if(content.length>20){
 								content = content.substr(0, 20) + '…';
 							}

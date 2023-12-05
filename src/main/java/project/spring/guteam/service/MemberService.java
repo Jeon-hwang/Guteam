@@ -16,5 +16,7 @@ public interface MemberService {
 	int update(MemberVO vo, String isCash);
 	int update(String memberId, int amount);
 	int delete(String memberId);
+	List<MemberVO> findLikeNickname(String keyword);
+	MemberVO findByNickname(String nickname);
 	
 }

@@ -1,3 +1,4 @@
+<%@ page errorPage = "/error/error.jsp" %>
 <link rel="icon" href="${pageContext.request.contextPath}/image/guteam_logo_white.png" type="image/x-icon"/>
 <!-- Bootstrap css --><!-- http://localhost:8080/guteam/ -->
 <link
@@ -13,6 +14,11 @@
 <script
    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <style type="text/css">
+.tagList {
+	background-color:#151b22;
+	color:#fff;
+	margin:1px 1px;
+}
 #thumbUp .btn-success{
 	background-color: #198754;
 }
@@ -89,7 +95,8 @@ header .auth{
 	align-items: center;
 	display:flex;
 	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
-	margin-right: 50px; 
+	margin-right: 50px;
+	flex-wrap:wrap;
 }
 .table th, .table td{
 	background-color: #0d131b;
@@ -214,11 +221,13 @@ body {
 	margin-right:5px;
 	height:40px;
 	margin-bottom: 5px;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .update_comment:hover, .update_comment_check:hover, .reply_view_btn:hover, .fold_replies_area:hover, .delete_comment:hover, .reply_add_btn:hover, .comment_paging .btnPaging:hover, .delete_reply:hover, .update_reply:hover, .update_reply_check:hover{
 	color:black;
 	background-color: #a0c5db;
 	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
 }
 .commentArea input[type="text"]{
 	width: 90%;
@@ -599,6 +608,7 @@ formArea input:focus{
 	background-color:#2a475e;
 	color:white;
 	border:none;
+	cursor:pointer;
 }
 .active .page-link{
 	background-color:#a0c5db;
@@ -617,6 +627,12 @@ formArea input:focus{
 	width : 100px;
 	height : 100px;
 	border : 1px solid grey;
+}
+.auth #homeProfile{
+	width:100%;
+	display:flex;
+	justify-content:end;
+	align-items:center;
 }
 .auth .btn {
 	background-color:rgba(103, 112, 123, 0.2);

@@ -254,5 +254,11 @@ public class MemberController {
     	MemberVO vo = memberService.read(memberId);
     	return new ResponseEntity<MemberVO>(vo,HttpStatus.OK);
     }
+    
+    @PostMapping("/nick/{nickname}")
+    public ResponseEntity<MemberVO> nickname(@PathVariable("nickname") String nickname){
+    	MemberVO vo = memberService.findByNickname(nickname);
+    	return new ResponseEntity<MemberVO>(vo,HttpStatus.OK);
+    }
 
 } // end MemberController

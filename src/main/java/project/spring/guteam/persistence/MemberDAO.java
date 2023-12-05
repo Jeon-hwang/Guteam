@@ -32,5 +32,7 @@ public interface MemberDAO {
 	
 	// 회원 id 중복 체크 int checkId(String memberId);
 	String selectByMemberId(String memberId);
+
+	List<MemberVO> selectLikeNickname(String keyword);
 	
 }

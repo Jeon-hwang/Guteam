@@ -47,6 +47,7 @@ public class GameBoardController {
 	
 	@PostMapping("/register")
 	public String registerPOST(GameBoardVO vo, RedirectAttributes reAttr, Principal principal) {
+		logger.info(vo.toString());
 		vo.setMemberId(principal.getName());
 		int result = gameBoardService.create(vo, principal);
 		if(result == 1) {
