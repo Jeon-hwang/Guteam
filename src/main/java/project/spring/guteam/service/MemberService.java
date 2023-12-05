@@ -1,3 +1,4 @@
+
 package project.spring.guteam.service;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface MemberService {
 	int update(String memberId, int amount);
 	int delete(String memberId);
 	List<MemberVO> findLikeNickname(String keyword);
+	List<MemberVO> findNickname(String getKeyword);
 	MemberVO findByNickname(String nickname);
+	MemberVO readNickname(String nickname);
 	
 }
