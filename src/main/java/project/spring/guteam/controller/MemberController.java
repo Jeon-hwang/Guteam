@@ -263,4 +263,11 @@ public class MemberController {
     	List<MemberVO> list = memberService.findNickname(keyword);
     	return new ResponseEntity<List<MemberVO>>(list,HttpStatus.OK);
     }
+    
+    @GetMapping("/selectDisplay")
+    public ResponseEntity<MemberVO> nicknameDisplay(String nickname){
+    	MemberVO vo = memberService.readNickname(nickname);
+    	return new ResponseEntity<MemberVO>(vo,HttpStatus.OK);
+    }
+    	
 } // end MemberController

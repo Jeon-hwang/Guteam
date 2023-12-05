@@ -85,4 +85,12 @@ public class MemberServiceImple implements MemberService {
 		logger.info("findNickname 호출 getKeyword = "+keyword);
 		return dao.findNickname(keyword);
 	}
+
+	@Override
+	public MemberVO readNickname(String nickname) {
+		logger.info("nickname조회");
+		return dao.selectNickname(nickname);
+	}
+	
+	
 }

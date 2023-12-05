@@ -35,4 +35,6 @@ public interface MemberDAO {
 	String selectByMemberId(String memberId);
 	
 	List<MemberVO> findNickname(String keyword);
+	
+	MemberVO selectNickname(String nickname);
 }

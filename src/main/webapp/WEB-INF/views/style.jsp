@@ -856,11 +856,8 @@ textarea:focus{
 	position:absolute;
 	background-color : #1b2838;
 	display : inline-block;
-	width : 200px;
-	height : 150px;
-	bottom : 10px;
-	left : 50px;
-	overflow-y: scroll; 
+	width : 100%;
+	height : auto;
 }
 .memberList{
 	display : flex;
@@ -871,5 +868,8 @@ textarea:focus{
 }
 .memberList p{
 	margin : 0px;
+}
+.mentionMember{
+	color : #BCFF66;
 }
 </style>

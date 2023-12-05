@@ -144,7 +144,23 @@
 					var list = '';
 					var commentRow = 1;
 					var varStatus = 0;
+					
 					$(data.list).each(function(){
+						var content = this.commentContent;
+						if(content.includes('@')){
+							console.log('멘션 존재함');
+							var findMention = /@[^ ]+/g;
+							var matches = content.match(findMention);
+							console.log(matches);
+							if (matches) {
+								 matches.forEach(match => {
+								        if(!content.includes('<a>'+match+'</a>')){
+								        content = content.replaceAll(match,'<a href="#" class="mentionMember">'+match+'</a>');
+								        }
+								    });
+								    console.log(content);
+							}
+						}
 						//console.log(this);
 						//console.log(data.nicknameList);
 						var nickname = data.nicknameList[varStatus];
@@ -157,7 +173,7 @@
 								+ '<pre>'
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
 								+ '<input type="hidden" id="commentId" value="'+this.commentId+'">'
-								+ '<div class="comment_info"><input type="hidden" id="commentContent" value="'+this.commentContent+'">'
+								+ '<div class="comment_info"><input type="hidden" id="commentContent" value="'+content+'">'
 								+ '<span>삭제된 댓글입니다.</span></div>'
 								+ '<div class="reply_btn_area">'
 								+ '<button class="reply_view_btn" style="display:block"><i class="bi bi-chat-left-dots-fill">'+this.replyCnt+'</i></button>'
@@ -172,12 +188,12 @@
 								if(this.commentContent.substring(0,9)=='(updated)'){
 						list += '&nbsp&nbsp<div class="comment_info"><span class="commentNickname">'+nickname+'</span>&nbsp&nbsp'
 								+ '<span>'+elapsedTime(commentDateCreated)+'(수정 됨)</span>&nbsp&nbsp<br>'
-								+ '<span class="commentContentView">'+this.commentContent.replace("(updated)","")+'</span>'
+								+ '<span class="commentContentView">'+content.replace("(updated)","")+'</span>'
 								+ '<textarea class="updateCommentContent" style="display:none" maxlength="165">'+this.commentContent.replace("(updated)","")+'</textarea></div>'
 								}else{
 						list += '&nbsp&nbsp<div class="comment_info"><span class="commentNickname">'+nickname+'</span>&nbsp&nbsp'
 								+ '<span>'+elapsedTime(commentDateCreated)+'</span>&nbsp&nbsp<br>'
-								+ '<span class="commentContentView">'+this.commentContent+'</span>'
+								+ '<span class="commentContentView">'+content+'</span>'
 								+ '<textarea class="updateCommentContent" style="display:none" maxlength="165">'+this.commentContent+'</textarea></div>'
 								}
 								if(principalMemberId==this.memberId){
@@ -191,7 +207,6 @@
 						list += '<div class="reply_btn_area">'
 								+ '<button class="reply_view_btn" style="display:block"><i class="bi bi-chat-left-dots-fill">'+this.replyCnt+'</i></button>'
 								+ '<button class="fold_replies_area" style="display:none">접기</button></div>'
-								
 								}
 						list += '</pre><div class="replies_area" id="repliesArea'+commentRow+'"></div></li>';
 						}
@@ -573,52 +588,76 @@
 					    
 				    }
 			 });
-			 
-			 $('#commentContent').on('keydown keyup',function(key){
-				
-				console.log(key.keyCode);
+			 var mentionPlace = 0;
+			 var mentionEnd = 0;
+			 $('#commentContent').on('keydown',function(key){
 				var textFocusStart = $('#commentContent')[0].selectionStart;
-			    var textFocusEnd = $('#commentContent')[0].selectionEnd;
+				var textFocusEnd = $('#commentContent')[0].selectionEnd;
+				var content = $('#commentContent').val();
+				
+				if(key.keyCode==8 && content.substr(textFocusStart-1,1)=='@'){
+					console.log('멤버창 삭제');
+					$('input').remove('#mentionLocation'+textFocusStart);
+					$('#gameId').prev().children().html("");
+				}else if(key.keyCode==46 && content.substr(textFocusStart,1)=='@'){
+					console.log('멤버창 삭제');
+					$('input').remove('#mentionLocation'+(textFocusStart+1));
+					$('#gameId').prev().children().html("");
+				}else if(mentionPlace > textFocusStart){
+					console.log('멤버창 삭제');
+					$('#gameId').prev().children().html("");
+				}
+			 });
+		
+			 $('#commentContent').on('keydown keyup',function(key){
+				var textFocusStart = $('#commentContent')[0].selectionStart;
+				var textFocusEnd = $('#commentContent')[0].selectionEnd;
+				var list = '';
+				var appendMention = '';
+				console.log(key.keyCode);
+				
 			    //console.log('텍스트 커서 위치?');
 			    console.log(textFocusStart);
-			    
+				
 				//console.log(textFocusEnd);
 				var content = $('#commentContent').val();
 				
-				var oldText = /@(\S+)/g;
-				var match = content.match(oldText);
-				console.log(match);
+			    if(key.keyCode==50 && content.substr(textFocusStart-1,1)=='@'){
+			    	mentionPlace = textFocusStart;
+					console.log('멤버창 오픈');
+					appendMention = '<input type="hidden" id="mentionLocation'+textFocusStart+'" value="'+textFocusStart+'">';
+					list += '<div style="position:absolute; width:200px; height:150px; overflow-y:auto; bottom: 10px; left :50px;"><div id="commentProfileArea"></div></div>'
+					$('#gameId').prev().html(list);
+					$('#gameId').prev().append(appendMention);
+				}else if(content.substr(textFocusStart-1,1)=='@'){
+					console.log('멤버창 오픈 옆에 멘션있음');
+				}
+				
 				if(content.lastIndexOf('@') >= 0 && content.lastIndexOf('@')>content.lastIndexOf(' ') && key.keyCode != 32){
 					 //console.log('친구 태그 호출!');
 					 //console.log(content.lastIndexOf('@'));
 					 var keyword = content.substring(content.lastIndexOf('@'));
 					 //console.log(keyword);
 					 var url = '../member/findNickname?keyword='+keyword;
-					 var list = '';
+					 
 					 $.getJSON(
 						url,
 						function(data){
 							//console.log(data);
 							if(data.length !=0){
-							list += '<div id="commentProfileArea">';
 							$(data).each(function(){
 								list += '<div class="memberList">'
 									 +  '<img alt="'+this.nickname+'" class="findProfileImage" src="../member/display?fileName='+this.memberImageName+'" width="50px" height="50px">'
 									 +  '<div class="commentMemberInfo"><p class="commentNickname">'+this.nickname+'</p><p class="commentMemberId" style="font-size:80%; color : lightgrey;">'+this.memberId+'</p></div>'
 									 +	'</div>';
 							});//end data.each
-							list += '</div>';
-							$('#gameId').prev().html(list);
-							}else{
-							$('#gameId').prev().html("");
+							$('#commentProfileArea').html(list);
 							}
 						}
 					 );//end getJSON
 				 }
 				 if(key.keyCode == 32){ // 띄워쓰기 입력 시 
-					$('#gameId').prev().html("");
-				 }else if(key.keyCode == 8 || key.keyCode == 46) { // 지우기(8)혹은 delete(46)버튼 입력시 그리고 
-					 $('#gameId').prev().html("");
+					$('#gameId').prev().children().html("");
 				 }
 			 });//end commentContent.keyup keydown
 			 
@@ -637,10 +676,10 @@
 				var commentContent = $('#commentContent').val();
 				var textFocusStart = $('#commentContent')[0].selectionStart;
 			    var textFocusEnd = $('#commentContent')[0].selectionEnd;
-			    var contentOne = commentContent.substring(0, textFocusStart);
+			    var contentOne = commentContent.substring(0, mentionPlace);
 			    var contentTwo = commentContent.substring(textFocusEnd, commentContent.length);
 				console.log(commentContent);
-			    var addText = $(this).children('.commentMemberInfo').children('.commentNickname').text();
+			    var addText = $(this).children('.commentMemberInfo').children('.commentNickname').text()+" ";
 			    console.log(addText);
 				
 			    $("#commentContent").val(contentOne + addText + contentTwo);
@@ -648,9 +687,28 @@
 			    $("#commentContent").prop("selectionEnd", textFocusStart).focus();
 			    
 				$('#gameId').prev().html("");
+				mentionPlace=0;
 			 });//end commentProfileArea.mouseout
 			 
-			
+			 $('#allComments').on('click','.comment_item .comment_info .commentContentView a',function(){
+				 
+				 var nickname = $(this).text().replace('@','');
+				 console.log(nickname);
+				 $.ajax({
+					type : 'get',
+					url : '../member/selectDisplay?nickname='+nickname,
+					headers : {
+						'Content-Type' : 'application/json'
+					},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(data){
+						console.log('result');
+						console.log(data);
+					}
+				 });
+			 });
 		});//end document
 	</script>
 </body>
