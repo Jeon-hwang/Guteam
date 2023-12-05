@@ -222,7 +222,7 @@ td {
 			var memberId = $('#receiverNickname').val();
 			var sendMemberId = $('#sendMemberId').val();
 			
-			
+			// 쪽지 알림
 			console.log('ajax요청');
 			$.ajax({
 				type:'post',
@@ -266,8 +266,10 @@ td {
 		    };
 		}
 
-		// 보낼 ID 검색
+		// 수신 ID 검색
+		// Id 키보드 선택
 		$('#searchIds').on('keyup',function(e){
+			// 방향키 위로
 			if(e.keyCode==38){
 				index-=1;
 				if(index<0){
@@ -279,7 +281,7 @@ td {
 					console.log($('#searchIds li')[index-1]);
 					$('#searchIds li')[index-1].focus();					
 				}
-				
+			// 방향키 아래로
 			}else if(e.keyCode==40){
 				index+=1;
 				if(index>maxIndex){
@@ -287,12 +289,16 @@ td {
 				}
 				console.log($('#searchIds li')[index-1]);
 				$('#searchIds li')[index-1].focus();
+			// 선택 후 엔터
 			}else if(e.keyCode==13){
 				$('#searchIds li')[index-1].click();
 				$('#checkNickNo').hide();
 			}
 			console.log(index);
 		});
+		
+		
+		// List에서 input 태그로(키보드)
 		$('#receiverNickname').on('keyup', function(e){
 			var keyword = $(this).val();
 			console.log("search() keyword="+keyword);
@@ -305,7 +311,8 @@ td {
 					$('#searchIds').focus();
 				}else{
 					console.log($('#searchIds li')[index-1]);
-					$('#searchIds li')[index-1].focus();					
+					$('#searchIds li')[index-1].focus();
+					
 				}
 				
 			}else if(e.keyCode==40){
@@ -345,9 +352,10 @@ td {
 				index=0;
 			}
 		}); //end .on'keyup'
-		$('#receiverNickname').on('focusout', debounce(function(){
-			//$('#searchIds').css('display', 'none');
-		}, 200));
+		
+		//$('#receiverNickname').on('focusout', debounce(function(){
+		//	$('#searchIds').css('display', 'none');
+		//}, 200));
 		
 		// 수신인 체크
 		$('#receiverNickname').blur(function(){
@@ -377,6 +385,7 @@ td {
 		
 	}); //end document
 	
+	// List에서 input 태그로(마우스)
 	function selectNick(clkMe) {
 		var clk = $(clkMe).text();
 		console.log("id 클릭 성공?"+clk);

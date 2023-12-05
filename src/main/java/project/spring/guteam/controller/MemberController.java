@@ -145,7 +145,7 @@ public class MemberController {
 		logger.info(vo.toString());
 	}
 	
-	// 회원정보 수정
+	// 회원정보 수정 화면
 	@GetMapping("/update")
 	public void updateGET(Model model, Principal principal) {
 		logger.info("updateGET() 호출");
@@ -157,6 +157,7 @@ public class MemberController {
 		
 	}
 	
+	// 회원정보 수정
 	@PostMapping("/update")
 	public String updatePOST(MemberVO vo, MultipartFile file, RedirectAttributes reAttr) {	
 		logger.info("updatePOST() 호출 : " + vo.toString());
@@ -247,11 +248,13 @@ public class MemberController {
         return entity;
     } //end display()
 	
+    // 캐쉬 충전
     @PutMapping("/cash")
     public int updateCash(String memberId,int cash) {
     	int result=0;
     	return result;
     }
+    
     
     @PostMapping("/{memberId}")
     public ResponseEntity<MemberVO> memberInfo(@PathVariable("memberId") String memberId){
