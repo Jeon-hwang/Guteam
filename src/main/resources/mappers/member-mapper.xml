@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -56,16 +55,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 <delete id="delete">
 	 delete from ${member} where ${memberId} = #{memberId}
 	 </delete>
-	 
-	 
+	 	 
 	 <select id="select_by_keyword" resultType="MemberVO">
 	 	select * from ${member} where ${nickname} like '%'||#{keyword}||'%'
 	 </select>
 
-	 <select id="find_member_nickname" resultType="MemberVO">
-	 	select * from ${member} where ${nickname} like #{keyword}
-	 </select>
-	 
 	 <select id="select_nickname" resultType="MemberVO">
 	 	select * from ${member} where ${nickname} = #{nickname}
 	 </select>

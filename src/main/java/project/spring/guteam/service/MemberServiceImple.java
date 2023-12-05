@@ -108,7 +108,7 @@ public class MemberServiceImple implements MemberService {
 			return null;
 		}
 		logger.info("findNickname 호출 getKeyword = "+keyword);
-		return dao.findNickname(keyword);
+		return dao.selectLikeNickname(keyword);
 	}
 
 	@Override

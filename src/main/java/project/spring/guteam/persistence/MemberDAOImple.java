@@ -88,12 +88,6 @@ public class MemberDAOImple implements MemberDAO {
 	}
 
 	@Override
-	public List<MemberVO> findNickname(String keyword) {
-		logger.info("findNickname 조회");
-		return sqlSession.selectList(NAMESPACE+".find_member_nickname","%"+keyword+"%");
-	}
-
-	@Override
 	public MemberVO selectNickname(String nickname) {
 		logger.info("nicknam 조회");
 		return sqlSession.selectOne(NAMESPACE+".select_nickname", nickname);
