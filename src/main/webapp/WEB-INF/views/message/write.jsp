@@ -241,6 +241,9 @@ td {
 	} //end sendRequest()
 	
 	$(document).ready(function(){
+		var maxIndex=0;
+		var index=0;
+		var currentKeyword='';
 		var result = $('#alert').val();
 		if(result == 'sendfail'){
 			alert('쪽지 전송에 실패하였습니다.');
@@ -264,39 +267,86 @@ td {
 		}
 
 		// 보낼 ID 검색
-		$('#receiverNickname').on('keyup', debounce(function(){
+		$('#searchIds').on('keyup',function(e){
+			if(e.keyCode==38){
+				index-=1;
+				if(index<0){
+					index=maxIndex;
+				}
+				if(index==0){
+					$('#receiverNickname').focus();
+				}else{
+					console.log($('#searchIds li')[index-1]);
+					$('#searchIds li')[index-1].focus();					
+				}
+				
+			}else if(e.keyCode==40){
+				index+=1;
+				if(index>maxIndex){
+					index=1;
+				}
+				console.log($('#searchIds li')[index-1]);
+				$('#searchIds li')[index-1].focus();
+			}else if(e.keyCode==13){
+				$('#searchIds li')[index-1].click();
+				$('#checkNickNo').hide();
+			}
+			console.log(index);
+		});
+		$('#receiverNickname').on('keyup', function(e){
 			var keyword = $(this).val();
 			console.log("search() keyword="+keyword);
-			
-			$('#searchIds').empty();// 입력시마다 결과값 비움
-			
+			if(e.keyCode==38){
+				index-=1;
+				if(index<0){
+					index=maxIndex;
+				}
+				if(index==0){
+					$('#searchIds').focus();
+				}else{
+					console.log($('#searchIds li')[index-1]);
+					$('#searchIds li')[index-1].focus();					
+				}
+				
+			}else if(e.keyCode==40){
+				index+=1;
+				if(index>maxIndex){
+					index=1;
+				}
+				console.log($('#searchIds li')[index-1]);
+				$('#searchIds li')[index-1].focus();
+			}
+			console.log(index);
 			if(keyword == '') {
 				$('#searchIds').html('');
 				$('#searchIds').css('display', 'none');
-			}else {
+			}else if(currentKeyword!=keyword){
 				var url = '../message/search/'+keyword;
 				$.getJSON(
 					url,
 					function(data) {
+						$('#searchIds').html('');
 						console.log(data);
 						if(data=='') {
 							$('#searchIds').css('display', 'none');
 						}else {
-							$(data).each(function(){
+							maxIndex=data.length;
+							$(data).each(function(num,val){
 								$('#searchIds').css('display', 'block');
 								var searchIds = $('#searchIds').html();
-								searchIds += '<li class="memNick" onclick="selectNick(this);">'+this+'</li>';
+								searchIds += '<li class="memNick" onclick="selectNick(this);" tabindex="-1">'+this+'</li>';
 								console.log(this);
 								$('#searchIds').html(searchIds);
 							}); //end .each()
 						}
 					}
 				); //end getJSON()
-				
+				 currentKeyword = keyword;
+				index=0;
 			}
-		}, 200)); //end .on'keyup'
+		}); //end .on'keyup'
 		$('#receiverNickname').on('focusout', debounce(function(){
-			$('#searchIds').css('display', 'none');
+			//$('#searchIds').css('display', 'none');
 		}, 200));
 		
 		// 수신인 체크
