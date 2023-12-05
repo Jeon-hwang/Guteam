@@ -275,7 +275,7 @@ public class MemberController {
     	return new ResponseEntity<List<MemberVO>>(list,HttpStatus.OK);
     }
     
-    @GetMapping("/selectDisplay")
+    @PostMapping("/selectDisplay")
     public ResponseEntity<MemberVO> nicknameDisplay(String nickname){
     	MemberVO vo = memberService.readNickname(nickname);
     	return new ResponseEntity<MemberVO>(vo,HttpStatus.OK);

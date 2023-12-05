@@ -64,7 +64,7 @@ public class BoardCommentDAOImpleTest {
 	}
 
 	private void insert() {
-		BoardCommentVO vo = new BoardCommentVO(0, 1, "hwnag", "반갑습니다!", null, 0);
+		BoardCommentVO vo = new BoardCommentVO(0, 1, "hwnag", "반갑습니다!", null, 0,null);
 		int result = dao.insert(vo);
 		if(result == 1) {
 			logger.info("insert 성공!");

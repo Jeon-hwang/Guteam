@@ -597,14 +597,14 @@
 				if(key.keyCode==8 && content.substr(textFocusStart-1,1)=='@'){
 					console.log('멤버창 삭제');
 					$('input').remove('#mentionLocation'+textFocusStart);
-					$('#gameId').prev().children().html("");
+					$('#gameId').prev().html("");
 				}else if(key.keyCode==46 && content.substr(textFocusStart,1)=='@'){
 					console.log('멤버창 삭제');
 					$('input').remove('#mentionLocation'+(textFocusStart+1));
-					$('#gameId').prev().children().html("");
+					$('#gameId').prev().html("");
 				}else if(mentionPlace > textFocusStart){
 					console.log('멤버창 삭제');
-					$('#gameId').prev().children().html("");
+					$('#gameId').prev().html("");
 				}
 			 });
 		
@@ -631,12 +631,12 @@
 				}else if(content.substr(textFocusStart-1,1)=='@'){
 					console.log('멤버창 오픈 옆에 멘션있음');
 				}
-				
-				if(content.lastIndexOf('@') >= 0 && content.lastIndexOf('@')>content.lastIndexOf(' ') && key.keyCode != 32){
+				//(content.lastIndexOf('@')>content.lastIndexOf(' '))
+				if(content.lastIndexOf('@') >= 0 && key.keyCode != 32){
 					 //console.log('친구 태그 호출!');
 					 //console.log(content.lastIndexOf('@'));
 					 var keyword = content.substring(content.lastIndexOf('@'));
-					 //console.log(keyword);
+					 console.log(keyword);
 					 var url = '../member/findNickname?keyword='+keyword;
 					 
 					 $.getJSON(
@@ -650,13 +650,13 @@
 									 +  '<div class="commentMemberInfo"><p class="commentNickname">'+this.nickname+'</p><p class="commentMemberId" style="font-size:80%; color : lightgrey;">'+this.memberId+'</p></div>'
 									 +	'</div>';
 							});//end data.each
-							$('#commentProfileArea').html(list);
+								$('#commentProfileArea').html(list);
 							}
 						}
 					 );//end getJSON
 				 }
 				 if(key.keyCode == 32){ // 띄워쓰기 입력 시 
-					$('#gameId').prev().children().html("");
+					$('#gameId').prev().html("");
 				 }
 			 });//end commentContent.keyup keydown
 			 
@@ -689,12 +689,13 @@
 				mentionPlace=0;
 			 });//end commentProfileArea.mouseout
 			 
-			 $('#allComments').on('click','.comment_item .comment_info .commentContentView a',function(){
-				 
+			 $('#allComments').on('click','.comment_item .comment_info .commentContentView a',function(event){
+				var mpX = event.pageX;
+				var mpY = event.pageY;
 				 var nickname = $(this).text().replace('@','');
 				 console.log(nickname);
 				 $.ajax({
-					type : 'get',
+					type : 'post',
 					url : '../member/selectDisplay?nickname='+nickname,
 					headers : {
 						'Content-Type' : 'application/json'
@@ -703,8 +704,48 @@
 				        xhr.setRequestHeader(header, token);
 				    },
 					success : function(data){
-						console.log('result');
 						console.log(data);
+						if(data.nickname != null){
+						var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="../game/display?fileName='+data.memberImageName+'" width="100px" height="100px" /><br>'
+						+'<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
+						+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
+						+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
+						$('#dialog').html(info);
+						$('#dialog').dialog({
+							resizable : false,
+							buttons:{
+								"닫기":function(){
+									$(this).dialog("close");
+								}
+							}
+						});
+						$('#ui-id-1').text(data.memberId);
+						$('.ui-widget-header').attr('style','background:#6c757d;');
+						$('.ui-widget-content').attr('style','background:#d0e0f9;');
+						$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
+						$('#dialog').parent().on('mouseleave',function(){
+							$('#dialog').dialog('close');
+						});
+						}else{
+							var info ='<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
+							+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
+							+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
+							$('#dialog').html(info);
+							$('#dialog').dialog({
+								resizable : false,
+								buttons:{
+									"닫기":function(){
+										$(this).dialog("close");
+									}
+								}
+							});
+							$('#ui-id-1').text('존재하지 않는 회원입니다.');
+							$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
+							$('#dialog').parent().on('mouseleave',function(){
+								$('#dialog').dialog('close');
+							});
+						}
+						
 					}
 				 });
 			 });

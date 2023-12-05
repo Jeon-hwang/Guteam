@@ -9,17 +9,19 @@ public class BoardCommentVO {
 	private String commentContent;
 	private Date commentDateCreated;
 	private int replyCnt;
+	private String deleted;
 
 	public BoardCommentVO() {}
 
 	public BoardCommentVO(int commentId, int gameBoardId, String memberId, String commentContent,
-			Date commentDateCreated, int replyCnt) {
+			Date commentDateCreated, int replyCnt, String deleted) {
 		this.commentId = commentId;
 		this.gameBoardId = gameBoardId;
 		this.memberId = memberId;
 		this.commentContent = commentContent;
 		this.commentDateCreated = commentDateCreated;
 		this.replyCnt = replyCnt;
+		this.deleted = deleted;
 	}
 
 	public int getCommentId() {
@@ -69,12 +71,19 @@ public class BoardCommentVO {
 	public void setReplyCnt(int replyCnt) {
 		this.replyCnt = replyCnt;
 	}
-
+	
+	public String getDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted(String deleted) {
+		this.deleted = deleted;
+	}
 	@Override
 	public String toString() {
 		return "BoardCommentVO [commentId=" + commentId + ", gameBoardId=" + gameBoardId + ", memberId=" + memberId
 				+ ", commentContent=" + commentContent + ", commentDateCreated=" + commentDateCreated + ", replyCnt="
-				+ replyCnt + "]";
+				+ replyCnt + "]" ;
 	}
 	
 	
