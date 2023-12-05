@@ -43,6 +43,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
    		<property name="releaseDate" value="release_date"/>
    		<property name="updateDate" value="update_date"/>
    		<property name="gameImageName" value="game_image_name"/>
+   		<property name="endService" value="end_service"/>
    		
    		<property name="game_board" value="game_board"/>
    		<property name="gameBoardId" value="game_board_id"/>
@@ -52,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
    		<property name="gameBoardContent" value="game_board_content"/>
    		<property name="gameBoardDateCreated" value="game_board_date_created"/>
    		<property name="commentCnt" value="comment_cnt"/>
+   		<property name="deleted" value="deleted"/>
    		
    		<property name="review" value="review"/>
    		<property name="reviewId" value="review_id"/>
@@ -77,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
    		<property name="cash" value="cash"/>
    		<property name="memberImageName" value="member_image_name"/>
    		<property name="isAdmin" value="is_admin"/>
+   		<property name="deleted" value="deleted"/>
 	 	
 	 	<property name="friend" value="friend"/>
 	 	<property name="memberId" value="member_id"/>

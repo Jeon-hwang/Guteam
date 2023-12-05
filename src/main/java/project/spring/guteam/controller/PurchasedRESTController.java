@@ -77,7 +77,7 @@ public class PurchasedRESTController {
 	}
 	
 	@GetMapping("/find/{memberId}")
-	public ResponseEntity<Integer> findPurchaseㅇ(@PathVariable("memberId") String memberId, int gameId){
+	public ResponseEntity<Integer> findPurchase(@PathVariable("memberId") String memberId, int gameId){
 		logger.info("findPurchased 실행");
 		int result = 0;
 		PurchasedVO vo = service.find(memberId, gameId);

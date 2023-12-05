@@ -224,4 +224,9 @@ public class GameServiceImple implements GameService {
 		return gameDAO.selectKeywords(keyword);
 	}
 
+	@Override
+	public int EndService(int gameId) {
+		return gameDAO.updateEndService(gameId);
+	}
+
 } // end GameServiceImple

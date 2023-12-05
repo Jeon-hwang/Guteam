@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import project.spring.guteam.domain.DiscountVO;
+import project.spring.guteam.domain.GameBoardVO;
 import project.spring.guteam.domain.GameVO;
 import project.spring.guteam.fileutil.GameImageUploadUtil;
 import project.spring.guteam.fileutil.MediaUtil;
@@ -141,6 +142,17 @@ public class GameController {
 		}	
 		
 	} // end updatePOST()
+	
+	@PostMapping("/endService")
+	public String endService(Model model, RedirectAttributes reAttr, int gameId) {
+		int result = gameService.EndService(gameId);
+		if(result==1) {
+			reAttr.addFlashAttribute("end_result", "success");
+			return "redirect:/game/list";
+		}else {
+			return "redirect:/game/detail?gameId="+gameId;
+		}
+	}
 	
 	@GetMapping("/updateVideo")
 	public void updateVideoGET(Model model, int gameId, String prevListUrl, Principal principal) {

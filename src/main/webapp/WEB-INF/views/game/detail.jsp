@@ -37,7 +37,12 @@
 	<br>
 	게임 이름 : ${vo.gameName }
 	<br>
+	<c:if test="${vo.endService=='N' }">
 	가격 : <span class="${vo.genre }">${vo.price }</span>
+	</c:if>
+	<c:if test="${vo.endService=='Y' }">
+	서비스 종료된 게임입니다.
+	</c:if>
 	<br>
 	장르 : ${vo.genre }
 	<br>
@@ -79,6 +84,12 @@
 	<div class="btn_group_detail">
 	<a href="update?gameId=${vo.gameId }&prevListUrl=" id="btnUpdate"><button class="btn btn-light">수정하기</button></a>
 	<a href="updateVideo?gameId=${vo.gameId }&prevListUrl=" id="btnUpdateVideo"><button class="btn btn-light">영상업로드</button></a>
+	<c:if test="${vo.endService=='N' }">
+	<form action="endService?gameId=${vo.gameId }" method="post" onsubmit="return confirm('정말 서비스 종료하시겠습니까?')">
+	<sec:csrfInput/>
+	<button class="btn btn-light">서비스 종료하기</button>
+	</form>
+	</c:if>
 	</div>
 	</sec:authorize>
 	<div class="btn_group_detail">
@@ -90,7 +101,7 @@
 	<input type="hidden" id="updateResult" value="${update_result }">
 	<input type="hidden" id="updateVideoResult" value="${update_video_result }">
 	<br>
-	
+	<c:if test="${vo.endService=='N' }">
 	<div class="wish_list_btn_area">
 		<button  class="btn btn-light" id="addWishList">위시리스트에 추가</button>
 		<button  class="btn btn-light" id="removeWishList" style="display : none">이미 위시리스트에 추가 되어 있습니다.</button>
@@ -101,7 +112,10 @@
 			<input type="submit" class="btn btn-light" id="submit" value="게임 구매">
 		</form>
 	</div>
-	
+	</c:if>
+	<c:if test="${vo.endService=='Y' }">
+	<p style="color:#fff;"> 서비스 종료된 게임입니다. </p>
+	</c:if>
 	</div>
 	</div>
 	</section>

@@ -43,7 +43,7 @@ public class MemberDAOImpleTest {
 	}
 
 	private void testUpdateCach() {
-		MemberVO vo = new MemberVO("test2", "1234", "테스트", "test", "00", 999999, "test", "N");
+		MemberVO vo = new MemberVO("test2", "1234", "테스트", "test", "00", 999999, "test", "N", "N");
 		int result = dao.updateCash(vo.getCash(),vo.getMemberId());
 		if(result == 1) {
 			logger.info("updateCash() 성공");
@@ -53,7 +53,7 @@ public class MemberDAOImpleTest {
 	}
 
 	private void testUpdateMem() {
-		MemberVO vo = new MemberVO("", "1234", "테스트", "test", "00", 0, "test", "N");
+		MemberVO vo = new MemberVO("", "1234", "테스트", "test", "00", 0, "test", "N", "N");
 		int result = dao.updateMem(vo);
 		if(result == 1) {
 			logger.info("update 성공");
@@ -76,7 +76,7 @@ public class MemberDAOImpleTest {
 	}
 
 	private void testInsert() {
-		MemberVO vo = new MemberVO("test3", "1234", "테스트", "test", "0000", 500, "test", "N");
+		MemberVO vo = new MemberVO("test3", "1234", "테스트", "test", "0000", 500, "test", "N", "N");
 		int result = dao.insert(vo);
 		if(result == 1) {
 			logger.info("insert() 성공");			

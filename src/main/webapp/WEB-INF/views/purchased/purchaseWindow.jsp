@@ -53,6 +53,7 @@
 		</thead>
 		<tbody>
 			<c:forEach var="vo" items="${list }" varStatus="status">
+			<c:if test="${vo.endService=='N' }">
 				<tr>
 					<td class="order"><input type="hidden" class="gameId" value="${vo.gameId }">${status.count }</td>
 					<td><img alt="${vo.gameName}" width="100px" height="100px"
@@ -61,6 +62,7 @@
 					<td class="price">${vo.price }</td>
 					<td>${vo.genre }</td>
 				</tr>
+			</c:if>
 			</c:forEach>
 		</tbody>
 	</table>

@@ -161,5 +161,10 @@ public class GameDAOImple implements GameDAO {
 		return sqlSession.selectList(NAMESPACE+".select_keyword", keyword);
 	}
 
+	@Override
+	public int updateEndService(int gameId) {
+		return sqlSession.update(NAMESPACE+".update_to_end", gameId);
+	}
+
 
 } // end GameDAOImple

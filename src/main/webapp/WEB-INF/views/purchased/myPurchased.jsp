@@ -77,11 +77,15 @@
 						 + '<span class="genre">'+this.genre+'</span>'
 						 + '<div class="active_game">'
 						 + '<span class="purchasedDate">구매 일자 : '+dateFormat(purchaseDate)+'</span><br>'
-						 if(checkGame(this.gameImageName)==0){
-					list += '<button class="download_btn"><a href="'
-						 + 'download'+this.gameImageName+'">다운로드</a></button><br>';
+						 if(this.endService=='N'){
+							 if(checkGame(this.gameImageName)==0){
+						list += '<button class="download_btn"><a href="'
+							 + 'download'+this.gameImageName+'">다운로드</a></button><br>';
+							 }else{
+						list += '<button class="run_game">실행</button><br>';
+							 }
 						 }else{
-					list += '<button class="run_game">실행</button><br>';
+							 list += '<p>서비스 종료된 게임입니다.</p>';
 						 }
 					list += '</div>'
 						 + '</li><hr>';

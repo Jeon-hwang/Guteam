@@ -49,7 +49,14 @@ public class GameBoardServiceImple implements GameBoardService {
 		List<GameBoardVO> gameBoardVOList = gameBoardDAO.select(gameId, criteria);
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < gameBoardVOList.size(); i++) {
-			nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+			if(gameBoardVOList.get(i).getDeleted().equals("Y")) {
+				gameBoardVOList.get(i).setGameBoardContent("삭제된 게시글입니다");
+				gameBoardVOList.get(i).setGameBoardTitle("삭제된 게시글 입니다");
+				gameBoardVOList.get(i).setMemberId("삭제된 게시글입니다");
+				nicknameList.add("삭제된 게시글입니다");
+			}else {
+				nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+			}
 		}
 		GameVO gameVO = gameDAO.select(gameId);
 		Map<String, Object> args = new HashMap<>();
@@ -110,7 +117,14 @@ public class GameBoardServiceImple implements GameBoardService {
 		}
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < gameBoardVOList.size(); i++) {
-			nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+			if(gameBoardVOList.get(i).getDeleted().equals("Y")) {
+				gameBoardVOList.get(i).setGameBoardContent("삭제된 게시글 입니다");
+				gameBoardVOList.get(i).setGameBoardTitle("삭제된 게시글 입니다");
+				gameBoardVOList.get(i).setMemberId("삭제된 게시글 입니다");
+				nicknameList.add("삭제된 게시글 입니다");
+			}else {
+				nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());				
+			}
 		}
 		GameVO gameVO = gameDAO.select(gameId);
 		Map<String, Object> args = new HashMap<>();
@@ -124,15 +138,21 @@ public class GameBoardServiceImple implements GameBoardService {
 	@Override
 	public Map<String, Object> read(int gameBoardId, String memberId) {
 		logger.info("gameBoard read(gameBoardId) 호출 : gameBoardId = " + gameBoardId);
-		GameBoardVO gameBoardVO = gameBoardDAO.selectByBoardId(gameBoardId);
-		String nickname = memberDAO.select(gameBoardVO.getMemberId()).getNickname();
 		Map<String, Object> args = new HashMap<>();
+		GameBoardVO gameBoardVO = gameBoardDAO.selectByBoardId(gameBoardId);
 		if(memberId!=null&&!memberId.equals("")) {
+			String nickname = memberDAO.select(gameBoardVO.getMemberId()).getNickname();
 			String memberImageName= memberDAO.select(memberId).getMemberImageName();
+			args.put("nickname", nickname);
 			args.put("memberImageName", memberImageName);			
 		}
+		if(gameBoardVO.getDeleted().equals("Y")) {
+			gameBoardVO.setGameBoardContent("삭제된 게시글 입니다");
+			gameBoardVO.setGameBoardTitle("삭제된 게시글 입니다");
+			gameBoardVO.setMemberId("삭제된 게시글 입니다");
+			args.put("nickname", "삭제된 게시글 입니다");
+		}
 		args.put("gameBoardVO", gameBoardVO);
-		args.put("nickname", nickname);
 		return args;
 	} // end read()
 
@@ -155,7 +175,14 @@ public class GameBoardServiceImple implements GameBoardService {
 		List<GameBoardVO> gameBoardVOList = gameBoardDAO.select(gameId, criteria, orderBy);
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < gameBoardVOList.size(); i++) {
-			nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+			if(gameBoardVOList.get(i).getDeleted().equals("Y")) {
+				gameBoardVOList.get(i).setGameBoardContent("삭제된 게시글 입니다");
+				gameBoardVOList.get(i).setGameBoardTitle("삭제된 게시글 입니다");
+				gameBoardVOList.get(i).setMemberId("삭제된 게시글 입니다");
+				nicknameList.add("삭제된 게시글 입니다");
+			}else {
+				nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+			}
 		}
 		GameVO gameVO = gameDAO.select(gameId);
 		Map<String, Object> args = new HashMap<>();
@@ -178,7 +205,14 @@ public class GameBoardServiceImple implements GameBoardService {
 		}
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < gameBoardVOList.size(); i++) {
-			nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+			if(gameBoardVOList.get(i).getDeleted().equals("Y")) {
+				gameBoardVOList.get(i).setGameBoardContent("삭제된 게시글 입니다");
+				gameBoardVOList.get(i).setGameBoardTitle("삭제된 게시글 입니다");
+				gameBoardVOList.get(i).setMemberId("삭제된 게시글 입니다");
+				nicknameList.add("삭제된 게시글 입니다");
+			}else {				
+				nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+			}
 		}
 		GameVO gameVO = gameDAO.select(gameId);
 		Map<String, Object> args = new HashMap<>();

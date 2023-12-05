@@ -68,13 +68,19 @@
 					width="300px" height="300px" src="display?fileName=${vo.gameImageName }">
 				</div>
 				<div class="videoArea" style="display:none;">
-				<video class="rounded mx-auto d-block" width="300px" height="300px" autoplay muted loop>
+				<video class="rounded mx-auto d-block" width="300px" height="300px" autoplay muted loop poster="display?fileName=${vo.gameImageName }">
 				<source src="/video/${vo.gameId }.mp4">
 				</video>
 				</div>
 				<input type="hidden" class="gameId" value="${vo.gameId }"><br>
 				<div class="info">
-					<h6>${vo.gameName }</h6> <p class="${vo.genre }">₩ ${vo.price }</p>
+					<h6>${vo.gameName }</h6> 
+					<c:if test="${vo.endService=='N' }">
+					<p class="${vo.genre }">₩ ${vo.price }</p>
+					</c:if>
+					<c:if test="${vo.endService=='Y' }">
+					<p>서비스 종료된 게임입니다.</p>
+					</c:if>
 					<p>${vo.genre }</p>
 					<p>
 					<c:if test="${ratingList[status.index]!=0 }">
@@ -120,6 +126,7 @@
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 	<input type="hidden" id="insertResult" value="${insert_result }">
 	<input type="hidden" id="discountResult" value="${discount_result }">
+	<input type="hidden" id="endResult" value="${end_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){
 			var selectedItem = $('.selectedItem').html();
@@ -138,6 +145,10 @@
 			var discountResult = $('#discountResult').val();
 			if(discountResult=='success'){
 				alert('할인 수정 성공!');
+			}
+			var endResult = $('#endResult').val();
+			if(endResult=='success'){
+				alert('서비스 종료!');
 			}
 			
 			$('.gameInfos').on('click', function(){

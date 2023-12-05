@@ -57,8 +57,8 @@
 	<s:authentication-manager>
 		<s:authentication-provider>
 			<s:jdbc-user-service data-source-ref="ds"
-			users-by-username-query="select member_id, password, 1 as enabled from member where member_id = ?"
-			authorities-by-username-query="select member_id, case when is_admin='Y' then 'ROLE_ADMIN' else 'ROLE_USER' end authority from member where member_id = ?"
+			users-by-username-query="select member_id, password, 1 as enabled from member where member_id = ? and deleted = 'N'"
+			authorities-by-username-query="select member_id, case when is_admin='Y' then 'ROLE_ADMIN' else 'ROLE_USER' end authority from member where member_id = ? and deleted = 'N'"
 			/>
 		<s:password-encoder ref="bcryptPasswordEncoder" />
 			

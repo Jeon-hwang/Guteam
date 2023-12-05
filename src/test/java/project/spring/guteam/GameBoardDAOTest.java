@@ -63,7 +63,7 @@ public class GameBoardDAOTest {
 	}
 
 	private void updateTest() {
-		GameBoardVO vo = new GameBoardVO(3, 0, "change", "changeTitle", "changed", null, 0);
+		GameBoardVO vo = new GameBoardVO(3, 0, "change", "changeTitle", "changed", null, 0, "N");
 		dao.update(vo);
 	}
 
@@ -82,7 +82,7 @@ public class GameBoardDAOTest {
 	}
 
 	private void insertTest() {
-		GameBoardVO vo  = new GameBoardVO(0, 5, "test2", "tset2", "test2", new Date(), 0);
+		GameBoardVO vo  = new GameBoardVO(0, 5, "test2", "tset2", "test2", new Date(), 0, "N");
 		int result = dao.insert(vo);
 		if(result==1) {
 			logger.info("success");

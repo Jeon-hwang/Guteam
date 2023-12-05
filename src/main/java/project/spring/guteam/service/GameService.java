@@ -30,4 +30,6 @@ public interface GameService {
 	// 로그인 정보를 기반으로 하는 데이터가 얼마나 있는지 리턴
 	List<String> findKeywords(String keyword);
 	// 키워드 입력시 키워드추천
+	int EndService(int gameId);
+	// 게임 서비스 종료
 }

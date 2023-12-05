@@ -87,7 +87,7 @@
 	<div class="btn_group_detail">
 	<sec:authentication property="principal" var="principal"/>
 	<sec:authorize access="isAuthenticated()">
-	<c:if test="${vo.gameBoardTitle!='삭제된 게시글 입니다' }">
+	<c:if test="${vo.deleted=='N' }">
 	<c:if test="${principal.username==vo.memberId }">
 	<a href="update?gameBoardId=${vo.gameBoardId }&page=${page}&gameId=${gameId}">
 	<button class="btn btn-light" >게시글 수정하기</button></a>

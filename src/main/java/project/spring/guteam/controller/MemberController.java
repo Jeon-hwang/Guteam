@@ -71,6 +71,8 @@ public class MemberController {
 			if(!passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {		
 				logger.info("로그인 실패 targetURL = " + targetURL);
 				reAttr.addFlashAttribute("alert", "loginFail");
+			}else if(memberService.read(memberId).getDeleted().equals("Y")) {
+				reAttr.addFlashAttribute("alert", "deleted");
 			}
 		} else {
 			reAttr.addFlashAttribute("alert", "loginFail");

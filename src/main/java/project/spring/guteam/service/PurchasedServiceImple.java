@@ -109,8 +109,8 @@ public class PurchasedServiceImple implements PurchasedService {
 
 	@Override
 	public PurchasedVO find(String memeberId, int gameId) {
-		logger.info("find 실행");
-		return purchasedDAO.find(memeberId, gameId);
+		logger.info("find 실행");		
+		return purchasedDAO.find(memeberId, gameId);		
 	}
 
 	@Transactional(value = "transactionManager")

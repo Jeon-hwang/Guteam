@@ -71,6 +71,7 @@
 					}
 				    
 				}); //end ajax
+				console.log('게임존재판단후 결과 = '+result);
 				return result;
 			}//end checkPurchasedGame
 			
@@ -87,21 +88,33 @@
 							$(data).each(function(){
 								console.log(this);
 								console.log(checkPurchasedGame(this.gameId));
-								if(checkPurchasedGame(this.gameId)==0){
+								if(this.endService=='Y'){
 								list +=	'<li class="wish_list_item">'
 									 + '<input type="hidden" class="gameId" value='+this.gameId+'>'
-									 + '<input type="checkbox" class="listCheck">'
+									 + '<input type="checkbox" class="listCheck" disabled>'
 									 + '<div class="gameImg"><img alt="'+this.gameName+'" width="100px" height="100px"'
 									 + 'src="../game/display?fileName='+this.gameImageName+'"></div>'
 									 + '<span id="gameName"><a href=../game/detail?gameId='+this.gameId+'>'+this.gameName+'</a></span>'
-									 + '<span class="genre">'+this.genre+'</span>'
-									 + '<span class="showPrice">￦'+this.price+'</span>'
-									 + '<input type="hidden" class="price" value='+this.price+'>'
+									 + '<span class="ownGame">서비스 종료된 게임입니다.</span>'
 									 + '<div class="buy_or_remove">'
-									 + '<button class="oneBuyBtn">구매</button>'
 									 + '<button class="removeWishList">X</button></div>'
 									 + '</li>'
 									 + '<hr>';
+								}else if(checkPurchasedGame(this.gameId)==0){
+									list += '<li class="wish_list_item">'
+										 + '<input type="hidden" class="gameId" value='+this.gameId+'>'
+										 + '<input type="checkbox" class="listCheck">'
+										 + '<div class="gameImg"><img alt="'+this.gameName+'" width="100px" height="100px"'
+										 + 'src="../game/display?fileName='+this.gameImageName+'"></div>'
+										 + '<span id="gameName"><a href=../game/detail?gameId='+this.gameId+'>'+this.gameName+'</a></span>'
+										 + '<span class="genre">'+this.genre+'</span>'
+										 + '<span class="showPrice">￦'+this.price+'</span>'
+										 + '<input type="hidden" class="price" value='+this.price+'>'
+										 + '<div class="buy_or_remove">'
+										 + '<button class="oneBuyBtn">구매</button>'
+										 + '<button class="removeWishList">X</button></div>'
+										 + '</li>'
+										 + '<hr>';
 								}else{
 								list += '<li class="wish_list_item">'
 									 + '<input type="hidden" class="gameId" value='+this.gameId+'>'

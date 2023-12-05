@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
  
     <select id="paging" resultType="GameBoardVO">
-    	select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+    	select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
     	from (select rownum rn, a.* from(
     	select * from ${game_board} where ${gameId}=#{gameId} order by ${gameBoardId} desc)a
     	) where rn between #{start} and #{end}
@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_by_member_id" resultType="GameBoardVO">
-	    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+	    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
 	from (select rownum rn, a.* from (select * from ${game_board} where ${gameId}=#{gameId})a, (select ${memberId} from ${member} where ${nickname} like '%'||#{keyword}||'%')b
 	where a.${memberId}=b.${memberId}
 	order by ${gameBoardId} desc)
@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_by_keyword" resultType="GameBoardVO">
-    	select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+    	select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
     	from (select rownum rn, a.* from(
     	select * from ${game_board}
     	where ${gameId}=#{gameId} and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
@@ -69,13 +69,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
     
     <update id = "update_deleted">
-    	update ${game_board}
-    	set ${gameBoardTitle} = '삭제된 게시글 입니다', ${gameBoardContent} = '삭제된 게시글 입니다', ${memberId}='deleted'
-    	where ${gameBoardId} = #{gameBoardId}
+    	update ${game_board} set ${deleted} = 'Y' where ${gameBoardId} = #{gameBoardId}
     </update>
     
     <select id="select_all_order_by_comment_cnt" resultType="GameBoardVO">
- 		select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+ 		select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
  			from (select rownum rn, a.* from(
  				select * from ${game_board} where ${gameId}=#{gameId}
     		order by ${commentCnt} desc, ${gameBoardId} desc)a ) 
@@ -83,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
  
  	<select id="select_by_keyword_order_by_comment_cnt" resultType="GameBoardVO">
- 		select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+ 		select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
  			from (select rownum rn, a.* from(
  				select * from ${game_board} where ${gameId}=#{gameId} and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
     			lower(${gameBoardContent}) like '%'||lower(#{keyword})||'%')
@@ -91,7 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_by_member_id_order_by_comment_cnt" resultType="GameBoardVO">
-    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
 	from (select rownum rn, a.* from (select * from ${game_board} where ${gameId}=#{gameId})a, (select ${memberId} from ${member} where ${nickname} like '%'||#{keyword}||'%')b
 	where a.${memberId}=b.${memberId}
 	order by ${commentCnt} desc, ${gameBoardId} desc)
@@ -99,9 +97,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="select_my_board" resultType="GameBoardVO">
-	    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}
+	    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
 	    from (select rownum rn, a.* from 
-	    (select * from ${game_board} where ${memberId}=#{memberId} order by ${gameBoardDateCreated} desc)a )
+	    (select * from ${game_board} where ${memberId}=#{memberId} and ${deleted}='N' order by ${gameBoardDateCreated} desc)a )
 	    where rn between #{start} and #{end}
     </select>
  
