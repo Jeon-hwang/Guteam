@@ -134,6 +134,7 @@ input::-webkit-inner-spin-button {
 </section>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
+	// 쪽지함 열기 (새창)
 	function popUp(){
 	   popupWin =  window.open('../message/list', '쪽지함', 'resizable');		
 	   popupWin.resizeTo(750, 500);

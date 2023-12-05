@@ -31,6 +31,7 @@ public class MessageRESTController {
 	@Autowired
 	private MemberService memberService;
 	
+	// 쪽지 삭제 (비동기)
 	@DeleteMapping("/delete/{sendRecv}")
 	public ResponseEntity<Integer> delete(@PathVariable("sendRecv") String sendRecv, @RequestBody int[] msgArr) {
 		logger.info(Arrays.toString(msgArr));
@@ -59,6 +60,7 @@ public class MessageRESTController {
 		
 	}
 	
+	// 쪽지 보관 (비동기)
 	@PutMapping("/box/{sendRecv}")
 	public ResponseEntity<Integer> update(@PathVariable("sendRecv") String sendRecv, @RequestBody int[]msgArr){
 		logger.info(Arrays.toString(msgArr));
@@ -77,6 +79,7 @@ public class MessageRESTController {
 		
 	}
 	
+	// 수신자 검색
 	@GetMapping("/search/{keyword}")
 	public ResponseEntity<List<String>> keywords(@PathVariable("keyword") String keyword) {
 		List<String> keywords = memberService.search(keyword);

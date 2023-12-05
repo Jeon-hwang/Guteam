@@ -176,8 +176,7 @@
 				</div>
 				<form action="../friend/delete" method="post">
 				<sec:csrfInput />
-				<input type="hidden" name="friendId" class="friendId"
-					value="${fvo.memberId }">
+				<input type="hidden" name="friendId" class="friendId" value="${fvo.memberId }">
 				<button type="submit" class="btn btn-light" id="btnDelete${fvo.memberId }"
 					formaction="../friend/delete" style="display:none;">친구삭제</button>
 				</form>
@@ -208,9 +207,7 @@
 			<div class="friendReq">
 			<form action="../friend/accept" method="post">
 				<sec:csrfInput />
-				<img alt="${svo.memberImageName }" width="100px"
-					height="100px"
-					src="display?fileName=${svo.memberImageName }">
+				<img alt="${svo.memberImageName }" width="100px" height="100px" src="display?fileName=${svo.memberImageName }">
 				<textarea id="toNickname" class="nameLvl" readonly>${svo.nickname }</textarea>
 				<input type="hidden" name="memberId" value="${vo.memberId }">
 				<input type="hidden" name="friendId" value="${svo.memberId }">
@@ -234,16 +231,12 @@
 			<div class="friendReq">
 				<form action="../friend/accept" method="post">
 				<sec:csrfInput />
-					<img alt="${rvo.memberImageName }" width="100px"
-						height="100px"
-						src="display?fileName=${rvo.memberImageName }">
+					<img alt="${rvo.memberImageName }" width="100px" height="100px" src="display?fileName=${rvo.memberImageName }">
 					<textarea id="toNickname" class="nameLvl" readonly>${rvo.nickname }</textarea>
 					<input type="hidden" name="memberId" value="${vo.memberId }">
 					<input type="hidden" name="friendId" value="${rvo.memberId }">
-					<button type="submit" class="btn btn-light"
-						formaction="../friend/accept">수락</button>
-					<button type="submit" class="btn btn-light"
-						formaction="../friend/reject">거절</button>
+					<button type="submit" class="btn btn-light" formaction="../friend/accept">수락</button>
+					<button type="submit" class="btn btn-light" formaction="../friend/reject">거절</button>
 				</form>
 			</div>
 
@@ -277,6 +270,8 @@
 		} else if (result == 'fail') {
 			alert('없는 아이디입니다.');
 		}
+		
+		// 친구 프로필 상세 보기 (사진클릭)
 		$('.frdImg').on('click',function(event){
 			var mpX = event.pageX;
 			var mpY = event.pageY;
@@ -316,6 +311,7 @@
 			
 		}); //end '.frdImg'.on('click')
 		
+		// 친구 프로필 상세 보기 (아이디클릭)
 		$('.nameList').on('click',function(event){
 			var mpX = event.pageX;
 			var mpY = event.pageY;

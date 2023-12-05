@@ -60,7 +60,7 @@
 			alert('가입 성공!');
 		}
 		else if(result == 'loginFail') {
-			console.log("아ㅋㅋ 틀렸다고~");
+			console.log("틀렸다고~");
 			alert('로그인에 실패하였습니다. 아이디와 비밀번호를 확인해 주세요.');
 		}
 
