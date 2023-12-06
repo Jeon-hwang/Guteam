@@ -141,7 +141,7 @@ public class GameBoardServiceImple implements GameBoardService {
 		Map<String, Object> args = new HashMap<>();
 		GameBoardVO gameBoardVO = gameBoardDAO.selectByBoardId(gameBoardId);
 		if(memberId!=null&&!memberId.equals("")) {
-			String nickname = memberDAO.select(gameBoardVO.getMemberId()).getNickname();
+			String nickname = memberDAO.selectByMemberId(gameBoardVO.getMemberId());
 			String memberImageName= memberDAO.select(memberId).getMemberImageName();
 			args.put("nickname", nickname);
 			args.put("memberImageName", memberImageName);			

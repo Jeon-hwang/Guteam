@@ -81,7 +81,7 @@ public class ReviewServiceImple implements ReviewService {
 		Map<String, Object> args = new HashMap<>();
 		ReviewVO reviewVO = reviewDAO.select(reviewId);
 		logger.info(reviewVO.toString());
-		String nickname = memberDAO.select(reviewVO.getMemberId()).getNickname();
+		String nickname = memberDAO.selectByMemberId(reviewVO.getMemberId());
 		GameVO gameVO = gameDAO.select(reviewVO.getGameId());
 		ThumbVO thumbVO = thumbDAO.select(new ThumbVO(reviewId, memberId, 0));
 		args.put("nickname", nickname);

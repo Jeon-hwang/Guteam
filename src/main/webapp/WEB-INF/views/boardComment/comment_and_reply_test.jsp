@@ -763,7 +763,7 @@
 							$('#dialog').dialog('close');
 						});
 						}else{
-							var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="../game/display?fileName=undefined_image.jpg" width="100px" height="100px" /><br>'
+							var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="/guteam/image/deleted.png" width="100px" height="100px" /><br>'
 							+ '<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
 							+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
 							+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
@@ -902,7 +902,7 @@
 								$('#dialog').dialog('close');
 							});
 							}else{
-								var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="../game/display?fileName=undefined_image.jpg" width="100px" height="100px" /><br>'
+								var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="/guteam/image/deleted.png" width="100px" height="100px" /><br>'
 								+'<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
 								+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
 								+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
