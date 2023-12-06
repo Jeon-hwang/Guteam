@@ -163,6 +163,10 @@
 					xhr.setRequestHeader(header, token);
 				},
 				success:function(data){
+					if(data==''){
+						alert('없는 회원입니다.');
+						return;
+					}
 					var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="../game/display?fileName='+data.memberImageName+'" width="100px" height="100px" /><br>'
 					+'<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
 					+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
@@ -331,6 +335,10 @@
 					xhr.setRequestHeader(header, token);
 				},
 				success:function(data){
+					if(data==''){
+						alert('없는 회원입니다.');
+						return;
+					}
 					var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="../game/display?fileName='+data.memberImageName+'" width="100px" height="100px" /><br>'
 					+'<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
 					+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
