@@ -119,7 +119,7 @@ public class BoardCommentServiceImple implements BoardCommentService {
 		List<ReplyVO> replies = replyDAO.select(commentId);
 		if(replies != null) { // 답글이 있을경우
 			for(int i=0;i<replies.size();i++) {
-				if(!replies.get(i).getReplyContent().equals("삭제된 댓글입니다.")) {
+				if(replies.get(i).getDeleted().equals("N")) { // 답글중 하나라도 삭제된 상태가 아닌것이 있다면?
 					return boardCommentDAO.updateDelete(commentId);
 				}
 			}

@@ -888,4 +888,11 @@ textarea:focus{
 .mentionMember{
 	color : #BCFF66;
 }
+#replyProfileArea{
+	position:absolute;
+	background-color : #1b2838;
+	display : inline-block;
+	width : 100%;
+	height : auto;
+}
 </style>

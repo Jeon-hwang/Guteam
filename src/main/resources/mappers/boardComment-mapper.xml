@@ -22,12 +22,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 </update>
 	 <update id="update_delete">
 	 	update ${board_comment}
-	 	set ${commentContent} = '삭제된 댓글입니다.'
+	 	set ${deleted} = 'Y'
 	 	where ${commentId} = #{commentId}
 	 </update>
 	 
 	 <select id="select_and_paging" resultType="BoardCommentVO">
-	 	select b.${commentId}, b.${gameBoardId}, b.${memberId}, b.${commentContent}, b.${replyCnt}, b.${commentDateCreated}
+	 	select b.${commentId}, b.${gameBoardId}, b.${memberId}, b.${commentContent}, b.${replyCnt}, b.${commentDateCreated},b.${deleted}
 	 	from (
 	 		select rownum rn, a.* from(
 	 			select * from ${board_comment} where ${gameBoardId}=#{gameBoardId} order by ${commentId} desc

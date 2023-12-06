@@ -89,7 +89,7 @@ public class ReplyServiceImple implements ReplyService {
 			int result = replyDAO.updateDelete(replyId); // 우선 해당 답글도 삭제상태로 바꿔줌 
 			List<ReplyVO> replies = replyDAO.select(commentId); // 댓글아래 답글들 가져오고
 			for(int i =0;i<replies.size();i++) {
-				if(!replies.get(i).getReplyContent().equals("삭제된 댓글입니다.")) { 
+				if(replies.get(i).getDeleted().equals("N")) { 
 					return result;
 				}
 			} // 모든 답글들도 삭제된 댓글입니다가 뜨면?
@@ -104,6 +104,7 @@ public class ReplyServiceImple implements ReplyService {
 			result=2;
 			return result; // 댓글도 완전 삭제
 		}else{
+			boardCommentDAO.updateReplyCnt(commentId, -1);
 			return replyDAO.updateDelete(replyId); // 이건 그냥 삭제되었습니다로만 바꾸어줌
 		}
 		

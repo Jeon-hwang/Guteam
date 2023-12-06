@@ -1,6 +1,5 @@
 package project.spring.guteam;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
@@ -12,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import project.spring.guteam.domain.BoardAndReplyVO;
 import project.spring.guteam.domain.BoardCommentVO;
 import project.spring.guteam.persistence.BoardCommentDAO;
 
@@ -64,7 +62,7 @@ public class BoardCommentDAOImpleTest {
 	}
 
 	private void insert() {
-		BoardCommentVO vo = new BoardCommentVO(0, 1, "hwnag", "반갑습니다!", null, 0,null);
+		BoardCommentVO vo = new BoardCommentVO(0, 1, "hwnag", "반갑습니다!", null, 0, null);
 		int result = dao.insert(vo);
 		if(result == 1) {
 			logger.info("insert 성공!");

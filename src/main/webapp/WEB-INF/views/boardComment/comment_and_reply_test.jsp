@@ -90,9 +90,7 @@
 				var gameBoardId = $('#gameBoardId').val();
 				var commentContent = $('#commentContent').val();
 				
-				if(commentContent == '삭제된 댓글입니다.'){
-					commentContent = '&nbsp삭제된 댓글입니다.';
-				}else if(commentContent.substring(0,9)=='(updated)'){
+				if(commentContent.substring(0,9)=='(updated)'){
 					commentContent = '&nbsp'+commentContent;
 				}
 				var obj = {
@@ -146,20 +144,22 @@
 					
 					$(data.list).each(function(){
 						var content = this.commentContent;
-						if(content.includes('@')){
-							console.log('멘션 존재함');
-							var findMention = /@[^ ]+/g;
-							var matches = content.match(findMention);
-							console.log(matches);
-							if (matches) {
-								 matches.forEach(match => {
-								        if(!content.includes('<a>'+match+'</a>')){
-								        content = content.replaceAll(match,'<a href="#" class="mentionMember">'+match+'</a>');
-								        }
-								    });
-								    console.log(content);
-							}
-						}
+						//if(content.includes('@')){
+						//	console.log(this);
+						//	console.log('멘션 존재함');
+						//	var findMention = /@[^ ]+/g;
+						//	var matches = content.match(findMention);
+						//	console.log(matches);
+						//	
+						//	if (matches) {
+						//		 matches.forEach(match => {
+						//		        if(!content.includes('<a href="#" class="mentionMember">'+match+'</a>')){
+						//		        	content = content.replaceAll(match,'<a href="#" class="mentionMember">'+match+'</a>');
+						//		        }
+						//		    });
+						//		    console.log(content);
+						//	}
+						//}
 						//console.log(this);
 						//console.log(data.nicknameList);
 						var nickname = data.nicknameList[varStatus];
@@ -167,7 +167,8 @@
 						varStatus++;
 						var commentDateCreated = new Date(this.commentDateCreated);
 						//console.log(this.commentContent.replace("(updated)",""));
-						if(this.commentContent=="삭제된 댓글입니다."){
+						console.log(this.deleted);
+						if(this.deleted == "Y"){
 						list += '<li class="comment_item">'
 								+ '<pre>'
 								+ '<input type="hidden" id="commentRow" value="'+commentRow+'">'
@@ -234,6 +235,18 @@
 					list +=	'</div>';
 						
 					$('#allComments').html(list);
+					// 여기다가 @- 바꿔주는 메소드 / 함수 실행
+					// console.log($('.commentContentView'));
+					$('.commentContentView').each(function(){
+						while(this.innerHTML.indexOf('@')!=-1){
+							var originHtml = this.innerHTML;
+							var pattern = /@[^ ]+/g;
+							var replaceHtml = originHtml.replace(pattern, function(match){
+								return '<a href="#" class="mentionMember">'+match.replace('@','')+'</a>';
+							});
+							$(this).html(replaceHtml);
+						}
+					});
 					 console.log('getAllcomments Json 끝남'); 
 					 if(openedReplyAreaRow != 0){
 							console.log('열려있는창 확인');
@@ -327,6 +340,7 @@
 			});//end delete.comment.on
 			
 			$('#allComments').on('click','.comment_item .reply_btn_area .reply_view_btn',function(){
+				
 				var commentId = $(this).parent().prevAll('#commentId').val();
 				var commentRow = $(this).parent().prevAll('#commentRow').val();
 				var url = '../boardComment/replies/all/'+commentId;
@@ -343,7 +357,7 @@
 				$(this).next().css("display","inline");
 				$(this).css("display","none");
 			
-				var commentContent = $(this).parent().prevAll('.comment_info').children('#commentContent').val();
+				var commentContent = $(this).parent().prevAll('.comment_info').children('span').text();
 				console.log('replies_Json 실행전');
 				$.getJSON(
 						url,
@@ -354,13 +368,15 @@
 						var repliesArea = '#repliesArea'+commentRow;
 						var varStatus = 0; 
 						$(data.list).each(function(){
+							var content = this.replyContent;
+							
 							console.log(this);
 							console.log('답글 보이기');
 							var nickname = data.nicknameList[varStatus];
 							var memberImageName = data.profileImageNameList[varStatus];
 							varStatus++;
 							var replyDateCreated = new Date(this.replyDateCreated);
-							if(this.replyContent=="삭제된 댓글입니다."){
+							if(this.deleted=="Y"){
 							list += '<li class="reply_item">'
 							+ '<input type="hidden" id="replyId" value="'+this.replyId+'">'
 							+ '<input type="hidden" id="replyContent" value="'+this.replyContent+'">'
@@ -373,12 +389,12 @@
 							+ '<span class="replyNickname">'+nickname + '</span>&nbsp&nbsp<span>'
 							if(this.replyContent.substring(0,9)=='(updated)'){
 							list += elapsedTime(replyDateCreated) +' (수정 됨)</span><br>'	
-							+ '<textarea class="updateReplyContent" style="display:none" maxlength="165">'+this.replyContent.replace('(updated)','')+'</textarea>'
-							+ '<span class="replyView">'+this.replyContent.replace('(updated)','') + '</span></div>'
+							+ '<textarea class="updateReplyContent" style="display:none" maxlength="165">'+content.replace('(updated)','')+'</textarea>'
+							+ '<span class="replyView">'+content.replace('(updated)','') + '</span></div>'
 							}else{
 							list += elapsedTime(replyDateCreated) +'</span><br>'	
-							+ '<textarea class="updateReplyContent" style="display:none" maxlength="165">'+this.replyContent+'</textarea>'
-							+ '<span class="replyView">'+this.replyContent + '</span></div>'
+							+ '<textarea class="updateReplyContent" style="display:none" maxlength="165">'+content+'</textarea>'
+							+ '<span class="replyView">'+content + '</span></div>'
 							}
 							if(principalMemberId==this.memberId){
 							list += '<button class="update_reply" >수정</button>'
@@ -398,12 +414,25 @@
 								list += '<a href="../member/login?targetURL=">로그인을 하셔야 답글을 달 수 있습니다</a>';
 							}else{
 								list += '<div class="reply_write_area">' 
+								+ '<div class="reply_mention_area" style="position:absolute"></div>'
 								+ '<textarea type="text" name="replyContent" class="replyContent" maxlength="165" placeholder="답글 입력"></textarea>' 
 								+ '<button class="reply_add_btn" >작성</button></div>';
 							}
 							
 							$(repliesArea).html(list);
-							console.log('reply_view Json 끝남');
+							
+							$('.replyView').each(function(){
+								while(this.innerHTML.indexOf('@')!=-1){
+									console.log(this);
+									var originHtml = this.innerHTML;
+									var pattern = /@[^ ]+/g;
+									var replaceHtml = originHtml.replace(pattern, function(match){
+										console.log('함수안'+match);
+										return '<a href="#" class="mentionMember">'+match.replace('@','')+'</a>';
+									});
+									$(this).html(replaceHtml);
+								}
+							});
 						}//end funtion(data)
 						 
 					);//end .getJSON	
@@ -630,6 +659,9 @@
 					$('#gameId').prev().append(appendMention);
 				}else if(content.substr(textFocusStart-1,1)=='@'){
 					console.log('멤버창 오픈 옆에 멘션있음');
+					mentionPlace = textFocusStart;
+					list += '<div style="position:absolute; width:200px; height:150px; overflow-y:auto; bottom: 10px; left :50px;"><div id="replyProfileArea"></div></div>'
+						$('#gameId').prev().html(list);
 				}
 				//(content.lastIndexOf('@')>content.lastIndexOf(' '))
 				if(content.lastIndexOf('@') >= 0 && key.keyCode != 32){
@@ -677,6 +709,10 @@
 			    var textFocusEnd = $('#commentContent')[0].selectionEnd;
 			    var contentOne = commentContent.substring(0, mentionPlace);
 			    var contentTwo = commentContent.substring(textFocusEnd, commentContent.length);
+				
+			    if(mentionPlace > textFocusEnd){
+			    	contentTwo = commentContent.substring(mentionPlace, commentContent.length); 
+			    }
 				console.log(commentContent);
 			    var addText = $(this).children('.commentMemberInfo').children('.commentNickname').text()+" ";
 			    console.log(addText);
@@ -727,7 +763,8 @@
 							$('#dialog').dialog('close');
 						});
 						}else{
-							var info ='<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
+							var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="../game/display?fileName=undefined_image.jpg" width="100px" height="100px" /><br>'
+							+ '<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
 							+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
 							+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
 							$('#dialog').html(info);
@@ -749,6 +786,144 @@
 					}
 				 });
 			 });
+			 
+			 $('#allComments').on('keydown keyup','.comment_item .reply_write_area textarea',function(key){
+					var textFocusStart = $(this)[0].selectionStart;
+					var textFocusEnd = $(this)[0].selectionEnd;
+					var list = '';
+					//console.log(key.keyCode);
+					
+				    //console.log('텍스트 커서 위치?');
+				    console.log(textFocusStart);
+					
+					//console.log(textFocusEnd);
+					var content = $(this).val();
+					
+				    if(key.keyCode==50 && content.substr(textFocusStart-1,1)=='@'){
+				    	mentionPlace = textFocusStart;
+						console.log('멤버창 오픈');
+			
+						list += '<div style="position:absolute; width:200px; height:150px; overflow-y:auto; bottom: 10px; left :50px;"><div id="replyProfileArea"></div></div>'
+						$(this).prev().html(list);
+
+					}else if(content.substr(textFocusStart-1,1)=='@'){
+						console.log('멤버창 오픈 옆에 멘션있음');
+						mentionPlace = textFocusStart;
+						list += '<div style="position:absolute; width:200px; height:150px; overflow-y:auto; bottom: 10px; left :50px;"><div id="replyProfileArea"></div></div>'
+						$(this).prev().html(list);
+					}
+					//(content.lastIndexOf('@')>content.lastIndexOf(' '))
+					if(content.lastIndexOf('@') >= 0 && key.keyCode != 32){
+						 //console.log('친구 태그 호출!');
+						 //console.log(content.lastIndexOf('@'));
+						 var keyword = content.substring(content.lastIndexOf('@'));
+						 console.log(keyword);
+						 var url = '../member/findNickname?keyword='+keyword;
+						 
+						 $.getJSON(
+							url,
+							function(data){
+								//console.log(data);
+								if(data.length !=0){
+								$(data).each(function(){
+									list += '<div class="memberList">'
+										 +  '<img alt="'+this.nickname+'" class="findProfileImage" src="../member/display?fileName='+this.memberImageName+'" width="50px" height="50px">'
+										 +  '<div class="commentMemberInfo"><p class="commentNickname">'+this.nickname+'</p><p class="commentMemberId" style="font-size:80%; color : lightgrey;">'+this.memberId+'</p></div>'
+										 +	'</div>';
+								});//end data.each
+									$('#replyProfileArea').html(list);
+								}
+							}
+						 );//end getJSON
+					 }
+					 if(key.keyCode == 32){ // 띄워쓰기 입력 시 
+						$('#gameId').prev().html("");
+					 }
+				 });//end replyContent.keyup keydown
+				  
+			 $('#allComments').on('click','.comment_item .reply_write_area .reply_mention_area #replyProfileArea .memberList',function(){
+				console.log('클릭 확인');
+				var replyContent = $(this).parent().parent().parent().next().val();
+				console.log('내용 확인 : '+replyContent);
+				var textFocusStart = $(this).parent().parent().parent().next()[0].selectionStart;
+			    var textFocusEnd = $(this).parent().parent().parent().next()[0].selectionEnd;
+			    var contentOne = replyContent.substring(0, mentionPlace);
+			    var contentTwo = replyContent.substring(textFocusEnd, replyContent.length);
+			    
+			    if(mentionPlace > textFocusEnd){
+			    	contentTwo = replyContent.substring(mentionPlace, commentContent.length); 
+			    }
+			    var addText = $(this).children('.commentMemberInfo').children('.commentNickname').text()+" ";
+			    console.log(addText);
+				
+			    $(this).parent().parent().parent().next().val(contentOne + addText + contentTwo);
+			    textFocusStart = textFocusStart + addText.length;
+			    $(this).parent().parent().parent().next().prop("selectionEnd", textFocusStart).focus();
+			    
+			    $(this).parent().parent().parent().html("");
+				mentionPlace=0;
+			 });//end replyProfileArea.mouseout
+			 
+			 $('#allComments').on('click','.reply_item .reply_info span a',function(event){
+					var mpX = event.pageX;
+					var mpY = event.pageY;
+					 var nickname = $(this).text().replace('@','');
+					 console.log(nickname);
+					 $.ajax({
+						type : 'post',
+						url : '../member/selectDisplay?nickname='+nickname,
+						headers : {
+							'Content-Type' : 'application/json'
+						},
+						beforeSend : function(xhr) {
+					        xhr.setRequestHeader(header, token);
+					    },
+						success : function(data){
+							console.log(data);
+							if(data.nickname != null){
+							var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="../game/display?fileName='+data.memberImageName+'" width="100px" height="100px" /><br>'
+							+'<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
+							+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
+							+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
+							$('#dialog').html(info);
+							$('#dialog').dialog({
+								resizable : false,
+								buttons:{
+									"닫기":function(){
+										$(this).dialog("close");
+									}
+								}
+							});
+							$('#ui-id-1').text(data.memberId);
+							$('.ui-widget-header').attr('style','background:#6c757d;');
+							$('.ui-widget-content').attr('style','background:#d0e0f9;');
+							$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
+							$('#dialog').parent().on('mouseleave',function(){
+								$('#dialog').dialog('close');
+							});
+							}else{
+								var info = '<img class="tagProfileImg" alt="'+data.nickname+'" src="../game/display?fileName=undefined_image.jpg" width="100px" height="100px" /><br>'
+								+'<p><i class="bi bi-person-square"></i> : ' + data.nickname + '</p>'
+								+ '<p><i class="bi bi-envelope"></i> : '+ data.email+'</p>'
+								+ '<p><i class="bi bi-phone-vibrate"></i> : '+ data.phone+'</p>';
+								$('#dialog').html(info);
+								$('#dialog').dialog({
+									resizable : false,
+									buttons:{
+										"닫기":function(){
+											$(this).dialog("close");
+										}
+									}
+								});
+								$('#ui-id-1').text('존재하지 않는 회원입니다.');
+								$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
+								$('#dialog').parent().on('mouseleave',function(){
+									$('#dialog').dialog('close');
+								});
+							}
+						}
+					 });
+				 });
 		});//end document
 	</script>
 </body>

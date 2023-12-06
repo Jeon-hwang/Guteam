@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<property name="boardId" value="board_id"/>
 		<property name="content" value="content"/>
 		<property name="createdDate" value="created_date"/>
+		<property name="deleted" value="deleted"/>
 		
 		<property name="discount" value="discount"/>
 		<property name="genre" value="genre"/>
@@ -34,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	 	<property name="memberId" value="member_id"/>
 	 	<property name="replyContent" value="reply_content"/>
 	 	<property name="replyDateCreated" value="reply_date_created"/>
+		<property name="deleted" value="deleted"/>
 	 	
 	 	<property name="game" value="game"/>
    		<property name="gameId" value="game_id"/>
