@@ -7,45 +7,10 @@
 <meta charset="UTF-8">
 <title>GUTEAM : 회원 가입</title>
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
-
 <style type="text/css">
-.titleArea {
-	justify-content: center;
-}
 span {
 	color:#fff;
 	font-weight:bolder;
-}
-.container {
-	width: 450px;
-	display: flex;
-	flex-direction: column;
-    flex-wrap: wrap;
-	border: solid snow 5px;
-	border-radius: 30px;
-    margin-top: 20px;
-}
-
-.infoArea {
-	margin: 0px;
-	display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-}
-.inputBox {
-	height: 45px;
-    vertical-align: super;
-    font-size: 20px;
-}
-.selBox {
-	width: 365px;
-    display: flex;
-    justify-content: flex-end;
-}
-#emailAddress {
-	width: 120px;
-	height: 30px;
-	display: flex;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -59,64 +24,54 @@ span {
 	<div class="titleArea">
 		<h2>회원 가입</h2>
 	</div>
+	<form action="register" method="post" id="register">
+	<sec:csrfInput/>
 		<div class="info">
-		<form action="register" method="post" id="register">
-		<sec:csrfInput/>
-			<div class="infoArea">
-				<i class="bi bi-person fs-2"></i>
-				<input type="text" id="memberId" name="memberId" class="inputBox" placeholder="ID 입력" required />
+			<div>
+				<span>아이디 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="memberId" name="memberId" placeholder="ID 입력" required /></span>
 				<span id="checkOk" style="display:none; color:#10af85;">사용 가능한 아이디입니다.</span>
 				<span id="checkNo" style="display:none; color:#e2252b;">아이디가 이미 존재합니다.</span>
-				
+				<br>
 				<span id="failLength" style="display:none; color:#fff;">ID는 4~12 글자로 입력해 주세요.</span>
 				<span id="failKor" style="display:none; color:#fff;">ID는 영어 또는 숫자만 가능합니다.</span>
 			</div>
 			<br>
-			<div class="infoArea">
-				<i class="bi bi-file-lock2 fs-2"></i>
-				<input type="password" id="pwd" name="password" class="inputBox" placeholder="PW 입력" required />	
-				<span id="checkPwd" style="display:none; color:#fff; width: 260px; font-size: 14px;">8자 이상, 최소한 영문, 숫자, 특수기호를 1자씩 사용해 주세요.<br>특수기호 : (!@#$%^&*?.)</span>
+			<div>
+				<span>비밀번호 :&nbsp;<input type="password" id="pwd" name="password" placeholder="PW 입력" required /></span>
+				<br>
+				<span id="checkPwd" style="display:none; color:#fff">8자 이상, 최소한 영문, 숫자, 특수기호를 1자씩 사용해 주세요.<br>특수기호 : (!@#$%^&*?.)</span>
 			</div>
 			<br>
-			<div class="infoArea">
-				<i class="bi bi-file-lock2-fill fs-2"></i>
-				<input type="password" id="pwdCheck" class="inputBox" placeholder="PW 확인" required />
+			<div>
+				<span>비번확인 :&nbsp;<input type="password" id="pwdCheck" placeholder="PW 확인" required /></span>
 				<span id="checkPwdYes" style="display:none; color:#10af85">비밀 번호가 일치합니다.</span>
 				<span id="checkPwdNo" style="display:none; color:#fff">비밀 번호가 일치하지 않습니다.</span>
 			</div>
 			<br>
-			<div class="infoArea">
-				<i class="bi bi-person fs-2"></i>
-				<input type="text" id="nickname" name="nickname" class="inputBox" placeholder="닉네임" required />
-				<span id="checkNickNoGood" style="display:none; color:#e2252b;">올바른 닉네임(영문/숫자/한글만 가능)을 사용해주세요.</span>
+			<div>
+				<span>닉네임 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="nickname" name="nickname" placeholder="닉네임" required /></span>
 				<span id="checkNickNo" style="display:none; color:#e2252b;">사용 중인 닉네임입니다.</span>
 				<span id="checkNickY" style="display:none; color:#10af85;">사용 가능한 닉네임입니다.</span>
 			</div>
 			<br>
-			<div class="infoArea">
-				<i class="bi bi-envelope fs-2"></i>
-				<div>
-				<input type="text" name="emailId" id="emailId" class="inputBox" style="width:120px;" required />
-				<i class="bi bi-at fs-2"></i>
-				<input type="text" name="emailTxt" id="emailTxt" class="inputBox" style="width:122px;" required />
-				</div>
-				<div class="selBox">
-				<select name="emailAddress" id="emailAddress">
-					<option value="">직접입력</option>
-					<option value="naver.com">naver.com</option>
-					<option value="gamail.com">gamail.com</option>
-					<option value="nate.com">nate.com</option>
-					<option value="hanmail.com">hanmail.com</option>
-					<option value="guteam.com">guteam.com</option>
-				</select>
-				</div>
-				<div id="emailChk"></div>
-				<input type="hidden" id="email" name="email">
+			<div>
+				<span>이메일 :&nbsp;
+					<input type="text" name="emailId" id="emailId" style="width:120px;" required />@</span>
+					<input type="text" name="emailTxt" id="emailTxt" style="width:120px;" required />
+					<select name="emailAddress" id="emailAddress">
+						<option value="">직접입력</option>
+						<option value="naver.com">naver.com</option>
+						<option value="gamail.com">gamail.com</option>
+						<option value="nate.com">nate.com</option>
+						<option value="hanmail.com">hanmail.com</option>
+						<option value="guteam.com">guteam.com</option>
+					</select>
+					<div id="emailChk"></div>
+					<input type="hidden" id="email" name="email">
 			</div>
 			<br>
-			<div class="infoArea">
-				<i class="bi bi-phone fs-2"></i>
-				<input type="tel" name="phone" id="phone" class="inputBox" placeholder="휴대폰 번호 입력" required />
+			<div>
+				<span> 연락처 :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="tel" name="phone" id="phone" required /></span>
 				<span id="checkPh" style="display:none;" >연락처를 정확히 입력해 주세요.</span>
 			</div>
 			<br>
@@ -125,8 +80,8 @@ span {
 			<div style="width:250px; display:flex; justify-content: flex-end;">
 				<input type="submit" class="btn btn-light" value="가입">
 			</div>
-		</form>
 		</div>
+	</form>
 </div>
 </div>
 </section>
@@ -270,14 +225,6 @@ span {
 			
 			var nickname = $('#nickname').val();
 			console.log('nickname = ' + nickname);
-			
-			var pattern = /([^0-9a-zA-Z가-힣!@#\$%\^&\*_\-+~`\x20])/i;		
-			if(pattern.test(nickname)){
-				$('#checkNickNoGood').show();
-				return;
-			}else{
-				$('#checkNickNoGood').hide();
-			}
 			
 			$.ajax({
 				type : 'POST',
