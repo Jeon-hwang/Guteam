@@ -65,7 +65,7 @@ public class ReviewServiceImple implements ReviewService {
 		List<ReviewVO> reviewList = reviewDAO.select(gameId, criteria);
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < reviewList.size(); i++) {
-			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
+			nicknameList.add(memberDAO.selectByMemberId(reviewList.get(i).getMemberId()));
 		}
 		GameVO gameVO = gameDAO.select(gameId);
 		args.put("reviewList", reviewList);
@@ -160,7 +160,7 @@ public class ReviewServiceImple implements ReviewService {
 		List<ReviewVO> reviewList = reviewDAO.selectByKeyword(gameId, criteria, keyword);
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < reviewList.size(); i++) {
-			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
+			nicknameList.add(memberDAO.selectByMemberId(reviewList.get(i).getMemberId()));
 		}
 		GameVO gameVO = gameDAO.select(gameId);
 		args.put("reviewList", reviewList);
@@ -183,7 +183,7 @@ public class ReviewServiceImple implements ReviewService {
 		List<ReviewVO> reviewList = reviewDAO.selectByKeywordOrderBy(gameId, criteria, keyword);
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < reviewList.size(); i++) {
-			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
+			nicknameList.add(memberDAO.selectByMemberId(reviewList.get(i).getMemberId()));
 		}
 		GameVO gameVO = gameDAO.select(gameId);
 		args.put("reviewList", reviewList);
@@ -200,7 +200,7 @@ public class ReviewServiceImple implements ReviewService {
 		List<ReviewVO> reviewList = reviewDAO.selectOrderBy(gameId, criteria);
 		List<String> nicknameList = new ArrayList<>();
 		for(int i = 0 ; i < reviewList.size(); i++) {
-			nicknameList.add(memberDAO.select(reviewList.get(i).getMemberId()).getNickname());
+			nicknameList.add(memberDAO.selectByMemberId(reviewList.get(i).getMemberId()));
 		}
 		GameVO gameVO = gameDAO.select(gameId);
 		args.put("reviewList", reviewList);

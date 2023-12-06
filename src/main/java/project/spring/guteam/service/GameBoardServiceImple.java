@@ -55,7 +55,7 @@ public class GameBoardServiceImple implements GameBoardService {
 				gameBoardVOList.get(i).setMemberId("삭제된 게시글입니다");
 				nicknameList.add("삭제된 게시글입니다");
 			}else {
-				nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+				nicknameList.add(memberDAO.selectByMemberId(gameBoardVOList.get(i).getMemberId()));
 			}
 		}
 		GameVO gameVO = gameDAO.select(gameId);
@@ -123,7 +123,7 @@ public class GameBoardServiceImple implements GameBoardService {
 				gameBoardVOList.get(i).setMemberId("삭제된 게시글 입니다");
 				nicknameList.add("삭제된 게시글 입니다");
 			}else {
-				nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());				
+				nicknameList.add(memberDAO.selectByMemberId(gameBoardVOList.get(i).getMemberId()));
 			}
 		}
 		GameVO gameVO = gameDAO.select(gameId);
@@ -181,7 +181,7 @@ public class GameBoardServiceImple implements GameBoardService {
 				gameBoardVOList.get(i).setMemberId("삭제된 게시글 입니다");
 				nicknameList.add("삭제된 게시글 입니다");
 			}else {
-				nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+				nicknameList.add(memberDAO.selectByMemberId(gameBoardVOList.get(i).getMemberId()));
 			}
 		}
 		GameVO gameVO = gameDAO.select(gameId);
@@ -210,8 +210,12 @@ public class GameBoardServiceImple implements GameBoardService {
 				gameBoardVOList.get(i).setGameBoardTitle("삭제된 게시글 입니다");
 				gameBoardVOList.get(i).setMemberId("삭제된 게시글 입니다");
 				nicknameList.add("삭제된 게시글 입니다");
-			}else {				
-				nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+			}else {
+				if(memberDAO.select(gameBoardVOList.get(i).getMemberId())!=null) {
+					nicknameList.add(memberDAO.select(gameBoardVOList.get(i).getMemberId()).getNickname());
+				}else {
+					nicknameList.add("탈퇴한 회원입니다.");
+				}
 			}
 		}
 		GameVO gameVO = gameDAO.select(gameId);
