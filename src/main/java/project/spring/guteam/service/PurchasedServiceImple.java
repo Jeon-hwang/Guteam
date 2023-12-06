@@ -121,8 +121,10 @@ public class PurchasedServiceImple implements PurchasedService {
 		List<String> imageNameList = new ArrayList<String>();
 		for(int i = 0; i<friendIdList.size();i++) { 
 			String friendId = friendIdList.get(i);
-			String imageName = memberDAO.select(friendId).getMemberImageName();
-			imageNameList.add(imageName);
+			if(memberDAO.select(friendId)!=null) {
+				String imageName = memberDAO.select(friendId).getMemberImageName();
+				imageNameList.add(imageName);				
+			}
 		}
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("imageNameList", imageNameList);

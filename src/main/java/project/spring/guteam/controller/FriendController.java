@@ -101,6 +101,11 @@ public class FriendController {
     	logger.info("addFriend() vo ? " + vo.toString());
     	// 이미 친구인지?
     	int result = friendService.read(principal.getName(), vo.getReceiveMemberId());
+    	if ( memberService.read(vo.getReceiveMemberId())==null) {
+    		logger.info("없는 아이디 입니다.");
+			reAttr.addFlashAttribute("fnd_alert", "fail");
+			return "redirect:/friend/list";
+    	}
     	
     	if(result == 1) { // 이미 친구
     		reAttr.addFlashAttribute("fnd_alert", "friend");

@@ -167,6 +167,7 @@
 		<table>
 		<tbody>
 		<c:forEach var="fvo" items="${friendList }">
+		<c:if test="${fvo.deleted=='N' }">
 			<div class="friend">
 				<input type="image" class="frdImg" alt="${fvo.memberId }" src="display?fileName=${fvo.memberImageName }" readonly />
 				<div class="nameList">
@@ -181,6 +182,7 @@
 					formaction="../friend/delete" style="display:none;">친구삭제</button>
 				</form>
 			</div>
+		</c:if>
 		</c:forEach>
 		</tbody>
 		</table>
@@ -269,6 +271,8 @@
 			alert('친구요청이 완료되었습니다.');
 		} else if (result == 'fail') {
 			alert('없는 아이디입니다.');
+		} else if (result == 'deleted'){
+			alert('삭제한 아이디 입니다.');
 		}
 		
 		// 친구 프로필 상세 보기 (사진클릭)

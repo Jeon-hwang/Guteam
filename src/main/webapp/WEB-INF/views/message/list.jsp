@@ -175,6 +175,7 @@ td {
 		}
 
 	}); //end document
+	
 	// 체크박스 전체 선택 (전체 선택 후 체크 하나 해제시 전체박스 체크해제)
 	$(function(){
 		var rowCnt = $('input[name="msgIdChk"]').length;

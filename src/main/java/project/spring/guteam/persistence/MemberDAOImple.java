@@ -78,7 +78,7 @@ public class MemberDAOImple implements MemberDAO {
 	@Override
 	public int delete(String memberId) {
 		logger.info("delete() 호출 memberId = " + memberId);
-		return sqlSession.delete(NAMESPACE + ".delete", memberId);
+		return sqlSession.update(NAMESPACE + ".delete", memberId);
 	}
 
 	@Override

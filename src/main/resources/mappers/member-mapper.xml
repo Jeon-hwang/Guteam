@@ -13,24 +13,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 </insert> -->
 	 <insert id="insert">
 	 insert into ${member}
-	 (${memberId}, ${password}, ${nickname}, ${email}, ${phone}, ${cash}, ${memberImageName}, ${isAdmin})
-	 values (#{memberId}, #{password}, #{nickname}, #{email}, #{phone}, #{cash}, #{memberImageName}, #{isAdmin})
+	 (${memberId}, ${password}, ${nickname}, ${email}, ${phone}, ${cash}, ${memberImageName})
+	 values (#{memberId}, #{password}, #{nickname}, #{email}, #{phone}, #{cash}, #{memberImageName})
 	 </insert>
 	 
 	 <select id="select_all" resultType="MemberVO">
-	 select * from ${member} order by ${memberId} desc
+	 select * from ${member} order by ${memberId} and ${deleted}='N' desc
 	 </select>
 	 
 	 <select id="select_by_member_id" resultType="MemberVO">
-	 select * from ${member} where ${memberId} = #{memberId}
+	 select * from ${member} where ${memberId} = #{memberId} and ${deleted}='N'
 	 </select>
 	 
 	 <select id="selectAll_by_nickname" resultType="String">
 	 select ${nickname} ||' ('||${memberId} || ')' as keyword from ${member} where lower(${memberId}) like '%'||lower(#{keyword})||'%'
-	 AND ${isAdmin} not like 'Y'
+	 AND ${isAdmin} not like 'Y' and ${deleted}='N'
 	 union
 	 select ${nickname} ||' ('||${memberId} || ')' as keyword from ${member} where lower(${nickname}) like '%'||lower(#{keyword})||'%'
-	 AND ${isAdmin} not like 'Y'
+	 AND ${isAdmin} not like 'Y' and ${deleted}='N'
 	 </select>
 	 
 	 <select id="select_by_nickname" resultType="String">
@@ -45,23 +45,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 update ${member} 
 	 set ${password} = #{password}, ${nickname} = #{nickname}, ${email} = #{email}, ${phone} = #{phone}, 
 	 		${memberImageName} = #{memberImageName}
-	 where ${memberId} = #{memberId}
+	 where ${memberId} = #{memberId} and ${deleted}='N'
 	 </update>
 	 
 	 <update id="update_cash">
-	 update ${member} set ${cash} = #{cash} where ${memberId} = #{memberId}
+	 update ${member} set ${cash} = #{cash} where ${memberId} = #{memberId} and ${deleted}='N'
 	 </update>
 	 
-	 <delete id="delete">
-	 delete from ${member} where ${memberId} = #{memberId}
-	 </delete>
+	 <update id="delete">
+	 update ${member} set ${deleted}='Y' where ${memberId} = #{memberId}
+	 </update>
 	 	 
 	 <select id="select_by_keyword" resultType="MemberVO">
-	 	select * from ${member} where ${nickname} like '%'||#{keyword}||'%'
+	 	select * from ${member} where ${nickname} like '%'||#{keyword}||'%' and ${deleted}='N'
 	 </select>
 
 	 <select id="select_nickname" resultType="MemberVO">
-	 	select * from ${member} where ${nickname} = #{nickname}
+	 	select * from ${member} where ${nickname} = #{nickname} and ${deleted}='N'
 	 </select>
 	 
 </mapper>

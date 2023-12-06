@@ -267,7 +267,7 @@ td {
 		}
 
 		// 수신 ID 검색
-		// Id 키보드 선택
+		// Id 리스트 키보드 선택
 		$('#searchIds').on('keyup',function(e){
 			// 방향키 위로
 			if(e.keyCode==38){
@@ -298,7 +298,7 @@ td {
 		});
 		
 		
-		// List에서 input 태그로(키보드)
+		// input 태그로(키보드)
 		$('#receiverNickname').on('keyup', function(e){
 			var keyword = $(this).val();
 			console.log("search() keyword="+keyword);
