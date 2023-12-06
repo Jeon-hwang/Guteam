@@ -6,6 +6,45 @@
 <html>
 <head>
 <jsp:include page="../style.jsp"></jsp:include>
+<style type="text/css">
+.gradient-border {
+	width: 100%;
+  --borderWidth: 5px;
+  background: #1D1F20;
+  position: relative;
+  border-radius: var(--borderWidth);
+}
+.gradient-border:after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+  border-radius: calc(1.5 * var(--borderWidth));
+  z-index: -1;
+  animation: animatedgradient 5s ease alternate infinite;
+  background-size: 300% 300%;
+}
+
+
+@keyframes animatedgradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+.formArea {
+	justify-content: flex-end;
+}
+}
+</style>
 <meta charset="UTF-8" >
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -23,6 +62,7 @@
 <div id="wrap">
 	<c:if test="${param.error==1 }">아이디와 비밀번호를 확인해주세요 </c:if>
 	<br>
+	<div class="gradient-border">
 	<div class="titleArea">
 		<h1>Log in</h1>
 	</div>
@@ -47,6 +87,7 @@
 			<input class="btn btn-light" type="submit" value="로그인">
 		</div>
 	</form>
+</div>
 </div>
 </div>
 </div>
