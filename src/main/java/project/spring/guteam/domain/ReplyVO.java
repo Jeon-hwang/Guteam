@@ -8,17 +8,19 @@ public class ReplyVO {
 	String memberId;
 	String replyContent;
 	Date replyDateCreated;
+	String deleted;
 	
 	public ReplyVO() {}
 
 	
-	public ReplyVO(int replyId, int commentId, String memberId, String replyContent, Date replyDateCreated) {
+	public ReplyVO(int replyId, int commentId, String memberId, String replyContent, Date replyDateCreated,String deleted) {
 		super();
 		this.replyId = replyId;
 		this.commentId = commentId;
 		this.memberId = memberId;
 		this.replyContent = replyContent;
 		this.replyDateCreated = replyDateCreated;
+		this.deleted = deleted;
 	}
 
 	public int getReplyId() {
@@ -60,7 +62,14 @@ public class ReplyVO {
 	public void setReplyDateCreated(Date replyDateCreated) {
 		this.replyDateCreated = replyDateCreated;
 	}
-
+	
+	public String getDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted(String deleted) {
+		this.deleted = deleted;
+	}
 	@Override
 	public String toString() {
 		return "ReplyVO [replyId=" + replyId + ", commentId=" + commentId + ", memberId=" + memberId + ", replyContent="

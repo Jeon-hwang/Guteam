@@ -1,6 +1,5 @@
 package project.spring.guteam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -19,7 +18,7 @@ import project.spring.guteam.persistence.FriendDAO;
 @ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/**/*.xml"})  
 @WebAppConfiguration 
 public class FriendDAOImpleTest {
-	private static final Logger logger = LoggerFactory.getLogger(BoardCommentDAOImpleTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(FriendDAOImpleTest.class);
 	
 	@Autowired
 	private FriendDAO dao;
