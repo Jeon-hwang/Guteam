@@ -30,13 +30,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	select b.${commentId}, b.${gameBoardId}, b.${memberId}, b.${commentContent}, b.${replyCnt}, b.${commentDateCreated},b.${deleted}
 	 	from (
 	 		select rownum rn, a.* from(
-	 			select * from ${board_comment} where ${gameBoardId}=#{gameBoardId} order by ${commentId} desc
+	 			select * from ${board_comment} where ${gameBoardId}=#{gameBoardId} and (${deleted} = 'N' or ${replyCnt} > 0) order by ${commentId} desc
 	 		)a
 	 	)b where rn between #{start} and #{end} 
 	 </select>
 	 
 	 <select id="total_count" resultType="Integer">
-	 	select count(*) total_cnt from ${board_comment} where ${gameBoardId}=#{gameBoardId}
+	 	select count(*) total_cnt from ${board_comment} where ${gameBoardId}=#{gameBoardId} and ${deleted} = 'N'
 	 </select>
 	 
 	 <select id="get_board_id" resultType="Integer">
@@ -57,17 +57,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 <select id="select_all_comment" resultType="BoardAndReplyVO">
 	 	select b.* from 
 	 	(select rownum rn, a.* from
-	 	(select a.${gameBoardId} as ${boardId}, a.${commentContent} as content,a.${commentDateCreated} as ${createdDate},b.${gameId} from (select * from ${board_comment} where ${memberId}=#{memberId})a, (select * from ${game_board})b where a.${gameBoardId} = b.${gameBoardId}
+	 	(select a.${gameBoardId} as ${boardId}, a.${commentContent} as content,a.${commentDateCreated} as ${createdDate},b.${gameId} from (select * from ${board_comment} where ${memberId}=#{memberId} and ${deleted}='N')a, (select * from ${game_board})b where a.${gameBoardId} = b.${gameBoardId}
 		union all
-		select c.${gameBoardId} as ${boardId},c.${replyContent} as content ,c.${replyDateCreated} as ${createdDate},d.${gameId} from (select a.*,b.${gameBoardId} from (select * from ${reply} where ${memberId}=#{memberId})a, (select * from ${board_comment})b where a.${commentId}=b.${commentId})c, (select * from ${game_board})d where c.${gameBoardId}=d.${gameBoardId} order by ${createdDate} desc
+		select c.${gameBoardId} as ${boardId},c.${replyContent} as content ,c.${replyDateCreated} as ${createdDate},d.${gameId} from (select a.*,b.${gameBoardId} from (select * from ${reply} where ${memberId}=#{memberId} and ${deleted}='N')a, (select * from ${board_comment})b where a.${commentId}=b.${commentId})c, (select * from ${game_board})d where c.${gameBoardId}=d.${gameBoardId} order by ${createdDate} desc
 		)
 		a)b where rn between #{start} and #{end}
 	</select>	 
 	 <select id="select_all_comment_count" resultType="Integer">
 	 	select count(*) from
-	 	(select a.${gameBoardId} as ${boardId}, a.${commentContent} as content,a.${commentDateCreated} as ${createdDate},b.${gameId} from (select * from ${board_comment} where ${memberId}=#{memberId})a, (select * from ${game_board})b where a.${gameBoardId} = b.${gameBoardId}
+	 	(select a.${gameBoardId} as ${boardId}, a.${commentContent} as content,a.${commentDateCreated} as ${createdDate},b.${gameId} from (select * from ${board_comment} where ${memberId}=#{memberId} and ${deleted}='N')a, (select * from ${game_board})b where a.${gameBoardId} = b.${gameBoardId}
 		union all
-		select c.${gameBoardId} as ${boardId},c.${replyContent} as content ,c.${replyDateCreated} as ${createdDate},d.${gameId} from (select a.*,b.${gameBoardId} from (select * from ${reply} where ${memberId}=#{memberId})a, (select * from ${board_comment})b where a.${commentId}=b.${commentId})c, (select * from ${game_board})d where c.${gameBoardId}=d.${gameBoardId} order by ${createdDate} desc)
+		select c.${gameBoardId} as ${boardId},c.${replyContent} as content ,c.${replyDateCreated} as ${createdDate},d.${gameId} from (select a.*,b.${gameBoardId} from (select * from ${reply} where ${memberId}=#{memberId} and ${deleted}='N')a, (select * from ${board_comment})b where a.${commentId}=b.${commentId})c, (select * from ${game_board})d where c.${gameBoardId}=d.${gameBoardId} order by ${createdDate} desc)
 	</select>	 
 	
 	<delete id="delete">

@@ -329,9 +329,7 @@
 					    },
 						success : function(result){
 							if(result==1){
-								getAllComments(nowPage);
-							}else if(result==2){
-								$('#commentCnt').text(parseInt($('#commentCnt').text())-1-replyCnt);
+								$('#commentCnt').text(parseInt($('#commentCnt').text())-1);
 								getAllComments(nowPage);
 							}
 						}	
@@ -548,10 +546,13 @@
 					        xhr.setRequestHeader(header, token);
 					    },
 						success : function(result){
+							console.log('결과값 :'+ result);
 							if(result==1){
+								commentCnt = $('#commentCnt').text()-1;
+								$('#commentCnt').text(commentCnt);
 								$(replyViewBtnClick).trigger("click");
 							}else if(result==2){
-								commentCnt = ($('#commentCnt').text()-commentCnt)-1;
+								commentCnt = $('#commentCnt').text()-1;
 								console.log($('#commentCnt').text());
 								console.log(commentCnt);
 								$('#commentCnt').text(commentCnt);
@@ -649,18 +650,18 @@
 				
 				//console.log(textFocusEnd);
 				var content = $('#commentContent').val();
-				
+				var height = 0;
 			    if(key.keyCode==50 && content.substr(textFocusStart-1,1)=='@'){
 			    	mentionPlace = textFocusStart;
 					console.log('멤버창 오픈');
 					appendMention = '<input type="hidden" id="mentionLocation'+textFocusStart+'" value="'+textFocusStart+'">';
-					list += '<div style="position:absolute; width:200px; height:150px; overflow-y:auto; bottom: 10px; left :50px;"><div id="commentProfileArea"></div></div>'
+					list += '<div id="openMention" style="position:absolute; width:200px; height:0px; overflow-y:auto; bottom: 10px; left :50px;"><div id="commentProfileArea"></div></div>'
 					$('#gameId').prev().html(list);
 					$('#gameId').prev().append(appendMention);
 				}else if(content.substr(textFocusStart-1,1)=='@'){
 					console.log('멤버창 오픈 옆에 멘션있음');
 					mentionPlace = textFocusStart;
-					list += '<div style="position:absolute; width:200px; height:150px; overflow-y:auto; bottom: 10px; left :50px;"><div id="replyProfileArea"></div></div>'
+					list += '<div id="openMention" style="position:absolute; width:200px; height:0px; overflow-y:auto; bottom: 10px; left :50px;"><div id="commentProfileArea"></div></div>'
 						$('#gameId').prev().html(list);
 				}
 				//(content.lastIndexOf('@')>content.lastIndexOf(' '))
@@ -675,6 +676,10 @@
 						url,
 						function(data){
 							//console.log(data);
+							var addHeight = data.length * 51;
+							if(addHeight > 153){
+								addHeight = 153;
+							}
 							if(data.length !=0){
 							$(data).each(function(){
 								list += '<div class="memberList">'
@@ -683,6 +688,7 @@
 									 +	'</div>';
 							});//end data.each
 								$('#commentProfileArea').html(list);
+								$('#openMention').css('height',addHeight+'px');
 							}
 						}
 					 );//end getJSON
@@ -803,13 +809,13 @@
 				    	mentionPlace = textFocusStart;
 						console.log('멤버창 오픈');
 			
-						list += '<div style="position:absolute; width:200px; height:150px; overflow-y:auto; bottom: 10px; left :50px;"><div id="replyProfileArea"></div></div>'
+						list += '<div id="openMention" style="position:absolute; width:200px; height:0px; overflow-y:auto; bottom: 10px; left :50px;"><div id="replyProfileArea"></div></div>'
 						$(this).prev().html(list);
 
 					}else if(content.substr(textFocusStart-1,1)=='@'){
 						console.log('멤버창 오픈 옆에 멘션있음');
 						mentionPlace = textFocusStart;
-						list += '<div style="position:absolute; width:200px; height:150px; overflow-y:auto; bottom: 10px; left :50px;"><div id="replyProfileArea"></div></div>'
+						list += '<div id="openMention" style="position:absolute; width:200px; height:0px; overflow-y:auto; bottom: 10px; left :50px;"><div id="replyProfileArea"></div></div>'
 						$(this).prev().html(list);
 					}
 					//(content.lastIndexOf('@')>content.lastIndexOf(' '))
@@ -824,6 +830,10 @@
 							url,
 							function(data){
 								//console.log(data);
+								var addHeight = data.length * 51;
+								if(addHeight>153){
+									addHeight =153;
+								}
 								if(data.length !=0){
 								$(data).each(function(){
 									list += '<div class="memberList">'
@@ -832,6 +842,7 @@
 										 +	'</div>';
 								});//end data.each
 									$('#replyProfileArea').html(list);
+									$('#openMention').css('height',addHeight+'px');
 								}
 							}
 						 );//end getJSON

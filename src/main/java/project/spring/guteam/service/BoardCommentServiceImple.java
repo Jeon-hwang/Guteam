@@ -116,24 +116,25 @@ public class BoardCommentServiceImple implements BoardCommentService {
 	@Transactional(value = "transactionManager")
 	@Override
 	public int delete(int commentId,int boardId) {
-		List<ReplyVO> replies = replyDAO.select(commentId);
-		if(replies != null) { // 답글이 있을경우
-			for(int i=0;i<replies.size();i++) {
-				if(replies.get(i).getDeleted().equals("N")) { // 답글중 하나라도 삭제된 상태가 아닌것이 있다면?
-					return boardCommentDAO.updateDelete(commentId);
-				}
-			}
-			for(int i=0;i<replies.size();i++) {
-				replyDAO.delete(replies.get(i).getReplyId());
+	//	List<ReplyVO> replies = replyDAO.select(commentId);
+	//	if(replies != null) { // 답글이 있을경우
+	//		for(int i=0;i<replies.size();i++) {
+	//			if(replies.get(i).getDeleted().equals("N")) { // 답글중 하나라도 삭제된 상태가 아닌것이 있다면?
 				gameBoardDAO.updateCommentCnt(boardId, -1);
-			}
-			gameBoardDAO.updateCommentCnt(boardId, -1);
-			boardCommentDAO.delete(commentId);
-			return 2;
-		}else { // 답글이 없을경우
-			gameBoardDAO.updateCommentCnt(boardId, -1);
-			return boardCommentDAO.delete(commentId);
-		}
+				return boardCommentDAO.updateDelete(commentId);
+	//			}
+	//		}
+	//		for(int i=0;i<replies.size();i++) {
+	//			replyDAO.delete(replies.get(i).getReplyId());
+	//			gameBoardDAO.updateCommentCnt(boardId, -1);
+	//		}
+	//		gameBoardDAO.updateCommentCnt(boardId, -1);
+	//		boardCommentDAO.delete(commentId);
+	//		return 2;
+	//	}else { // 답글이 없을경우
+	//		gameBoardDAO.updateCommentCnt(boardId, -1);
+	//		return boardCommentDAO.delete(commentId);
+	//	}
 	
 	}
 	
