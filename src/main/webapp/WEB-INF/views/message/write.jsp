@@ -353,12 +353,12 @@ td {
 			}
 		}); //end .on'keyup'
 		
-		//$('#receiverNickname').on('focusout', debounce(function(){
-		//	$('#searchIds').css('display', 'none');
-		//}, 200));
+		$('#receiverNickname').on('focusout', debounce(function(){
+			$('#searchIds').css('display', 'none');
+		}, 200));
 		
 		// 수신인 체크
-		$('#receiverNickname').blur(function(){
+		$('#receiverNickname').on('blur', function(){
 			console.log("receiverNickname 조회 체크")
 			
 			var nickname = $('#receiverNickname').val();
@@ -391,6 +391,7 @@ td {
 		console.log("id 클릭 성공?"+clk);
 		var nick = clk.split(' ')[0];
 		$('#receiverNickname').val(nick);
+		$('#checkNickNo').hide();
 		$('#searchIds').css('display', 'none');
 	}
 

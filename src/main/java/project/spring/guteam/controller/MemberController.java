@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import project.spring.guteam.authentication.VerifyRecaptcha;
 import project.spring.guteam.domain.MemberVO;
 import project.spring.guteam.fileutil.FileUploadUtil;
 import project.spring.guteam.fileutil.MediaUtil;
@@ -280,5 +280,23 @@ public class MemberController {
     	MemberVO vo = memberService.readNickname(nickname);
     	return new ResponseEntity<MemberVO>(vo,HttpStatus.OK);
     }
+    
+    //Recaptcha
+	@PostMapping("/verifyRecaptcha")
+	@ResponseBody
+	public int VerifyRecaptcha(HttpServletRequest request) {
+	    VerifyRecaptcha.setSecretKey("6LdPLykpAAAAAA5QMuaBQyfMRFDvWf8tVM94ZCMZ");
+	    String gRecaptchaResponse = request.getParameter("recaptcha");
+	    try {
+	       if(VerifyRecaptcha.verify(gRecaptchaResponse)) {
+	    	   return 0; // 성공	    	   
+	       }else {
+	    	   return 1; // 실패
+	       }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return -1; //에러
+	    }
+	}
     	
 } // end MemberController
