@@ -75,6 +75,7 @@ span {
 	$(document).ready(function(){
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
+		var beforeNickname = $('#nickname').val();
 		// 닉네임 길이
 		function nickLength(str) {
 			  return (str.length >= 1 && str.length <= 10);
@@ -105,6 +106,12 @@ span {
 					return;
 				}else{
 					$('#checkNickNoGood').hide();
+				}
+				
+				if(nickname==beforeNickname){
+					$('#checkNickNo').hide();
+					$('#checkNickY').show();
+					return;
 				}
 				
 				$.ajax({

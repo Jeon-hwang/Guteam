@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select * from ${game_board} where ${gameBoardId}=#{gameBoardId}
     </select>
     <update id="update">
-    	update ${game_board} set ${gameBoardTitle}=#{gameBoardTitle}, ${gameBoardContent}=#{gameBoardContent} where ${gameBoardId}=#{gameBoardId}
+    	update ${game_board} set ${gameBoardTitle}=#{gameBoardTitle}, ${gameBoardContent}=#{gameBoardContent} where ${gameBoardId}=#{gameBoardId} and ${deleted}='N'
     </update>
  
     <select id="paging" resultType="GameBoardVO">
@@ -30,19 +30,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="total_count_by_member_id" resultType="Integer">
     	select count(*) total_cnt from (select * from ${game_board} where ${gameId}=#{gameId})a, (select ${memberId} from ${member} where ${nickname} like '%'||#{keyword}||'%')b
-	where a.${memberId}=b.${memberId}
+	where a.${memberId}=b.${memberId} and ${deleted}='N'
     </select>
     
     <select id="total_count_by_keyword" resultType="Integer">
     	select count(*) total_cnt from ${game_board}
-    	where ${gameId}=#{gameId} and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
+    	where ${gameId}=#{gameId} and ${deleted}='N' and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
     		lower(${gameBoardContent}) like '%'||lower(#{keyword})||'%')
     </select>
     
     <select id="select_by_member_id" resultType="GameBoardVO">
 	    select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
 	from (select rownum rn, a.* from (select * from ${game_board} where ${gameId}=#{gameId})a, (select ${memberId} from ${member} where ${nickname} like '%'||#{keyword}||'%')b
-	where a.${memberId}=b.${memberId}
+	where a.${memberId}=b.${memberId} and ${deleted}='N'
 	order by ${gameBoardId} desc)
 	where rn between #{start} and #{end}
     </select>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
     	from (select rownum rn, a.* from(
     	select * from ${game_board}
-    	where ${gameId}=#{gameId} and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
+    	where ${gameId}=#{gameId} and ${deleted}='N' and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
     		lower(${gameBoardContent}) like '%'||lower(#{keyword})||'%')
     	order by ${gameBoardId} desc)a
     	) where rn between #{start} and #{end}
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="total_cnt_my_board" resultType="Integer">
     	select count(*) total_cnt from ${game_board}
-    	where ${memberId} = #{memberId}
+    	where ${memberId} = #{memberId} and ${deleted}='N'
     </select>
    
     <update id="update_comment_cnt">
@@ -83,14 +83,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<select id="select_by_keyword_order_by_comment_cnt" resultType="GameBoardVO">
  		select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
  			from (select rownum rn, a.* from(
- 				select * from ${game_board} where ${gameId}=#{gameId} and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
+ 				select * from ${game_board} where ${gameId}=#{gameId} and ${deleted}='N' and (lower(${gameBoardTitle}) like '%'||lower(#{keyword})||'%' or
     			lower(${gameBoardContent}) like '%'||lower(#{keyword})||'%')
     		order by ${commentCnt} desc, ${gameBoardId} desc)a ) where rn between #{start} and #{end}
     </select>
     
     <select id="select_by_member_id_order_by_comment_cnt" resultType="GameBoardVO">
     select ${gameBoardId}, ${gameId}, ${memberId}, ${gameBoardTitle}, ${gameBoardContent}, ${gameBoardDateCreated}, ${commentCnt}, ${deleted}
-	from (select rownum rn, a.* from (select * from ${game_board} where ${gameId}=#{gameId})a, (select ${memberId} from ${member} where ${nickname} like '%'||#{keyword}||'%')b
+	from (select rownum rn, a.* from (select * from ${game_board} where ${gameId}=#{gameId} and ${deleted}='N')a, (select ${memberId} from ${member} where ${nickname} like '%'||#{keyword}||'%')b
 	where a.${memberId}=b.${memberId}
 	order by ${commentCnt} desc, ${gameBoardId} desc)
 	where rn between #{start} and #{end}

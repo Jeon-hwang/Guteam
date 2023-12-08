@@ -68,10 +68,10 @@ public class MemberController {
 	public String loginPOST(String memberId, String password, String targetURL, HttpServletRequest request, RedirectAttributes reAttr) {
 		logger.info("loginPOST() 호출");
 		if(memberService.read(memberId, "checking")==1) {
-			if(!passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {		
+			if(memberService.read(memberId)!=null&&!passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {		
 				logger.info("로그인 실패 targetURL = " + targetURL);
 				reAttr.addFlashAttribute("alert", "loginFail");
-			}else if(memberService.read(memberId).getDeleted().equals("Y")) {
+			}else if(memberService.read(memberId)==null){
 				reAttr.addFlashAttribute("alert", "deleted");
 			}
 		} else {

@@ -11,16 +11,19 @@
 	background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	-webkit-animation: hue 10s infinite linear;
+	-webkit-animation: ani 10s infinite linear;
 }
 
-@-webkit-keyframes hue {
+@-webkit-keyframes ani {
 	from {
 		-webkit-filter: hue-rotate(0deg); 
 	} 
 	to {
 		-webkit-filter: hue-rotate(-360deg);
 	}
+}
+.board-box{
+	margin-bottom:10px;
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
