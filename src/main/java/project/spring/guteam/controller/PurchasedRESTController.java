@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -114,9 +115,9 @@ public class PurchasedRESTController {
 	
 	@PutMapping("/cashUpdate/{memberId}")
 	@JsonProperty("cash")
-	public ResponseEntity<Integer> updateCash(@PathVariable String memberId){
+	public ResponseEntity<Integer> updateCash(@PathVariable String memberId,@RequestBody int cash){
 		logger.info("캐쉬 업데이트!");
-		int result = service.updateCash(memberId);
+		int result = service.updateCash(memberId,cash);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 }

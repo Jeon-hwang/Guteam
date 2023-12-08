@@ -172,6 +172,7 @@
 								location.href = "myPurchased";
 							}else{
 								alert("잘못된 구매경로입니다.");
+								cash=0;
 								$.ajax({
 			    					type : 'PUT',
 			    					url : 'cashUpdate/'+memberId,
@@ -221,7 +222,7 @@
 	        	}else{
 	        		gameName = gameNameArr.text();
 	        	}
-	        	var price = 0;
+	        	var finalCash = 0;
 	        	
 	            IMP.request_pay({
 	                pg : 'kakaopay', // 결제수단은 카카오 페이만 
@@ -234,8 +235,9 @@
 	            }, function (rsp) { // callback
 	                if (rsp.success) {
 	                    console.log(rsp);
-	                    cash = totalPrice+cash;
-	                   
+	                    finalCash = cash;
+	                    cash = totalPrice;
+	                   	
 	                    $.ajax({
 	    					type : 'PUT',
 	    					url : 'cashUpdate/'+memberId,
@@ -248,7 +250,8 @@
 	    				    },
 	    					success : function(result){
 	    						if(result==1){
-	    							 $('#buyNow').click();
+	    							cash= finalCash+cash;
+	    							$('#buyNow').click();
 	    						}
 	    					}	
 	    				});//end ajax

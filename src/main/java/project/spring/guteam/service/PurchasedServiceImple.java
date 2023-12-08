@@ -135,10 +135,9 @@ public class PurchasedServiceImple implements PurchasedService {
 	}
 
 	@Override
-	public int updateCash(String memberId) {
+	public int updateCash(String memberId,int cash) {
 		logger.info("updateCash 실행");
-		
-		return memberDAO.updatePurchase(memberDAO.select(memberId).getCash(), memberId);
+		return memberDAO.updateCash(cash, memberId);
 	}
 	
 

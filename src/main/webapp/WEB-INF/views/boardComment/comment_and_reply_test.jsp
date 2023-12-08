@@ -476,7 +476,7 @@
 					success : function(result){
 						//console.log(result);
 						if(result==1){
-							alert('대댓글 입력 성공');
+						//	alert('대댓글 입력 성공');
 						//	getAllComments(nowPage);
 							$(replyViewBtn).trigger("click");
 							$(replyViewBtn).children().text(parseInt($(replyViewBtn).text())+1);

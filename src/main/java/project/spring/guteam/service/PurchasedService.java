@@ -14,5 +14,5 @@ public interface PurchasedService {
 	List<PurchasedVO> read(String memberId);
 	PurchasedVO find(String memeberId, int gameId);
 	Map<String, Object> findFriends(String memberId, int gameId);
-	int updateCash(String memberId);
+	int updateCash(String memberId,int cash);
 }
