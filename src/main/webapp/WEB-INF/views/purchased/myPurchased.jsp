@@ -26,12 +26,10 @@
 <title>나의 구매내역</title>
 </head>
 <body>
-	
-	
-	<h2>나의 게임 목록</h2>
 	<sec:authentication property="principal" var="principal"/>
 	<input type="hidden" id="memberId" value="${principal.username }">
 	<div id="myGameArea">
+	<h2>나의 게임 목록</h2>
 		<ul id="games"></ul>
 	</div>
 	
