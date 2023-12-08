@@ -242,7 +242,7 @@
 							var originHtml = this.innerHTML;
 							var pattern = /@[^ ]+/g;
 							var replaceHtml = originHtml.replace(pattern, function(match){
-								return '<a href="#" class="mentionMember">'+match.replace('@','')+'</a>';
+								return '<a class="mentionMember">'+match.replace('@','')+'</a>';
 							});
 							$(this).html(replaceHtml);
 						}
@@ -426,7 +426,7 @@
 									var pattern = /@[^ ]+/g;
 									var replaceHtml = originHtml.replace(pattern, function(match){
 										console.log('함수안'+match);
-										return '<a href="#" class="mentionMember">'+match.replace('@','')+'</a>';
+										return '<a class="mentionMember">'+match.replace('@','')+'</a>';
 									});
 									$(this).html(replaceHtml);
 								}
@@ -782,7 +782,7 @@
 									}
 								}
 							});
-							$('#ui-id-1').text('존재하지 않는 회원입니다.');
+							$('#ui-id-1').text('없는 회원입니다.');
 							$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
 							$('#dialog').parent().on('mouseleave',function(){
 								$('#dialog').dialog('close');
@@ -926,7 +926,7 @@
 										}
 									}
 								});
-								$('#ui-id-1').text('존재하지 않는 회원입니다.');
+								$('#ui-id-1').text('없는 회원입니다.');
 								$('#dialog').parent().attr('style','border:none;background-color:#d0e0f9;display:inline-block;position:absolute;left:'+mpX+'px;top:'+mpY+'px;');
 								$('#dialog').parent().on('mouseleave',function(){
 									$('#dialog').dialog('close');

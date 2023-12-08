@@ -136,7 +136,7 @@
 	        	}
 	        	console.log("게임 이름 :"+ gameName);*/
 
-				if(cash<totalPrice){
+				if(cash<totalPrice){ // 보유금이 총금액보다 모자랄 경우
 					totalPrice = totalPrice-cash; // 일단은 보유금에서 깎지만 나중에 선택할 수 있게 한다.
 					alert('보유한 금액이 모자랍니다.');
 					requestPay(totalPrice);

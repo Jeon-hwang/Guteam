@@ -50,7 +50,7 @@ public class PurchasedServiceImple implements PurchasedService {
 		if(purchasedDAO.find(vo.getMemberId(), vo.getGameId())==null) {
 			if(cash>=0) {
 				result = purchasedDAO.insert(vo);
-				memberDAO.updateCash(cash, vo.getMemberId()); //캐쉬 업데이트
+				memberDAO.updatePurchase(cash, vo.getMemberId()); //캐쉬 업데이트
 				wishListDAO.delete(wishVO);
 			}else {
 				result=0;
@@ -135,7 +135,7 @@ public class PurchasedServiceImple implements PurchasedService {
 	@Override
 	public int updateCash(String memberId, int cash) {
 		logger.info("updateCash 실행");
-		return memberDAO.updateCash(cash, memberId);
+		return memberDAO.updatePurchase(cash, memberId);
 	}
 	
 

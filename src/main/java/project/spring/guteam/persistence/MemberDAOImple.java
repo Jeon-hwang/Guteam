@@ -66,7 +66,7 @@ public class MemberDAOImple implements MemberDAO {
 	}
 	
 	@Override
-	public int updateCash(int amount,String memberId) {
+	public int updateCash(int amount,String memberId) { // 캐쉬 별도 충전시 
 		logger.info("updateCash() 호출 cash, memberId = " + amount + "," + memberId );
 		Map<String, Object> args = new HashMap<String, Object>();
 		int cash = select(memberId).getCash()+amount; 
@@ -91,6 +91,15 @@ public class MemberDAOImple implements MemberDAO {
 	public MemberVO selectNickname(String nickname) {
 		logger.info("nicknam 조회");
 		return sqlSession.selectOne(NAMESPACE+".select_nickname", nickname);
+	}
+
+	@Override
+	public int updatePurchase(int cash, String memberId) {
+		logger.info("updateCash() 호출 cash, memberId = " + cash + "," + memberId );
+		Map<String, Object> args = new HashMap<String, Object>(); 
+		args.put("cash", cash);
+		args.put("memberId", memberId);
+		return sqlSession.update(NAMESPACE + ".update_cash", args);
 	}
 
 }

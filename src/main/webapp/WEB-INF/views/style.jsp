@@ -887,6 +887,7 @@ textarea:focus{
 }
 .mentionMember{
 	color : #BCFF66;
+	cursor: pointer;
 }
 #replyProfileArea{
 	position:absolute;

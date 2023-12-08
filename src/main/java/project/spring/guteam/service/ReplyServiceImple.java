@@ -57,10 +57,17 @@ public class ReplyServiceImple implements ReplyService {
 		for(int i = 0; i<list.size();i++) {
 			String memberId = list.get(i).getMemberId();
 			MemberVO memberVO = memberDAO.select(memberId);
-			String nickname = memberVO.getNickname();
-			String profileImageName = memberVO.getMemberImageName();
+			String nickname, profileImageName;
+			if(memberVO == null) {
+				nickname = memberDAO.selectByMemberId(memberId);
+				profileImageName = "deleted.png";
+			}else {
+				nickname = memberVO.getNickname();
+				profileImageName = memberVO.getMemberImageName();
+			}
 			nicknameList.add(nickname);
 			profileImageNameList.add(profileImageName);
+			
 		}
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("list", list);
