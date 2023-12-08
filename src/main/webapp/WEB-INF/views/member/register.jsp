@@ -49,6 +49,7 @@ span {
 }
 </style>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
@@ -118,6 +119,11 @@ span {
 				<i class="bi bi-phone fs-2"></i>
 				<input type="tel" name="phone" id="phone" class="inputBox" placeholder="휴대폰 번호 입력" required />
 				<span id="checkPh" style="display:none;" >연락처를 정확히 입력해 주세요.</span>
+			</div>
+			<br>
+			<div class="infoArea">
+				<div class="g-recaptcha" data-sitekey="6LdPLykpAAAAAHv6qvYt_XfpJhIIhZ-Gx4FPK4yC"></div>
+				<button id="btn_cap">체크</button>
 			</div>
 			<br>
 			<input type="hidden" name="memberImageName" value="/default.jpeg">
@@ -257,6 +263,11 @@ span {
 			}
 		}); //end #pwdChk.keyup()
 		
+		// 닉네임 길이
+		function nickLength(str) {
+			  return (str.length >= 1 && str.length <= 10);
+		}
+		
 		// 닉네임 중복 체크
 		$('#nickname').blur(function(){
 			console.log("nickname중복 검사 체크")
@@ -271,32 +282,40 @@ span {
 			var nickname = $('#nickname').val();
 			console.log('nickname = ' + nickname);
 			
-			var pattern = /([^0-9a-zA-Z가-힣!@#\$%\^&\*_\-+~`\x20])/i;		
-			if(pattern.test(nickname)){
+			var pattern = /([^0-9a-zA-Z가-힣!@#\$%\^&\*_\-+~`\x20])/i;
+			if(nickLength(nickname) == false) {
+				alert("닉네임은 2 ~ 10글자로 지어주세요.")
 				$('#checkNickNoGood').show();
-				return;
-			}else{
-				$('#checkNickNoGood').hide();
-			}
-			
-			$.ajax({
-				type : 'POST',
-				url : "../member/checkNickname",
-				data : {nickname : nickname},
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(header, token);
-			    },
-				success : function(result) {
-					console.log("중복? " + result);
-					if(result == 'dupl'){
-						$('#checkNickNo').show();
-						$('#checkNickY').hide();// 닉넴 중복
-					} else {
-						$('#checkNickNo').hide();
-						$('#checkNickY').show();
-					}
+				$('#checkNickY').hide();
+			} else {
+				if(pattern.test(nickname)){
+					$('#checkNickNoGood').show();
+					return;
+				}else{
+					$('#checkNickNoGood').hide();
 				}
-			}); //end ajax
+				
+				$.ajax({
+					type : 'POST',
+					url : "../member/checkNickname",
+					data : {nickname : nickname},
+					beforeSend : function(xhr) {
+				        xhr.setRequestHeader(header, token);
+				    },
+					success : function(result) {
+						console.log("중복? " + result);
+						if(result == 'dupl'){
+							$('#checkNickNo').show();
+							$('#checkNickY').hide();// 닉넴 중복
+						} else {
+							$('#checkNickNo').hide();
+							$('#checkNickY').show();
+						}
+					}
+				}); //end ajax
+				
+				
+			}
 			
 		}); //end nickname.blur()
 		
@@ -371,8 +390,58 @@ span {
 			}
 		}); //end #phone.on()
 		
+		$('#btn_cap').click(function(){
+			$.ajax({
+				url: '../member/verifyRecaptcha',
+				type: 'post',
+				data: {
+					recaptcha: $("#g-recaptcha-response").val()
+				},
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				success: function(data) {
+					switch (data) {
+						case 0: 
+							console.log("자동 가입 방지 봇 통과");
+							break;
+						case 1: 
+							alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
+							break;
+						default: 
+							alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(data) + "]");
+							break;
+					}
+				}
+			}); //end ajax()
+		})
+		
 		// 유효성 미검증시, submit 막기
 		$('#register').submit(function(e){
+			 $.ajax({
+				url: '../member/verifyRecaptcha',
+				type: 'post',
+				data: {
+					recaptcha: $("#g-recaptcha-response").val()
+				},
+				beforeSend : function(xhr) {
+			        xhr.setRequestHeader(header, token);
+			    },
+				success: function(data) {
+					switch (data) {
+						case 0: 
+							console.log("자동 가입 방지 봇 통과");
+							break;
+						case 1: 
+							alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
+							break;
+						default: 
+							alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(data) + "]");
+							break;
+					}
+				}
+			}); //end ajax()
+			
 			var autofocusAt = '';
 			var checkOk = $('#checkOk').is(':visible');
 			if(checkOk==false){
