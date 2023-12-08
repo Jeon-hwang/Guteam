@@ -261,8 +261,10 @@
 
 	$(document).ready(function() {
 		var result = $('#fnd_alert').val();
-		if (result == 'friend') {
-			alert('이미 친구인 유저입니다.')
+		if(result == 'me') {
+			alert('본인입니다.');
+		} else if (result == 'friend') {
+			alert('이미 친구인 유저입니다.');
 		} else if (result == 'alreadyFrd') {
 			alert('먼저 친구 요청 받아 친구가 되었습니다.')
 		} else if (result == 'dupl') {

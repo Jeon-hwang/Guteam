@@ -74,19 +74,25 @@ public class FriendController {
     	sendMemberList = friendRequestService.readTo(principal.getName());
     	for(int i=0; i<sendMemberList.size(); i++) {
     		MemberVO vo = memberService.read(sendMemberList.get(i));
-    		sendList.add(vo);
+    		if(vo != null) { // null값 처리 조건문
+    			sendList.add(vo);    			
+    		}
     	}
     	
     	receiveMemberList = friendRequestService.readFrom(principal.getName());
     	for(int i=0; i<receiveMemberList.size(); i++) {
     		MemberVO vo = memberService.read(receiveMemberList.get(i));
-    		receiveList.add(vo);
+    		if(vo != null) {
+    			receiveList.add(vo);    			
+    		}
     	}
     	
     	myFriendList = friendService.read(principal.getName());
     	for(int i=0; i<myFriendList.size(); i++) {
     		MemberVO vo = memberService.read(myFriendList.get(i));
-    		friendList.add(vo);
+    		if(vo != null) {
+    			friendList.add(vo);    			
+    		}
     	}
     	
     	model.addAttribute("vo", memberService.read(principal.getName()));
@@ -99,6 +105,12 @@ public class FriendController {
     @PostMapping("/addFriend")
     public String addFriend (FriendRequestVO vo, RedirectAttributes reAttr, Principal principal) {
     	logger.info("addFriend() vo ? " + vo.toString());
+    	// 본인한테 용청하다니
+    	if(vo.getReceiveMemberId().equals(principal.getName())) {
+    		logger.info("본인입니다요.");
+    		reAttr.addFlashAttribute("fnd_alert", "me");
+            return "redirect:/friend/list";
+    	}
     	// 이미 친구인지?
     	int result = friendService.read(principal.getName(), vo.getReceiveMemberId());
     	if ( memberService.read(vo.getReceiveMemberId())==null) {
