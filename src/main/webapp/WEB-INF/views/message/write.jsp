@@ -353,9 +353,17 @@ td {
 			}
 		}); //end .on'keyup'
 		
-		$('#receiverNickname').on('focusout', debounce(function(){
+		// 검색 리스트 가리기
+		$('html').on('click',function(e){
+			var target = e.target;
+			if($(target).attr('id')=='searchIds'||$(target).attr('class')=='memNick'||$(target).attr('id')=='receiverNickname'){
+				return;
+			}
 			$('#searchIds').css('display', 'none');
-		}, 200));
+		});
+		$('#messageTitle').on('focus',function(){
+			$('#searchIds').css('display', 'none');
+		});
 		
 		// 수신인 체크
 		$('#receiverNickname').on('blur', function(){
