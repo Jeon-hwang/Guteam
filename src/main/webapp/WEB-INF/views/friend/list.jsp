@@ -8,6 +8,13 @@
 <head>
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 <style type="text/css">
+.infoArea{
+	display:flex;
+	flex-wrap:wrap;
+}
+.infoArea h3 {
+	width:100%;
+}
 .ui-dialog-buttonset button{
 	margin-right:8px;
 	color: #6c757d;
@@ -100,7 +107,7 @@
 }
 .friendReq{
 	width: 110px; 
-	height: 140px; 
+	height: 190px; 
 	display: flex;
 	flex-direction: row;
     flex-wrap: wrap;
@@ -207,7 +214,7 @@
 			<form action="../friend/accept" method="post">
 				<sec:csrfInput />
 				<img alt="${svo.memberImageName }" width="100px" height="100px" src="display?fileName=${svo.memberImageName }">
-				<textarea id="toNickname" class="nameLvl" readonly>${svo.nickname }</textarea>
+				<textarea id="toNickname" class="nameLvl" cols="3" rows="5" wrap="soft" readonly>${svo.nickname }</textarea>
 				<input type="hidden" name="memberId" value="${vo.memberId }">
 				<input type="hidden" name="friendId" value="${svo.memberId }">
 				<button type="submit" class="btn btn-light"
