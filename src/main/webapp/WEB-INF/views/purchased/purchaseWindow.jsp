@@ -157,7 +157,7 @@
 
 					$.ajax({
 						type : 'POST',
-						url : 'buy/'+memberId+'?price='+price,
+						url : 'buy/'+memberId,
 						headers : {
 							'Content-Type' : 'application/json'
 						},

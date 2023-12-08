@@ -935,6 +935,13 @@
 						}
 					 });
 				 });
+			 $('body').click(function(){
+				if ($('#openMention').length) {
+				  $('#openMention').parent().html("");
+				}
+					
+				
+			 });
 		});//end document
 	</script>
 </body>

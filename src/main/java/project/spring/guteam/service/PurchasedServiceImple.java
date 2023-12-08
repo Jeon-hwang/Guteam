@@ -42,16 +42,18 @@ public class PurchasedServiceImple implements PurchasedService {
 	
 	@Override
 	@Transactional(value = "transactionManager")
-	public int create(PurchasedVO vo,int price) throws Exception{
+	public int create(PurchasedVO vo) throws Exception{
 		logger.info("create 생성");
 		int result = 0;
-		WishListVO wishVO = new WishListVO(vo.getMemberId(), vo.getGameId());
-		int cash = getCash(vo.getMemberId())-price;
+		WishListVO wishVO = wishListDAO.select(vo.getMemberId(), vo.getGameId());
+		int cash = gameDAO.select(vo.getGameId()).getPrice();
 		if(purchasedDAO.find(vo.getMemberId(), vo.getGameId())==null) {
 			if(cash>=0) {
 				result = purchasedDAO.insert(vo);
-				memberDAO.updatePurchase(cash, vo.getMemberId()); //캐쉬 업데이트
-				wishListDAO.delete(wishVO);
+				memberDAO.updateCash((-1*cash), vo.getMemberId()); //캐쉬 업데이트
+				if(wishVO != null) {
+					wishListDAO.delete(wishVO);
+				}
 			}else {
 				result=0;
 			}
@@ -60,7 +62,7 @@ public class PurchasedServiceImple implements PurchasedService {
 			//게임이 이미 존재하는 경우
 			result =2;
 		}
-		 // 위시리스트에서 삭제
+		
 		/* 현재문제점 결제를 이중으로하면 캐쉬가 나중걸로 반영되어버린다 컨트롤러에서 계사하는게 맞는듯...*/
 		return result;
 	}
@@ -133,9 +135,10 @@ public class PurchasedServiceImple implements PurchasedService {
 	}
 
 	@Override
-	public int updateCash(String memberId, int cash) {
+	public int updateCash(String memberId) {
 		logger.info("updateCash 실행");
-		return memberDAO.updatePurchase(cash, memberId);
+		
+		return memberDAO.updatePurchase(memberDAO.select(memberId).getCash(), memberId);
 	}
 	
 
