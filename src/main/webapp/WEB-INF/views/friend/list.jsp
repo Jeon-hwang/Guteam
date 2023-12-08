@@ -120,9 +120,6 @@
 }
 #toNickname {
 	width: 100px;
-	rows: 5;
-	cols:3;
-	wrap: soft;
 }
 #wrap {
     display: flex;
@@ -261,9 +258,9 @@
 
 	$(document).ready(function() {
 		var result = $('#fnd_alert').val();
-		if(result == 'me'){
+		if(result == 'me') {
 			alert('본인입니다.');
-		}else if(result == 'friend') {
+		} else if (result == 'friend') {
 			alert('이미 친구인 유저입니다.');
 		} else if (result == 'alreadyFrd') {
 			alert('먼저 친구 요청 받아 친구가 되었습니다.');

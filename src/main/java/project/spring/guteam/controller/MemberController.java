@@ -68,7 +68,8 @@ public class MemberController {
 	public String loginPOST(String memberId, String password, String targetURL, HttpServletRequest request, RedirectAttributes reAttr) {
 		logger.info("loginPOST() 호출");
 		if(memberService.read(memberId, "checking")==1) {
-			if(memberService.read(memberId)!=null&&!passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {		
+			// 탈퇴한 회원 로그인시 (memberId가 null일때)
+			if(memberService.read(memberId) != null && !passwordEncoder.matches(password, memberService.read(memberId).getPassword())) {		
 				logger.info("로그인 실패 targetURL = " + targetURL);
 				reAttr.addFlashAttribute("alert", "loginFail");
 			}else if(memberService.read(memberId)==null){

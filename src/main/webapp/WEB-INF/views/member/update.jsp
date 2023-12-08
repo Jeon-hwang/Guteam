@@ -45,11 +45,15 @@ span {
 			<br>
 			<span>이메일 :&nbsp;&nbsp;
 				<input type="text" name="email" id="email" value="${vo.email }" required />
+				<span id="checkEmailNo" style="display:none; color:#e2252b;">잘못된 이메일 주소입니다.</span>
+				<span id="checkEmailY" style="display:none; color:#10af85;">옳바른 이메일 주소입니다.</span>
 			</span>
 			<br>
 			<br>
 			<span>연락처 :&nbsp;&nbsp;
 				<input type="text" name="phone" id="phone" value="${vo.phone }" required />
+				<span id="checkPhoneNo" style="display:none; color:#e2252b;">잘못된 번호 양식입니다.</span>
+				<span id="checkPhoneY" style="display:none; color:#10af85;">옳바른 번호 양식입니다.</span>
 			</span>
 			<br>
 			<br>
@@ -108,7 +112,7 @@ span {
 					$('#checkNickNoGood').hide();
 				}
 				
-				if(nickname==beforeNickname){
+				if(nickname == beforeNickname) {
 					$('#checkNickNo').hide();
 					$('#checkNickY').show();
 					return;
@@ -142,8 +146,12 @@ span {
 			var email = $('#email').val();
 			console.log(email);
 		    if(pattern.test(email) === false) { 
-		    	alert("이메일형식이 올바르지 않습니다.");
+		    	$('#checkEmailNo').show();
+		    	$('#checkEmailY').hide();
 		    	
+		    } else {
+		    	$('#checkEmailNo').hide();
+		    	$('#checkEmailY').show();
 		    }
 			
 		});
@@ -152,9 +160,10 @@ span {
 		function phoneOnly(val){
 			return /^(?=.*[0-9])[0-9]{11,11}$/.test(val);				
 		} 
-		$('#phone').on("change keyup keydown", function(){
+		$('#phone').on("change keyup keydown blur", function(){
 			var regExp = /^010-([0-9]{4})-([0-9]{4})$/;
 			var phone = $('#phone').val().replaceAll('-','');
+			console.log(phone.length);
 			if(phone.length>3&&phone.length<=7){
 				console.log(phone);
 				var firstNum = phone.substr(0,3);
@@ -171,13 +180,21 @@ span {
 			}
 			if(!phoneOnly(phone)){
 				console.log('번호아님');
-				$('#checkPh').show();
+				$('#checkPhoneNo').show();
+				$('#checkPhoneY').hide();
+				
 			}
 			phone = $('#phone').val();
+			if(phone.length < 11) {
+				$('#checkPhoneNo').show();
+				$('#checkPhoneY').hide();
+			}
 			if(regExp.test(phone)){
-				$('#checkPh').hide();
+				$('#checkPhoneNo').hide();
+				$('#checkPhoneY').show();
 			} else {
-				$('#checkPh').show();
+				$('#checkPhoneNo').show();
+				$('#checkPhoneY').hide();
 				console.log('why');
 			}
 			var pattern = /[^0-9-]/g;		
@@ -192,15 +209,21 @@ span {
 			var autofocusAt = '';
 			
 			var checkNickY = $('#checkNickY').is(':visible');
-			if(checkNickY==false){
+			if(checkNickY == false){
 				autofocusAt='#nickname';
 			}
 			
-			var checkPh = $('#checkPh').is(':visible'); // hide
-			if(checkPh==true){
+			var checkPhoneY = $('#checkPhoneY').is(':visible'); // hide
+			if(checkPhoneY == false){
 				autofocusAt='#phone';
 			}
-			if(autofocusAt==''){				
+			
+			var checkEmailY = $('#checkEmailY').is(':visible');
+			if(checkEmailY == false) {
+				autofocusAt = '#email';
+			}
+			
+			if(autofocusAt == ''){				
 				return true;
 			}else{
 				console.log(autofocusAt);
