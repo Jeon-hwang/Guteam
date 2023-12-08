@@ -43,11 +43,11 @@ public class PurchasedRESTController {
 	private String downloadPath;
 	
 	@PostMapping("/buy/{memberId}")
-	public ResponseEntity<Integer> insertPurchased(@RequestBody int gameId,@PathVariable("memberId") String memberId,int price){
+	public ResponseEntity<Integer> insertPurchased(@RequestBody int gameId,@PathVariable("memberId") String memberId){
 			PurchasedVO vo = new PurchasedVO(memberId, gameId, null);
 			try {
 //				logger.info("cash? "+cash);
-				int result = service.create(vo,price);
+				int result = service.create(vo);
 				return new ResponseEntity<Integer>(result,HttpStatus.OK);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -114,9 +114,9 @@ public class PurchasedRESTController {
 	
 	@PutMapping("/cashUpdate/{memberId}")
 	@JsonProperty("cash")
-	public ResponseEntity<Integer> updateCash(@PathVariable String memberId,@RequestBody Integer cash){
+	public ResponseEntity<Integer> updateCash(@PathVariable String memberId){
 		logger.info("캐쉬 업데이트!");
-		int result = service.updateCash(memberId, cash);
+		int result = service.updateCash(memberId);
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 }
