@@ -12,6 +12,12 @@
 <meta name="_csrf" content="${_csrf.token}" />
 <meta name="_csrf_header" content="${_csrf.headerName}" />
 <style type="text/css">
+.flexable{
+	display:flex;
+}
+.flexable div{
+	color:#fff;
+}
 .tag{
 		background-color:#cee0ff;
 		color:#050505;
@@ -118,21 +124,23 @@
 
 <div id="tag-container" class="inputArea">
 <sec:authentication property="principal" var="principal"/>
-<form action="update" method="post" onsubmit="update();">
+<form action="update" method="post" onsubmit="return update();">
 <sec:csrfInput/>
 <input type="hidden" name="page" value="${page }">
 <input id="gameId" type="hidden" name="gameId" value="${gameId }">
 <input type="hidden" name="gameBoardId" value="${vo.gameBoardId }">
-<p data-type="gameBoardTitle" contenteditable="true" style="width:296px;height:24px;max-width:296px;max-height:24px; cursor: text;
+<div class="flexable"><p data-type="gameBoardTitle" contenteditable="true" style="width:296px;height:24px;max-width:296px;max-height:24px; cursor: text;
       border: none; background-color:#2a3f5a; font-size:15px; color:#fff;
-      display: block;" class="contents"></p>
+      display: block;overflow-y:auto;" class="contents"></p>
+<div class="limitByte">&nbsp;(&nbsp;</div><div class="currentByte"></div><div class="limitByte">/ 1000byte )</div></div>
 <input type="hidden" name="gameBoardTitle" id="gameBoardTitle" value='${vo.gameBoardTitle }'>
 <div class="caption">
 <p>${principal.username }</p>
 </div>
-<p data-type="gameBoardContent" contenteditable="true" style="width:761px;height:450px;max-width:761px;max-height:450px; cursor: text;
+<div class="flexable"><p data-type="gameBoardContent" contenteditable="true" style="width:450px;height:450px;max-width:761px;max-height:450px; cursor: text;
       border: none; background-color:#2a3f5a; font-size:15px; color:#fff;
-      display: block;" class="contents"></p>
+      display: block;overflow-y:auto;" class="contents"></p>
+<div class="limitByte">&nbsp;(&nbsp;</div><div class="currentByte"></div><div class="limitByte">/ 4000byte )</div></div>
 <input type="hidden" name="gameBoardContent" id="gameBoardContent" value='${vo.gameBoardContent }'>
 <br>
 <input class="btn btn-secondary" type="submit" value="수정하기">
@@ -151,6 +159,10 @@
 	$(document).ready(function(){
 		$('[data-type="gameBoardContent"]').html($('#gameBoardContent').attr('value'));
 		$('[data-type="gameBoardTitle"]').html($('#gameBoardTitle').attr('value'));
+		$('.contents').each(function(){
+			var currentByte = checkByte(this.innerHTML);
+			$(this).nextAll('.currentByte').text(currentByte);
+		});
 		$('.tag').on('DOMCharacterDataModified ',function(){
 			$(this).removeClass();
 		}).on('click',function(event){
@@ -213,6 +225,16 @@
 			alert('빈 칸 없이 입력해주세요');
 			return false;
 		}
+		if(checkByte($('#gameBoardTitle').val())>1000){
+			$('[data-type="gameBoardTitle"]').html($('[data-type="gameBoardTitle"]').html().substr(0,800));
+			$('[data-type="gameBoardTitle"]').focus();
+			return false;
+		}
+		if(checkByte($('#gameBoardContent').val())>4000){
+			$('[data-type="gameBoardContent"]').html($('[data-type="gameBoardContent"]').html().substr(0,3000));
+			$('[data-type="gameBoardContent"]').focus();
+			return false;
+		}
 	}
 	function getNodeAtCursor() {
 		  var selection = window.getSelection();
@@ -225,6 +247,26 @@
 		  }
 		}
 	function getNodeAtKeyup(){
+		var limitByte=1000;
+		if($(this).attr('data-type')=='gameBoardTitle'){
+			limitByte=1000;
+		}else if($(this).attr('data-type')=='gameBoardContent'){
+			limitByte=4000;
+		}
+		var currentByte = checkByte(this.innerHTML);
+		$(this).nextAll('.currentByte').text(currentByte);
+		if(currentByte>limitByte){
+			if($('#'+$(this).attr('data-type')+'OverText').html()==null){
+				var newP = document.createElement('p');
+				$(newP).attr('style','color:#fff;');
+				$(newP).attr('id',$(this).attr('data-type')+'OverText');
+				var newText = document.createTextNode('최대 글자수를 초과하였습니다');
+				newP.appendChild(newText);
+				this.after(newP);			
+			}
+		}else{
+			$('#'+$(this).attr('data-type')+'OverText').remove();
+		}
 		var selection = window.getSelection();
 		$('.currentDiv').removeClass();
 		$('#currentDiv').removeAttr('id');
@@ -369,6 +411,18 @@
 
 		$('.contents').on('mouseup', getNodeAtCursor);
 		$('.contents').on('keyup', getNodeAtKeyup);
+		function checkByte(objHTML){
+			var totalByte = 0;
+			for(var i = 0 ; i < objHTML.length; i++ ){
+				var currentChar = objHTML.charCodeAt(i);
+				if(currentChar > 128){
+					totalByte+=2;
+				}else{
+					totalByte++;
+				}
+			}
+			return totalByte;
+		}
 
 </script>
 </body>

@@ -6,6 +6,23 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type="text/css">
+.boardContent .bi{
+	background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-webkit-animation: hue 10s infinite linear;
+}
+
+@-webkit-keyframes hue {
+	from {
+		-webkit-filter: hue-rotate(0deg); 
+	} 
+	to {
+		-webkit-filter: hue-rotate(-360deg);
+	}
+}
+</style>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token}"/>

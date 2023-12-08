@@ -93,6 +93,12 @@
 		display:flex;
 		justify-content:space-around;
 	}
+	.flexable{
+		display:flex;
+	}
+	.flexable div{
+		color:#fff;
+	}
 </style>
 <title></title>
 </head>
@@ -124,12 +130,14 @@
 <form action="register" method="post" onsubmit="return register();">
 <input type="hidden" name="gameId" id="gameId" value="${gameId }">
 <sec:csrfInput/>
-<p data-type="gameBoardTitle" contenteditable="true" style="width:296px;height:24px;max-width:296px;max-height:24px; cursor: text;
+<div class="flexable"><p data-type="gameBoardTitle" contenteditable="true" style="width:296px;height:24px;max-width:296px;max-height:24px; cursor: text;
       border: none; background-color:#2a3f5a; font-size:15px; color:#fff;
-      display: block;" class="contents"autofocus></p>
-<p data-type="gameBoardContent" contenteditable="true" style="width:761px;height:450px;max-width:761px;max-height:450px; cursor: text;
+      display: block;overflow-y:auto;" class="contents"autofocus></p>
+<div class="limitByte">&nbsp;(&nbsp;</div><div class="currentByte">0</div><div class="limitByte">/ 1000 )</div></div>
+<div class="flexable"><p data-type="gameBoardContent" contenteditable="true" style="width:500px;height:450px;max-width:761px;max-height:450px; cursor: text;
       border: none; background-color:#2a3f5a; font-size:15px; color:#fff;
-      display: block;" class="contents"></p>
+      display: block;overflow-y:auto;" class="contents"></p>
+<div class="limitByte">&nbsp;(&nbsp;</div><div class="currentByte">0</div><div class="limitByte">/ 4000 )</div></div>
  <input type="hidden" name="gameBoardTitle" id="gameBoardTitle">
  <input type="hidden" name="gameBoardContent" id="gameBoardContent">
 <button id="submit" class="btn btn-secondary" >글 작성 완료하기</button><br>
@@ -162,9 +170,20 @@ function register(event){
 	var gameBoardContent = $('[data-type="gameBoardContent"]').html().replaceAll('contenteditable="true"','');
 	$('#gameBoardTitle').attr('value',gameBoardTitle);
 	$('#gameBoardContent').attr('value',gameBoardContent);
+	console.log(checkByte($('#gameBoardTitle').val()),checkByte($('#gameBoardContent').val()));
 	var gameId = $('#gameId').val();
 	if(gameBoardTitle==''||gameBoardContent==''||gameId==''){
 		alert('빈 칸 없이 입력해주세요');
+		return false;
+	}
+	if(checkByte($('#gameBoardTitle').val())>1000){
+		$('[data-type="gameBoardTitle"]').html($('[data-type="gameBoardTitle"]').html().substr(0,800));
+		$('[data-type="gameBoardTitle"]').focus();
+		return false;
+	}
+	if(checkByte($('#gameBoardContent').val())>4000){
+		$('[data-type="gameBoardContent"]').html($('[data-type="gameBoardContent"]').html().substr(0,3000));
+		$('[data-type="gameBoardContent"]').focus();
 		return false;
 	}
 }
@@ -179,6 +198,26 @@ function getNodeAtCursor() {
 	  }
 	}
 function getNodeAtKeyup(){
+	var limitByte=1000;
+	if($(this).attr('data-type')=='gameBoardTitle'){
+		limitByte=1000;
+	}else if($(this).attr('data-type')=='gameBoardContent'){
+		limitByte=4000;
+	}
+	var currentByte = checkByte(this.innerHTML);
+	$(this).nextAll('.currentByte').text(currentByte);
+	if(currentByte>limitByte){
+		if($('#'+$(this).attr('data-type')+'OverText').html()==null){
+			var newP = document.createElement('p');
+			$(newP).attr('style','color:#fff;');
+			$(newP).attr('id',$(this).attr('data-type')+'OverText');
+			var newText = document.createTextNode('최대 글자수를 초과하였습니다');
+			newP.appendChild(newText);
+			this.after(newP);			
+		}
+	}else{
+		$('#'+$(this).attr('data-type')+'OverText').remove();
+	}
 	var selection = window.getSelection();
 	$('.currentDiv').removeClass();
 	$('#currentDiv').removeAttr('id');
@@ -329,6 +368,18 @@ function changeTag(tag){
 
 	$('.contents').on('mouseup', getNodeAtCursor);
 	$('.contents').on('keyup', getNodeAtKeyup);
+	function checkByte(objHTML){
+		var totalByte = 0;
+		for(var i = 0 ; i < objHTML.length; i++ ){
+			var currentChar = objHTML.charCodeAt(i);
+			if(currentChar > 128){
+				totalByte+=2;
+			}else{
+				totalByte++;
+			}
+		}
+		return totalByte;
+	}
 
 	
 </script>

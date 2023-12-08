@@ -67,7 +67,7 @@
 					value="detail?gameBoardId=${gameBoardVO.gameBoardId }&page=${pageMaker.criteria.page}&gameId=${gameVO.gameId}">
 				<tr class="gameBoardInfo">
 					<td>${gameBoardVO.gameBoardId }</td>
-					<td>${gameBoardVO.gameBoardTitle }</td>
+					<td class="boardTitles">${gameBoardVO.gameBoardTitle }</td>
 					<td>${nicknameList[status.index] }</td>
 					<td><fmt:formatDate
 							value="${gameBoardVO.gameBoardDateCreated }"
@@ -106,6 +106,11 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$('.boardTitles').each(function(){
+				if($(this).text().length>20){
+					$(this).html($(this).text().substr(0,20)+'..');
+				}
+			});
 			var insertResult = $('#insertResult').val();
 			console.log(insertResult);
 			if (insertResult == 'success') {
