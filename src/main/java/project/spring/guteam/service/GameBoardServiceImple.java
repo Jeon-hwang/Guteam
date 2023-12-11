@@ -140,10 +140,10 @@ public class GameBoardServiceImple implements GameBoardService {
 		logger.info("gameBoard read(gameBoardId) 호출 : gameBoardId = " + gameBoardId);
 		Map<String, Object> args = new HashMap<>();
 		GameBoardVO gameBoardVO = gameBoardDAO.selectByBoardId(gameBoardId);
+		String nickname = memberDAO.selectByMemberId(gameBoardVO.getMemberId());
+		args.put("nickname", nickname);
 		if(memberId!=null&&!memberId.equals("")) {
-			String nickname = memberDAO.selectByMemberId(gameBoardVO.getMemberId());
 			String memberImageName= memberDAO.select(memberId).getMemberImageName();
-			args.put("nickname", nickname);
 			args.put("memberImageName", memberImageName);			
 		}
 		if(gameBoardVO.getDeleted().equals("Y")) {
