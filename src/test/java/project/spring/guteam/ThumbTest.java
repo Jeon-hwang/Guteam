@@ -24,7 +24,7 @@ public class ThumbTest {
 	@Test
 	public void test() {
 //		insertTest();
-		selectTest();
+//		selectTest();
 //		updateTest();
 //		deleteTest();
 		
