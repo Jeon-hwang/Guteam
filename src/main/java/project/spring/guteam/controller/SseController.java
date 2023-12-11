@@ -2,6 +2,7 @@ package project.spring.guteam.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import project.spring.guteam.notiutil.SseEmitters;
+import project.spring.guteam.persistence.MemberDAO;
 
 @RestController
 @RequestMapping(value="/sse")
@@ -21,6 +23,9 @@ public class SseController {
 	private static final Logger logger = LoggerFactory.getLogger(SseController.class);	
 
 	private final SseEmitters sseEmitters;
+	
+	@Autowired
+	MemberDAO memberDAO;
 	
 	public SseController(SseEmitters sseEmitters) {
 		this.sseEmitters = sseEmitters;
@@ -45,7 +50,8 @@ public class SseController {
 	
 	@Async
 	@PostMapping("/message/{memberId}")
-	public ResponseEntity<Void> message(@PathVariable("memberId") String memberId, @RequestParam String sendMemberId){
+	public ResponseEntity<Void> message(@PathVariable("memberId") String memberNickname, @RequestParam String sendMemberId){
+		String memberId = memberDAO.selectByNickname(memberNickname);
 		logger.info("memberId : " + memberId + ", sendMemberId : " + sendMemberId);
 		sseEmitters.message(memberId, sendMemberId); // 메시지를 memberId 를 기준으로 알림
 		return ResponseEntity.ok().build();
