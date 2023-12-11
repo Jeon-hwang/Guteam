@@ -7,6 +7,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>Guteam Game List</title>
 <jsp:include page="/WEB-INF/views/home.jsp"></jsp:include>
 </head>
@@ -129,6 +131,8 @@
 	<input type="hidden" id="endResult" value="${end_result }">
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 			var selectedItem = $('.selectedItem').html();
 			if(selectedItem=='가격'){
 				$('#keywordCriteria').attr('value','price');
@@ -188,10 +192,16 @@
 				if(pattern.test(keyword)||keyword==''){
 					$('#keywords').html('');
 				}else{
-					var url = '/guteam/game/'+keyword;
-					$.getJSON(
-						url,
-						function(data){
+					$.ajax({
+						type:'post',
+						url:'/guteam/game/'+keyword,
+						headers:{
+							'Content-Type':'application/json'
+						},
+						beforeSend : function(xhr) {
+					        xhr.setRequestHeader(header, token);
+					    },
+						success:function(data){
 							if(data!=''){							
 								$('#keywords').html('<span style="color:#fff;">추천 검색어 : </span> &nbsp;&nbsp;');
 								$(data).each(function(){
@@ -201,7 +211,7 @@
 								});
 							}
 						}
-					);
+					});
 				}
 			});
 			function checkDiscountGenre(){

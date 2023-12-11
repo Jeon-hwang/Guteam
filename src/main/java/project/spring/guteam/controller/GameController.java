@@ -326,7 +326,7 @@ public class GameController {
 		return new ResponseEntity<Map<String, Object>>(args, HttpStatus.OK);
 	} // end recentlyViewed()
 	
-	@GetMapping("/{keyword}")
+	@PostMapping("/{keyword}")
 	public ResponseEntity<List<String>> keywords(@PathVariable("keyword") String keyword){
 		List<String> keywords = gameService.findKeywords(keyword);
 		return new ResponseEntity<List<String>>(keywords, HttpStatus.OK);
