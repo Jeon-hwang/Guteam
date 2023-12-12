@@ -216,8 +216,8 @@
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	function update(event){
-		var gameBoardTitle = $('[data-type="gameBoardTitle"]').html().replaceAll('contenteditable="true"','');
-		var gameBoardContent = $('[data-type="gameBoardContent"]').html().replaceAll('contenteditable="true"','');
+		var gameBoardTitle = $('[data-type="gameBoardTitle"]').html().replaceAll('contenteditable="true"','').replaceAll('\'','"');
+		var gameBoardContent = $('[data-type="gameBoardContent"]').html().replaceAll('contenteditable="true"','').replaceAll('\'','"');
 		$('#gameBoardTitle').attr('value',gameBoardTitle);
 		$('#gameBoardContent').attr('value',gameBoardContent);
 		var gameId = $('#gameId').val();

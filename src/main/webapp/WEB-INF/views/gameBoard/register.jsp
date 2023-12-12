@@ -180,8 +180,8 @@ $(document).ready(function(){
 	}); // end contents.onFocusout() onKeyup();
 }); // end document.ready()
 function register(event){
-	var gameBoardTitle = $('[data-type="gameBoardTitle"]').html().replaceAll('contenteditable="true"','');
-	var gameBoardContent = $('[data-type="gameBoardContent"]').html().replaceAll('contenteditable="true"','');
+	var gameBoardTitle = $('[data-type="gameBoardTitle"]').html().replaceAll('contenteditable="true"','').replaceAll('\'','"');
+	var gameBoardContent = $('[data-type="gameBoardContent"]').html().replaceAll('contenteditable="true"','').replaceAll('\'','"');
 	$('#gameBoardTitle').attr('value',gameBoardTitle);
 	$('#gameBoardContent').attr('value',gameBoardContent);
 	console.log(checkByte($('#gameBoardTitle').val()),checkByte($('#gameBoardContent').val()));
