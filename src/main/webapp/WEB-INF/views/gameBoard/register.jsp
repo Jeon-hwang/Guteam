@@ -119,14 +119,15 @@
 <div class="formArea">
 <div class="info">
 <div class="caption">
-<p>memberId = </p>
-<p>boardTitle = </p>
-<p>baordContent = </p>
+<p>닉네임 = </p>
+<p>제목 = </p>
+<p>내용 = </p>
 </div>
 <div id="tag-container" class="inputArea">
 <div class="caption" style="width:100%;">
-<p>${principal.username }</p>
+<p id="nickname"></p>
 </div>
+<input type="hidden" id="memberId" value="${principal.username }">
 <form action="register" method="post" onsubmit="return register();">
 <input type="hidden" name="gameId" id="gameId" value="${gameId }">
 <sec:csrfInput/>
@@ -152,7 +153,22 @@
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 var deleted = '삭제된 게시글';
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
 $(document).ready(function(){
+	var nickname = '';
+	var principalName = $('#memberId').val();
+	$.ajax({
+		url:'/guteam/member/'+principalName,
+		method:'post',
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		success:function(data){
+			$('#nickname').text(data.nickname);
+		}
+	});
+	
 	$('.contents').on('keydown keyup', function(e){
 		var text = $(this).val();
 		if(text.length > 0) {
@@ -163,8 +179,6 @@ $(document).ready(function(){
 		}
 	}); // end contents.onFocusout() onKeyup();
 }); // end document.ready()
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
 function register(event){
 	var gameBoardTitle = $('[data-type="gameBoardTitle"]').html().replaceAll('contenteditable="true"','');
 	var gameBoardContent = $('[data-type="gameBoardContent"]').html().replaceAll('contenteditable="true"','');
