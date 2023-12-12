@@ -7,6 +7,8 @@
 <jsp:include page="/WEB-INF/views/style.jsp"></jsp:include>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf.headerName}" />
 <style type="text/css">
 .flexable{
 	display:flex;
@@ -35,10 +37,10 @@
 <div class="formArea">
 <div class="info">
 <div class="caption">
-<p>memberId = </p>
-<p>reviewTitle = </p>
-<p>rating = </p>
-<p>reviewContent = </p>
+<p>닉네임 = </p>
+<p>제목 = </p>
+<p>평점 = </p>
+<p>내용 = </p>
 </div>
 <div class="inputArea">
 <sec:authentication property="principal" var="principal"/>
@@ -46,7 +48,8 @@
 <sec:csrfInput/>
 <input type="hidden" name="gameId" value="${gameId }">
 <div class="caption">
-<p>${principal.username }</p>
+<input type="hidden" id="memberId" value="${principal.username }">
+<p id="nickname"></p>
 </div>
 <div class="flexable"><input type="text" id="title" class="contents" name="reviewTitle" autofocus required><div class="limitByte">&nbsp;(&nbsp;</div><div class="currentByte">0</div><div class="limitByte">/ 50 )</div></div>
 <br>
@@ -70,6 +73,20 @@
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 <script type="text/javascript">
 		$(document).ready(function(){
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var nickname = '';
+			var principalName = $('#memberId').val();
+			$.ajax({
+				url:'/guteam/member/'+principalName,
+				method:'post',
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				success:function(data){
+					$('#nickname').text(data.nickname);
+				}
+			});
 			$('.bi').on('click',function(e){
 				var x = e.clientX-e.currentTarget.offsetLeft;
 				if(x<8){
