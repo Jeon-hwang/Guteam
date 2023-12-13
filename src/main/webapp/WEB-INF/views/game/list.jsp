@@ -119,7 +119,7 @@
 			</c:if>
 		</c:forEach>
 		<c:if test="${pageMaker.hasNext }">
-			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}">&raquo;</a></li>
+			<li class="page-item"><a class="page-link" href="list?page=${pageMaker.endPageNo+1 }&keyword=${keyword}&keywordCriteria=${keywordCriteria}&orderBy=${orderBy}">&raquo;</a></li>
 		</c:if>
 	</ul>
 	</div>
