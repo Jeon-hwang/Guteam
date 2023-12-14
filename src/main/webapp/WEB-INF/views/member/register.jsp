@@ -404,6 +404,7 @@ span {
 		}); //end #phone.on()
 		
 		$('#btn_cap').click(function(){
+			var captcha = 0;
 			$.ajax({
 				url: '../member/verifyRecaptcha',
 				type: 'post',
@@ -417,6 +418,7 @@ span {
 					switch (data) {
 						case 0: 
 							console.log("자동 가입 방지 봇 통과");
+							captcha = 1;
 							break;
 						case 1: 
 							alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
@@ -427,10 +429,14 @@ span {
 					}
 				}
 			}); //end ajax()
-		})
+			if(captcha != 1) {
+				return false;
+			} 
+		});
 		
 		// 유효성 미검증시, submit 막기
 		$('#register').submit(function(e){
+			var captcha = 0;
 			 $.ajax({
 				url: '../member/verifyRecaptcha',
 				type: 'post',
@@ -444,6 +450,7 @@ span {
 					switch (data) {
 						case 0: 
 							console.log("자동 가입 방지 봇 통과");
+							captcha = 1;
 							break;
 						case 1: 
 							alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
@@ -454,6 +461,9 @@ span {
 					}
 				}
 			}); //end ajax()
+			if(captcha != 1) {
+				return false;
+			} 
 			
 			var autofocusAt = '';
 			var checkOk = $('#checkOk').is(':visible');
