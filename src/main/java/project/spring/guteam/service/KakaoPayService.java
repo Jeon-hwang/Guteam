@@ -28,7 +28,7 @@ public class KakaoPayService {
 	    
 	    private Map<String, KakaoPayReadyVO> payMap = new ConcurrentHashMap<String, KakaoPayReadyVO>();
 	    
-	    public String kakaoPayReady(String memberId, Integer cash) {
+	    public String kakaoPayReady(String memberId, Integer cash, String URI) {
 	 
 	        RestTemplate restTemplate = new RestTemplate();
 	 
@@ -47,9 +47,9 @@ public class KakaoPayService {
 	        params.add("quantity", "1");
 	        params.add("total_amount", cash+"");
 	        params.add("tax_free_amount", cash/10+"");
-	        params.add("approval_url", "http://localhost:8080/guteam/payment/kakaoPaySuccess?cash="+cash);
-	        params.add("cancel_url", "http://localhost:8080/guteam/member/profiles");
-	        params.add("fail_url", "http://localhost:8080/guteam/member/profiles");
+	        params.add("approval_url", URI+"/payment/kakaoPaySuccess?cash="+cash);
+	        params.add("cancel_url", URI+"/member/profiles");
+	        params.add("fail_url", URI+"/member/profiles");
 	 
 	         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
 	 

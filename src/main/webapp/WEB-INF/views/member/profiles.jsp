@@ -126,7 +126,7 @@ input::-webkit-inner-spin-button {
 <input type="hidden" id="amount" value="${info.amount.total }">
 <input type="hidden" id="tid" value="${info.tid }">
 <input type="hidden" id="approvedAt" value="${info.approved_at }">
-<span>
+<span style="display:none;">
 <fmt:formatDate value="${info.approved_at }" pattern="MM-dd HH:mm:ss" />
 </span>
 </div>

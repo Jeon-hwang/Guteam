@@ -2,6 +2,8 @@ package project.spring.guteam.controller;
 
 import java.security.Principal;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +32,12 @@ public class PaymentController {
 	private MemberService memberService;
 		
 	@PostMapping("/kakaoPay")
-	public String KakaoPay(Principal principal, Integer cash) {
+	public String KakaoPay(Principal principal, Integer cash, HttpServletRequest request) {
 		 logger.info("kakaoPay post............................................");
-	     return "redirect:" + kakaoPay.kakaoPayReady(principal.getName(), cash);
+		 String uri = request.getHeader("referer");
+		 String contextroot = uri.substring(0, uri.indexOf("/guteam"))+"/guteam";
+		 logger.info(contextroot);
+	     return "redirect:" + kakaoPay.kakaoPayReady(principal.getName(), cash, contextroot);
 		
 	}
 	
