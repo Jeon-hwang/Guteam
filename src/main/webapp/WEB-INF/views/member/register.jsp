@@ -103,7 +103,7 @@ span {
 				</div>
 				<div class="selBox">
 				<select name="emailAddress" id="emailAddress">
-					<option value="">직접입력</option>
+					<option id="emailSelf" value="">직접입력</option>
 					<option value="naver.com">naver.com</option>
 					<option value="gamail.com">gamail.com</option>
 					<option value="nate.com">nate.com</option>
@@ -328,7 +328,20 @@ span {
 				$('#emailTxt').val(val);
 				$('#emailTxt').attr('readonly','readonly');
 			}else{
+				$('#emailTxt').on('change keyup keydown',function(){
+					var val = $(this).val();
+					var front = $('#emailId').val();
+					var domain = $('#emailTxt').val().substr(($('#emailTxt').val().lastIndexOf('.'))+1);
+					if($('#emailTxt').val().indexOf('.')==-1|| $('#emailTxt').val().indexOf('.')==0 || domain.length<2){
+						$('#emailChk').html('<span>올바른 이메일 형식이 아닙니다.</span>');
+					}else{
+						$('#emailChk').html('');
+					}
+					$('#email').val(front + "@" + val);
+					console.log("email? = " + $('#email').val());
+				});
 				$('#emailTxt').removeAttr('readonly');
+				return;
 			}
 			var domain = $('#emailTxt').val().substr(($('#emailTxt').val().lastIndexOf('.'))+1);
 			if($('#emailTxt').val().indexOf('.')==-1|| $('#emailTxt').val().indexOf('.')==0 || domain.length<2){
