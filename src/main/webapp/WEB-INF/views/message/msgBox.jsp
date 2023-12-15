@@ -209,7 +209,7 @@ td {
 		var msgArr = [];
 		var sendRecv= "";
 		var msgList = $('input[name="msgIdChk"]:checked'); // 체크한 게시물
-		var sndRcv = msgList.closest('tr').find('.wtf').text();
+		var sndRcv = msgList.closest('tr').find('.wtf').text(); // 삭제할 쪽지 보낸/받은 판단
 	    console.log(sndRcv);
 		var str = sndRcv.substr(1,2); // *substring과 substr의 인덱스 조건 차이 분명히 알기
 		console.log(str);

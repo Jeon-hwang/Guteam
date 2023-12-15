@@ -283,7 +283,7 @@ td {
 				}
 			// 방향키 아래로
 			}else if(e.keyCode==40){
-				index+=1;
+					index+=1;
 				if(index>maxIndex){
 					index=1;
 				}
