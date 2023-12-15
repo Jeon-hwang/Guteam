@@ -123,7 +123,6 @@ span {
 			<br>
 			<div class="infoArea">
 				<div class="g-recaptcha" data-sitekey="6LdPLykpAAAAAHv6qvYt_XfpJhIIhZ-Gx4FPK4yC"></div>
-				<button id="btn_cap">체크</button>
 			</div>
 			<br>
 			<input type="hidden" name="memberImageName" value="/default.jpeg">
@@ -403,40 +402,9 @@ span {
 			}
 		}); //end #phone.on()
 		
-		$('#btn_cap').click(function(){
-			var captcha = 0;
-			$.ajax({
-				url: '../member/verifyRecaptcha',
-				type: 'post',
-				data: {
-					recaptcha: $("#g-recaptcha-response").val()
-				},
-				beforeSend : function(xhr) {
-			        xhr.setRequestHeader(header, token);
-			    },
-				success: function(data) {
-					switch (data) {
-						case 0: 
-							console.log("자동 가입 방지 봇 통과");
-							captcha = 1;
-							break;
-						case 1: 
-							alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
-							break;
-						default: 
-							alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(data) + "]");
-							break;
-					}
-				}
-			}); //end ajax()
-			if(captcha != 1) {
-				return false;
-			} 
-		});
 		
 		// 유효성 미검증시, submit 막기
 		$('#register').submit(function(e){
-			var captcha = 0;
 			 $.ajax({
 				url: '../member/verifyRecaptcha',
 				type: 'post',
@@ -450,20 +418,17 @@ span {
 					switch (data) {
 						case 0: 
 							console.log("자동 가입 방지 봇 통과");
-							captcha = 1;
 							break;
 						case 1: 
 							alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
-							break;
-						default: 
+							return false;
+						case -1: 
 							alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(data) + "]");
-							break;
+							return false;
 					}
 				}
 			}); //end ajax()
-			if(captcha != 1) {
-				return false;
-			} 
+			
 			
 			var autofocusAt = '';
 			var checkOk = $('#checkOk').is(':visible');
